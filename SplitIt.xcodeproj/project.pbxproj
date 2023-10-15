@@ -7,9 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		60115DF72ADBF2980050D32C /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115DF62ADBF2980050D32C /* UIColor+.swift */; };
+		60115DF92ADBF2E10050D32C /* HomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115DF82ADBF2E10050D32C /* HomeVM.swift */; };
+		60115DFC2ADBF8860050D32C /* RxAppState in Frameworks */ = {isa = PBXBuildFile; productRef = 60115DFB2ADBF8860050D32C /* RxAppState */; };
+		60115E012ADC01150050D32C /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E002ADC01150050D32C /* UITextField+.swift */; };
 		6078ACCC2ADA74AC00995811 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCB2ADA74AC00995811 /* AppDelegate.swift */; };
 		6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCD2ADA74AC00995811 /* SceneDelegate.swift */; };
-		6078ACD02ADA74AC00995811 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCF2ADA74AC00995811 /* ViewController.swift */; };
+		6078ACD02ADA74AC00995811 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCF2ADA74AC00995811 /* HomeVC.swift */; };
 		6078ACD52ADA74AD00995811 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6078ACD42ADA74AD00995811 /* Assets.xcassets */; };
 		6078ACD82ADA74AD00995811 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6078ACD62ADA74AD00995811 /* LaunchScreen.storyboard */; };
 		6078ACE12ADA751D00995811 /* RxRealm in Frameworks */ = {isa = PBXBuildFile; productRef = 6078ACE02ADA751D00995811 /* RxRealm */; };
@@ -22,10 +26,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		60115DF62ADBF2980050D32C /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		60115DF82ADBF2E10050D32C /* HomeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVM.swift; sourceTree = "<group>"; };
+		60115E002ADC01150050D32C /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
 		6078ACC82ADA74AC00995811 /* SplitIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SplitIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6078ACCB2ADA74AC00995811 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6078ACCD2ADA74AC00995811 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		6078ACCF2ADA74AC00995811 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		6078ACCF2ADA74AC00995811 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		6078ACD42ADA74AD00995811 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6078ACD72ADA74AD00995811 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6078ACD92ADA74AD00995811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -42,6 +49,7 @@
 				6078ACED2ADA756900995811 /* RxCocoa in Frameworks */,
 				6078ACF22ADA757E00995811 /* RxDataSources in Frameworks */,
 				6078ACE72ADA752F00995811 /* Then in Frameworks */,
+				60115DFC2ADBF8860050D32C /* RxAppState in Frameworks */,
 				6078ACE42ADA752600995811 /* Reusable in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -49,6 +57,63 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		60115DF22ADBF0DD0050D32C /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				60115DF32ADBF10B0050D32C /* Home */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		60115DF32ADBF10B0050D32C /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				60115DFD2ADBFFB40050D32C /* View */,
+				60115DFE2ADBFFBD0050D32C /* ViewModel */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		60115DF42ADBF1F80050D32C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				60115DF52ADBF2580050D32C /* Extensions */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		60115DF52ADBF2580050D32C /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				60115DF62ADBF2980050D32C /* UIColor+.swift */,
+				60115E002ADC01150050D32C /* UITextField+.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		60115DFD2ADBFFB40050D32C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6078ACCF2ADA74AC00995811 /* HomeVC.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		60115DFE2ADBFFBD0050D32C /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				60115DF82ADBF2E10050D32C /* HomeVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		60115DFF2ADC000F0050D32C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		6078ACBF2ADA74AC00995811 = {
 			isa = PBXGroup;
 			children = (
@@ -70,7 +135,9 @@
 			children = (
 				6078ACCB2ADA74AC00995811 /* AppDelegate.swift */,
 				6078ACCD2ADA74AC00995811 /* SceneDelegate.swift */,
-				6078ACCF2ADA74AC00995811 /* ViewController.swift */,
+				60115DFF2ADC000F0050D32C /* Models */,
+				60115DF42ADBF1F80050D32C /* Resources */,
+				60115DF22ADBF0DD0050D32C /* Presenter */,
 				6078ACD42ADA74AD00995811 /* Assets.xcassets */,
 				6078ACD62ADA74AD00995811 /* LaunchScreen.storyboard */,
 				6078ACD92ADA74AD00995811 /* Info.plist */,
@@ -102,6 +169,7 @@
 				6078ACEC2ADA756900995811 /* RxCocoa */,
 				6078ACEE2ADA756900995811 /* RxSwift */,
 				6078ACF12ADA757E00995811 /* RxDataSources */,
+				60115DFB2ADBF8860050D32C /* RxAppState */,
 			);
 			productName = SplitIt;
 			productReference = 6078ACC82ADA74AC00995811 /* SplitIt.app */;
@@ -138,6 +206,7 @@
 				6078ACE82ADA753B00995811 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				6078ACEB2ADA756900995811 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				6078ACF02ADA757E00995811 /* XCRemoteSwiftPackageReference "RxDataSources" */,
+				60115DFA2ADBF8860050D32C /* XCRemoteSwiftPackageReference "RxAppState" */,
 			);
 			productRefGroup = 6078ACC92ADA74AC00995811 /* Products */;
 			projectDirPath = "";
@@ -165,8 +234,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6078ACD02ADA74AC00995811 /* ViewController.swift in Sources */,
+				6078ACD02ADA74AC00995811 /* HomeVC.swift in Sources */,
+				60115DF72ADBF2980050D32C /* UIColor+.swift in Sources */,
 				6078ACCC2ADA74AC00995811 /* AppDelegate.swift in Sources */,
+				60115E012ADC01150050D32C /* UITextField+.swift in Sources */,
+				60115DF92ADBF2E10050D32C /* HomeVM.swift in Sources */,
 				6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -377,6 +449,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		60115DFA2ADBF8860050D32C /* XCRemoteSwiftPackageReference "RxAppState" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pixeldock/RxAppState";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		6078ACDF2ADA751D00995811 /* XCRemoteSwiftPackageReference "RxRealm" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxRealm";
@@ -428,6 +508,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		60115DFB2ADBF8860050D32C /* RxAppState */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 60115DFA2ADBF8860050D32C /* XCRemoteSwiftPackageReference "RxAppState" */;
+			productName = RxAppState;
+		};
 		6078ACE02ADA751D00995811 /* RxRealm */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6078ACDF2ADA751D00995811 /* XCRemoteSwiftPackageReference "RxRealm" */;
