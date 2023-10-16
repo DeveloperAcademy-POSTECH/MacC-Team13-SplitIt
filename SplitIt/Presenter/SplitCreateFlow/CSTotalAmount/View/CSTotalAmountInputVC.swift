@@ -18,6 +18,7 @@ class CSTotalAmountInputVC: UIViewController {
     let header = NavigationHeader()
     let titleMessage = UILabel()
     let totalAmountTextFiled = UITextField()
+    let currencyLabel = UILabel()
     let textFiledNotice = UILabel()
     let nextButton = UIButton()
     
@@ -27,29 +28,36 @@ class CSTotalAmountInputVC: UIViewController {
         setLayout()
         setAttribute()
         setBinding()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         setKeyboardNotification()
         self.totalAmountTextFiled.becomeFirstResponder()
     }
-
+    
     func setAttribute() {
-        view.backgroundColor = .systemBackground
-        self.navigationController?.isNavigationBarHidden = true
+        view.backgroundColor = UIColor(hex: 0xF8F7F4)
         
         header.do {
             $0.configureBackButton(viewController: self)
         }
         
+        titleMessage.do {
+            $0.text = "총 얼마를 사용하셨나요?"
+        }
+        
         totalAmountTextFiled.do {
-            $0.backgroundColor = UIColor(hex: 0xD9D9D9)
+            $0.keyboardType = .numberPad
             $0.layer.cornerRadius = 8
-            $0.layer.borderColor = UIColor(hex: 0xAFB1B6).cgColor
+            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
             $0.layer.borderWidth = 1
             $0.textAlignment = .center
+        }
+        
+        currencyLabel.do {
+            $0.text = "KRW"
         }
         
         textFiledNotice.do {
@@ -67,6 +75,9 @@ class CSTotalAmountInputVC: UIViewController {
         [header,titleMessage,totalAmountTextFiled,textFiledNotice,nextButton].forEach {
             view.addSubview($0)
         }
+        
+        totalAmountTextFiled.addSubview(currencyLabel)
+        
         header.snp.makeConstraints {
             $0.height.equalTo(30)
             $0.top.equalTo(view.safeAreaLayoutGuide)
@@ -75,7 +86,6 @@ class CSTotalAmountInputVC: UIViewController {
         
         titleMessage.snp.makeConstraints {
             $0.top.equalTo(header.snp.bottom).offset(30)
-//            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.centerX.equalToSuperview()
         }
         
@@ -83,6 +93,11 @@ class CSTotalAmountInputVC: UIViewController {
             $0.top.equalTo(titleMessage.snp.bottom).offset(53)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(60)
+        }
+        
+        currencyLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(20)
         }
         
         textFiledNotice.snp.makeConstraints {
@@ -98,24 +113,22 @@ class CSTotalAmountInputVC: UIViewController {
     }
     
     func setBinding() {
-        let input = CSTotalAmountInputVM.Input(viewDidLoad: Driver.just(()),
-                                                 nextButtonTapSend: nextButton.rx.tap.asDriver(),
-                                                 totalAmountTextFieldValue: totalAmountTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""))
+        let input = CSTotalAmountInputVM.Input(nextButtonTapped: nextButton.rx.tap.asDriver(),
+                                               totalAmount: totalAmountTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""))
         let output = viewModel.transform(input: input)
         
-        output.titleMessage
-            .drive(titleMessage.rx.text)
+        output.totalAmount
+            .drive(totalAmountTextFiled.rx.text)
             .disposed(by: disposeBag)
         
-        output.presentCSMemberInputView
+        output.showCSMemberInputView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 
-//                let vc = CSMemberVC()
-//                self.navigationController?.pushViewController(vc, animated: true)
+                //                let vc = CSMemberVC()
+                //                self.navigationController?.pushViewController(vc, animated: true)
             })
-            .disposed(by: disposeBag)
-        
+            .disposed(by: disposeBag)   
     }
 }
 
@@ -146,6 +159,7 @@ extension CSTotalAmountInputVC: UITextFieldDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+    
     func setKeyboardObserverRemove() {
         NotificationCenter.default.removeObserver(self)
     }
