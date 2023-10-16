@@ -15,6 +15,7 @@ class CSTitleInputVC: UIViewController {
     
     let viewModel = CSTitleInputVM()
     
+    let header = NavigationHeader()
     let titleMessage = UILabel()
     let titleTextFiled = UITextField()
     let textFiledCounter = UILabel()
@@ -27,16 +28,21 @@ class CSTitleInputVC: UIViewController {
         setLayout()
         setAttribute()
         setBinding()
-        setKeyboardNotification()
+        
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setKeyboardNotification()
         self.titleTextFiled.becomeFirstResponder()
     }
 
     func setAttribute() {
         view.backgroundColor = .systemBackground
+        
+        header.do {
+            $0.configureBackButton(viewController: self)
+        }
         
         titleMessage.do {
             $0.text = "어디에 돈을 쓰셨나요?"
@@ -62,12 +68,18 @@ class CSTitleInputVC: UIViewController {
     }
     
     func setLayout() {
-        [titleMessage,titleTextFiled,textFiledCounter,textFiledNotice,nextButton].forEach {
+        [header,titleMessage,titleTextFiled,textFiledCounter,textFiledNotice,nextButton].forEach {
             view.addSubview($0)
         }
         
-        titleMessage.snp.makeConstraints {
+        header.snp.makeConstraints {
+            $0.height.equalTo(30)
             $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
+        titleMessage.snp.makeConstraints {
+            $0.top.equalTo(header.snp.bottom).offset(30)
             $0.centerX.equalToSuperview()
         }
         
@@ -103,9 +115,8 @@ class CSTitleInputVC: UIViewController {
         output.showCSTotalAmountView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                
-//                let vc = CSTotalAmountVC()
-//                self.navigationController?.pushViewController(vc, animated: true)
+                let vc = CSTotalAmountInputVC()
+                self.navigationController?.pushViewController(vc, animated: false)
             })
             .disposed(by: disposeBag)
         
@@ -151,7 +162,6 @@ extension CSTitleInputVC: UITextFieldDelegate {
             self.nextButton.snp.updateConstraints {
                 $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(keyboardHeight + 26)
             }
-            self.view.layoutIfNeeded()
         }
     }
     
@@ -159,7 +169,6 @@ extension CSTitleInputVC: UITextFieldDelegate {
         self.nextButton.snp.updateConstraints {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
-        self.view.layoutIfNeeded()
     }
     
     func setKeyboardObserver() {
