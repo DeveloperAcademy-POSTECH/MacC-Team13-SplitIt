@@ -28,17 +28,17 @@ class CSTitleInputVC: UIViewController {
         setLayout()
         setAttribute()
         setBinding()
-        
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         setKeyboardNotification()
         self.titleTextFiled.becomeFirstResponder()
     }
-
+    
     func setAttribute() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor(hex: 0xF8F7F4)
         
         header.do {
             $0.configureBackButton(viewController: self)
@@ -49,9 +49,8 @@ class CSTitleInputVC: UIViewController {
         }
         
         titleTextFiled.do {
-            $0.backgroundColor = UIColor(hex: 0xD9D9D9)
             $0.layer.cornerRadius = 8
-            $0.layer.borderColor = UIColor(hex: 0xAFB1B6).cgColor
+            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
             $0.layer.borderWidth = 1
             $0.textAlignment = .center
         }
@@ -108,10 +107,9 @@ class CSTitleInputVC: UIViewController {
     
     func setBinding() {
         let input = CSTitleInputVM.Input(nextButtonTapped: nextButton.rx.tap,
-                                           title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""))
-        
+                                         title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""))
         let output = viewModel.transform(input: input)
-            
+        
         output.showCSTotalAmountView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
@@ -175,8 +173,8 @@ extension CSTitleInputVC: UITextFieldDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+    
     func setKeyboardObserverRemove() {
         NotificationCenter.default.removeObserver(self)
     }
-    
 }
