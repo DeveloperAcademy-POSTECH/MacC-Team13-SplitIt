@@ -40,10 +40,8 @@ class HomeVC: UIViewController {
         
         output.showWanView
             .drive(onNext: {
-                // MARK: 완이 연결할 뷰로 수정
-                print("완뷰 이동") // 수정 후 삭제
-//                let vc = HomeVC()
-//                self.navigationController?.pushViewController(vc, animated: true)
+                let vc = CSTitleInputVC()
+                self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
         
