@@ -49,8 +49,6 @@ class CSMemberInputVM {
                 guard let self = self else { return }
                 self.memberList.accept(["나의닉네임","코리","제롬","토마토","제리","모아나"])
                 searchListDB.accept(["가","가나","가나다","나","나다라","나다라마","다라마바"])
-                
-                let currentTitle = CreateStore.shared.getCurrentCSInfoTitle()
             })
             .disposed(by: disposeBag)
 
@@ -68,7 +66,6 @@ class CSMemberInputVM {
                     let endIndex = text.index(text.startIndex, offsetBy: self.maxTextCount)
                     self.currentSearchText.accept(String(text[text.startIndex..<endIndex]))
                 }
-                
                 // 검색창의 text에 따라 DB에서 필터링
                 let db = searchListDB.value
                 let list = db.filter { $0.contains(text) }

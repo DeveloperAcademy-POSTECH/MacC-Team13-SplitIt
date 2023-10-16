@@ -56,7 +56,6 @@ class CSMemberInputSearchFooter: UITableViewHeaderFooterView, Reusable {
             $0.leading.trailing.equalToSuperview().inset(20)
         }
     }
-
 }
 
 
