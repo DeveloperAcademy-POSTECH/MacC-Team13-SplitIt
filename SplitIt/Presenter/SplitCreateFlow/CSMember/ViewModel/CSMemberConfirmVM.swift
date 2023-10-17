@@ -22,7 +22,6 @@ class CSMemberConfirmVM {
     }
     
     struct Output {
-        let memberCountText: Driver<String>
         let showExclCycle: Driver<Void> //필요
     }
     
@@ -33,10 +32,9 @@ class CSMemberConfirmVM {
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
                 let currentMember = CreateStore.shared.getCurrentCSInfoCSMember()
-                let memberCount = currentMember.count
                 let currentTitle = CreateStore.shared.getCurrentCSInfoTitle()
+                // MARK: currentTotalAmount도 얻어와야함
                 self.memberList.onNext(currentMember)
-                self.memberCount.onNext("총 \(memberCount)명")
             })
             .disposed(by: disposeBag)
 
@@ -50,8 +48,7 @@ class CSMemberConfirmVM {
             })
             .disposed(by: disposeBag)
 
-        return Output(memberCountText: memberCount.asDriver(onErrorJustReturn: ""),
-                      showExclCycle: showExclCycle)
+        return Output(showExclCycle: showExclCycle)
     }
 }
 
