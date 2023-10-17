@@ -20,6 +20,7 @@ final class SplitRepository {
     let exclItemArr = BehaviorRelay<[ExclItem]>(value: [])
     let exclMemberArr = BehaviorRelay<[ExclMember]>(value: [])
     let csMemberArr = BehaviorRelay<[CSMember]>(value: [])
+    let memberLogArr = BehaviorRelay<[MemberLog]>(value: [])
     
     private var currentCSInfo: CSInfo?
     private var newExclItem: ExclItem?
@@ -46,6 +47,11 @@ extension SplitRepository {
         let realmManager = RealmManager()
         splitArr.accept(realmManager.bringSplitWithSplitIdx(splitIdx: splitIdx))
         fetchAllDataBaseSplit(false, realmManager: realmManager)
+    }
+    
+    /// memberLog 전체를 패치
+    func fetchMemberLog() {
+        self.memberLogArr.accept(RealmManager().bringMemberLogAll())
     }
     
     /// false면 split 기준, true면 csInfo 기준으로 하위 데이터 모두를 패치
@@ -110,6 +116,12 @@ extension SplitRepository {
         
         csInfoArr.accept([newCSInfo])
         csMemberArr.accept([newCSMember])
+    }
+    
+    /// name을 받아서 memberLogArr, realm에 새로 생성
+    func createMemberLog(name: String) {
+        RealmManager().updateData(memberLog: MemberLog(name: name))
+        fetchMemberLog()
     }
     
     /// ExclItem 및 CSMember에 따라 ExclMember 생성
@@ -355,6 +367,12 @@ extension SplitRepository {
         exclItemArr.accept(newExclItems)
         realmManager.deleteExclItem(exclItemIdxArr: [deleteExclItem!.exclItemIdx])
         deleteExclMember(exclItemIdx: deleteExclItem!.exclItemIdx, realmManager: realmManager)
+    }
+    
+    /// memberLogIdx로 memberLog 삭제
+    func deleteMemberLog(memberLogIdx: String) {
+        RealmManager().deleteMemberLog(memberLogIdx: memberLogIdx)
+        self.fetchMemberLog()
     }
     
     /// 모든 realm의 데이터를 삭제 - Test 용

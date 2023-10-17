@@ -101,6 +101,21 @@ final class RealmManager {
             print("UpdateDate To Realm Error")
         }
     }
+    
+    /// Realm에 MemberLog 업데이트
+    func updateData(memberLog: MemberLog) {
+        do {
+            let realm = try Realm()
+            let realmMemberLog = RealmMemberLog()
+            realmMemberLog.update(withMemerLog: memberLog)
+            
+            try! realm.write {
+                realm.add(realmMemberLog)
+            }
+        } catch {
+            print("UpdateDate To Realm Error")
+        }
+    }
 }
 
 extension RealmManager {
@@ -244,6 +259,19 @@ extension RealmManager {
             return []
         }
     }
+    
+    /// Realm에서 memberLog 전체를 가져오기
+    func bringMemberLogAll() -> [MemberLog] {
+        do {
+            let realm = try Realm()
+            let realmMemberLogArr = realm.objects(RealmMemberLog.self)
+            
+            return realmMemberLogArr.map { MemberLog(withRealmMemberLog: $0) }
+        } catch {
+            print("UpdateDate To Realm Error")
+            return []
+        }
+    }
 }
 
 extension RealmManager {
@@ -332,6 +360,23 @@ extension RealmManager {
                     realm.delete(exclMember)
                 }
             }
+        } catch {
+            print("DeleteDate To Realm Error")
+        }
+    }
+    
+    /// memberLog name을 기준으로 memberLog를 삭제하는 메서드
+    func deleteMemberLog(memberLogIdx: String) {
+        do {
+            let realm = try Realm()
+            
+            let memberLogIdx = try! ObjectId(string: memberLogIdx)
+            let deleteMemberLog = realm.objects(RealmMemberLog.self).where { $0.memberLogIdx == memberLogIdx }
+            
+            try! realm.write {
+                realm.delete(deleteMemberLog)
+            }
+
         } catch {
             print("DeleteDate To Realm Error")
         }
