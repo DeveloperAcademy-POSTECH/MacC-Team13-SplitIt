@@ -15,10 +15,11 @@ class CSMemberConfirmVC: UIViewController {
     
     let viewModel = CSMemberConfirmVM()
     
+    let header = NavigationHeader()
     let titleMessage = UILabel()
+    let subTitleMessage = UILabel()
     let tableView = UITableView()
-    let memberCountLabel = UILabel()
-    let memberCountDescription = UILabel()
+    let bottomDescription = UILabel()
     let nextButton = UIButton()
     
     override func viewDidLoad() {
@@ -30,10 +31,20 @@ class CSMemberConfirmVC: UIViewController {
     }
 
     func setAttribute() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor(hex: 0xF8F7F4)
+        
+        header.do {
+            $0.configureBackButton(viewController: self)
+        }
 
         titleMessage.do {
+            $0.text = "좋아요 :D"
+            $0.font = .systemFont(ofSize: 24)
+        }
+        
+        subTitleMessage.do {
             $0.text = "입력한 내용이 정확한지 확인해주세요"
+            $0.font = .systemFont(ofSize: 15)
         }
         
         nextButton.do {
@@ -42,51 +53,68 @@ class CSMemberConfirmVC: UIViewController {
             $0.backgroundColor = UIColor(hex: 0x19191B)
         }
         
+        bottomDescription.do {
+            $0.text = "위 내용으로 정산을 시작합니다"
+            $0.font = .systemFont(ofSize: 15)
+        }
+        
         setTableView()
     }
     
 
     
     func setTableView() {
+        let topInset: CGFloat = 16.0
+        let bottomInset: CGFloat = 16.0
+        let interItemSpacing: CGFloat = 8.0
+        let rowHeight: CGFloat = 32.0
+        
         tableView.do {
             $0.register(cellType: CSMemberConfirmCell.self)
-            $0.rowHeight = 35
-            $0.separatorStyle = .none
-            $0.layer.cornerRadius = 30
-            $0.backgroundColor = UIColor(hex: 0xD1D1D1)
             $0.clipsToBounds = true
-        }
-        
-        memberCountDescription.do {
-            $0.text = "위 인원으로 정산을 시작합니다."
+            $0.backgroundColor = UIColor(hex: 0xE5E4E0)
+            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
+            $0.layer.borderWidth = 1
+            $0.layer.cornerRadius = 8
+            $0.rowHeight = rowHeight + interItemSpacing // 40
+            $0.separatorStyle = .none
+            $0.contentInset = UIEdgeInsets(top: topInset-interItemSpacing,
+                                           left: 0,
+                                           bottom: bottomInset,
+                                           right: 0)
         }
     }
     
     func setLayout() {
-        [titleMessage,nextButton,tableView,memberCountLabel,memberCountDescription].forEach {
+        [header, titleMessage, subTitleMessage, nextButton, tableView, bottomDescription].forEach {
             view.addSubview($0)
         }
         
-        titleMessage.snp.makeConstraints {
+        header.snp.makeConstraints {
+            $0.height.equalTo(30)
             $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.centerX.equalToSuperview()
-        }
-
-
-        tableView.snp.makeConstraints {
-            $0.top.equalTo(titleMessage).offset(34)
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.bottom.equalTo(memberCountLabel.snp.top).offset(-22)
-        }
-
-        memberCountLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(memberCountDescription.snp.top).offset(-7)
+            $0.leading.trailing.equalToSuperview()
         }
         
-        memberCountDescription.snp.makeConstraints {
+        titleMessage.snp.makeConstraints {
+            $0.top.equalTo(header.snp.bottom).offset(20)
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(nextButton.snp.top).offset(-50)
+        }
+        
+        subTitleMessage.snp.makeConstraints {
+            $0.top.equalTo(titleMessage.snp.bottom).offset(5)
+            $0.centerX.equalToSuperview()
+        }
+
+        tableView.snp.makeConstraints {
+            $0.top.equalTo(subTitleMessage.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.height.equalTo(360)
+        }
+
+        bottomDescription.snp.makeConstraints {
+            $0.top.equalTo(tableView.snp.bottom).offset(20)
+            $0.centerX.equalToSuperview()
         }
         
         nextButton.snp.makeConstraints {
@@ -107,12 +135,9 @@ class CSMemberConfirmVC: UIViewController {
                 (row, item, cell) in
                 if let csCell = cell as? CSMemberConfirmCell {
                     csCell.configure(item: item)
+                    csCell.selectionStyle = .none
                 }
             }
-            .disposed(by: disposeBag)
-        
-        output.memberCountText
-            .drive(memberCountLabel.rx.text)
             .disposed(by: disposeBag)
         
         output.showExclCycle

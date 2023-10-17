@@ -5,13 +5,6 @@
 //  Created by 홍승완 on 2023/10/17.
 //
 
-//
-//  CSMemberConfirmTableViewCell.swift
-//  MacC_Tutorial
-//
-//  Created by 홍승완 on 2023/10/12.
-//
-
 import UIKit
 import Then
 import Reusable
@@ -38,15 +31,28 @@ class CSMemberConfirmCell: UITableViewCell, Reusable {
     }
     
     func setAttribute() {
-        self.selectionStyle = .none
-        self.backgroundColor = UIColor.clear
+        self.backgroundColor = UIColor(white: 0, alpha: 0)
+        
         contentView.do {
-            $0.backgroundColor = UIColor.clear
+            $0.backgroundColor = UIColor(hex: 0xF8F7F4)
+            $0.layer.cornerRadius = 16
+            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
+            $0.layer.borderWidth = 1
+        }
+        
+        name.do {
+            $0.textColor = UIColor(hex: 0x202020)
         }
     }
     
     func setLayout() {
         contentView.addSubview(name)
+        
+        contentView.snp.makeConstraints {
+            $0.top.equalToSuperview().inset(8)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.bottom.equalToSuperview()
+        }
         
         name.snp.makeConstraints {
             $0.center.equalToSuperview()
