@@ -12,6 +12,7 @@ import UIKit
 class CSTitleInputVM {
     
     var disposeBag = DisposeBag()
+    
     let maxTextCount = 12
     struct Input {
         let nextButtonTapped: ControlEvent<Void> // 다음 버튼

@@ -124,9 +124,8 @@ class CSTotalAmountInputVC: UIViewController {
         output.showCSMemberInputView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                
-                //                let vc = CSMemberVC()
-                //                self.navigationController?.pushViewController(vc, animated: true)
+                let vc = CSMemberInputVC()
+                self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)   
     }
