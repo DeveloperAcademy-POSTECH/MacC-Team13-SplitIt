@@ -19,6 +19,8 @@
 		1A3853072ADE5B9D00E9A20B /* RealmExclMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3853062ADE5B9D00E9A20B /* RealmExclMember.swift */; };
 		1A4DB2292ADE61E800616243 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2282ADE61E800616243 /* RealmManager.swift */; };
 		1A4DB22B2ADE68E400616243 /* SplitRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB22A2ADE68E400616243 /* SplitRepository.swift */; };
+		1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */; };
+		1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2522ADEB24F00616243 /* MemberLog.swift */; };
 		60115DF72ADBF2980050D32C /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115DF62ADBF2980050D32C /* UIColor+.swift */; };
 		60115DF92ADBF2E10050D32C /* HomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115DF82ADBF2E10050D32C /* HomeVM.swift */; };
 		60115DFC2ADBF8860050D32C /* RxAppState in Frameworks */ = {isa = PBXBuildFile; productRef = 60115DFB2ADBF8860050D32C /* RxAppState */; };
@@ -62,6 +64,8 @@
 		1A3853062ADE5B9D00E9A20B /* RealmExclMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmExclMember.swift; sourceTree = "<group>"; };
 		1A4DB2282ADE61E800616243 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		1A4DB22A2ADE68E400616243 /* SplitRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitRepository.swift; sourceTree = "<group>"; };
+		1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMemberLog.swift; sourceTree = "<group>"; };
+		1A4DB2522ADEB24F00616243 /* MemberLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberLog.swift; sourceTree = "<group>"; };
 		60115DF62ADBF2980050D32C /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		60115DF82ADBF2E10050D32C /* HomeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVM.swift; sourceTree = "<group>"; };
 		60115E002ADC01150050D32C /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
@@ -113,6 +117,7 @@
 				1A3853022ADE5B4500E9A20B /* RealmCSMember.swift */,
 				1A3853042ADE5B7B00E9A20B /* RealmExclItem.swift */,
 				1A3853062ADE5B9D00E9A20B /* RealmExclMember.swift */,
+				1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */,
 			);
 			path = RealmModels;
 			sourceTree = "<group>";
@@ -125,6 +130,7 @@
 				1A3852F82ADE5AC200E9A20B /* CSMember.swift */,
 				1A3852FA2ADE5ADA00E9A20B /* ExclItem.swift */,
 				1A3852FC2ADE5B0100E9A20B /* ExclMember.swift */,
+				1A4DB2522ADEB24F00616243 /* MemberLog.swift */,
 			);
 			path = LocalModels;
 			sourceTree = "<group>";
@@ -422,6 +428,7 @@
 				60115E242ADD2BE20050D32C /* CSMemberInputSearchCell.swift in Sources */,
 				60115E122ADC19D40050D32C /* NavigationHeader.swift in Sources */,
 				60115E182ADD19CD0050D32C /* NumberFormatterHelper.swift in Sources */,
+				1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */,
 				60115E162ADCDB840050D32C /* CSTotalAmountInputVM.swift in Sources */,
 				60115E142ADCDB570050D32C /* CSTotalAmountInputVC.swift in Sources */,
 				1A3853052ADE5B7B00E9A20B /* RealmExclItem.swift in Sources */,
@@ -446,6 +453,7 @@
 				60115E262ADD2CB00050D32C /* CSMemberInputSearchFooter.swift in Sources */,
 				6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */,
 				60115E1D2ADD2B5E0050D32C /* CSMemberInputVC.swift in Sources */,
+				1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */,
 				1A4DB22B2ADE68E400616243 /* SplitRepository.swift in Sources */,
 				1A3852FD2ADE5B0100E9A20B /* ExclMember.swift in Sources */,
 			);
