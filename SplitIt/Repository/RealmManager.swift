@@ -12,7 +12,7 @@ import RxCocoa
 
 final class RealmManager {
     
-    // Realm에 Split 업데이트
+    /// Realm에 Split 업데이트
     func updateData(splitArr: [Split]) {
         do {
             let realm = try Realm()
@@ -30,7 +30,7 @@ final class RealmManager {
         }
     }
     
-    // Realm에 CSInfo 업데이트
+    /// Realm에 CSInfo 업데이트
     func updateData(csInfoArr: [CSInfo]) {
         do {
             let realm = try Realm()
@@ -48,7 +48,7 @@ final class RealmManager {
         }
     }
     
-    // Realm에 CSMember 업데이트
+    /// Realm에 CSMember 업데이트
     func updateData(csMemberArr: [CSMember]) {
         do {
             let realm = try Realm()
@@ -66,7 +66,7 @@ final class RealmManager {
         }
     }
     
-    // Realm에 ExclItem 업데이트
+    /// Realm에 ExclItem 업데이트
     func updateData(exclItemArr: [ExclItem]) {
         do {
             let realm = try Realm()
@@ -84,7 +84,7 @@ final class RealmManager {
         }
     }
     
-    // Realm에 ExclMember 업데이트
+    /// Realm에 ExclMember 업데이트
     func updateData(exclMemberArr: [ExclMember]) {
         do {
             let realm = try Realm()
@@ -105,7 +105,7 @@ final class RealmManager {
 
 extension RealmManager {
     
-    // Realm에서 최근 날짜 기준으로 갯수만큼 Split 가져오기
+    /// Realm에서 최근 날짜 기준으로 갯수만큼 Split 가져오기
     func bringSplitWithCount(bringCount: Int) -> [Split] {
         do {
             let realm = try Realm()
@@ -127,7 +127,7 @@ extension RealmManager {
         }
     }
     
-    // Realm에서 splitIdx를 기준으로 CSInfo 가져오기
+    /// Realm에서 splitIdx를 기준으로 CSInfo 가져오기
     func bringCSInfoWithSplitIdxArr(splitIdxArr: [String]) -> [CSInfo] {
         do {
             let realm = try Realm()
@@ -147,7 +147,7 @@ extension RealmManager {
         }
     }
     
-    // Realm에서 CSInfo들을 기준으로 CSMember 가져오기
+    /// Realm에서 CSInfo들을 기준으로 CSMember 가져오기
     func bringCSMemberWithCSInfoIdxArr(csInfoIdxArr: [String]) -> [CSMember] {
         do {
             let realm = try Realm()
@@ -167,7 +167,7 @@ extension RealmManager {
         }
     }
     
-    // Realm에서 CSInfo들을 기준으로 ExclItem 가져오기
+    /// Realm에서 CSInfo들을 기준으로 ExclItem 가져오기
     func bringExclItemWithCSInfoIdxArr(csInfoIdxArr: [String]) -> [ExclItem] {
         do {
             let realm = try Realm()
@@ -187,7 +187,7 @@ extension RealmManager {
         }
     }
     
-    // Realm에서 ExclItem들을 기준으로 ExclMember 가져오기
+    /// Realm에서 ExclItem들을 기준으로 ExclMember 가져오기
     func bringExclMemberWithExclItemIdxArr(exclItemIdxArr: [String]) -> [ExclMember] {
         do {
             let realm = try Realm()
@@ -207,7 +207,7 @@ extension RealmManager {
         }
     }
     
-    // Realm에서 SplitIdx를 기준으로 Split 가져오기 - 해당하는 Split 하나만 배열형태로 가져오게됨
+    /// Realm에서 SplitIdx를 기준으로 Split 가져오기 - 해당하는 Split 하나만 배열형태로 가져오게됨
     func bringSplitWithSplitIdx(splitIdx: String) -> [Split] {
         do {
             let realm = try Realm()
@@ -226,7 +226,7 @@ extension RealmManager {
         }
     }
     
-    // Realm에서 CSInfoIdx를 기준으로 CSInfo 가저오기 - 해당하는 CSInfo 하나만 배열형태로 가져오게됨
+    /// Realm에서 CSInfoIdx를 기준으로 CSInfo 가저오기 - 해당하는 CSInfo 하나만 배열형태로 가져오게됨
     func bringCSInfoWithCSInfoIdx(csInfoIdx: String) -> [CSInfo] {
         do {
             let realm = try Realm()
@@ -248,7 +248,7 @@ extension RealmManager {
 
 extension RealmManager {
     
-    // splitIdx를 기준으로 split을 삭제하는 메서드
+    /// splitIdx를 기준으로 split을 삭제하는 메서드
     func deleteSplit(splitIdx: String) {
         do {
             let realm = try Realm()
@@ -265,7 +265,7 @@ extension RealmManager {
         }
     }
     
-    // [csInfo]를 기준으로 csInfo를 삭제하는 메서드
+    /// [csInfo]를 기준으로 csInfo를 삭제하는 메서드
     func deleteCSInfo(csInfoIdxArr: [String]) {
         do {
             let realm = try Realm()
@@ -283,7 +283,7 @@ extension RealmManager {
         }
     }
     
-    // [csMemberIdx]를 기준으로 csMember를 삭제하는 메서드
+    /// [csMemberIdx]를 기준으로 csMember를 삭제하는 메서드
     func deleteCSMember(csMemberIdxArr: [String]) {
         do {
             let realm = try Realm()
@@ -301,7 +301,7 @@ extension RealmManager {
         }
     }
     
-    // [exclItemIdx]를 기준으로 exclItem을 삭제하는 메서드
+    /// [exclItemIdx]를 기준으로 exclItem을 삭제하는 메서드
     func deleteExclItem(exclItemIdxArr: [String]) {
         do {
             let realm = try Realm()
@@ -319,7 +319,7 @@ extension RealmManager {
         }
     }
     
-    // [exclMemberIdx]를 기준으로 exclMember를 삭제하는 메서드
+    /// [exclMemberIdx]를 기준으로 exclMember를 삭제하는 메서드
     func deleteExclMember(exclMemberIdxArr: [String]) {
         do {
             let realm = try Realm()
@@ -337,7 +337,7 @@ extension RealmManager {
         }
     }
     
-    // 전체 realmData 삭제 -> 테스트용
+    /// 전체 realmData 삭제 -> 테스트용
     func deleteAllData() {
         do {
             let realm = try Realm()
