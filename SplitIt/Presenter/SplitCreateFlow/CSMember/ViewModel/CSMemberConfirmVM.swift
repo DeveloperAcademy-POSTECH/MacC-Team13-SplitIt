@@ -13,7 +13,6 @@ class CSMemberConfirmVM {
     
     var disposeBag = DisposeBag()
     
-    let titleMessage = BehaviorSubject<String>(value: "")
     let memberList = BehaviorSubject<[String]>(value: [])
     let memberCount = BehaviorSubject<String>(value: "")
    
@@ -23,14 +22,13 @@ class CSMemberConfirmVM {
     }
     
     struct Output {
-        let titleMessage: Driver<String>
         let memberCountText: Driver<String>
-        let memberList: BehaviorSubject<[String]>
-        let presentExclCycle: Driver<Void>
+        let showExclCycle: Driver<Void> //필요
     }
     
     func transform(input: Input) -> Output {
-        // 현재 차수의 members 세팅
+        let showExclCycle = input.nextButtonTapSend.asDriver()
+        
         input.viewDidLoad
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
@@ -38,15 +36,11 @@ class CSMemberConfirmVM {
                 let memberCount = currentMember.count
                 let currentTitle = CreateStore.shared.getCurrentCSInfoTitle()
                 self.memberList.onNext(currentMember)
-                self.titleMessage.onNext("[\(currentTitle)] 정산 인원")
                 self.memberCount.onNext("총 \(memberCount)명")
             })
             .disposed(by: disposeBag)
-        
-      
-        let presentExclCycle = input.nextButtonTapSend.asDriver()
-        
-        presentExclCycle
+
+        showExclCycle
             .withLatestFrom(self.memberList.asDriver(onErrorJustReturn: []))
             .drive(onNext: {
                 CreateStore.shared.setCurrentCSInfoCSMember(members: $0)
@@ -55,9 +49,9 @@ class CSMemberConfirmVM {
                 
             })
             .disposed(by: disposeBag)
-        
-        
-        return Output(titleMessage: titleMessage.asDriver(onErrorJustReturn: ""), memberCountText: memberCount.asDriver(onErrorJustReturn: ""), memberList: memberList, presentExclCycle: presentExclCycle)
+
+        return Output(memberCountText: memberCount.asDriver(onErrorJustReturn: ""),
+                      showExclCycle: showExclCycle)
     }
 }
 

@@ -32,6 +32,10 @@ class CSMemberConfirmVC: UIViewController {
     func setAttribute() {
         view.backgroundColor = .systemBackground
 
+        titleMessage.do {
+            $0.text = "입력한 내용이 정확한지 확인해주세요"
+        }
+        
         nextButton.do {
             $0.setTitle("똑똑한 정산하기", for: .normal)
             $0.layer.cornerRadius = 24
@@ -96,15 +100,10 @@ class CSMemberConfirmVC: UIViewController {
     func setBinding() {
         let input = CSMemberConfirmVM.Input(viewDidLoad: Driver.just(()),
                                                    nextButtonTapSend: nextButton.rx.tap.asDriver())
-        
         let output = viewModel.transform(input: input)
         
-        output.titleMessage
-            .drive(titleMessage.rx.text)
-            .disposed(by: disposeBag)
-        
-        output.memberList
-            .bind(to: tableView.rx.items(cellIdentifier: "CSMemberConfirmTableViewCell")) {
+        viewModel.memberList
+            .bind(to: tableView.rx.items(cellIdentifier: "CSMemberConfirmCell")) {
                 (row, item, cell) in
                 if let csCell = cell as? CSMemberConfirmCell {
                     csCell.configure(item: item)
@@ -116,7 +115,7 @@ class CSMemberConfirmVC: UIViewController {
             .drive(memberCountLabel.rx.text)
             .disposed(by: disposeBag)
         
-        output.presentExclCycle
+        output.showExclCycle
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 
