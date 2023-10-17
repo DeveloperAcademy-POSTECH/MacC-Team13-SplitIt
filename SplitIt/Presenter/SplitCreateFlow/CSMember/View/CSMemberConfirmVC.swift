@@ -210,8 +210,8 @@ class CSMemberConfirmVC: UIViewController {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 
-//                let vc = ExclItemNameInputVC()
-//                self.navigationController?.pushViewController(vc, animated: true)
+                let vc = ExclItemNameInputVC()
+                self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
         
