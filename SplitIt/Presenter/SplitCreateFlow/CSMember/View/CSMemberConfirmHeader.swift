@@ -37,7 +37,6 @@ class CSMemberConfirmHeader: UITableViewHeaderFooterView, Reusable {
     func setAttribute() {
         contentView.do {
             $0.backgroundColor = UIColor(hex: 0xE5E4E0)
-            
             // MARK: Bottom Border만 추가
 //            $0.layer.borderWidth = 1
 //            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
@@ -48,7 +47,7 @@ class CSMemberConfirmHeader: UITableViewHeaderFooterView, Reusable {
         }
         
         totalAmount.do {
-            $0.font = .systemFont(ofSize: 18)
+            $0.font = .systemFont(ofSize: 22)
         }
     }
     
@@ -102,7 +101,7 @@ class CSMemberConfirmHeader: UITableViewHeaderFooterView, Reusable {
         let largeTextRange = NSRange(location: location, length: rangeLengh)
         
         let attributedText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)])
-        attributedText.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)], range: largeTextRange)
+        attributedText.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 22)], range: largeTextRange)
         return attributedText
     }
 }

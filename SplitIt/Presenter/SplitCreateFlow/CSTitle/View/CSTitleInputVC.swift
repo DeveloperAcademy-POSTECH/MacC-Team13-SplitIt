@@ -114,7 +114,7 @@ class CSTitleInputVC: UIViewController {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 let vc = CSTotalAmountInputVC()
-                self.navigationController?.pushViewController(vc, animated: false)
+                self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
         
