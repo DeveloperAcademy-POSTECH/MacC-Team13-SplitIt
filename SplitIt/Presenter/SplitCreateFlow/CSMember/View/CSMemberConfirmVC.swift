@@ -20,7 +20,12 @@ class CSMemberConfirmVC: UIViewController {
     let subTitleMessage = UILabel()
     let tableView = UITableView()
     let bottomDescription = UILabel()
-    let nextButton = UIButton()
+    let equalSplitButton = UIButton()
+    let equalSplitImage = UIImageView(image: UIImage(systemName: "sun.max"))
+    let equalSplitLabel = UILabel()
+    let smartSplitButton = UIButton()
+    let smartSplitImage = UIImageView(image: UIImage(systemName: "sun.min"))
+    let smartSplitLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,10 +52,30 @@ class CSMemberConfirmVC: UIViewController {
             $0.font = .systemFont(ofSize: 15)
         }
         
-        nextButton.do {
-            $0.setTitle("똑똑한 정산하기", for: .normal)
-            $0.layer.cornerRadius = 24
-            $0.backgroundColor = UIColor(hex: 0x19191B)
+        equalSplitButton.do {
+            $0.layer.cornerRadius = 42
+            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
+            $0.layer.borderWidth = 1
+            $0.backgroundColor = UIColor(hex: 0xF8F7F4)
+        }
+        
+        equalSplitLabel.do {
+            $0.text = "1/n 정산하기"
+            $0.textColor = UIColor(hex: 0x202020)
+            $0.font = .systemFont(ofSize: 16, weight: .bold)
+        }
+        
+        smartSplitButton.do {
+            $0.layer.cornerRadius = 42
+            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
+            $0.layer.borderWidth = 1
+            $0.backgroundColor = UIColor(hex: 0xF8F7F4)
+        }
+        
+        smartSplitLabel.do {
+            $0.text = "쓴 만큼 정산하기"
+            $0.textColor = UIColor(hex: 0x202020)
+            $0.font = .systemFont(ofSize: 16, weight: .bold)
         }
         
         bottomDescription.do {
@@ -86,8 +111,16 @@ class CSMemberConfirmVC: UIViewController {
     }
     
     func setLayout() {
-        [header, titleMessage, subTitleMessage, nextButton, tableView, bottomDescription].forEach {
+        [header, titleMessage, subTitleMessage, equalSplitButton, smartSplitButton, tableView, bottomDescription].forEach {
             view.addSubview($0)
+        }
+        
+        [equalSplitImage, equalSplitLabel].forEach {
+            equalSplitButton.addSubview($0)
+        }
+        
+        [smartSplitImage, smartSplitLabel].forEach {
+            smartSplitButton.addSubview($0)
         }
         
         header.snp.makeConstraints {
@@ -117,17 +150,44 @@ class CSMemberConfirmVC: UIViewController {
             $0.centerX.equalToSuperview()
         }
         
-        nextButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.height.equalTo(170)
+        equalSplitButton.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(51)
+            $0.leading.equalToSuperview().inset(32)
+            $0.width.height.equalTo(150)
         }
-
+        
+        equalSplitImage.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.width.height.equalTo(64)
+            $0.top.equalToSuperview().inset(24)
+        }
+        
+        equalSplitLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(25)
+        }
+        
+        smartSplitButton.snp.makeConstraints {
+            $0.centerY.equalTo(equalSplitButton.snp.centerY)
+            $0.trailing.equalToSuperview().inset(32)
+            $0.width.height.equalTo(150)
+        }
+        
+        smartSplitImage.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.width.height.equalTo(64)
+            $0.top.equalToSuperview().inset(24)
+        }
+        
+        smartSplitLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(25)
+        }
     }
     
     func setBinding() {
         let input = CSMemberConfirmVM.Input(viewDidLoad: Driver.just(()),
-                                                   nextButtonTapSend: nextButton.rx.tap.asDriver())
+                                                   nextButtonTapSend: smartSplitButton.rx.tap.asDriver())
         let output = viewModel.transform(input: input)
         
         viewModel.memberList
