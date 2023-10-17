@@ -37,6 +37,11 @@
 		60115E222ADD2BC80050D32C /* CSMemberInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E212ADD2BC80050D32C /* CSMemberInputCell.swift */; };
 		60115E242ADD2BE20050D32C /* CSMemberInputSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E232ADD2BE20050D32C /* CSMemberInputSearchCell.swift */; };
 		60115E262ADD2CB00050D32C /* CSMemberInputSearchFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E252ADD2CB00050D32C /* CSMemberInputSearchFooter.swift */; };
+		60115E292ADE21C40050D32C /* CSMemberConfirmVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E282ADE21C40050D32C /* CSMemberConfirmVC.swift */; };
+		60115E2B2ADE21CB0050D32C /* CSMemberConfirmVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E2A2ADE21CB0050D32C /* CSMemberConfirmVM.swift */; };
+		60115E2D2ADE221D0050D32C /* CSMemberConfirmCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E2C2ADE221D0050D32C /* CSMemberConfirmCell.swift */; };
+		60115E2F2ADE3EDA0050D32C /* CSMemberConfirmHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E2E2ADE3EDA0050D32C /* CSMemberConfirmHeader.swift */; };
+		60115E312ADE715E0050D32C /* CSMemberConfirmHeaderVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E302ADE715E0050D32C /* CSMemberConfirmHeaderVM.swift */; };
 		6078ACCC2ADA74AC00995811 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCB2ADA74AC00995811 /* AppDelegate.swift */; };
 		6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCD2ADA74AC00995811 /* SceneDelegate.swift */; };
 		6078ACD02ADA74AC00995811 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCF2ADA74AC00995811 /* HomeVC.swift */; };
@@ -81,6 +86,11 @@
 		60115E212ADD2BC80050D32C /* CSMemberInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberInputCell.swift; sourceTree = "<group>"; };
 		60115E232ADD2BE20050D32C /* CSMemberInputSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberInputSearchCell.swift; sourceTree = "<group>"; };
 		60115E252ADD2CB00050D32C /* CSMemberInputSearchFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberInputSearchFooter.swift; sourceTree = "<group>"; };
+		60115E282ADE21C40050D32C /* CSMemberConfirmVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberConfirmVC.swift; sourceTree = "<group>"; };
+		60115E2A2ADE21CB0050D32C /* CSMemberConfirmVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberConfirmVM.swift; sourceTree = "<group>"; };
+		60115E2C2ADE221D0050D32C /* CSMemberConfirmCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberConfirmCell.swift; sourceTree = "<group>"; };
+		60115E2E2ADE3EDA0050D32C /* CSMemberConfirmHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberConfirmHeader.swift; sourceTree = "<group>"; };
+		60115E302ADE715E0050D32C /* CSMemberConfirmHeaderVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberConfirmHeaderVM.swift; sourceTree = "<group>"; };
 		6078ACC82ADA74AC00995811 /* SplitIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SplitIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6078ACCB2ADA74AC00995811 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6078ACCD2ADA74AC00995811 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -282,6 +292,8 @@
 				60115E202ADD2B6D0050D32C /* Cell */,
 				60115E1C2ADD2B5E0050D32C /* CSMemberInputVC.swift */,
 				60115E252ADD2CB00050D32C /* CSMemberInputSearchFooter.swift */,
+				60115E282ADE21C40050D32C /* CSMemberConfirmVC.swift */,
+				60115E2E2ADE3EDA0050D32C /* CSMemberConfirmHeader.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -290,6 +302,8 @@
 			isa = PBXGroup;
 			children = (
 				60115E1E2ADD2B660050D32C /* CSMemberInputVM.swift */,
+				60115E2A2ADE21CB0050D32C /* CSMemberConfirmVM.swift */,
+				60115E302ADE715E0050D32C /* CSMemberConfirmHeaderVM.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -299,6 +313,7 @@
 			children = (
 				60115E212ADD2BC80050D32C /* CSMemberInputCell.swift */,
 				60115E232ADD2BE20050D32C /* CSMemberInputSearchCell.swift */,
+				60115E2C2ADE221D0050D32C /* CSMemberConfirmCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -424,12 +439,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60115E292ADE21C40050D32C /* CSMemberConfirmVC.swift in Sources */,
 				60115E222ADD2BC80050D32C /* CSMemberInputCell.swift in Sources */,
 				60115E242ADD2BE20050D32C /* CSMemberInputSearchCell.swift in Sources */,
 				60115E122ADC19D40050D32C /* NavigationHeader.swift in Sources */,
 				60115E182ADD19CD0050D32C /* NumberFormatterHelper.swift in Sources */,
+				60115E2D2ADE221D0050D32C /* CSMemberConfirmCell.swift in Sources */,
 				1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */,
 				60115E162ADCDB840050D32C /* CSTotalAmountInputVM.swift in Sources */,
+				60115E312ADE715E0050D32C /* CSMemberConfirmHeaderVM.swift in Sources */,
+				60115E2F2ADE3EDA0050D32C /* CSMemberConfirmHeader.swift in Sources */,
 				60115E142ADCDB570050D32C /* CSTotalAmountInputVC.swift in Sources */,
 				1A3853052ADE5B7B00E9A20B /* RealmExclItem.swift in Sources */,
 				6078ACD02ADA74AC00995811 /* HomeVC.swift in Sources */,
@@ -443,6 +462,7 @@
 				1A3853032ADE5B4500E9A20B /* RealmCSMember.swift in Sources */,
 				1A3853012ADE5B3100E9A20B /* RealmCSInfo.swift in Sources */,
 				60115E012ADC01150050D32C /* UITextField+.swift in Sources */,
+				60115E2B2ADE21CB0050D32C /* CSMemberConfirmVM.swift in Sources */,
 				1A3853072ADE5B9D00E9A20B /* RealmExclMember.swift in Sources */,
 				60115DF92ADBF2E10050D32C /* HomeVM.swift in Sources */,
 				60115E0E2ADC19250050D32C /* CSTitleInputVM.swift in Sources */,

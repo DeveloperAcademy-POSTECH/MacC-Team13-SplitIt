@@ -44,6 +44,10 @@ class CreateStore {
         return currentCSInfoTitle
     }
     
+    func getCurrentCSInfoTotalAmount() -> Int {
+        return currentCSInfoTotalAmount
+    }
+    
     func getCurrentCSInfoCSMember() -> [String] {
         return currentCSMembers
     }
