@@ -24,12 +24,7 @@ class CSMemberConfirmCell: UITableViewCell, Reusable {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
 
-    }
-    
     func setAttribute() {
         self.backgroundColor = UIColor(white: 0, alpha: 0)
         
@@ -59,7 +54,23 @@ class CSMemberConfirmCell: UITableViewCell, Reusable {
         }
     }
 
-    func configure(item: String) {
-        name.text = item
+    func configure(item: String, row: Int) {
+        if row == 0 {
+            configureUniqueMember(name: item)
+        } else {
+            configureMember(name: item)
+        }
+    }
+    
+    private func configureUniqueMember(name: String) {
+        self.name.text = "\(name) (나)"
+        self.name.textColor = UIColor(hex: 0xF1F1F1)
+        contentView.backgroundColor = UIColor(hex: 0x343434)
+    }
+    
+    private func configureMember(name: String) {
+        self.name.text = name
+        self.name.textColor = UIColor(hex: 0x202020)
+        contentView.backgroundColor = UIColor(hex: 0xF8F7F4)
     }
 }

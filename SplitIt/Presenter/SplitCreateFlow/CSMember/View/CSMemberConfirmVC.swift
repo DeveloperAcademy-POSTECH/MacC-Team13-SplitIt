@@ -133,9 +133,9 @@ class CSMemberConfirmVC: UIViewController {
         viewModel.memberList
             .bind(to: tableView.rx.items(cellIdentifier: "CSMemberConfirmCell")) {
                 (row, item, cell) in
-                if let csCell = cell as? CSMemberConfirmCell {
-                    csCell.configure(item: item)
-                    csCell.selectionStyle = .none
+                if let memberCell = cell as? CSMemberConfirmCell {
+                    memberCell.configure(item: item, row: row)
+                    memberCell.selectionStyle = .none
                 }
             }
             .disposed(by: disposeBag)
