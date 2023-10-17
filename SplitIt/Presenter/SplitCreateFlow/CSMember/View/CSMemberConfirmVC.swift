@@ -97,8 +97,9 @@ class CSMemberConfirmVC: UIViewController {
             $0.register(headerFooterViewType: CSMemberConfirmHeader.self)
             $0.clipsToBounds = true
             $0.alwaysBounceVertical = false
-//            $0.backgroundColor = UIColor(hex: 0xE5E4E0)
-            $0.backgroundColor = UIColor(hex: 0xF8F7F4)
+            $0.showsVerticalScrollIndicator = false
+            $0.backgroundColor = UIColor(hex: 0xE5E4E0)
+//            $0.backgroundColor = UIColor(hex: 0xF8F7F4)
             $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 8
@@ -190,11 +191,12 @@ class CSMemberConfirmVC: UIViewController {
     }
     
     func setBinding() {
-        let input = CSMemberConfirmVM.Input(viewDidLoad: Driver.just(()),
-                                                   nextButtonTapSend: smartSplitButton.rx.tap.asDriver())
+        let input = CSMemberConfirmVM.Input(viewDidLoad: Driver<Void>.just(()),
+                                            smartSplitTap: smartSplitButton.rx.tap.asDriver(),
+                                            equalSplitTap: equalSplitButton.rx.tap.asDriver())
         let output = viewModel.transform(input: input)
         
-        viewModel.memberList
+        output.memberList
             .bind(to: tableView.rx.items(cellIdentifier: "CSMemberConfirmCell")) {
                 (row, item, cell) in
                 if let memberCell = cell as? CSMemberConfirmCell {
@@ -204,12 +206,18 @@ class CSMemberConfirmVC: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        output.showExclCycle
+        output.showSmartSplitCycle
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 
 //                let vc = ExclItemNameInputVC()
 //                self.navigationController?.pushViewController(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        output.showEqualSplitCycle
+            .drive(onNext: {
+                print(">>> 1/n 정산버튼 탭")
             })
             .disposed(by: disposeBag)
     }

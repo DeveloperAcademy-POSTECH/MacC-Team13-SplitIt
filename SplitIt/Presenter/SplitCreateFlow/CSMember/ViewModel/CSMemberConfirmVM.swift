@@ -13,42 +13,41 @@ class CSMemberConfirmVM {
     
     var disposeBag = DisposeBag()
     
-    let memberList = BehaviorSubject<[String]>(value: [])
-    let memberCount = BehaviorSubject<String>(value: "")
-   
     struct Input {
-        let viewDidLoad: Driver<Void> // viewDidLoad
-        let nextButtonTapSend: Driver<Void> // 다음 버튼
+        let viewDidLoad: Driver<Void>
+        let smartSplitTap: Driver<Void>
+        let equalSplitTap: Driver<Void>
     }
     
     struct Output {
-        let showExclCycle: Driver<Void> //필요
+        let showSmartSplitCycle: Driver<Void>
+        let showEqualSplitCycle: Driver<Void>
+        let memberList: BehaviorSubject<[String]>
     }
     
     func transform(input: Input) -> Output {
-        let showExclCycle = input.nextButtonTapSend.asDriver()
+        let showSmartSplitCycle = input.smartSplitTap.asDriver()
+        let showEqualSplitCycle = input.equalSplitTap.asDriver()
+        let memberList = BehaviorSubject<[String]>(value: [])
         
         input.viewDidLoad
-            .drive(onNext: { [weak self] in
-                guard let self = self else { return }
+            .drive(onNext: {
                 let currentMember = CreateStore.shared.getCurrentCSInfoCSMember()
-                let currentTitle = CreateStore.shared.getCurrentCSInfoTitle()
-                // MARK: currentTotalAmount도 얻어와야함
-                self.memberList.onNext(currentMember)
+                memberList.onNext(currentMember)
             })
             .disposed(by: disposeBag)
-
-        showExclCycle
-            .withLatestFrom(self.memberList.asDriver(onErrorJustReturn: []))
+        
+        showSmartSplitCycle
+            .withLatestFrom(memberList.asDriver(onErrorJustReturn: []))
             .drive(onNext: {
                 CreateStore.shared.setCurrentCSInfoCSMember(members: $0)
                 CreateStore.shared.printAll()
-                // nextVC 구현
-                
             })
             .disposed(by: disposeBag)
 
-        return Output(showExclCycle: showExclCycle)
+        return Output(showSmartSplitCycle: showSmartSplitCycle,
+                      showEqualSplitCycle: showEqualSplitCycle,
+                      memberList: memberList)
     }
 }
 
