@@ -26,7 +26,7 @@ class CSMemberConfirmCell: UITableViewCell, Reusable {
     }
 
     func setAttribute() {
-        self.backgroundColor = UIColor(white: 0, alpha: 0)
+        self.backgroundColor = UIColor(hex: 0xE5E4E0)
         
         contentView.do {
             $0.backgroundColor = UIColor(hex: 0xF8F7F4)

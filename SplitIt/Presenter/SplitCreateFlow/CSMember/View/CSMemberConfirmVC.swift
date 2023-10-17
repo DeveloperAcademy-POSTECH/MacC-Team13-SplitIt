@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Reusable
 
 class CSMemberConfirmVC: UIViewController {
     
@@ -18,13 +19,13 @@ class CSMemberConfirmVC: UIViewController {
     let header = NavigationHeader()
     let titleMessage = UILabel()
     let subTitleMessage = UILabel()
-    let tableView = UITableView()
+    let tableView = UITableView(frame: .zero, style: .plain)
     let bottomDescription = UILabel()
     let equalSplitButton = UIButton()
-    let equalSplitImage = UIImageView(image: UIImage(systemName: "sun.max"))
+    let equalSplitImage = UIImageView(image: UIImage(named: "XMark"))
     let equalSplitLabel = UILabel()
     let smartSplitButton = UIButton()
-    let smartSplitImage = UIImageView(image: UIImage(systemName: "sun.min"))
+    let smartSplitImage = UIImageView(image: UIImage(named: "XMark"))
     let smartSplitLabel = UILabel()
     
     override func viewDidLoad() {
@@ -85,28 +86,31 @@ class CSMemberConfirmVC: UIViewController {
         
         setTableView()
     }
-    
 
-    
     func setTableView() {
-        let topInset: CGFloat = 16.0
         let bottomInset: CGFloat = 16.0
         let interItemSpacing: CGFloat = 8.0
         let rowHeight: CGFloat = 32.0
         
         tableView.do {
             $0.register(cellType: CSMemberConfirmCell.self)
+            $0.register(headerFooterViewType: CSMemberConfirmHeader.self)
             $0.clipsToBounds = true
-            $0.backgroundColor = UIColor(hex: 0xE5E4E0)
+            $0.alwaysBounceVertical = false
+//            $0.backgroundColor = UIColor(hex: 0xE5E4E0)
+            $0.backgroundColor = UIColor(hex: 0xF8F7F4)
             $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 8
             $0.rowHeight = rowHeight + interItemSpacing // 40
             $0.separatorStyle = .none
-            $0.contentInset = UIEdgeInsets(top: topInset-interItemSpacing,
-                                           left: 0,
+            $0.sectionHeaderTopPadding = 0.0
+            $0.contentInset = UIEdgeInsets(top: 0.0,
+                                           left: 0.0,
                                            bottom: bottomInset,
-                                           right: 0)
+                                           right: 0.0)
+            $0.rx.setDelegate(self)
+                .disposed(by: disposeBag)
         }
     }
     
@@ -210,4 +214,17 @@ class CSMemberConfirmVC: UIViewController {
             .disposed(by: disposeBag)
     }
     
+}
+
+extension CSMemberConfirmVC: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let header = tableView.dequeueReusableHeaderFooterView(CSMemberConfirmHeader.self) else { return UIView() }
+        header.contentView.backgroundColor = UIColor(hex: 0xF8F7F4)
+        return header
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        let headerHeight = 90.0
+        return headerHeight
+    }
 }
