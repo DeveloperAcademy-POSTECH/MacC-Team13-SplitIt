@@ -259,8 +259,8 @@ class CSMemberInputVC: UIViewController {
         output.showCSMemberConfirmView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-//                let vc = CSMemberConfirmVC()
-//                self.navigationController?.pushViewController(vc, animated: true)
+                let vc = CSMemberConfirmVC()
+                self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
         
