@@ -7,7 +7,7 @@
 
 import UIKit
 
-//MARK: 토마토 Task, 아래는 예시
+//MARK: 토마토 Task
 
 extension UIColor {
 
