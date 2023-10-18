@@ -20,9 +20,17 @@ class HomeVC: UIViewController {
     
     let viewModel = HomeVM()
     
-    let button1: UIButton = UIButton()
-    let button2: UIButton = UIButton()
-    let button3: UIButton = UIButton()
+    let myInfoButton: UIButton = UIButton()
+    let mainImage: UIView = UIView()
+    let mainTextLabel: UILabel = UILabel()
+    let subTextLabel: UILabel = UILabel()
+    let splitItButton: UIButton = UIButton()
+    let devider: UIView = UIView()
+    let recentSplitTextLabel: UILabel = UILabel()
+    let historyButton: UIButton = UIButton()
+    let historyButtonLabel: UILabel = UILabel()
+    let historyButtonImage: UIImageView = UIImageView()
+    let recentSplitCollectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,9 +41,9 @@ class HomeVC: UIViewController {
     }
     
     func setBinding() {
-        let input = HomeVM.Input(wanButtonTapped: button1.rx.tap,
-                                 moanaButtonTapped: button2.rx.tap,
-                                 jerryButtonTapped: button3.rx.tap)
+        let input = HomeVM.Input(splitItButtonTapped: splitItButton.rx.tap,
+                                 myInfoButtonTapped: myInfoButton.rx.tap,
+                                 recentSplitButtonTapped: historyButton.rx.tap)
         let output = viewModel.transform(input: input)
         
         output.showWanView
@@ -67,48 +75,131 @@ class HomeVC: UIViewController {
     func setAttribute() {
         view.backgroundColor = .systemBackground
         
-        button1.do {
-            $0.setTitle("완 작업하는 뷰로 이동", for: .normal)
-            $0.layer.cornerRadius = 24
-            $0.backgroundColor = UIColor(hex: 0x19191B)
+        myInfoButton.do {
+            $0.setImage(UIImage(systemName: "person.circle.fill",
+                                withConfiguration: UIImage.SymbolConfiguration(font: UIFont.systemFont(ofSize: 40))), for: .normal)
+            $0.tintColor = UIColor.gray
         }
         
-        button2.do {
-            $0.setTitle("모아나 작업하는 뷰로 이동", for: .normal)
-            $0.layer.cornerRadius = 24
-            $0.backgroundColor = UIColor(hex: 0x19191B)
+        mainImage.do {
+            $0.backgroundColor = UIColor.blue
         }
         
-        button3.do {
-            $0.setTitle("제리 작업하는 뷰로 이동", for: .normal)
-            $0.layer.cornerRadius = 24
-            $0.backgroundColor = UIColor(hex: 0x19191B)
+        mainTextLabel.do {
+            $0.text = "혹시... 카드 긁으셨나요?"
+            $0.font = UIFont.systemFont(ofSize: 18)
+            $0.textColor = UIColor.black
+        }
+        
+        subTextLabel.do {
+            $0.text = "스플리릿 시간입니다!"
+            $0.font = UIFont.systemFont(ofSize: 21)
+            $0.textColor = UIColor.black
+        }
+        
+        splitItButton.do {
+            $0.setTitle("♦ Split it!", for: .normal)
+            $0.setTitleColor(UIColor.black, for: .normal)
+            $0.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+            $0.backgroundColor = UIColor.green
+            $0.layer.cornerRadius = 20
+            $0.clipsToBounds = true
+            $0.layer.borderColor = UIColor.black.cgColor
+        }
+        
+        devider.do {
+            $0.backgroundColor = UIColor.gray
+            $0.layer.opacity = 0.3
+        }
+        
+        recentSplitTextLabel.do {
+            $0.text = "최근 스플리릿 내역"
+            $0.font = UIFont.systemFont(ofSize: 21)
+            $0.textColor = UIColor.black
+        }
+        
+        historyButtonLabel.do {
+            $0.text = "더보기"
+            $0.font = UIFont.systemFont(ofSize: 12)
+            $0.textColor = UIColor.black
+        }
+        
+        historyButtonImage.do {
+            $0.image = UIImage(systemName: "chevron.right")
+            $0.tintColor = UIColor.black
         }
     }
 
     func setLayout() {
-        [button1, button2, button3].forEach {
+        [myInfoButton, mainImage, mainTextLabel, subTextLabel, splitItButton, devider, recentSplitTextLabel, historyButton, recentSplitCollectionView].forEach {
             view.addSubview($0)
         }
         
-        button1.snp.makeConstraints {
-            $0.center.equalToSuperview()
-            $0.width.equalTo(300)
-            $0.height.equalTo(48)
+        historyButton.addSubview(historyButtonLabel)
+        historyButton.addSubview(historyButtonImage)
+        
+        myInfoButton.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(62)
+            $0.width.height.equalTo(40)
+            $0.trailing.equalToSuperview().inset(16)
         }
         
-        button2.snp.makeConstraints {
-            $0.top.equalTo(button1.snp.bottom).offset(20)
-            $0.centerX.equalTo(button1.snp.centerX)
-            $0.width.equalTo(300)
-            $0.height.equalTo(48)
+        mainImage.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(180)
+            $0.centerX.equalToSuperview()
+            $0.width.height.equalTo(165)
         }
         
-        button3.snp.makeConstraints {
-            $0.top.equalTo(button2.snp.bottom).offset(20)
-            $0.centerX.equalTo(button1.snp.centerX)
-            $0.width.equalTo(300)
+        mainTextLabel.snp.makeConstraints {
+            $0.top.equalTo(mainImage.snp.bottom).offset(24)
+            $0.centerX.equalToSuperview()
+        }
+        
+        subTextLabel.snp.makeConstraints {
+            $0.top.equalTo(mainTextLabel.snp.bottom).offset(4)
+            $0.centerX.equalToSuperview()
+        }
+        
+        splitItButton.snp.makeConstraints {
+            $0.top.equalTo(subTextLabel.snp.bottom).offset(24)
             $0.height.equalTo(48)
+            $0.width.equalTo(130)
+            $0.centerX.equalToSuperview()
+        }
+        
+        devider.snp.makeConstraints {
+            $0.bottom.equalTo(recentSplitTextLabel.snp.top).offset(-16.5)
+            $0.horizontalEdges.equalToSuperview().inset(25)
+            $0.height.equalTo(1)
+        }
+        
+        recentSplitTextLabel.snp.makeConstraints {
+            $0.bottom.equalTo(recentSplitCollectionView.snp.top).offset(-8.5)
+            $0.leading.equalToSuperview().inset(30)
+        }
+        
+        historyButton.snp.makeConstraints {
+            $0.centerY.equalTo(recentSplitTextLabel.snp.centerY)
+            $0.trailing.equalToSuperview().inset(30)
+            $0.height.equalTo(25)
+        }
+        
+        historyButtonImage.snp.makeConstraints {
+            $0.trailing.equalToSuperview()
+            $0.centerY.equalToSuperview()
+            $0.width.equalTo(8)
+            $0.height.equalTo(13.8)
+        }
+        
+        historyButtonLabel.snp.makeConstraints {
+            $0.trailing.equalTo(historyButtonImage.snp.leading).offset(-8)
+            $0.centerY.equalToSuperview()
+        }
+        
+        recentSplitCollectionView.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-40)
+            $0.horizontalEdges.equalToSuperview().inset(30)
+            $0.height.equalTo(94)
         }
     }
 }
