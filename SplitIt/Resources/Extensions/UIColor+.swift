@@ -12,25 +12,28 @@ import UIKit
 extension UIColor {
 
     // MARK: Text Colors
-    
+
     /**
      기본 글씨의 색상입니다.
      - parameters:
         - property: $text-primary
      */
     class var TextPrimary: UIColor { return UIColor.AppColorGrayscale900 }
+
     /**
      보조 글씨의 색상입니다.
      - parameters:
         - property: $text-secondary
      */
     class var TextSecondary: UIColor { return UIColor.AppColorGrayscale600 }
+
     /**
      비활성화 된 글씨의 색상입니다.
      - parameters:
         - property: $text-deactivate
      */
     class var TextDeactivate: UIColor { return UIColor.AppColorGrayscale200 }
+
     /**
      반전 된 글씨의 색상입니다.
      - parameters:
@@ -38,57 +41,65 @@ extension UIColor {
      */
     class var TextInvert: UIColor { return UIColor.AppColorGrayscale50 }
 
-    
+
     // MARK: Surface Colors
-    
+
     /**
      기본 면의 색상입니다.
      - parameters:
         - property: $surface-primary
      */
     class var SurfacePrimary: UIColor { return UIColor.AppColorBrandCalmshell }
+
     /**
      주 보조 면의 색상입니다.
      - parameters:
         - property: $surface-secondary
      */
     class var SurfaceSecondary: UIColor { return UIColor.AppColorGrayscale800 }
+
     /**
      부 보조 면의 색상입니다.
      - parameters:
         - property: $surface-tertiary
      */
     class var SurfaceTertiary: UIColor { return UIColor.AppColorGrayscale600 }
+
     /**
      비활성화 된 면의 색상입니다.
      - parameters:
         - property: $surface-deactivate
      */
     class var SurfaceDeactivate: UIColor { return UIColor.AppColorGrayscale50K }
+
     /**
      선택 된 면의 색상입니다.
      - parameters:
         - property: $surface-selected
      */
     class var SurfaceSelected: UIColor { return UIColor.AppColorGrayscale25K }
+
     /**
      반전 된 면의 색상입니다.
      - parameters:
         - property: $surface-invert
      */
     class var SurfaceInvert: UIColor { return UIColor.AppColorGrayscale900 }
+
     /**
      브랜드의 면의 색상입니다.
      - parameters:
         - property: $surface-brand
      */
     class var SurfaceBrand: UIColor { return UIColor.AppColorBrandWatermelon }
+
     /**
      흰색의 면의 색상입니다.
      - parameters:
         - property: $surface-white
      */
     class var SurfaceWhite: UIColor { return UIColor.AppColorGrayscaleBase }
+
     /**
      주의 및 경고의 면의 색상입니다.
      - parameters:
@@ -96,33 +107,37 @@ extension UIColor {
      */
     class var SurfaceWarn: UIColor { return UIColor.AppColorStatusWarnRed }
 
-    
+
     // MARK: Border Colors
-    
+
     /**
      기본적인 선의 색상입니다.
      - parameters:
       - property:$border-primary
      */
     class var BorderPrimary: UIColor { return UIColor.AppColorGrayscale900 }
+
     /**
      보조적인 선의 색상입니다.
      - parameters:
       - property:$border-secondary
      */
     class var BorderSecondary: UIColor { return UIColor.AppColorGrayscale600 }
+
     /**
      부보조적인 선의 색상입니다.
      - parameters:
       - property:$border-tertiary
      */
     class var BorderTertiary: UIColor { return UIColor.AppColorGrayscale400 }
+
     /**
      비활성화 된 선의 색상입니다.
      - parameters:
       - property:$border-deactivate
      */
     class var BorderDeactivate: UIColor { return UIColor.AppColorGrayscale200 }
+
     /**
      반전 된 선의 색상입니다.
      - parameters:
@@ -130,7 +145,7 @@ extension UIColor {
      */
     class var BorderInvert: UIColor { return UIColor.AppColorGrayscale50 }
 
-    
+
     // MARK: Brand Colors
     class var AppColorBrandCalmshell: UIColor { return UIColor(hex: 0xF8F7F4) }
     class var AppColorBrandWatermelon: UIColor { return UIColor(hex: 0x4DB8A9) }
@@ -188,6 +203,3 @@ extension UIColor {
         )
     }
 }
-
-
-
