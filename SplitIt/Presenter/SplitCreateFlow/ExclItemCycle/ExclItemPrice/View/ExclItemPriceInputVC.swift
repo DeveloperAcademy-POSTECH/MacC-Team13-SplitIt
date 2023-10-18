@@ -132,7 +132,7 @@ class ExclItemPriceInputVC: UIViewController {
         output.showExclItemTargetView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let vc = CSMemberInputVC()
+                let vc = ExclMemberVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
