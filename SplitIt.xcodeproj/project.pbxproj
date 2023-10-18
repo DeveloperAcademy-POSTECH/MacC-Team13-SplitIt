@@ -54,6 +54,13 @@
 		6078ACED2ADA756900995811 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 6078ACEC2ADA756900995811 /* RxCocoa */; };
 		6078ACEF2ADA756900995811 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6078ACEE2ADA756900995811 /* RxSwift */; };
 		6078ACF22ADA757E00995811 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 6078ACF12ADA757E00995811 /* RxDataSources */; };
+		DE1711AC2ADFBA4F0097850D /* MyInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1711AB2ADFBA4F0097850D /* MyInfoVC.swift */; };
+		DE1711AE2ADFBA590097850D /* MyInfoVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1711AD2ADFBA590097850D /* MyInfoVM.swift */; };
+		DE1711B02ADFBAA20097850D /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1711AF2ADFBAA20097850D /* UserData.swift */; };
+		DE1711B22ADFBAB50097850D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1711B12ADFBAB50097850D /* User.swift */; };
+		DE1711B42ADFBAC80097850D /* PayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1711B32ADFBAC80097850D /* PayData.swift */; };
+		DE1711B62ADFBADD0097850D /* SocialPay.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1711B52ADFBADD0097850D /* SocialPay.swift */; };
+		DE1711B82ADFBB540097850D /* UIViews+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1711B72ADFBB540097850D /* UIViews+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -98,6 +105,13 @@
 		6078ACD42ADA74AD00995811 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6078ACD72ADA74AD00995811 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6078ACD92ADA74AD00995811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DE1711AB2ADFBA4F0097850D /* MyInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoVC.swift; sourceTree = "<group>"; };
+		DE1711AD2ADFBA590097850D /* MyInfoVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoVM.swift; sourceTree = "<group>"; };
+		DE1711AF2ADFBAA20097850D /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		DE1711B12ADFBAB50097850D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		DE1711B32ADFBAC80097850D /* PayData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayData.swift; sourceTree = "<group>"; };
+		DE1711B52ADFBADD0097850D /* SocialPay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialPay.swift; sourceTree = "<group>"; };
+		DE1711B72ADFBB540097850D /* UIViews+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViews+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +171,7 @@
 		60115DF22ADBF0DD0050D32C /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
+				DE1711A82ADFBA320097850D /* MyInfo */,
 				60115E042ADC18110050D32C /* SplitCreateFlow */,
 				60115DF32ADBF10B0050D32C /* Home */,
 				60115E112ADC19D40050D32C /* NavigationHeader.swift */,
@@ -187,6 +202,7 @@
 			children = (
 				60115DF62ADBF2980050D32C /* UIColor+.swift */,
 				60115E002ADC01150050D32C /* UITextField+.swift */,
+				DE1711B72ADFBB540097850D /* UIViews+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -350,6 +366,35 @@
 			path = SplitIt;
 			sourceTree = "<group>";
 		};
+		DE1711A82ADFBA320097850D /* MyInfo */ = {
+			isa = PBXGroup;
+			children = (
+				DE1711AA2ADFBA440097850D /* ViewModel */,
+				DE1711A92ADFBA3B0097850D /* View */,
+				DE1711AF2ADFBAA20097850D /* UserData.swift */,
+				DE1711B12ADFBAB50097850D /* User.swift */,
+				DE1711B32ADFBAC80097850D /* PayData.swift */,
+				DE1711B52ADFBADD0097850D /* SocialPay.swift */,
+			);
+			path = MyInfo;
+			sourceTree = "<group>";
+		};
+		DE1711A92ADFBA3B0097850D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DE1711AB2ADFBA4F0097850D /* MyInfoVC.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DE1711AA2ADFBA440097850D /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				DE1711AD2ADFBA590097850D /* MyInfoVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -441,9 +486,11 @@
 			files = (
 				60115E292ADE21C40050D32C /* CSMemberConfirmVC.swift in Sources */,
 				60115E222ADD2BC80050D32C /* CSMemberInputCell.swift in Sources */,
+				DE1711AC2ADFBA4F0097850D /* MyInfoVC.swift in Sources */,
 				60115E242ADD2BE20050D32C /* CSMemberInputSearchCell.swift in Sources */,
 				60115E122ADC19D40050D32C /* NavigationHeader.swift in Sources */,
 				60115E182ADD19CD0050D32C /* NumberFormatterHelper.swift in Sources */,
+				DE1711AE2ADFBA590097850D /* MyInfoVM.swift in Sources */,
 				60115E2D2ADE221D0050D32C /* CSMemberConfirmCell.swift in Sources */,
 				1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */,
 				60115E162ADCDB840050D32C /* CSTotalAmountInputVM.swift in Sources */,
@@ -455,10 +502,14 @@
 				60115DF72ADBF2980050D32C /* UIColor+.swift in Sources */,
 				1A3852F92ADE5AC200E9A20B /* CSMember.swift in Sources */,
 				60115E102ADC195C0050D32C /* CreateStore.swift in Sources */,
+				DE1711B22ADFBAB50097850D /* User.swift in Sources */,
+				DE1711B02ADFBAA20097850D /* UserData.swift in Sources */,
 				1A3852F72ADE5AB200E9A20B /* CSInfo.swift in Sources */,
 				60115E1F2ADD2B660050D32C /* CSMemberInputVM.swift in Sources */,
+				DE1711B62ADFBADD0097850D /* SocialPay.swift in Sources */,
 				6078ACCC2ADA74AC00995811 /* AppDelegate.swift in Sources */,
 				1A4DB2292ADE61E800616243 /* RealmManager.swift in Sources */,
+				DE1711B42ADFBAC80097850D /* PayData.swift in Sources */,
 				1A3853032ADE5B4500E9A20B /* RealmCSMember.swift in Sources */,
 				1A3853012ADE5B3100E9A20B /* RealmCSInfo.swift in Sources */,
 				60115E012ADC01150050D32C /* UITextField+.swift in Sources */,
@@ -469,6 +520,7 @@
 				1A3852FF2ADE5B1B00E9A20B /* RealmSplit.swift in Sources */,
 				60115E0C2ADC18F90050D32C /* CSTitleInputVC.swift in Sources */,
 				1A3852F52ADE5A9F00E9A20B /* Split.swift in Sources */,
+				DE1711B82ADFBB540097850D /* UIViews+.swift in Sources */,
 				1A3852FB2ADE5ADA00E9A20B /* ExclItem.swift in Sources */,
 				60115E262ADD2CB00050D32C /* CSMemberInputSearchFooter.swift in Sources */,
 				6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */,
