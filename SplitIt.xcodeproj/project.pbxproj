@@ -54,6 +54,9 @@
 		6078ACED2ADA756900995811 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 6078ACEC2ADA756900995811 /* RxCocoa */; };
 		6078ACEF2ADA756900995811 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6078ACEE2ADA756900995811 /* RxSwift */; };
 		6078ACF22ADA757E00995811 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 6078ACF12ADA757E00995811 /* RxDataSources */; };
+		8677BA592ADFF5B6002BD395 /* CSEditListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA582ADFF5B6002BD395 /* CSEditListVM.swift */; };
+		8677BA5B2ADFF6D4002BD395 /* CSEditListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA5A2ADFF6D4002BD395 /* CSEditListVC.swift */; };
+		8677BA5D2AE00C58002BD395 /* CSEditListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA5C2AE00C58002BD395 /* CSEditListCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -98,6 +101,9 @@
 		6078ACD42ADA74AD00995811 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6078ACD72ADA74AD00995811 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6078ACD92ADA74AD00995811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8677BA582ADFF5B6002BD395 /* CSEditListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CSEditListVM.swift; path = ../../../../../SplitItTest/mySplitItTest/SplitItTest/View/Cell/CSEditListVM.swift; sourceTree = "<group>"; };
+		8677BA5A2ADFF6D4002BD395 /* CSEditListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CSEditListVC.swift; path = ../../../../../SplitItTest/mySplitItTest/SplitItTest/View/Cell/CSEditListVC.swift; sourceTree = "<group>"; };
+		8677BA5C2AE00C58002BD395 /* CSEditListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSEditListCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +165,7 @@
 			children = (
 				60115E042ADC18110050D32C /* SplitCreateFlow */,
 				60115DF32ADBF10B0050D32C /* Home */,
+				8677BA512ADFF3A2002BD395 /* SplitEditFlow */,
 				60115E112ADC19D40050D32C /* NavigationHeader.swift */,
 			);
 			path = Presenter;
@@ -350,6 +357,32 @@
 			path = SplitIt;
 			sourceTree = "<group>";
 		};
+		8677BA512ADFF3A2002BD395 /* SplitEditFlow */ = {
+			isa = PBXGroup;
+			children = (
+				8677BA552ADFF579002BD395 /* View */,
+				8677BA542ADFF571002BD395 /* ViewModel */,
+			);
+			path = SplitEditFlow;
+			sourceTree = "<group>";
+		};
+		8677BA542ADFF571002BD395 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				8677BA582ADFF5B6002BD395 /* CSEditListVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		8677BA552ADFF579002BD395 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8677BA5A2ADFF6D4002BD395 /* CSEditListVC.swift */,
+				8677BA5C2AE00C58002BD395 /* CSEditListCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -443,8 +476,10 @@
 				60115E222ADD2BC80050D32C /* CSMemberInputCell.swift in Sources */,
 				60115E242ADD2BE20050D32C /* CSMemberInputSearchCell.swift in Sources */,
 				60115E122ADC19D40050D32C /* NavigationHeader.swift in Sources */,
+				8677BA592ADFF5B6002BD395 /* CSEditListVM.swift in Sources */,
 				60115E182ADD19CD0050D32C /* NumberFormatterHelper.swift in Sources */,
 				60115E2D2ADE221D0050D32C /* CSMemberConfirmCell.swift in Sources */,
+				8677BA5D2AE00C58002BD395 /* CSEditListCell.swift in Sources */,
 				1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */,
 				60115E162ADCDB840050D32C /* CSTotalAmountInputVM.swift in Sources */,
 				60115E312ADE715E0050D32C /* CSMemberConfirmHeaderVM.swift in Sources */,
@@ -468,6 +503,7 @@
 				60115E0E2ADC19250050D32C /* CSTitleInputVM.swift in Sources */,
 				1A3852FF2ADE5B1B00E9A20B /* RealmSplit.swift in Sources */,
 				60115E0C2ADC18F90050D32C /* CSTitleInputVC.swift in Sources */,
+				8677BA5B2ADFF6D4002BD395 /* CSEditListVC.swift in Sources */,
 				1A3852F52ADE5A9F00E9A20B /* Split.swift in Sources */,
 				1A3852FB2ADE5ADA00E9A20B /* ExclItem.swift in Sources */,
 				60115E262ADD2CB00050D32C /* CSMemberInputSearchFooter.swift in Sources */,
