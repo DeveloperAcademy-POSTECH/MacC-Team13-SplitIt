@@ -47,6 +47,7 @@ class ExclItemNameInputVC: UIViewController {
         
         titleMessage.do {
             $0.text = "따로 계산할 것은 무엇인가요?"
+            $0.font = .systemFont(ofSize: 18)
         }
         
         nameTextFiled.do {
@@ -54,6 +55,7 @@ class ExclItemNameInputVC: UIViewController {
             $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
             $0.layer.borderWidth = 1
             $0.textAlignment = .center
+            $0.font = .systemFont(ofSize: 24)
         }
         
         nameTextSuffix.do {
@@ -63,6 +65,7 @@ class ExclItemNameInputVC: UIViewController {
         
         textFiledNotice.do {
             $0.text = "여기에 사용을 돕는 문구가 들어가요"
+            $0.font = .systemFont(ofSize: 12)
         }
         
         nextButton.do {
@@ -126,7 +129,7 @@ class ExclItemNameInputVC: UIViewController {
         output.showExclItemPriceView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let vc = CSTotalAmountInputVC()
+                let vc = ExclItemPriceInputVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
