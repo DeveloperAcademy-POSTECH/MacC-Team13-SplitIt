@@ -46,7 +46,7 @@ class HomeVC: UIViewController {
                                  recentSplitButtonTapped: historyButton.rx.tap)
         let output = viewModel.transform(input: input)
         
-        output.showWanView
+        output.showCreateSplit
             .drive(onNext: {
                 let vc = CSTitleInputVC()
                 self.navigationController?.pushViewController(vc, animated: true)

@@ -19,17 +19,17 @@ class HomeVM {
     }
     
     struct Output {
-        let showWanView: Driver<Void>
+        let showCreateSplit: Driver<Void>
         let showMoanaView: Driver<Void>
         let showJerryView: Driver<Void>
     }
 
     func transform(input: Input) -> Output {
-        let showWanView = input.splitItButtonTapped.asDriver()
+        let showCreateSplit = input.splitItButtonTapped.asDriver()
         let showMoanaView = input.myInfoButtonTapped.asDriver()
         let showJerryView = input.recentSplitButtonTapped.asDriver()
 
-        return Output(showWanView: showWanView,
+        return Output(showCreateSplit: showCreateSplit,
                       showMoanaView: showMoanaView,
                       showJerryView: showJerryView)
     }
