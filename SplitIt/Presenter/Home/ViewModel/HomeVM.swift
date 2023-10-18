@@ -28,6 +28,12 @@ class HomeVM {
         let showCreateSplit = input.splitItButtonTapped.asDriver()
         let showMoanaView = input.myInfoButtonTapped.asDriver()
         let showJerryView = input.recentSplitButtonTapped.asDriver()
+        
+        showCreateSplit
+            .drive(onNext: {
+                SplitRepository.share.createDatasForCreateFlow()
+            })
+            .disposed(by: disposeBag)
 
         return Output(showCreateSplit: showCreateSplit,
                       showMoanaView: showMoanaView,
