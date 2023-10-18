@@ -85,13 +85,48 @@ extension UIColor {
         - property: $surface-invert
      */
     class var SurfaceInvert: UIColor { return UIColor.AppColorGrayscale900 }
-
+    
     /**
-     브랜드의 면의 색상입니다.
+     브랜드 색상 'Calmshell'이 적용되는 면의 색상입니다.
      - parameters:
-        - property: $surface-brand
+        - property: $surface-brand-calmshell
      */
-    class var SurfaceBrand: UIColor { return UIColor.AppColorBrandWatermelon }
+    class var SurfaceBrandCalmshell: UIColor { return UIColor.AppColorBrandCalmshell }
+    
+    /**
+     브랜드 색상 'Watermelon'이 적용되는 면의 색상입니다.
+     - parameters:
+        - property: $surface-brand-watermelon
+     */
+    class var SurfaceBrandWatermelon: UIColor { return UIColor.AppColorBrandWatermelon }
+    
+    /**
+     브랜드 색상 'Cherry'가 적용되는 면의 색상입니다.
+     - parameters:
+        - property: $surface-brand-cherry
+     */
+    class var SurfaceBrandCherry: UIColor { return UIColor.AppColorBrandCherry }
+    
+    /**
+     브랜드 색상 'Pear'가 적용되는 면의 색상입니다.
+     - parameters:
+        - property: $surface-brand-pear
+     */
+    class var SurfaceBrandPear: UIColor { return UIColor.AppColorBrandPear }
+    
+    /**
+     브랜드 색상 'Mushroom'이 적용되는 면의 색상입니다.
+     - parameters:
+        - property: $surface-brand-mushroom
+     */
+    class var SurfaceBrandMushroom: UIColor { return UIColor.AppColorBrandMushroom }
+    
+    /**
+     브랜드 색상 'Radish'가 적용되는 면의 색상입니다.
+     - parameters:
+        - property: $surface-brand-radish
+     */
+    class var SurfaceBrandRadish: UIColor { return UIColor.AppColorBrandRadish }
 
     /**
      흰색의 면의 색상입니다.
