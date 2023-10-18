@@ -54,6 +54,10 @@
 		6078ACED2ADA756900995811 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 6078ACEC2ADA756900995811 /* RxCocoa */; };
 		6078ACEF2ADA756900995811 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6078ACEE2ADA756900995811 /* RxSwift */; };
 		6078ACF22ADA757E00995811 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 6078ACF12ADA757E00995811 /* RxDataSources */; };
+		C24535082ADFFAF80060D756 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24535072ADFFAF80060D756 /* UIFont+.swift */; };
+		C245350F2ADFFD360060D756 /* ONEMobileBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C245350C2ADFFD350060D756 /* ONEMobileBold.ttf */; };
+		C24535102ADFFD360060D756 /* ONEMobileLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C245350D2ADFFD360060D756 /* ONEMobileLight.ttf */; };
+		C24535112ADFFD360060D756 /* ONEMobileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C245350E2ADFFD360060D756 /* ONEMobileRegular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -98,6 +102,10 @@
 		6078ACD42ADA74AD00995811 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6078ACD72ADA74AD00995811 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6078ACD92ADA74AD00995811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C24535072ADFFAF80060D756 /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
+		C245350C2ADFFD350060D756 /* ONEMobileBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileBold.ttf; sourceTree = "<group>"; };
+		C245350D2ADFFD360060D756 /* ONEMobileLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileLight.ttf; sourceTree = "<group>"; };
+		C245350E2ADFFD360060D756 /* ONEMobileRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileRegular.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +184,7 @@
 		60115DF42ADBF1F80050D32C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C24535092ADFFCDA0060D756 /* Assets */,
 				60115DF52ADBF2580050D32C /* Extensions */,
 				60115E172ADD19CD0050D32C /* NumberFormatterHelper.swift */,
 			);
@@ -187,6 +196,7 @@
 			children = (
 				60115DF62ADBF2980050D32C /* UIColor+.swift */,
 				60115E002ADC01150050D32C /* UITextField+.swift */,
+				C24535072ADFFAF80060D756 /* UIFont+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -350,6 +360,32 @@
 			path = SplitIt;
 			sourceTree = "<group>";
 		};
+		C24535092ADFFCDA0060D756 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				C245350A2ADFFCE10060D756 /* Fonts */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		C245350A2ADFFCE10060D756 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				C245350B2ADFFD250060D756 /* Korean */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		C245350B2ADFFD250060D756 /* Korean */ = {
+			isa = PBXGroup;
+			children = (
+				C245350C2ADFFD350060D756 /* ONEMobileBold.ttf */,
+				C245350D2ADFFD360060D756 /* ONEMobileLight.ttf */,
+				C245350E2ADFFD360060D756 /* ONEMobileRegular.ttf */,
+			);
+			path = Korean;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -428,6 +464,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				6078ACD82ADA74AD00995811 /* LaunchScreen.storyboard in Resources */,
+				C245350F2ADFFD360060D756 /* ONEMobileBold.ttf in Resources */,
+				C24535102ADFFD360060D756 /* ONEMobileLight.ttf in Resources */,
+				C24535112ADFFD360060D756 /* ONEMobileRegular.ttf in Resources */,
 				6078ACD52ADA74AD00995811 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -441,6 +480,7 @@
 			files = (
 				60115E292ADE21C40050D32C /* CSMemberConfirmVC.swift in Sources */,
 				60115E222ADD2BC80050D32C /* CSMemberInputCell.swift in Sources */,
+				C24535082ADFFAF80060D756 /* UIFont+.swift in Sources */,
 				60115E242ADD2BE20050D32C /* CSMemberInputSearchCell.swift in Sources */,
 				60115E122ADC19D40050D32C /* NavigationHeader.swift in Sources */,
 				60115E182ADD19CD0050D32C /* NumberFormatterHelper.swift in Sources */,
