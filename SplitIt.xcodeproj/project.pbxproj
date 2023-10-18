@@ -56,6 +56,8 @@
 		6078ACF22ADA757E00995811 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 6078ACF12ADA757E00995811 /* RxDataSources */; };
 		60AD20E22ADEC15000EFACCD /* ExclItemNameInputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD20E12ADEC15000EFACCD /* ExclItemNameInputVC.swift */; };
 		60AD20E42ADEC15700EFACCD /* ExclItemNameInputVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD20E32ADEC15700EFACCD /* ExclItemNameInputVM.swift */; };
+		60AD20E92ADEC8AD00EFACCD /* ExclItemPriceInputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD20E82ADEC8AD00EFACCD /* ExclItemPriceInputVC.swift */; };
+		60AD20EB2ADEC8BA00EFACCD /* ExclItemPriceInputVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD20EA2ADEC8BA00EFACCD /* ExclItemPriceInputVM.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -102,6 +104,8 @@
 		6078ACD92ADA74AD00995811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		60AD20E12ADEC15000EFACCD /* ExclItemNameInputVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemNameInputVC.swift; sourceTree = "<group>"; };
 		60AD20E32ADEC15700EFACCD /* ExclItemNameInputVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemNameInputVM.swift; sourceTree = "<group>"; };
+		60AD20E82ADEC8AD00EFACCD /* ExclItemPriceInputVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemPriceInputVC.swift; sourceTree = "<group>"; };
+		60AD20EA2ADEC8BA00EFACCD /* ExclItemPriceInputVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemPriceInputVM.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -358,6 +362,7 @@
 		60AD20DD2ADEC0BC00EFACCD /* ExclItemCycle */ = {
 			isa = PBXGroup;
 			children = (
+				60AD20E52ADEC88D00EFACCD /* ExclItemPrice */,
 				60AD20E02ADEC10700EFACCD /* ExclItemName */,
 			);
 			path = ExclItemCycle;
@@ -386,6 +391,31 @@
 				60AD20DE2ADEC0EB00EFACCD /* View */,
 			);
 			path = ExclItemName;
+			sourceTree = "<group>";
+		};
+		60AD20E52ADEC88D00EFACCD /* ExclItemPrice */ = {
+			isa = PBXGroup;
+			children = (
+				60AD20E72ADEC89D00EFACCD /* ViewModel */,
+				60AD20E62ADEC89700EFACCD /* View */,
+			);
+			path = ExclItemPrice;
+			sourceTree = "<group>";
+		};
+		60AD20E62ADEC89700EFACCD /* View */ = {
+			isa = PBXGroup;
+			children = (
+				60AD20E82ADEC8AD00EFACCD /* ExclItemPriceInputVC.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		60AD20E72ADEC89D00EFACCD /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				60AD20EA2ADEC8BA00EFACCD /* ExclItemPriceInputVM.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -497,6 +527,7 @@
 				60115E102ADC195C0050D32C /* CreateStore.swift in Sources */,
 				1A3852F72ADE5AB200E9A20B /* CSInfo.swift in Sources */,
 				60115E1F2ADD2B660050D32C /* CSMemberInputVM.swift in Sources */,
+				60AD20E92ADEC8AD00EFACCD /* ExclItemPriceInputVC.swift in Sources */,
 				6078ACCC2ADA74AC00995811 /* AppDelegate.swift in Sources */,
 				1A4DB2292ADE61E800616243 /* RealmManager.swift in Sources */,
 				1A3853032ADE5B4500E9A20B /* RealmCSMember.swift in Sources */,
@@ -516,6 +547,7 @@
 				1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */,
 				1A4DB22B2ADE68E400616243 /* SplitRepository.swift in Sources */,
 				1A3852FD2ADE5B0100E9A20B /* ExclMember.swift in Sources */,
+				60AD20EB2ADEC8BA00EFACCD /* ExclItemPriceInputVM.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
