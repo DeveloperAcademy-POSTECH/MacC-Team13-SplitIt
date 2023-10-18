@@ -13,9 +13,9 @@ class HomeVM {
     var disposeBag = DisposeBag()
     
     struct Input {
-        let wanButtonTapped: ControlEvent<Void>
-        let moanaButtonTapped: ControlEvent<Void>
-        let jerryButtonTapped: ControlEvent<Void>
+        let splitItButtonTapped: ControlEvent<Void>
+        let myInfoButtonTapped: ControlEvent<Void>
+        let recentSplitButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
@@ -25,9 +25,9 @@ class HomeVM {
     }
 
     func transform(input: Input) -> Output {
-        let showWanView = input.wanButtonTapped.asDriver()
-        let showMoanaView = input.moanaButtonTapped.asDriver()
-        let showJerryView = input.jerryButtonTapped.asDriver()
+        let showWanView = input.splitItButtonTapped.asDriver()
+        let showMoanaView = input.myInfoButtonTapped.asDriver()
+        let showJerryView = input.recentSplitButtonTapped.asDriver()
 
         return Output(showWanView: showWanView,
                       showMoanaView: showMoanaView,
