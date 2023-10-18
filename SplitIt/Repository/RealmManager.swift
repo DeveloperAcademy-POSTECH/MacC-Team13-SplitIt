@@ -398,3 +398,23 @@ extension RealmManager {
         }
     }
 }
+
+
+//extension RealmManager {
+//    func createDummy() {
+//            let repo = Repository.shard
+//
+//            repo.createDatasForCreateFlow()
+//            repo.inputCSInfoWithTitle(title: "Test")
+//            repo.inputCSInfoWithTotalAmount(totalAmount: 1000)
+//            repo.createCSMember(name: "제롬")
+//            repo.createCSMember(name: "완")
+//            repo.createCSMember(name: "모아나")
+//            repo.createCSMember(name: "제리")
+//            repo.createCSMember(name: "토마토")
+//            repo.createCSMember(name: "코리")
+//            repo.createExclItemWithName(name: "맥주")
+//            repo.createExclItemPrice(price: 100)
+//            repo.updateDataToDB()
+//        }
+//}
