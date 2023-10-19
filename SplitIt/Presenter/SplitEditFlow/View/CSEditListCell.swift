@@ -6,17 +6,28 @@
 
 import UIKit
 import SnapKit
+import Reusable
 import RxSwift
 
-class CSEditListCell: UITableViewCell {
+class CSEditListCell: UITableViewCell, Reusable {
     
     var disposeBag = DisposeBag()
     
-    lazy var csTitleLabel: UILabel = {
-        let button = UILabel()
-        button.textAlignment = .center
-        return button
+    var csTitleLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
     }()
+    
+    var editBtn: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("수정하기", for: .normal)
+        btn.setTitleColor(.lightGray, for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 12)
+        return btn
+    }()
+
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -24,33 +35,20 @@ class CSEditListCell: UITableViewCell {
     }
     
     func setupUI() {
-        let titleLB = UILabel()
-        titleLB.text = "이름"
-        titleLB.font = .systemFont(ofSize: 12)
-        let titleBtn = UIButton(type: .system)
-        titleBtn.setTitle("수정하기", for: .normal)
-        titleBtn.tintColor = .lightGray
-        titleBtn.titleLabel?.font = .systemFont(ofSize: 12)
-        
-        let roundTitleStack = UIStackView(arrangedSubviews: [csTitleLabel, titleBtn])
-        roundTitleStack.axis = .horizontal
-        roundTitleStack.layer.cornerRadius = 8
-        roundTitleStack.layer.borderWidth = 1
-        roundTitleStack.distribution = .equalSpacing
-        
-        let titleStackView = UIStackView(arrangedSubviews: [titleLB,roundTitleStack])
-        titleStackView.axis = .vertical
-        titleStackView.spacing = 4
-        roundTitleStack.snp.makeConstraints { make in
-            make.height.equalTo(43)
+        contentView.backgroundColor = UIColor(hex: 0xF8F7F4)
+        [csTitleLabel, editBtn].forEach {
+            contentView.addSubview($0)
+        }
+        csTitleLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(16)
+            make.centerY.equalToSuperview()
         }
         
-        
-        contentView.addSubview(titleStackView)
-        titleStackView.snp.makeConstraints { make in
-            make.top.equalTo(contentView.snp.bottom).inset(-16)
-            make.leading.trailing.equalToSuperview().inset(30)
+        editBtn.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(16)
+            make.centerY.equalToSuperview()
         }
+        
     }
     
     required init?(coder: NSCoder) {
