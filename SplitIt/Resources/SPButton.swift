@@ -12,8 +12,8 @@ import SnapKit
 
 extension SPButton {
     enum Style {
-        
-        // MARK: Button 330 Styles
+
+        // MARK: Active Button Styles
         case primaryCalmshell
         case primaryWatermelon
         case primaryCherry
@@ -22,87 +22,142 @@ extension SPButton {
         case primaryRadish
         case secondary
         
+        // MARK: Pressed Button Styles
+        case primaryCalmshellPressed
+        case primaryWatermelonPressed
+        case primaryCherryPressed
+        case primaryPearPressed
+        case primaryMushroomPressed
+        case primaryRadishPressed
+        case secondaryPressed
+        
+        // MARK: Deactive Button Style
         case deactivate
     }
 }
 
 final class SPButton: UIButton {
-
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Style Configuration
     func applyStyle(_ style: Style) {
+        configureCommonProperties()
+        
         switch style {
+        // 활성 버튼, Unpressed 상태
         case .primaryCalmshell:
-            self.setTitle("버튼", for: .normal)
-            self.setTitleColor(.TextPrimary, for: .normal)
-            self.layer.cornerRadius = 24
             self.backgroundColor = .SurfaceBrandCalmshell
-            self.layer.borderColor = UIColor.BorderPrimary.cgColor
-            self.layer.borderWidth = 1
+            self.configureActiveProperties()
+            self.configureUnpressedProperties()
             
         case .primaryWatermelon:
-            self.setTitle("버튼", for: .normal)
-            self.setTitleColor(.TextPrimary, for: .normal)
-            self.layer.cornerRadius = 24
             self.backgroundColor = .SurfaceBrandWatermelon
-            self.layer.borderColor = UIColor.BorderPrimary.cgColor
-            self.layer.borderWidth = 1
-            
+            self.configureActiveProperties()
+            self.configureUnpressedProperties()
+        
         case .primaryCherry:
-            self.setTitle("버튼", for: .normal)
-            self.setTitleColor(.TextPrimary, for: .normal)
-            self.layer.cornerRadius = 24
             self.backgroundColor = .SurfaceBrandCherry
-            self.layer.borderColor = UIColor.BorderPrimary.cgColor
-            self.layer.borderWidth = 1
-            
+            self.configureActiveProperties()
+            self.configureUnpressedProperties()
+        
         case .primaryPear:
-            self.setTitle("버튼", for: .normal)
-            self.setTitleColor(.TextPrimary, for: .normal)
-            self.layer.cornerRadius = 24
             self.backgroundColor = .SurfaceBrandPear
-            self.layer.borderColor = UIColor.BorderPrimary.cgColor
-            self.layer.borderWidth = 1
-            
+            self.configureActiveProperties()
+            self.configureUnpressedProperties()
+        
         case .primaryMushroom:
-            self.setTitle("버튼", for: .normal)
-            self.setTitleColor(.TextPrimary, for: .normal)
-            self.layer.cornerRadius = 24
             self.backgroundColor = .SurfaceBrandMushroom
-            self.layer.borderColor = UIColor.BorderPrimary.cgColor
-            self.layer.borderWidth = 1
+            self.configureActiveProperties()
+            self.configureUnpressedProperties()
             
         case .primaryRadish:
-            self.setTitle("버튼", for: .normal)
-            self.setTitleColor(.TextPrimary, for: .normal)
-            self.layer.cornerRadius = 24
             self.backgroundColor = .SurfaceBrandRadish
-            self.layer.borderColor = UIColor.BorderPrimary.cgColor
-            self.layer.borderWidth = 1
-            
+            self.configureActiveProperties()
+            self.configureUnpressedProperties()
+        
         case .secondary:
-            self.setTitle("버튼", for: .normal)
-            self.setTitleColor(.TextPrimary, for: .normal)
-            self.layer.cornerRadius = 24
             self.backgroundColor = .SurfaceDeactivate
-            self.layer.borderColor = UIColor.BorderPrimary.cgColor
-            self.layer.borderWidth = 1
+            self.configureActiveProperties()
+            self.configureUnpressedProperties()
+        
+        // 활성 버튼, Pressed 상태
+        case .primaryCalmshellPressed:
+            self.backgroundColor = .SurfaceBrandCalmshell
+            self.configureActiveProperties()
+            self.configurePressedProperties()
+        
+        case .primaryWatermelonPressed:
+            self.backgroundColor = .SurfaceBrandWatermelon
+            self.configureActiveProperties()
+            self.configurePressedProperties()
+
+        case .primaryCherryPressed:
+            self.backgroundColor = .SurfaceBrandCherry
+            self.configureActiveProperties()
+            self.configurePressedProperties()
+
+        case .primaryPearPressed:
+            self.backgroundColor = .SurfaceBrandPear
+            self.configureActiveProperties()
+            self.configurePressedProperties()
+
+        case .primaryMushroomPressed:
+            self.backgroundColor = .SurfaceBrandMushroom
+            self.configureActiveProperties()
+            self.configurePressedProperties()
+        
+        case .primaryRadishPressed:
+            self.backgroundColor = .SurfaceBrandRadish
+            self.configureActiveProperties()
+            self.configurePressedProperties()
+
+        case .secondaryPressed:
+            self.backgroundColor = .SurfaceDeactivate
+            self.configureActiveProperties()
+            self.configurePressedProperties()
             
+        // 비활성 버튼
         case .deactivate:
-            self.setTitle("버튼", for: .disabled)
-            self.setTitleColor(.TextDeactivate, for: .disabled)
-            self.layer.cornerRadius = 24
-            self.backgroundColor = .SurfaceDeactivate
-            self.layer.borderColor = UIColor.BorderPrimary.cgColor
-            self.layer.borderWidth = 1
+            self.backgroundColor = .SurfaceBrandCalmshell
+            self.configureDeactiveProperties()
+            self.configurePressedProperties()
         }
+    }
+    
+    private func configureCommonProperties() {
+        self.setTitle("버튼", for: .normal)
+        self.layer.masksToBounds = false
+        self.layer.cornerRadius = 24
+        self.layer.borderWidth = 1
+        self.layer.shadowRadius = 0
+        self.layer.shadowOpacity = 1
+    }
+    
+    private func configureActiveProperties() {
+        self.setTitleColor(.TextPrimary, for: .normal)
+        self.layer.borderColor = UIColor.BorderPrimary.cgColor
+        self.layer.shadowColor = UIColor.BorderPrimary.cgColor
+
+    }
+    
+    private func configureDeactiveProperties() {
+        self.setTitleColor(.TextDeactivate, for: .normal)
+        self.layer.borderColor = UIColor.BorderDeactivate.cgColor
+        self.layer.shadowColor = UIColor.BorderDeactivate.cgColor
+    }
+    
+    private func configureUnpressedProperties() {
+        self.layer.shadowOffset = CGSize(width: 0, height: 8)
+    }
+    
+    private func configurePressedProperties() {
+        self.layer.shadowOffset = CGSize(width: 0, height: 3)
     }
 }
