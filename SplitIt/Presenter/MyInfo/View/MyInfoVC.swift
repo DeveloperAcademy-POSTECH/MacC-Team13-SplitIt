@@ -74,32 +74,28 @@ class MyInfoVC: UIViewController {
         payColor()
         
     }
+
+    func addTapGesture(to view: UIView) -> UITapGestureRecognizer {
+        let tapGesture = UITapGestureRecognizer()
+        view.addGestureRecognizer(tapGesture)
+        return tapGesture
+    }
     
     func setBinding() {
         
-        let friendListTap = UITapGestureRecognizer()
-        friendListView.addGestureRecognizer(friendListTap)
-        
-        let exclItemTap = UITapGestureRecognizer()
-        exclItemListView.addGestureRecognizer(exclItemTap)
-        
-        let editBtnTap = UITapGestureRecognizer()
-        accountEditView.addGestureRecognizer(editBtnTap)
+        let friendListTap = addTapGesture(to: friendListView)
+        let exclItemTap = addTapGesture(to: exclItemListView)
+        let editBtnTap = addTapGesture(to: accountEditView)
         
         let input = MyInfoVM.Input(privacyBtnTapped: privacyBtn.rx.tap.asDriver(),
                                    friendListViewTapped: friendListTap.rx.event.asObservable().map { _ in () },
                                    exclItemViewTapped: exclItemTap.rx.event.asObservable().map { _ in () },
                                    editAccountViewTapped: editBtnTap.rx.event.asObservable().map{ _ in () }
-                                   
-                                   
         )
+        
         
         let output = viewModel.transform(input: input)
         
- 
-                //                let bankVC = BankAccountVC()
-                //                self.navigationController?.pushViewController(bankVC, animated: true)
-           
         
         output.moveToPrivacyView
             .drive(onNext:{
@@ -128,9 +124,9 @@ class MyInfoVC: UIViewController {
         output.moveToEditAccountView
             .subscribe(onNext: {
                 print("계좌수정뷰 이동")
-                //                let bankVC = BankAccountVC()
-                //                self.navigationController?.pushViewController(bankVC, animated: true)
-           
+                let bankVC = MyBankAccountVC()
+                self.navigationController?.pushViewController(bankVC, animated: true)
+                
             })
             .disposed(by: disposeBag)
         
