@@ -59,6 +59,7 @@
 		C24535102ADFFD360060D756 /* ONEMobileLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C245350D2ADFFD360060D756 /* ONEMobileLight.ttf */; };
 		C24535112ADFFD360060D756 /* ONEMobileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C245350E2ADFFD360060D756 /* ONEMobileRegular.ttf */; };
 		C24535152AE0071C0060D756 /* SPButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24535142AE0071C0060D756 /* SPButton.swift */; };
+		C24535192AE11A2F0060D756 /* SPTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24535182AE11A2E0060D756 /* SPTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -108,6 +109,7 @@
 		C245350D2ADFFD360060D756 /* ONEMobileLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileLight.ttf; sourceTree = "<group>"; };
 		C245350E2ADFFD360060D756 /* ONEMobileRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileRegular.ttf; sourceTree = "<group>"; };
 		C24535142AE0071C0060D756 /* SPButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPButton.swift; sourceTree = "<group>"; };
+		C24535182AE11A2E0060D756 /* SPTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +192,7 @@
 				60115DF52ADBF2580050D32C /* Extensions */,
 				60115E172ADD19CD0050D32C /* NumberFormatterHelper.swift */,
 				C24535142AE0071C0060D756 /* SPButton.swift */,
+				C24535182AE11A2E0060D756 /* SPTextField.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -481,6 +484,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C24535192AE11A2F0060D756 /* SPTextField.swift in Sources */,
 				60115E292ADE21C40050D32C /* CSMemberConfirmVC.swift in Sources */,
 				60115E222ADD2BC80050D32C /* CSMemberInputCell.swift in Sources */,
 				C24535082ADFFAF80060D756 /* UIFont+.swift in Sources */,
