@@ -16,6 +16,9 @@ class MyInfoVM: UIViewController {
     let payData = PayData.shared.payData
     let disposeBag = DisposeBag()
     
+    let repo = SplitRepository.share
+    
+    
     struct Input {
         let privacyBtnTapped: Driver<Void>
         let friendListViewTapped: Observable<Void>
@@ -36,6 +39,10 @@ class MyInfoVM: UIViewController {
         let exclItemViewTapped = input.exclItemViewTapped
         let editAccountViewTap = input.editAccountViewTapped
 
+        repo.fetchMemberLog()
+        let members = repo.memberLogArr.value
+
+        
 
         let output = Output(moveToPrivacyView: privacyBtnTapped,
                             moveTofriendListView: friendListViewTapped,
