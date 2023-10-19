@@ -42,8 +42,7 @@ class CSTotalAmountInputVM {
         showCSMemberInputView
             .withLatestFrom(totalAmountResult.asDriver())
             .drive(onNext: {
-                CreateStore.shared.setCurrentCSInfoTotalAmount(totalAmount: $0)
-                CreateStore.shared.printAll()
+                SplitRepository.share.inputCSInfoWithTotalAmount(totalAmount: $0)
             })
             .disposed(by: disposeBag)
         
