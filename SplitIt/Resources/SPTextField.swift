@@ -17,7 +17,7 @@ extension SPTextField {
 }
 
 final class SPTextField: UITextField {
-    var monetaryUnitsCountry = UITextView()
+    let currencyLabel = UILabel()
     
     // MARK: - Initializer
     override init(frame: CGRect) {
@@ -30,24 +30,31 @@ final class SPTextField: UITextField {
 
     // MARK: - Style Configuration
     func applyStyle(_ style: Style) {
+        
         configureCommonProperties()
-
+        setCurrencyLabel(style: style)
+        
         switch style {
+            
+            // 일반 키보드
         case .normal:
             self.keyboardType = .default
             self.configureCommonProperties()
             self.configureActiveProperties()
 
+            // 따로 계산용 키보드
         case .elseValue:
             self.keyboardType = .default
             self.configureCommonProperties()
             self.configureActiveProperties()
 
+            // 숫자 키보드
         case .number:
             self.keyboardType = .numberPad
             self.configureCommonProperties()
             self.configureActiveProperties()
             
+            // 비활성 키보드
         case .deactivate:
             self.configureDeactiveProperties()
         }
@@ -61,6 +68,8 @@ final class SPTextField: UITextField {
     }
 
     private func configureActiveProperties() {
+        self.autocorrectionType = .no
+        self.autocapitalizationType = .none
         self.layer.borderColor = UIColor.BorderPrimary.cgColor
     }
 
@@ -68,4 +77,25 @@ final class SPTextField: UITextField {
         self.isEnabled = false
         self.layer.borderColor = UIColor.BorderDeactivate.cgColor
     }
+    
+    private func setCurrencyLabel(style: SPTextField.Style) {
+        self.addSubview(currencyLabel)
+        
+        currencyLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(20)
+        }
+        
+        switch style {
+        case .normal:
+            break
+        case .elseValue:
+            currencyLabel.text = "값"
+        case .number:
+            currencyLabel.text = "KRW"
+        case .deactivate:
+            break
+        }
+    }
+    
 }
