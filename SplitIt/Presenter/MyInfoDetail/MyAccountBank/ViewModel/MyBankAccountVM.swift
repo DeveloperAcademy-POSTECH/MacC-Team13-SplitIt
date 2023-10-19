@@ -15,6 +15,8 @@ class MyBankAccountVM {
     let payData = PayData.shared.payData
     let userData = UserData.shared.userData
     
+    
+    
     struct Input {
         let inputNameText: ControlEvent<String>
         let editDoneBtnTapped: Driver<Void>
@@ -23,7 +25,7 @@ class MyBankAccountVM {
         let tossTapped: Observable<Void>
         let kakaoTapeed: Observable<Void>
         let naverTapped: Observable<Void>
-
+        
     }
     
     
@@ -33,7 +35,7 @@ class MyBankAccountVM {
         let toggleTossPay: Observable<Void>
         let toggleKakaoPay: Observable<Void>
         let togglenaverPay: Observable<Void>
-
+        
         
     }
     
@@ -52,25 +54,27 @@ class MyBankAccountVM {
         var inputName: String = userData.value.name
         
         
+        
         inputNameText
             .bind(onNext: { text in
                 print(text)
                 inputName = text
             })
             .disposed(by: disposeBag)
-
+        
         
         tossTapped
             .subscribe(onNext: {
                 if let index = updatedPayData.firstIndex(where: { $0.socialPayIdx == 1 }) {
                     updatedPayData[index].isTrue.toggle()
+                    
                 }
                 self.payData.accept(updatedPayData)
                 print(updatedPayData)
             })
             .disposed(by: disposeBag)
-
-
+        
+        
         kakaoTapped
             .subscribe(onNext: {
                 if let index = updatedPayData.firstIndex(where: { $0.socialPayIdx == 2 }) {
@@ -92,7 +96,6 @@ class MyBankAccountVM {
             .disposed(by: disposeBag)
         
         
-        
         inputAccountText
             .subscribe(onNext: { text in
                 print("계좌번호 \(text)")
@@ -105,10 +108,10 @@ class MyBankAccountVM {
                 print("수정버튼 눌림")
                 UserData.shared.updateUserName(inputName == "" ? self.userData.value.name : inputName)
                 UserData.shared.updateUserAccount(inputAccount == "" ? self.userData.value.account : inputAccount)
-    
+                
             })
             .disposed(by: disposeBag)
-
+        
         
         let output = Output(popToMyInfoView: editDoneBtnTapped,
                             showBankModel: selectBackTapped,
@@ -120,6 +123,6 @@ class MyBankAccountVM {
         return output
     }
     
-   
+    
 }
 
