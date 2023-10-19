@@ -11,6 +11,7 @@ import RxCocoa
 import SafariServices
 import SnapKit
 import Then
+import RealmSwift
 
 class MyInfoVC: UIViewController {
     
@@ -18,50 +19,48 @@ class MyInfoVC: UIViewController {
     var disposeBag = DisposeBag()
     let userData = UserData.shared.userData
     
-    private let userNameLabel = UILabel()
-    private let userName = UILabel()
-    private let userBar = UIView()
+    let header = NavigationHeader()
+    let userNameLabel = UILabel()
+    let userName = UILabel()
+    let userBar = UIView()
     
-    private let accountView = UIView()
-    private let accountInfoLabel = UILabel()
-
+    let accountView = UIView()
+    let accountInfoLabel = UILabel()
     
-    private let accountEditView = UIView()
-    private let accountEditLabel = UILabel()
-    private let accountEditChevron = UIImageView()
+    let accountEditView = UIView()
+    let accountEditLabel = UILabel()
+    let accountEditChevron = UIImageView()
     
-    private let accountBankLabel = UILabel()
-    private let accountLabel = UILabel()
+    let accountBankLabel = UILabel()
+    let accountLabel = UILabel()
     
-    private let socialPayLabel = UILabel()
-    private let tossPayBtn = UIButton()
-    private let tossPayLabel = UILabel()
+    let socialPayLabel = UILabel()
+    let tossPayBtn = UIButton()
+    let tossPayLabel = UILabel()
     
-    private let kakaoPayLabel = UILabel()
-    private let kakaoPayBtn = UIButton()
+    let kakaoPayLabel = UILabel()
+    let kakaoPayBtn = UIButton()
     
-    private let naverPayLabel = UILabel()
-    private let naverPayBtn = UIButton()
+    let naverPayLabel = UILabel()
+    let naverPayBtn = UIButton()
     
-    private let splitLabel = UILabel()
+    let splitLabel = UILabel()
     
-    private let friendView = UIView()
+    let friendView = UIView()
     
-    private let friendListView = UIView()
-    private let friendListLabel = UILabel()
-    private let friendImage = UIImageView()
-    private let friendChevron = UIImageView()
+    let friendListView = UIView()
+    let friendListLabel = UILabel()
+    let friendImage = UIImageView()
+    let friendChevron = UIImageView()
     
-    private let friendBar = UIView()
+    let friendBar = UIView()
     
-    private let exclItemListView = UIView()
-    private let exclItemLabel = UILabel()
-    private let exclItemImage = UIImageView()
-    private let exclItemChevron = UIImageView()
+    let exclItemListView = UIView()
+    let exclItemLabel = UILabel()
+    let exclItemImage = UIImageView()
+    let exclItemChevron = UIImageView()
     
-    
-    private let privacyBtn = UIButton()
-    
+    let privacyBtn = UIButton()
     
     override func viewDidLoad() {
         
@@ -117,7 +116,8 @@ class MyInfoVC: UIViewController {
         output.moveToExclItemListView
             .subscribe(onNext: {
                 print("먹지 않은 뷰 이동")
-                
+          
+
             })
             .disposed(by: disposeBag)
         
@@ -138,14 +138,11 @@ class MyInfoVC: UIViewController {
                 self.accountLabel.text = user.account
             })
             .disposed(by: disposeBag)
-        
-        
-        
     }
     
-    
+
     func setAddView() {
-        [accountView, splitLabel,friendView, privacyBtn].forEach {
+        [header, accountView, splitLabel,friendView, privacyBtn].forEach {
             view.addSubview($0)
         }
         [userNameLabel, userName, userBar, accountInfoLabel, accountBankLabel, accountLabel,socialPayLabel, tossPayBtn, tossPayLabel, kakaoPayBtn, kakaoPayLabel, naverPayBtn, naverPayLabel, accountEditView].forEach {
@@ -171,22 +168,19 @@ class MyInfoVC: UIViewController {
     
     func setAttribute() {
         view.backgroundColor = .white
-//
-//        self.navigationController?.navigationBar.topItem?.title = ""
-//        self.navigationItem.title = "나의 정보"
-//
         
         let privacyBtnString = NSAttributedString(string: "개인정보 처리방침", attributes: [
             NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
         ])
-        
-//        let accountEditBtnString = NSAttributedString(string: "수정하기", attributes: [
-//            NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
-//        ])
-        
-        
+
+        //밑줄 만들어주기 위한 attribute
         let attributedString = NSMutableAttributedString(string: "수정하기")
         attributedString.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: attributedString.length))
+        
+        
+        header.do {
+            $0.configureBackButton(viewController: self)
+        }
         
         userName.do {
             $0.font = UIFont.boldSystemFont(ofSize: 24)
@@ -348,6 +342,13 @@ class MyInfoVC: UIViewController {
     }
     
     func setLayout() {
+        
+        header.snp.makeConstraints {
+            $0.height.equalTo(30)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
         accountView.snp.makeConstraints { make in
             make.height.equalTo(230)
             make.width.equalTo(330)

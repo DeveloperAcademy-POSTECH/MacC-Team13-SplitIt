@@ -19,6 +19,8 @@ class MyBankAccountVC: UIViewController {
     let userData = UserData.shared.userData
     let maxCharacterCount = 8
     
+    let header = NavigationHeader()
+    
     private var nameLabel = UILabel()
     private var nameTextField = UITextField()
     private var nameCountLabel = UILabel()
@@ -50,8 +52,6 @@ class MyBankAccountVC: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
 
- 
-
         setAddView()
         setLayout()
         setAttribute()
@@ -75,7 +75,7 @@ class MyBankAccountVC: UIViewController {
 
     
     func setAddView() {
-        [nameLabel, nameTextField,
+        [header, nameLabel, nameTextField,
          bankLabel, bankView,
          accountLabel,editDoneBtn,
          accountTextField, payLabel,
@@ -94,6 +94,12 @@ class MyBankAccountVC: UIViewController {
     }
     
     func setLayout() {
+        header.snp.makeConstraints {
+            $0.height.equalTo(30)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
         nameLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(112)
             make.left.equalToSuperview().offset(36)
@@ -256,6 +262,10 @@ class MyBankAccountVC: UIViewController {
         self.navigationController?.navigationBar.topItem?.title = ""
         self.navigationItem.title = "내 정보 수정"
         
+        header.do {
+            $0.configureBackButton(viewController: self)
+        }
+        
         nameLabel.do {
             $0.text = "이름"
             $0.font = UIFont.systemFont(ofSize: 12)
@@ -397,8 +407,8 @@ class MyBankAccountVC: UIViewController {
         output.showBankModel
             .subscribe(onNext: { [weak self] in
                 let modalVC = BankListModalVC()
-                modalVC.modalPresentationStyle = .formSheet
-                modalVC.modalTransitionStyle = .coverVertical
+                                modalVC.modalPresentationStyle = .formSheet
+                                modalVC.modalTransitionStyle = .coverVertical
                 modalVC.selectedBankName
                     .bind { [weak self] bankName in
                         self?.bankNameLabel.text = bankName
@@ -409,9 +419,10 @@ class MyBankAccountVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        
-        
     }
+
+        
+    
     
     //Pay류 isTrue값에 따라 버튼 색상 변경 함수
     //    func payColor() {

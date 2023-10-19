@@ -541,13 +541,12 @@
 		DE73D6DF2AE0D10200ABF3EF /* MyAccountBank */ = {
 			isa = PBXGroup;
 			children = (
+				DE73D6F22AE1223800ABF3EF /* Cell */,
 				DE73D6E12AE0D11600ABF3EF /* ViewModel */,
 				DE73D6E02AE0D11000ABF3EF /* View */,
 				DE73D6E62AE0D20600ABF3EF /* BankListData.swift */,
 				DE73D6E82AE0D27500ABF3EF /* Bank.swift */,
 				DE73D6EA2AE0D29000ABF3EF /* BankManager.swift */,
-				DE73D6EE2AE0D2D500ABF3EF /* BankCell.swift */,
-				DE73D6F02AE1104B00ABF3EF /* PayButton.swift */,
 			);
 			path = MyAccountBank;
 			sourceTree = "<group>";
@@ -555,6 +554,7 @@
 		DE73D6E02AE0D11000ABF3EF /* View */ = {
 			isa = PBXGroup;
 			children = (
+				DE73D6F02AE1104B00ABF3EF /* PayButton.swift */,
 				DE73D6E22AE0D12300ABF3EF /* MyBankAccountVC.swift */,
 				DE73D6EC2AE0D2C300ABF3EF /* BankListModalVC.swift */,
 			);
@@ -567,6 +567,14 @@
 				DE73D6E42AE0D12C00ABF3EF /* MyBankAccountVM.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		DE73D6F22AE1223800ABF3EF /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				DE73D6EE2AE0D2D500ABF3EF /* BankCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

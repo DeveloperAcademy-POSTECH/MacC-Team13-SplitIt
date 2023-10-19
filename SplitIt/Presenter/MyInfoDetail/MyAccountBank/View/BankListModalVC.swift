@@ -18,8 +18,8 @@ class BankListModalVC: UIViewController, UIScrollViewDelegate {
     var disposeBag = DisposeBag()
     var selectedBankName: BehaviorRelay<String> = BehaviorRelay<String>(value: "은행을 선택해주세요")
 
-    
-    var label = UILabel()
+    let topView = UIView()
+    let selectedBankLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,12 +33,23 @@ class BankListModalVC: UIViewController, UIScrollViewDelegate {
     
     
     func setLayout() {
+        
         collectionView.snp.makeConstraints { make in
-            make.height.equalTo(1500)
-            make.width.equalTo(380)
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(10)
+            make.top.equalTo(topView.snp.bottom).offset(10)
+            make.leading.trailing.bottom.equalToSuperview()
+
         }
+        
+        topView.snp.makeConstraints { make in
+            make.width.equalTo(390)
+            make.height.equalTo(90)
+            make.top.centerX.equalToSuperview()
+        }
+        
+        selectedBankLabel.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
+        
     }
     
     func setCollectionView() {
@@ -48,34 +59,25 @@ class BankListModalVC: UIViewController, UIScrollViewDelegate {
             configureCell: { (_, collectionView, indexPath, item) in
             
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BankCell", for: indexPath) as! BankCell
-                cell.backgroundColor = .gray
+                cell.backgroundColor = .clear
                 
-                let label = UILabel()
-
-                cell.contentView.addSubview(label)
-                label.translatesAutoresizingMaskIntoConstraints = false
-
-                label.text = item.name
-                
-                label.centerXAnchor.constraint(equalTo: cell.centerXAnchor).isActive = true
-                label.centerYAnchor.constraint(equalTo: cell.centerYAnchor).isActive = true
-                
+                cell.nameLabel.text = item.name
+        
                 return cell
             }
         )
+        
         
         BankManager.shared.getAllBanks()
             .map { [SectionModel(model: "Section", items: $0)] }
             .bind(to: collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
-        
 
         collectionView.rx.modelSelected(Bank.self)
             .subscribe(onNext: { bank in
                 UserData.shared.updateUserBankName(bank.name)
                 self.dismiss(animated: true, completion: nil)
-                print(bank.name, bank.backIdx)
                 self.selectedBankName.accept(bank.name)
             })
             .disposed(by: disposeBag)
@@ -84,12 +86,18 @@ class BankListModalVC: UIViewController, UIScrollViewDelegate {
  
     
     func setAttribute() {
-        
+        view.addSubview(topView)
         view.addSubview(collectionView)
+        topView.addSubview(selectedBankLabel)
         
         view.backgroundColor = .white
+        
         collectionView.backgroundColor = .white
         
+        topView.backgroundColor = .white
+        
+        selectedBankLabel.text = "정산받을 은행을 선택해주세요"
+        selectedBankLabel.font = UIFont.systemFont(ofSize: 21)
         
         
     }
@@ -99,11 +107,11 @@ class BankListModalVC: UIViewController, UIScrollViewDelegate {
 extension BankListModalVC: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth: CGFloat = 100.0
-        let cellHeight: CGFloat = 70.0
+        let cellWidth: CGFloat = 326
+        let cellHeight: CGFloat = 48
         
         return CGSize(width: cellWidth, height: cellHeight)
     }
-    
+   
 }
 

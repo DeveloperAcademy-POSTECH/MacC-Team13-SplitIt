@@ -18,7 +18,6 @@ struct PayButton {
 
     init(labelText: String, btn: UIImage, check: UIImage) {
         
-     
         self.label = UILabel()
         self.label.text = labelText
         self.label.font = UIFont.systemFont(ofSize: 11)
