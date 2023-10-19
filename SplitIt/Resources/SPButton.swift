@@ -87,7 +87,7 @@ final class SPButton: UIButton {
             self.configureActiveProperties()
             self.configureUnpressedProperties()
         
-        // 활성 버튼, Pressed 상태
+        // 비활성 버튼, Pressed 상태
         case .primaryCalmshellPressed:
             self.backgroundColor = .SurfaceBrandCalmshell
             self.configureActiveProperties()
@@ -144,10 +144,10 @@ final class SPButton: UIButton {
         self.setTitleColor(.TextPrimary, for: .normal)
         self.layer.borderColor = UIColor.BorderPrimary.cgColor
         self.layer.shadowColor = UIColor.BorderPrimary.cgColor
-
     }
     
     private func configureDeactiveProperties() {
+        self.isEnabled = false
         self.setTitleColor(.TextDeactivate, for: .normal)
         self.layer.borderColor = UIColor.BorderDeactivate.cgColor
         self.layer.shadowColor = UIColor.BorderDeactivate.cgColor
@@ -158,6 +158,7 @@ final class SPButton: UIButton {
     }
     
     private func configurePressedProperties() {
+        self.isEnabled = false
         self.layer.shadowOffset = CGSize(width: 0, height: 3)
     }
 }
