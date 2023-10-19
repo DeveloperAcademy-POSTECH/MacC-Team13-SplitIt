@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+struct User {
+    var userIdx: Int32
+    var name: String
+    var account: String
+    var bank: String
+    
+}

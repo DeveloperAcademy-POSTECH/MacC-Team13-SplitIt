@@ -56,9 +56,8 @@ class HomeVC: UIViewController {
         output.showMoanaView
             .drive(onNext: {
                 // MARK: 모아나가 연결할 뷰로 수정
-                print("모아나뷰 이동") // 수정 후 삭제
-//                let vc = HomeVC()
-//                self.navigationController?.pushViewController(vc, animated: true)
+                let vc = MyInfoVC()
+                self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
         
