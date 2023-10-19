@@ -101,8 +101,8 @@
 		6078ACD42ADA74AD00995811 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6078ACD72ADA74AD00995811 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6078ACD92ADA74AD00995811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8677BA582ADFF5B6002BD395 /* CSEditListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CSEditListVM.swift; path = ../../../../../SplitItTest/mySplitItTest/SplitItTest/View/Cell/CSEditListVM.swift; sourceTree = "<group>"; };
-		8677BA5A2ADFF6D4002BD395 /* CSEditListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CSEditListVC.swift; path = ../../../../../SplitItTest/mySplitItTest/SplitItTest/View/Cell/CSEditListVC.swift; sourceTree = "<group>"; };
+		8677BA582ADFF5B6002BD395 /* CSEditListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSEditListVM.swift; sourceTree = "<group>"; };
+		8677BA5A2ADFF6D4002BD395 /* CSEditListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSEditListVC.swift; sourceTree = "<group>"; };
 		8677BA5C2AE00C58002BD395 /* CSEditListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSEditListCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
