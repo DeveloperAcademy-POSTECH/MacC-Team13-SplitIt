@@ -56,11 +56,16 @@ class ExclMemberSectionHeader: UICollectionReusableView, Reusable {
             $0.height.width.equalTo(15)
         }
     }
-    
-    // Rx의 MultiSection에서 section의 headerTitle를 세팅
-    func configure(item: TargetSection, sectionIndex: Int) {
+
+    func configure(item: ExclMemberSection, sectionIndex: Int) {
+        let numberFormatter = NumberFormatterHelper()
+        
         self.backgroundColor = backgroundColor(forSectionIndex: sectionIndex)
-        headerTitle.text = "[\(item.title) 값 / \(item.price) KRW]"
+        
+        let name = item.exclItem.name
+        let price = numberFormatter.formattedString(from: item.exclItem.price)
+        
+        headerTitle.text = "[\(name) 값 / \(price) KRW]"
     }
     
     func backgroundColor(forSectionIndex sectionIndex: Int) -> UIColor {
