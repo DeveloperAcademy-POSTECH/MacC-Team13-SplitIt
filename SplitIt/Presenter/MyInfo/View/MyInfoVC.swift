@@ -17,7 +17,7 @@ class MyInfoVC: UIViewController {
     
     var viewModel = MyInfoVM()
     var disposeBag = DisposeBag()
-    let userData = UserData.shared.userData
+    let userDefault = UserDefaults.standard
     
     let header = NavigationHeader()
     let userNameLabel = UILabel()
@@ -70,10 +70,24 @@ class MyInfoVC: UIViewController {
         setAttribute()
         setLayout()
         setBinding()
-        payColor()
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+           super.viewWillAppear(animated)
+           userNewInfo()
+       }
 
+       func userNewInfo() {
+           self.userName.text = UserDefaults.standard.string(forKey: "userName")
+           self.accountBankLabel.text = UserDefaults.standard.string(forKey: "userBank")
+           self.accountLabel.text = UserDefaults.standard.string(forKey: "userAccount")
+           
+           self.tossPayBtn.backgroundColor = userDefault.bool(forKey: "tossPay") ? UIColor.systemBlue : UIColor.gray
+           self.kakaoPayBtn.backgroundColor = userDefault.bool(forKey: "kakaoPay") ? UIColor.systemYellow : UIColor.gray
+           self.naverPayBtn.backgroundColor = userDefault.bool(forKey: "naverPay") ? UIColor.systemGreen : UIColor.gray
+       }
+    
     func addTapGesture(to view: UIView) -> UITapGestureRecognizer {
         let tapGesture = UITapGestureRecognizer()
         view.addGestureRecognizer(tapGesture)
@@ -91,8 +105,7 @@ class MyInfoVC: UIViewController {
                                    exclItemViewTapped: exclItemTap.rx.event.asObservable().map { _ in () },
                                    editAccountViewTapped: editBtnTap.rx.event.asObservable().map{ _ in () }
         )
-        
-        
+                
         let output = viewModel.transform(input: input)
         
         
@@ -108,7 +121,8 @@ class MyInfoVC: UIViewController {
         
         output.moveTofriendListView
             .subscribe(onNext: {
-                print("친구뷰 이동")
+                let memberLogVC = MemberLogVC()
+                self.navigationController?.pushViewController(memberLogVC, animated: true)
                 
             })
             .disposed(by: disposeBag)
@@ -116,10 +130,10 @@ class MyInfoVC: UIViewController {
         output.moveToExclItemListView
             .subscribe(onNext: {
                 print("먹지 않은 뷰 이동")
-          
-
+        
             })
             .disposed(by: disposeBag)
+        
         
         output.moveToEditAccountView
             .subscribe(onNext: {
@@ -129,17 +143,7 @@ class MyInfoVC: UIViewController {
                 
             })
             .disposed(by: disposeBag)
-        
-        
-        UserData.shared.userData
-            .subscribe(onNext: { user in
-                self.userName.text = user.name
-                self.accountBankLabel.text = user.bank
-                self.accountLabel.text = user.account
-            })
-            .disposed(by: disposeBag)
     }
-    
 
     func setAddView() {
         [header, accountView, splitLabel,friendView, privacyBtn].forEach {
@@ -164,7 +168,6 @@ class MyInfoVC: UIViewController {
         
 
     }
-    
     
     func setAttribute() {
         view.backgroundColor = .white
@@ -258,6 +261,7 @@ class MyInfoVC: UIViewController {
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 12
             $0.titleLabel?.font = .systemFont(ofSize: 13)
+
         }
         
             kakaoPayLabel.do {
@@ -271,6 +275,7 @@ class MyInfoVC: UIViewController {
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 12
             $0.titleLabel?.font = .systemFont(ofSize: 13)
+
         }
         
         naverPayLabel.do {
@@ -539,26 +544,7 @@ class MyInfoVC: UIViewController {
     }
     
 
-    func payColor() {
-        PayData.shared.tossPayEnabled
-            .drive(onNext: { isToggled in
-                self.tossPayBtn.backgroundColor = isToggled ? UIColor.blue : UIColor.gray
-            })
-            .disposed(by: disposeBag)
-        
-        PayData.shared.kakaoPayEnabled
-            .drive(onNext: { isToggled in
-                self.kakaoPayBtn.backgroundColor = isToggled ? UIColor.systemYellow : UIColor.gray
-            })
-            .disposed(by: disposeBag)
-        
-        PayData.shared.naverPayEnabled
-            .drive(onNext: { isToggled in
-                self.naverPayBtn.backgroundColor = isToggled ? UIColor.systemGreen : UIColor.gray
-            })
-            .disposed(by: disposeBag)
-    }
-    
+
     
 }
 

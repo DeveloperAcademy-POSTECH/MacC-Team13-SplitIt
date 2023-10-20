@@ -12,11 +12,11 @@ import SafariServices
 
 class MyInfoVM: UIViewController {
     
-    let userData = UserData.shared.userData
     let payData = PayData.shared.payData
     let disposeBag = DisposeBag()
     
     let repo = SplitRepository.share
+    let userDefault = UserDefaults.standard
     
     
     struct Input {
@@ -38,17 +38,18 @@ class MyInfoVM: UIViewController {
         let friendListViewTapped = input.friendListViewTapped
         let exclItemViewTapped = input.exclItemViewTapped
         let editAccountViewTap = input.editAccountViewTapped
-
-        repo.fetchMemberLog()
-        let members = repo.memberLogArr.value
-
         
-
+        repo.fetchMemberLog()
+        
+        userDefault.set(false, forKey: "tossPay")
+        userDefault.set(false, forKey: "kakaoPay")
+        userDefault.set(false, forKey: "naverPay")
+        
         let output = Output(moveToPrivacyView: privacyBtnTapped,
                             moveTofriendListView: friendListViewTapped,
                             moveToExclItemListView: exclItemViewTapped,
                             moveToEditAccountView: editAccountViewTap
-                            )
+        )
         
         return output
     }

@@ -76,7 +76,8 @@ class BankListModalVC: UIViewController, UIScrollViewDelegate {
 
         collectionView.rx.modelSelected(Bank.self)
             .subscribe(onNext: { bank in
-                UserData.shared.updateUserBankName(bank.name)
+                UserDefaults.standard.set(bank.name, forKey: "userBank")
+               // UserData.shared.updateUserBankName(bank.name)
                 self.dismiss(animated: true, completion: nil)
                 self.selectedBankName.accept(bank.name)
             })

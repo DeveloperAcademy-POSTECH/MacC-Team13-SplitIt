@@ -16,8 +16,8 @@ class MyBankAccountVC: UIViewController {
     let viewModel = MyBankAccountVM()
     var disposeBag = DisposeBag()
     let payData = PayData.shared.payData
-    let userData = UserData.shared.userData
     let maxCharacterCount = 8
+    let userDefault = UserDefaults.standard
     
     let header = NavigationHeader()
     
@@ -26,7 +26,7 @@ class MyBankAccountVC: UIViewController {
     var nameCountLabel = UILabel()
     
     let bankView = UIView()
-    let bankNameLabel = UILabel()
+    var bankNameLabel = UILabel()
     let bankArrowImage = UIImageView()
     
     let bankLabel = UILabel()
@@ -50,24 +50,14 @@ class MyBankAccountVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        
         setAddView()
         setLayout()
         setAttribute()
         setBinding()
         setPay()
-        //payColor()
+        asapRxData()
     }
-    
-    @objc func keyboardWillShow(notification: Notification) {
-        if let userInfo = notification.userInfo {
-            if let keyboardSize = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-                let keyboardHeight = keyboardSize.height
-                // 키보드가 나타날 때 수행할 작업을 여기에 추가하세요.
-            }
-        }
-    }
+
     
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -90,7 +80,7 @@ class MyBankAccountVC: UIViewController {
         [leftBar, rightBar, tossPayView, kakaoPayView, naverPayView].forEach {
             payView.addSubview($0)
         }
-        // view.addSubview(tossPayView)
+      
     }
     
     func setLayout() {
@@ -225,18 +215,9 @@ class MyBankAccountVC: UIViewController {
         
     }
     
-    
-    func addTapGesture(to view: UIView) -> UITapGestureRecognizer {
-        let tapGesture = UITapGestureRecognizer()
-        view.addGestureRecognizer(tapGesture)
-        return tapGesture
-    }
-    
-    
+ 
     func setAttribute() {
-        //왜 9글자로 나옴,,,?
         nameTextField.rx.text.orEmpty
-        //.map { "(\($0.count)/8)" }
             .map { text -> String in
                 let cnt = min(text.count, 8)
                 return "(\(cnt) / 8)"
@@ -256,12 +237,8 @@ class MyBankAccountVC: UIViewController {
             .disposed(by: disposeBag)
         
         
-        
-        
         view.backgroundColor = .white
         
-        self.navigationController?.navigationBar.topItem?.title = ""
-        self.navigationItem.title = "내 정보 수정"
         
         header.do {
             $0.configureBackButton(viewController: self)
@@ -278,12 +255,16 @@ class MyBankAccountVC: UIViewController {
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.gray.cgColor
-            //placeholder의 색깔을 정하기 위함
-            $0.attributedPlaceholder = NSAttributedString(string: "이름을 입력해주세요",
-                                                          attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
             
+            //placeholder의 색깔
+            if UserDefaults.standard.string(forKey: "userName") == nil {
+                $0.attributedPlaceholder = NSAttributedString(string: "이름을 입력해주세요",
+                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+            } else {
+                $0.placeholder = UserDefaults.standard.string(forKey: "userName")
+            }
             $0.font = UIFont.systemFont(ofSize: 15)
-            //$0.placeholder = userData.value.name
+           
             $0.clipsToBounds = true
             
             //textField의 앞부분의 빈공간 구현
@@ -308,7 +289,13 @@ class MyBankAccountVC: UIViewController {
         }
         
         bankNameLabel.do {
-            $0.text = "은행을 선택해주세요"
+            if UserDefaults.standard.string(forKey: "userBank") == nil {
+                $0.text = "은행을 선택해주세요"
+                $0.textColor = .gray
+            } else {
+                $0.text = UserDefaults.standard.string(forKey: "userBank")
+                $0.textColor = .black
+            }
             $0.font = UIFont.systemFont(ofSize: 15)
             
         }
@@ -329,11 +316,23 @@ class MyBankAccountVC: UIViewController {
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.gray.cgColor
-            $0.attributedPlaceholder = NSAttributedString(string: "   계좌번호를 입력해주세요",
+            
+            if UserDefaults.standard.string(forKey: "userAccount") == nil {
+            $0.attributedPlaceholder = NSAttributedString(string: "계좌번호를 입력해주세요",
                                                           attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+            } else {
+                $0.placeholder = UserDefaults.standard.string(forKey: "userAccount")
+            }
+            
+            
+            
             $0.font = UIFont.systemFont(ofSize: 15)
             //$0.placeholder = userData.value.account
             $0.clipsToBounds = true
+            
+            //textField의 앞부분의 빈공간 구현
+            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: $0.frame.height))
+            $0.leftViewMode = .always
             
             
         }
@@ -369,17 +368,17 @@ class MyBankAccountVC: UIViewController {
             
         }
         
-        tossPayView.do {
-            $0.backgroundColor = UIColor.systemBlue
-        }
-        
-        kakaoPayView.do {
-            $0.backgroundColor = UIColor.systemYellow
-        }
-        
-        naverPayView.do {
-            $0.backgroundColor = UIColor.systemGreen
-        }
+//        tossPayView.do {
+//            $0.backgroundColor = .gray
+//        }
+//
+//        kakaoPayView.do {
+//            $0.backgroundColor = .gray
+//        }
+//
+//        naverPayView.do {
+//            $0.backgroundColor = .gray
+//        }
         
     }
     
@@ -389,10 +388,6 @@ class MyBankAccountVC: UIViewController {
         let tossTap = addTapGesture(to: tossPayView)
         let kakaoTap = addTapGesture(to: kakaoPayView)
         let naverTap = addTapGesture(to: naverPayView)
-        
-        var tossColor = false
-        var kakaoColor = false
-        var naverColor = false
         
         let input = MyBankAccountVM.Input(inputNameText: nameTextField.rx.text.orEmpty.changed,
                                           editDoneBtnTapped: editDoneBtn.rx.tap.asDriver(),
@@ -407,7 +402,7 @@ class MyBankAccountVC: UIViewController {
         let output = viewModel.transform(input: input)
         
         output.popToMyInfoView
-            .drive(onNext:{
+            .drive(onNext:{ [self] in
                 self.navigationController?.popViewController(animated: true)
             })
             .disposed(by: disposeBag)
@@ -419,51 +414,58 @@ class MyBankAccountVC: UIViewController {
                 modalVC.modalPresentationStyle = .formSheet
                 modalVC.modalTransitionStyle = .coverVertical
                 modalVC.selectedBankName
-                    .bind { [weak self] bankName in
-                        self?.bankNameLabel.text = bankName
+                    .bind { bankName in
+                        self?.userDefault.set(bankName, forKey: "userName")
                         print(bankName)
                     }
                     .disposed(by: modalVC.disposeBag)
                 self?.present(modalVC, animated: true, completion: nil)
             })
             .disposed(by: disposeBag)
-        
-        output.toggleTossPay
-            .subscribe(onNext: { [weak self] in
-                if tossColor { //true 일 때
-                    self?.tossPayView.backgroundColor = UIColor.systemBlue
-                } else {
-                    self?.tossPayView.backgroundColor = .gray
-                }
-                tossColor.toggle()
-            })
-            .disposed(by: disposeBag)
-        
-        output.toggleKakaoPay
-            .subscribe(onNext: { [weak self] in
-                if kakaoColor { //true 일 때
-                    self?.kakaoPayView.backgroundColor = UIColor.systemYellow
-                } else {
-                    self?.kakaoPayView.backgroundColor = .gray
-                }
-                kakaoColor.toggle()
-            })
-            .disposed(by: disposeBag)
-        
-        output.togglenaverPay
-            .subscribe(onNext: { [weak self] in
-                if naverColor { //true 일 때
-                    self?.naverPayView.backgroundColor = UIColor.systemGreen
-                } else {
-                    self?.naverPayView.backgroundColor = .gray
-                }
-                naverColor.toggle()
-            })
-            .disposed(by: disposeBag)
-        
     }
     
     
+    
+    
+    func asapRxData() {
+        userDefault.rx
+            .observe(Bool.self, "tossPay")
+            .subscribe(onNext: { value in
+                guard let value = value else { return }
+                self.tossPayView.backgroundColor = value ? UIColor.systemBlue : UIColor.gray
+            })
+            .disposed(by: disposeBag)
+        
+        userDefault.rx
+            .observe(Bool.self, "kakaoPay")
+            .subscribe(onNext: { value in
+                guard let value = value else { return }
+                self.kakaoPayView.backgroundColor = value ? UIColor.systemYellow : UIColor.gray
+            })
+            .disposed(by: disposeBag)
+
+        userDefault.rx
+            .observe(Bool.self, "naverPay")
+            .subscribe(onNext: { value in
+                guard let value = value else { return }
+                self.naverPayView.backgroundColor = value ? UIColor.systemGreen : UIColor.gray
+            })
+            .disposed(by: disposeBag)
+        
+        userDefault.rx
+            .observe(String.self, "userBank")
+            .subscribe(onNext: { value in
+                guard let value = value else { return }
+                self.bankNameLabel.text = value
+                
+            })
+    }
+    
+    func addTapGesture(to view: UIView) -> UITapGestureRecognizer {
+        let tapGesture = UITapGestureRecognizer()
+        view.addGestureRecognizer(tapGesture)
+        return tapGesture
+    }
 }
 
 extension MyBankAccountVC: UITextFieldDelegate {
