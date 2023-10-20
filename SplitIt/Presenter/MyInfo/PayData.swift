@@ -29,27 +29,6 @@ struct PayData {
         return payData.asObservable()
     }
     
-    //pay icon들 색깔 지정해주기 위해서 Driver로 전달
-    var tossPayEnabled: Driver<Bool> {
-        return payData.map { payColor in
-            return payColor.first(where: { $0.socialPayIdx == 1 })?.isTrue ?? false
-        }
-        .asDriver(onErrorJustReturn: false)
-    }
-    
-    var kakaoPayEnabled: Driver<Bool> {
-        return payData.map { payColor in
-            return payColor.first(where: { $0.socialPayIdx == 2})?.isTrue ?? false
-        }
-        .asDriver(onErrorJustReturn: false)
-    }
-    
-    var naverPayEnabled: Driver<Bool> {
-        return payData.map { payColor in
-            return payColor.first(where: { $0.socialPayIdx == 3})?.isTrue ?? false
-        }
-        .asDriver(onErrorJustReturn: false)
-    }
-    
+
 }
 

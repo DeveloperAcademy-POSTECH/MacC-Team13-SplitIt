@@ -13,7 +13,6 @@ import SnapKit
 class MemberCell: UITableViewCell {
     
     var nameLabel = UILabel()
-    var editBtn = UIButton()
     var deleteBtn = UIButton()
     
     let viewModel = MemberLogVM()
@@ -36,7 +35,6 @@ class MemberCell: UITableViewCell {
     
     func addView() {
         contentView.addSubview(nameLabel)
-        contentView.addSubview(editBtn)
         contentView.addSubview(deleteBtn)
         
     }
@@ -48,13 +46,8 @@ class MemberCell: UITableViewCell {
             make.left.equalToSuperview().offset(16)
         }
         
-        editBtn.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(10)
-            make.right.equalToSuperview().offset(-50)
-        }
-        
         deleteBtn.snp.makeConstraints { make in
-            make.width.equalTo(30)
+            make.width.height.equalTo(20)
             make.top.equalToSuperview().offset(10)
             make.right.equalToSuperview().offset(-10)
         }
@@ -62,25 +55,15 @@ class MemberCell: UITableViewCell {
     }
     
     func setAttribute() {
-
         
         nameLabel.font = UIFont.systemFont(ofSize: 18)
         nameLabel.textColor = .black
         
-        editBtn.setTitle("수정", for: .normal)
-        editBtn.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        editBtn.titleLabel?.textColor = .black
-        editBtn.clipsToBounds = true
-        editBtn.layer.cornerRadius = 12
-        editBtn.backgroundColor = .blue
-        
-        
-        deleteBtn.setTitle("삭제", for: .normal)
-        deleteBtn.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        deleteBtn.titleLabel?.textColor = .black
+        deleteBtn.setImage(UIImage(systemName: "x.circle.fill"), for: .normal)
+        deleteBtn.tintColor = .gray
         deleteBtn.clipsToBounds = true
         deleteBtn.layer.cornerRadius = 12
-        deleteBtn.backgroundColor = .red
+        deleteBtn.backgroundColor = .clear
         
     }
     

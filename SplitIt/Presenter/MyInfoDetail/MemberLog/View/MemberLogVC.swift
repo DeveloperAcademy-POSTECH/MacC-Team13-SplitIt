@@ -12,13 +12,13 @@ import RxDataSources
 import SnapKit
 import Then
 
-class MemberLogVC: UIViewController {
+class MemberLogVC: UIViewController, UIScrollViewDelegate {
+    let repo = SplitRepository.share
     
-    var label = UILabel()
+    let header = NavigationHeader()
+    var searchImage = UIImageView()
     var tableView = UITableView()
     var searchBarTextField = UITextField()
-    let header = NavigationHeader()
-    //searchBar에 있는 돋보기 모양
     
     var viewModel = MemberLogVM()
     var disposeBag = DisposeBag()
@@ -41,73 +41,73 @@ class MemberLogVC: UIViewController {
         
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
-        
-        tableView.rx.itemSelected
-            .bind { indexPath in
-                print(indexPath)
-            }
-            .disposed(by: disposeBag)
+
     }
     
     
     func setAddView() {
-        [header, label, tableView, searchBarTextField].forEach {
+        [header,tableView, searchBarTextField].forEach {
             view.addSubview($0)
         }
-       
+        searchBarTextField.addSubview(searchImage)
+        
     }
     
     func setLayout() {
-      
-        
         header.snp.makeConstraints {
             $0.height.equalTo(30)
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
         }
         
-        
-        label.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(100)
-            make.left.equalToSuperview().offset(20)
+        searchBarTextField.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(108)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(330)
+            make.height.equalTo(30)
+            
         }
         
         tableView.snp.makeConstraints { make in
             make.height.equalTo(500)
             make.width.equalTo(350)
-            make.top.equalToSuperview().offset(180)
+            make.top.equalTo(searchBarTextField.snp.bottom).offset(8)
             make.centerX.equalToSuperview()
         }
         
-        searchBarTextField.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(130)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(350)
-            make.height.equalTo(50)
-            
+        searchImage.snp.makeConstraints { make in
+            make.height.equalTo(22)
+            make.width.equalTo(22)
+            make.left.equalToSuperview().offset(10)
+            make.centerY.equalToSuperview()
         }
+        
     }
-    
     
     func setAttribute() {
         
-        self.navigationController?.navigationBar.topItem?.title = ""
         view.backgroundColor = .white
-        
         
         header.do {
             $0.configureBackButton(viewController: self)
         }
         
-        label.text = "친구 목록"
-        label.font = UIFont.systemFont(ofSize: 20)
+        searchBarTextField.do {
+            $0.clipsToBounds = true
+            $0.layer.borderColor = UIColor.black.cgColor
+            $0.layer.borderWidth = 1
+            $0.placeholder = "친구이름을 입력하세요"
+            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 38, height: $0.frame.height))
+            $0.leftViewMode = .always
+            
+        }
         
-        searchBarTextField.clipsToBounds = true
-        searchBarTextField.layer.borderColor = UIColor.black.cgColor
-        searchBarTextField.layer.borderWidth = 1
-        searchBarTextField.placeholder = "간단히 입력해주세요"
+        searchImage.do {
+            $0.image = UIImage(systemName: "magnifyingglass")
+        }
+        
+        
     }
-    
     
     func setBinding() {
         
@@ -117,81 +117,47 @@ class MemberLogVC: UIViewController {
                 guard let self = self else { return }
                 
                 if text == "" {
-                    viewModel.filteredMemberList = viewModel.memberList
+                    viewModel.filteredMemberList = repo.memberLogArr
                 } else {
                     self.viewModel.filterMembers(with: text)
                 }
             }
             .disposed(by: disposeBag)
         
+        
         viewModel.filteredMemberList
             .bind(to: tableView.rx.items(cellIdentifier: "MemberCell", cellType: MemberCell.self)) { (row, member, cell) in
-                
                 cell.nameLabel.text = member.name
                 //삭제버튼 눌렀을 때
                 cell.deleteBtn.rx.tap
                     .observe(on: MainScheduler.asyncInstance)
-                    .subscribe(onNext: {
-                       // self.showDeteleActionSheet(memIdx: member.memberLogIdx)
+                    .subscribe(onNext: { [self] in
+                        self.showDeteleActionSheet(memIdx: member.memberLogIdx)
                         print(member.memberLogIdx)
+                        //tableView.reloadData()
                     })
                     .disposed(by: cell.disposeBag)
-                
-                //수정버튼을 눌렀을 때
-                cell.editBtn.rx.tap
-                    .observe(on: MainScheduler.asyncInstance)
-                    .subscribe(onNext: {
-                        //self.showEditActionSheet(name: member.name, memIndex: member.memberIdx)
-                    })
-                    .disposed(by: cell.disposeBag)
+                    
             }
             .disposed(by: disposeBag)
+        
+
+
     }
     
-    
-    
-    func showDeteleActionSheet(memIdx: Int32) {
+    func showDeteleActionSheet(memIdx: String) {
         
         let actionSheet = UIAlertController(title: nil, message: "친구를 삭제하시겠습니까?", preferredStyle: .alert)
         
         actionSheet.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-        
         actionSheet.addAction(UIAlertAction(title: "삭제", style: .default, handler: { [weak self] _ in
             guard let self = self else { return }
-            var currentMembers = viewModel.memberList.value
-//            if let index = currentMembers.firstIndex(where: { $0.memberIdx == memberLogIdx }) {
-//                print(index)
-//                currentMembers.remove(at: index)
-//                viewModel.memberList.accept(currentMembers)
-//            }
+            repo.deleteMemberLog(memberLogIdx: memIdx)
+            self.viewModel.filteredMemberList.accept(self.repo.memberLogArr.value.sorted { $0.name < $1.name })
         }))
-        
         present(actionSheet, animated: true)
-        
     }
-    
-    func showEditActionSheet(name: String, memIndex: Int32){
-        
-        let actionSheet = UIAlertController(title: nil, message: "친구 이름 수정", preferredStyle: .alert)
-        
-        actionSheet.addTextField(configurationHandler: { textField in
-            textField.placeholder = name
-        })
-        
-        actionSheet.addAction(UIAlertAction(title: "저장", style: .default, handler: { [weak self] _ in
-            guard let self = self else { return }
-            var currentMembers = viewModel.memberList.value
-//            if let index = currentMembers.firstIndex(where: { $0.memberIdx == memIndex }), let textField = actionSheet.textFields?.first {
-//                currentMembers[index].name = textField.text!
-//                viewModel.memberList.accept(currentMembers)
-//                print(textField.text!)
-//            }
-        }))
-        
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        
-        present(actionSheet, animated: true, completion: nil)
-    }
+   
 }
 
 
