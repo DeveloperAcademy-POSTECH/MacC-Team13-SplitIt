@@ -281,6 +281,7 @@ final class SPButton: UIButton {
     
     // 공통 프로퍼티
     private func configureCommonProperties() {
+        self.titleLabel?.font = UIFont.KoreanButtonText
         self.layer.masksToBounds = false
         self.layer.borderWidth = 1
         self.layer.shadowRadius = 0
@@ -506,7 +507,7 @@ final class SPButton: UIButton {
     
     // 하프 버튼 폰트 및 타입페이스 설정
     private func configureHalfButtonFontProperties() {
-//        currencyLabel.font = UIFont.KoreanButtonText
+        currencyLabel.font = UIFont.KoreanButtonText
     }
     
     private func configureHalfButtonStringSmartSplitProperties() {

@@ -91,11 +91,19 @@ final class SPTextField: UITextField {
             break
         case .elseValue:
             currencyLabel.text = "값"
+            self.configureCurrencyLabelFontProperties()
+            
         case .number:
             currencyLabel.text = "KRW"
+            self.configureCurrencyLabelFontProperties()
+            
         case .deactivate:
             break
         }
+    }
+    
+    private func configureCurrencyLabelFontProperties() {
+        currencyLabel.font = UIFont.KoreanCaption1
     }
     
 }
