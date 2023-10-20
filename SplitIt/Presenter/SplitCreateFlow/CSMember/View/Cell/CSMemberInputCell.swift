@@ -85,30 +85,29 @@ class CSMemberInputCell: UICollectionViewCell, Reusable {
         deleteButton.snp.removeConstraints()
     }
 
-    func configure(item: String, indexPath: IndexPath, viewModel: CSMemberInputVM) {
+    func configure(item: CSMember, indexPath: IndexPath, viewModel: CSMemberInputVM) {
         self.viewModel = viewModel
         self.indexPath = indexPath
 
         if indexPath.row == 0 {
             setLayoutMe()
-            memberName.text = "\(item) (나)"
+            memberName.text = "\(item.name)(나)"
             contentView.backgroundColor = UIColor(hex: 0x343434)
             memberName.textColor = UIColor(hex: 0xF1F1F1)
         } else {
             setLayout()
-            memberName.text = item
+            memberName.text = item.name
             contentView.backgroundColor = UIColor(hex: 0xF8F7F4)
             memberName.textColor = UIColor(hex: 0x202020)
             
+            // MARK: Tap한 item에 해당하는 name을 Repository의 CSMember에서 삭제
             deleteButton.rx.tap
-                .withLatestFrom(viewModel.memberList)
-                .map { memberList -> [String] in
-                    var updatedList = memberList
-                    updatedList.remove(at: indexPath.row)
-                    return updatedList
-                }
-                .asDriver(onErrorJustReturn: [])
-                .drive(viewModel.memberList)
+                .asDriver()
+                .drive(onNext: {
+                    let memberList = viewModel.memberList.value
+                    let deleteItem = memberList.filter{$0.csMemberIdx == item.csMemberIdx}.first!
+                    SplitRepository.share.deleteCSMemberAndRelatedData(csMemberIdx: deleteItem.csMemberIdx)
+                })
                 .disposed(by: cellDisposeBag)
         }
     }

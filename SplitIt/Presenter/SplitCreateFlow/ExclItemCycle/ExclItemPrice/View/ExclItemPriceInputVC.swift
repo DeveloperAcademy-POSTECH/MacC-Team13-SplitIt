@@ -1,24 +1,24 @@
 //
-//  CSTitleInputVC.swift
+//  ExclItemPriceInputVC.swift
 //  SplitIt
 //
-//  Created by 홍승완 on 2023/10/15.
+//  Created by 홍승완 on 2023/10/17.
 //
 
 import UIKit
 import RxSwift
 import RxCocoa
 
-class CSTitleInputVC: UIViewController {
+class ExclItemPriceInputVC: UIViewController {
     
     var disposeBag = DisposeBag()
     
-    let viewModel = CSTitleInputVM()
+    let viewModel = ExclItemPriceInputVM()
     
     let header = NavigationHeader()
     let titleMessage = UILabel()
-    let titleTextFiled = UITextField()
-    let textFiledCounter = UILabel()
+    let priceTextField = UITextField()
+    let currencyLabel = UILabel()
     let textFiledNotice = UILabel()
     let nextButton = UIButton()
     
@@ -34,7 +34,7 @@ class CSTitleInputVC: UIViewController {
         super.viewWillAppear(animated)
         
         setKeyboardNotification()
-        self.titleTextFiled.becomeFirstResponder()
+        self.priceTextField.becomeFirstResponder()
     }
     
     func setAttribute() {
@@ -45,18 +45,26 @@ class CSTitleInputVC: UIViewController {
         }
         
         titleMessage.do {
-            $0.text = "어디에 돈을 쓰셨나요?"
+            $0.font = .systemFont(ofSize: 18)
         }
         
-        titleTextFiled.do {
+        priceTextField.do {
+            $0.keyboardType = .numberPad
             $0.layer.cornerRadius = 8
             $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
             $0.layer.borderWidth = 1
             $0.textAlignment = .center
+            $0.font = .systemFont(ofSize: 24)
+        }
+        
+        currencyLabel.do {
+            $0.text = "KRW"
+            $0.font = .systemFont(ofSize: 15)
         }
         
         textFiledNotice.do {
             $0.text = "여기에 사용을 돕는 문구가 들어가요"
+            $0.font = .systemFont(ofSize: 12)
         }
         
         nextButton.do {
@@ -67,9 +75,11 @@ class CSTitleInputVC: UIViewController {
     }
     
     func setLayout() {
-        [header,titleMessage,titleTextFiled,textFiledCounter,textFiledNotice,nextButton].forEach {
+        [header,titleMessage,priceTextField,textFiledNotice,nextButton].forEach {
             view.addSubview($0)
         }
+        
+        priceTextField.addSubview(currencyLabel)
         
         header.snp.makeConstraints {
             $0.height.equalTo(30)
@@ -82,19 +92,19 @@ class CSTitleInputVC: UIViewController {
             $0.centerX.equalToSuperview()
         }
         
-        titleTextFiled.snp.makeConstraints {
-            $0.top.equalTo(titleMessage.snp.bottom).offset(53)
+        priceTextField.snp.makeConstraints {
+            $0.top.equalTo(titleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(60)
         }
         
-        textFiledCounter.snp.makeConstraints {
-            $0.top.equalTo(titleTextFiled.snp.bottom).offset(6)
-            $0.trailing.equalTo(titleTextFiled.snp.trailing).inset(5)
+        currencyLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(20)
         }
         
         textFiledNotice.snp.makeConstraints {
-            $0.top.equalTo(titleTextFiled.snp.bottom).offset(6)
+            $0.top.equalTo(priceTextField.snp.bottom).offset(6)
             $0.centerX.equalToSuperview()
         }
         
@@ -106,53 +116,37 @@ class CSTitleInputVC: UIViewController {
     }
     
     func setBinding() {
-        let input = CSTitleInputVM.Input(nextButtonTapped: nextButton.rx.tap,
-                                         title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""))
+        let input = ExclItemPriceInputVM.Input(nextButtonTapped: nextButton.rx.tap.asDriver(),
+                                               price: priceTextField.rx.text.orEmpty.asDriver(onErrorJustReturn: ""))
         let output = viewModel.transform(input: input)
         
-        output.showCSTotalAmountView
+        output.title
+            .map(viewModel.mapTitleMessage)
+            .drive(titleMessage.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.totalAmount
+            .drive(priceTextField.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.showExclItemTargetView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let vc = CSTotalAmountInputVC()
+                let vc = ExclMemberVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
-            .disposed(by: disposeBag)
-        
-        output.titleCount
-            .drive(textFiledCounter.rx.text)
-            .disposed(by: disposeBag)
-        
-        output.textFieldIsValid
-            .distinctUntilChanged()
-            .drive(onNext: { [weak self] isValid in
-                guard let self = self else { return }
-                self.textFiledCounter.textColor = isValid
-                ? UIColor(hex: 0xCCCCCC)
-                : UIColor(hex: 0xFF3030)
-            })
-            .disposed(by: disposeBag)
-        
-        output.textFieldIsValid
-            .map { [weak self] isValid -> String in
-                guard let self = self else { return "" }
-                if !isValid {
-                    return String(self.titleTextFiled.text?.prefix(self.viewModel.maxTextCount) ?? "")
-                } else {
-                    return self.titleTextFiled.text ?? ""
-                }
-            }
-            .drive(titleTextFiled.rx.text)
             .disposed(by: disposeBag)
     }
 }
 
-extension CSTitleInputVC: UITextFieldDelegate {
+extension ExclItemPriceInputVC: UITextFieldDelegate {
     func setKeyboardNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     @objc private func keyboardWillShow(_ notification: Notification) {
+        
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let keyboardHeight: CGFloat
             keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
@@ -176,4 +170,7 @@ extension CSTitleInputVC: UITextFieldDelegate {
     func setKeyboardObserverRemove() {
         NotificationCenter.default.removeObserver(self)
     }
+    
 }
+
+

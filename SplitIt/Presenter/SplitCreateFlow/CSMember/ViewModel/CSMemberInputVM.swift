@@ -15,18 +15,18 @@ class CSMemberInputVM {
     
     let maxTextCount = 12
     
-    let memberList = BehaviorRelay<[String]>(value: []) // CSMemberInputCell에서 사용
+    let memberList = SplitRepository.share.csMemberArr
     let isOverayViewHidden = BehaviorRelay<Bool>(value: false) // CSMemberInputVC
     let currentSearchText = BehaviorRelay<String>(value: "") // CSMemberInputSearchFooter
     
     struct Input {
-        let viewDidLoad: Driver<Void> // viewDidLoad
-        let nextButtonTapSend: Driver<Void> // 다음 버튼
-        let searchBarText: Driver<String> // TitleTextField의 text
+        let viewDidLoad: Driver<Void>
+        let nextButtonTapSend: Driver<Void>
+        let searchBarText: Driver<String>
     }
     
     struct Output {
-        let memberList: BehaviorRelay<[String]>
+        let memberList: BehaviorRelay<[CSMember]>
         let searchList: BehaviorRelay<[String]>
         let showCSMemberConfirmView: Driver<Void>
         let isOverlayingSearchView: Driver<Bool>
@@ -35,47 +35,87 @@ class CSMemberInputVM {
     }
     
     func transform(input: Input) -> Output {
+        let maxTextCount = maxTextCount
         let searchList = BehaviorRelay<[String]>(value: [])
-        let searchBarText = input.searchBarText
+        
+        let memberListValue = memberList.value.map { $0.name }
+        let memberNameList = BehaviorRelay<[String]>(value: memberListValue)
+        
+        let memberLogList = SplitRepository.share.memberLogArr
+        let memberLogNameList = BehaviorRelay<Set<String>>(value: Set())
+        
+        let searchBarText = input.searchBarText.asDriver()
         let textFieldCount = BehaviorRelay<Int>(value: 0)
         let textFieldCounter = BehaviorRelay<String>(value: "")
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
         let showCSMemberConfirmView = input.nextButtonTapSend.asDriver()
-        let searchListDB = BehaviorRelay<[String]>(value: []) // Dummy
 
-        // 현재 차수의 members, DB 세팅
-        input.viewDidLoad
-            .drive(onNext: { [weak self] in
-                guard let self = self else { return }
-                self.memberList.accept(["나의닉네임","코리","제롬","토마토","제리","모아나"])
-                searchListDB.accept(["가","가나","가나다","나","나다라","나다라마","다라마바"])
-            })
+        memberList
+            .asDriver()
+            .map { $0.map { $0.name } }
+            .drive(memberNameList)
+            .disposed(by: disposeBag)
+        
+        memberLogList
+            .asDriver()
+            .map { $0.map {$0.name} }
+            .map{Set($0)}
+            .drive(memberLogNameList)
             .disposed(by: disposeBag)
 
+        // MARK: Repository로부터 MemberLog를 fetch
+        input.viewDidLoad
+            .drive(onNext: {
+                SplitRepository.share.fetchMemberLog()
+            })
+            .disposed(by: disposeBag)
+        
+        // MARK: output: textFieldCounter
+        isOverayViewHidden
+            .asDriver(onErrorJustReturn: false)
+            .map{ _ in String("0/\(self.maxTextCount)") }
+            .drive(textFieldCounter)
+            .disposed(by: disposeBag)
+
+        // 현재 입력한 text의 개수를 textFieldCount에 drive
         searchBarText
             .map{ $0.count }
             .drive(textFieldCount)
             .disposed(by: disposeBag)
-        
+
+        // MARK: 현재 입력한 text를 maxTextCount 제한에 맞추어 Relay에 accept
         searchBarText
-            .drive(onNext: { [weak self] text in
-                guard let self = self else { return }
-                if text.count <= self.maxTextCount {
-                    self.currentSearchText.accept(text)
+            .map {text in
+                if text.count <= maxTextCount {
+                    return text
                 } else {
-                    let endIndex = text.index(text.startIndex, offsetBy: self.maxTextCount)
-                    self.currentSearchText.accept(String(text[text.startIndex..<endIndex]))
+                    let endIndex = text.index(text.startIndex, offsetBy: maxTextCount)
+                    return String(text[text.startIndex..<endIndex])
                 }
-                // 검색창의 text에 따라 DB에서 필터링
-                let db = searchListDB.value
-                let list = db.filter { $0.contains(text) }
-                searchList.accept(list)
-            })
+            }
+            .drive(currentSearchText)
             .disposed(by: disposeBag)
-            
-        // SearchBar Display
+        
+        // MARK: output: SearchList (SearchList 로직)
+        /// 현재 멤버에 존재하지 않으면서, MemberLog에 존재하는 현재 입력한 text를 포함하는 [String] 타입을 drive
         searchBarText
-            .map { $0.count > 0 }
+            .map { text in
+                let memberNameSet = Set(memberNameList.value)
+                let memberLogSet = Set(memberLogNameList.value)
+                
+                let intersection = memberLogSet.intersection(memberNameSet)
+                let excludeMemberNameInMemberLogArray = Array(memberLogSet.subtracting(intersection))
+
+                let nameMatchAndExcludeCurrentMemberMemberLogList = excludeMemberNameInMemberLogArray.filter{$0.contains(text)}
+                return nameMatchAndExcludeCurrentMemberMemberLogList
+            }
+            .drive(searchList)
+            .disposed(by: disposeBag)
+        
+        // MARK: output: isOverayViewHidden
+        /// 현재 입력한 text가 없으면 searchBar를 Hidden
+        searchBarText
+            .map { $0.count == 0 }
             .drive(isOverayViewHidden)
             .disposed(by: disposeBag)
         
@@ -89,27 +129,13 @@ class CSMemberInputVM {
             .drive(textFieldCounter)
             .disposed(by: disposeBag)
         
-        // TextField Input Valid
+        // MARK: output: textFieldIsValid
         searchBarText
             .map { [weak self] text -> Bool in
                 guard let self = self else { return false }
                 return text.count < self.maxTextCount
             }
             .drive(textFieldIsValid)
-            .disposed(by: disposeBag)
-        
-        showCSMemberConfirmView
-            .withLatestFrom(self.memberList.asDriver(onErrorJustReturn: []))
-            .drive(onNext: {
-                CreateStore.shared.setCurrentCSInfoCSMember(members: $0)
-                CreateStore.shared.printAll()
-            })
-            .disposed(by: disposeBag)
-        
-        isOverayViewHidden
-            .asDriver(onErrorJustReturn: false)
-            .map{ _ in String("0/\(self.maxTextCount)") }
-            .drive(textFieldCounter)
             .disposed(by: disposeBag)
 
         return Output(memberList: memberList,
@@ -119,5 +145,10 @@ class CSMemberInputVM {
                       textFieldCounter: textFieldCounter.asDriver(),
                       textFieldIsValid: textFieldIsValid.asDriver())
     }
-}
+    
+    // 입력한 name이 memberLog에 존재하는지 확인하여 존재하지 않는지 여부를 Bool type으로 반환
+    func canAddMemberLogWithName(name: String) -> Bool {
+        return !SplitRepository.share.memberLogArr.value.map{$0.name}.contains(name)
+    }
+ }
 

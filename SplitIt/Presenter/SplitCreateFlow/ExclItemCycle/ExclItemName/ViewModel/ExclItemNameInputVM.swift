@@ -1,54 +1,53 @@
 //
-//  CSTitleInputVM.swift
+//  ExclItemNameInputVM.swift
 //  SplitIt
 //
-//  Created by 홍승완 on 2023/10/15.
+//  Created by 홍승완 on 2023/10/17.
 //
 
 import RxSwift
 import RxCocoa
 import UIKit
 
-class CSTitleInputVM {
+class ExclItemNameInputVM {
     
     var disposeBag = DisposeBag()
     
-    let maxTextCount = 12
-    
+    let maxTextCount = 8
     struct Input {
         let nextButtonTapped: ControlEvent<Void> // 다음 버튼
-        let title: Driver<String> // TitleTextField의 text
+        let name: Driver<String>
     }
     
     struct Output {
-        let showCSTotalAmountView: Driver<Void>
-        let titleCount: Driver<String>
+        let showExclItemPriceView: Driver<Void>
+        let nameCount: Driver<String>
         let textFieldIsValid: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
-        let title = input.title
-        let showCSTotalAmountView = input.nextButtonTapped
+        let name = input.name
+        let showExclItemPriceView = input.nextButtonTapped
         let textFieldCount = BehaviorRelay<String>(value: "")
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
 
-        showCSTotalAmountView
+        showExclItemPriceView
             .asDriver()
-            .withLatestFrom(input.title)
+            .withLatestFrom(input.name)
             .drive(onNext: {
-                SplitRepository.share.inputCSInfoWithTitle(title: $0)
+                SplitRepository.share.createExclItemWithName(name: $0)
             })
             .disposed(by: disposeBag)
         
-        title
-            .map { title in
-                let currentTextCount = title.count > self.maxTextCount ? title.count - 1 : title.count
+        name
+            .map { text in
+                let currentTextCount = text.count > self.maxTextCount ? text.count - 1 : text.count
                 return "\(currentTextCount)/\(self.maxTextCount)"
             }
             .drive(textFieldCount)
             .disposed(by: disposeBag)
         
-        title
+        name
             .map { [weak self] text -> Bool in
                 guard let self = self else { return false }
                 return text.count < self.maxTextCount
@@ -56,8 +55,8 @@ class CSTitleInputVM {
             .drive(textFieldIsValid)
             .disposed(by: disposeBag)
         
-        return Output(showCSTotalAmountView: showCSTotalAmountView.asDriver(),
-                      titleCount: textFieldCount.asDriver(),
+        return Output(showExclItemPriceView: showExclItemPriceView.asDriver(),
+                      nameCount: textFieldCount.asDriver(),
                       textFieldIsValid: textFieldIsValid.asDriver())
     }
 
