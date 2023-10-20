@@ -386,19 +386,19 @@
 		8677BA552ADFF579002BD395 /* CSEditMainView */ = {
 			isa = PBXGroup;
 			children = (
-				8677BA5A2ADFF6D4002BD395 /* CSEditListVC.swift */,
 				8677BA542ADFF571002BD395 /* ViewModel */,
-				8677BA5E2AE2487D002BD395 /* Cell */,
+				8677BA5E2AE2487D002BD395 /* View */,
 			);
 			path = CSEditMainView;
 			sourceTree = "<group>";
 		};
-		8677BA5E2AE2487D002BD395 /* Cell */ = {
+		8677BA5E2AE2487D002BD395 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8677BA5A2ADFF6D4002BD395 /* CSEditListVC.swift */,
 				8677BA5C2AE00C58002BD395 /* CSEditListCell.swift */,
 			);
-			path = Cell;
+			path = View;
 			sourceTree = "<group>";
 		};
 		8677BA5F2AE2631F002BD395 /* CSTitleEditView */ = {
