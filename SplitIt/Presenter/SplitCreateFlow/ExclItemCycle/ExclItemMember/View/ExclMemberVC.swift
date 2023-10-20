@@ -16,7 +16,7 @@ class ExclMemberVC: UIViewController {
     
     let viewModel = ExclMemberVM()
     
-    var dataSource: RxCollectionViewSectionedReloadDataSource<TargetSectionModel>!
+    var dataSource: RxCollectionViewSectionedReloadDataSource<ExclMemberSectionModel>!
     
     let header = NavigationHeader()
     let titleMessage = UILabel()
@@ -142,10 +142,9 @@ class ExclMemberVC: UIViewController {
                         ofKind: UICollectionView.elementKindSectionHeader)
         }
         
-        dataSource = RxCollectionViewSectionedReloadDataSource<TargetSectionModel>(
+        dataSource = RxCollectionViewSectionedReloadDataSource<ExclMemberSectionModel>(
             configureCell: { [weak self] dataSource, tableView, indexPath, item in
                 guard let self = self else { return UICollectionViewCell() }
-                
                 switch dataSource.sectionModels[indexPath.section].type {
                 case .data(let section):
                     let cell = collectionView.dequeueReusableCell(for: indexPath, cellType: ExclMemberCell.self)
@@ -181,21 +180,8 @@ class ExclMemberVC: UIViewController {
                 case .button(_:):
                     print(">>> 따로 계산할 항목 추가하기")
                 case .data(let target):
-                    let title = target.title
-                    let price = target.price
-                    var items = target.items
-                    let name = items[indexPath.row].name
-                    var isTarget = items[indexPath.row].isTarget
-                    isTarget.toggle()
-                    let target = Target(name: name, isTarget: isTarget)
-                    items[indexPath.row] = target
-                    sectionModel = TargetSectionModel(type: .data(TargetSection(title: title,
-                                                                                price: price,
-                                                                                items: items)))
-                    sections[indexPath.section] = sectionModel
-                    viewModel.sections.accept(sections)
-                    
-                    print(viewModel.sections.value[indexPath.section].items[indexPath.row])
+                    let tappedExclMemberIdx = target.items[indexPath.row].exclMemberIdx
+                    SplitRepository.share.toggleExclMember(exclMemberIdx: tappedExclMemberIdx)
                 }
             })
             .disposed(by: disposeBag)
