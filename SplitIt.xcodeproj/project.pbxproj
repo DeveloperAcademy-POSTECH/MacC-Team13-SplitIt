@@ -60,11 +60,11 @@
 		60AD20EB2ADEC8BA00EFACCD /* ExclItemPriceInputVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD20EA2ADEC8BA00EFACCD /* ExclItemPriceInputVM.swift */; };
 		60AD20F02ADF811A00EFACCD /* ExclMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD20EF2ADF811A00EFACCD /* ExclMemberVC.swift */; };
 		60AD20F22ADF812300EFACCD /* ExclMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD20F12ADF812300EFACCD /* ExclMemberVM.swift */; };
-		60AD20F42ADF827400EFACCD /* ExclMemberSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD20F32ADF827400EFACCD /* ExclMemberSection.swift */; };
 		60AD20F72ADF838300EFACCD /* ExclMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD20F62ADF838300EFACCD /* ExclMemberCell.swift */; };
 		60AD20F92ADF83DE00EFACCD /* ExclAddCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD20F82ADF83DE00EFACCD /* ExclAddCell.swift */; };
 		60AD20FB2ADF842C00EFACCD /* ExclMemberSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD20FA2ADF842C00EFACCD /* ExclMemberSectionHeader.swift */; };
 		60AD20FD2ADF846600EFACCD /* ExclMemberSectionBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD20FC2ADF846600EFACCD /* ExclMemberSectionBackground.swift */; };
+		60C6F0802AE158950092836E /* ExclMemberSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C6F07F2AE158950092836E /* ExclMemberSection.swift */; };
 		DE1711C22AE0BA9B0097850D /* MyInfoVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1711C12AE0BA9B0097850D /* MyInfoVM.swift */; };
 		DE1711C42AE0BAB30097850D /* MyInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1711C32AE0BAB30097850D /* MyInfoVC.swift */; };
 		DE1711C62AE0BACE0097850D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1711C52AE0BACE0097850D /* User.swift */; };
@@ -129,11 +129,11 @@
 		60AD20EA2ADEC8BA00EFACCD /* ExclItemPriceInputVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemPriceInputVM.swift; sourceTree = "<group>"; };
 		60AD20EF2ADF811A00EFACCD /* ExclMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclMemberVC.swift; sourceTree = "<group>"; };
 		60AD20F12ADF812300EFACCD /* ExclMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclMemberVM.swift; sourceTree = "<group>"; };
-		60AD20F32ADF827400EFACCD /* ExclMemberSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclMemberSection.swift; sourceTree = "<group>"; };
 		60AD20F62ADF838300EFACCD /* ExclMemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclMemberCell.swift; sourceTree = "<group>"; };
 		60AD20F82ADF83DE00EFACCD /* ExclAddCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclAddCell.swift; sourceTree = "<group>"; };
 		60AD20FA2ADF842C00EFACCD /* ExclMemberSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclMemberSectionHeader.swift; sourceTree = "<group>"; };
 		60AD20FC2ADF846600EFACCD /* ExclMemberSectionBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclMemberSectionBackground.swift; sourceTree = "<group>"; };
+		60C6F07F2AE158950092836E /* ExclMemberSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclMemberSection.swift; sourceTree = "<group>"; };
 		DE1711C12AE0BA9B0097850D /* MyInfoVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoVM.swift; sourceTree = "<group>"; };
 		DE1711C32AE0BAB30097850D /* MyInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoVC.swift; sourceTree = "<group>"; };
 		DE1711C52AE0BACE0097850D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -468,7 +468,7 @@
 			children = (
 				60AD20EE2ADF809700EFACCD /* ViewModel */,
 				60AD20ED2ADF809000EFACCD /* View */,
-				60AD20F32ADF827400EFACCD /* ExclMemberSection.swift */,
+				60C6F07F2AE158950092836E /* ExclMemberSection.swift */,
 				60AD20FA2ADF842C00EFACCD /* ExclMemberSectionHeader.swift */,
 				60AD20FC2ADF846600EFACCD /* ExclMemberSectionBackground.swift */,
 			);
@@ -682,6 +682,7 @@
 				60115E142ADCDB570050D32C /* CSTotalAmountInputVC.swift in Sources */,
 				60AD20F22ADF812300EFACCD /* ExclMemberVM.swift in Sources */,
 				60AD20E22ADEC15000EFACCD /* ExclItemNameInputVC.swift in Sources */,
+				60C6F0802AE158950092836E /* ExclMemberSection.swift in Sources */,
 				1A3853052ADE5B7B00E9A20B /* RealmExclItem.swift in Sources */,
 				6078ACD02ADA74AC00995811 /* HomeVC.swift in Sources */,
 				DE73D6ED2AE0D2C300ABF3EF /* BankListModalVC.swift in Sources */,

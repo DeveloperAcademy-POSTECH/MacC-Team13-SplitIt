@@ -194,14 +194,14 @@ class CSMemberInputVC: UIViewController {
     func setBinding() {
         let input = CSMemberInputVM.Input(viewDidLoad: Driver.just(()),
                                             nextButtonTapSend: nextButton.rx.tap.asDriver(),
-                                            searchBarText: searchBar.rx.text.orEmpty.asDriver(onErrorJustReturn: ""))
+                                          searchBarText: searchBar.rx.text.orEmpty.asDriver(onErrorJustReturn: ""))
         let output = viewModel.transform(input: input)
 
         output.isOverlayingSearchView
             .distinctUntilChanged()
             .drive(onNext: { [weak self] isTrue in
                 guard let self = self else { return }
-                self.collectionView.isUserInteractionEnabled = !isTrue
+                self.collectionView.isUserInteractionEnabled = isTrue
             })
             .disposed(by: disposeBag)
     
@@ -267,7 +267,7 @@ class CSMemberInputVC: UIViewController {
         viewModel.isOverayViewHidden
             .asDriver(onErrorJustReturn: false)
             .distinctUntilChanged()
-            .map { !$0 }
+            .map { $0 }
             .drive(searchListTableView.rx.isHidden)
             .disposed(by: disposeBag)
 
@@ -275,10 +275,17 @@ class CSMemberInputVC: UIViewController {
             .asDriver()
             .drive(onNext: { [weak self] indexPath in
                 guard let self = self else { return }
-                let item = output.searchList.value[indexPath.row]
-                var members = self.viewModel.memberList.value
-                members.append(item)
-                self.viewModel.memberList.accept(members)
+                /// 현재 text를 Repository에 추가함.
+                /// searchList의 memberList와의 중복 및 text와의 매칭은 viewModel의 비즈니스 로직이 담당.
+                let tappedMemberName = output.searchList.value[indexPath.row]
+                SplitRepository.share.createCSMember(name: tappedMemberName)
+
+                /// 입력한 text가 현재 memberLog에 존재하지 않는다면 그 text를 Repository에 추가함.
+                let canAddMemberLog = viewModel.canAddMemberLogWithName(name: tappedMemberName)
+                if canAddMemberLog {
+                    SplitRepository.share.createMemberLog(name: tappedMemberName)
+                }
+
                 hideSearchView()
                 scrollToItemInTableView()
             })
@@ -286,11 +293,11 @@ class CSMemberInputVC: UIViewController {
     }
     
     func hideSearchView() {
-        Observable<String>.just("")
-            .bind(to: self.searchBar.rx.text)
+        Driver<String>.just("")
+            .drive(searchBar.rx.text)
             .disposed(by: disposeBag)
         
-        Driver<Bool>.just(false)
+        Driver<Bool>.just(true)
             .drive(self.viewModel.isOverayViewHidden)
             .disposed(by: disposeBag)
     }
@@ -313,11 +320,22 @@ extension CSMemberInputVC: UITableViewDelegate {
             .asDriver()
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                var members = self.viewModel.memberList.value
-                let text = self.viewModel.currentSearchText.value
-                members.append(text)
-                viewModel.memberList.accept(members)
+
+                let currentMemberList = self.viewModel.memberList.value.map{$0.name}
+                let currentSearchText = self.viewModel.currentSearchText.value
                 
+                let canAddMember = currentMemberList.contains(currentSearchText) ? false : true
+                let canAddMemberLog = viewModel.canAddMemberLogWithName(name: currentSearchText)
+                
+                /// 입력한 text가 memberList에 존재하지 않는다면 그 text를 Repository에 추가함.
+                if canAddMember {
+                    SplitRepository.share.createCSMember(name: currentSearchText)
+                }
+                /// 입력한 text가 현재 memberLog에 존재하지 않는다면 그 text를 Repository에 추가함.
+                if canAddMemberLog {
+                    SplitRepository.share.createMemberLog(name: currentSearchText)
+                }
+
                 self.footerDisposBag = DisposeBag()
                 
                 hideSearchView()

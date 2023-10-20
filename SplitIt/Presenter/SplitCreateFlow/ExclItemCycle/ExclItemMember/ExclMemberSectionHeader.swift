@@ -9,8 +9,13 @@ import UIKit
 import SnapKit
 import Then
 import Reusable
+import RxSwift
+import RxCocoa
 
 class ExclMemberSectionHeader: UICollectionReusableView, Reusable {
+    
+    var disposeBag = DisposeBag()
+    
     let headerTitle = UILabel()
     let deleteButton = UIButton()
     
@@ -23,6 +28,12 @@ class ExclMemberSectionHeader: UICollectionReusableView, Reusable {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        disposeBag = DisposeBag()
     }
     
     func setAttribute() {
@@ -56,11 +67,28 @@ class ExclMemberSectionHeader: UICollectionReusableView, Reusable {
             $0.height.width.equalTo(15)
         }
     }
-    
-    // Rx의 MultiSection에서 section의 headerTitle를 세팅
-    func configure(item: TargetSection, sectionIndex: Int) {
+
+    func configure(item: ExclMemberSection, sectionIndex: Int) {
+        let numberFormatter = NumberFormatterHelper()
+        
         self.backgroundColor = backgroundColor(forSectionIndex: sectionIndex)
-        headerTitle.text = "[\(item.title) 값 / \(item.price) KRW]"
+        
+        let name = item.exclItem.name
+        let price = numberFormatter.formattedString(from: item.exclItem.price)
+        
+        headerTitle.text = "[\(name) 값 / \(price) KRW]"
+        
+        deleteButton.rx.tap
+            .asDriver()
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.deleteSectionRelatedExclItem(item: item)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    func deleteSectionRelatedExclItem(item: ExclMemberSection) {
+        SplitRepository.share.deleteExclItemAndRelatedData(exclItemIdx: item.exclItem.exclItemIdx)
     }
     
     func backgroundColor(forSectionIndex sectionIndex: Int) -> UIColor {

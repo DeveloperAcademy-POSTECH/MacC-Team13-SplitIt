@@ -35,8 +35,7 @@ class ExclItemNameInputVM {
             .asDriver()
             .withLatestFrom(input.name)
             .drive(onNext: {
-                CreateStore.shared.setCurrentExclItemName(name: $0)
-                CreateStore.shared.printAll()
+                SplitRepository.share.createExclItemWithName(name: $0)
             })
             .disposed(by: disposeBag)
         

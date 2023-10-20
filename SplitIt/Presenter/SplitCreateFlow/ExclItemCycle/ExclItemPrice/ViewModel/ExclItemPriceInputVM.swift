@@ -48,8 +48,7 @@ class ExclItemPriceInputVM {
         showExclItemTargetView
             .withLatestFrom(priceResult.asDriver())
             .drive(onNext: {
-                CreateStore.shared.setCurrentCSInfoTotalAmount(totalAmount: $0)
-                CreateStore.shared.printAll()
+                SplitRepository.share.inputExclItemPrice(price: $0)
             })
             .disposed(by: disposeBag)
         
