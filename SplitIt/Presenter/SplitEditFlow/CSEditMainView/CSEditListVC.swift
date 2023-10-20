@@ -220,8 +220,7 @@ extension CSEditListVC {
     }
     
     private func pushTotalPriceEditViewController() {
-        let vc = CSTotalAmountInputVC()
-        vc.view.backgroundColor = .white
+        let vc = CSTotalAmountEditVC()
         navigationController?.pushViewController(vc, animated: true)
     }
     

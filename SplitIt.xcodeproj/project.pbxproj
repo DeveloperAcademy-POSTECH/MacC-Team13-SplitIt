@@ -59,6 +59,8 @@
 		8677BA5D2AE00C58002BD395 /* CSEditListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA5C2AE00C58002BD395 /* CSEditListCell.swift */; };
 		8677BA612AE26349002BD395 /* CSTitleEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA602AE26349002BD395 /* CSTitleEditVC.swift */; };
 		8677BA632AE26399002BD395 /* CSTitleEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA622AE26399002BD395 /* CSTitleEditVM.swift */; };
+		8677BA662AE27079002BD395 /* CSTotalAmountEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA652AE27079002BD395 /* CSTotalAmountEditVC.swift */; };
+		8677BA682AE27081002BD395 /* CSTotalAmountEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA672AE27081002BD395 /* CSTotalAmountEditVM.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -108,6 +110,8 @@
 		8677BA5C2AE00C58002BD395 /* CSEditListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSEditListCell.swift; sourceTree = "<group>"; };
 		8677BA602AE26349002BD395 /* CSTitleEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSTitleEditVC.swift; sourceTree = "<group>"; };
 		8677BA622AE26399002BD395 /* CSTitleEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSTitleEditVM.swift; sourceTree = "<group>"; };
+		8677BA652AE27079002BD395 /* CSTotalAmountEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSTotalAmountEditVC.swift; sourceTree = "<group>"; };
+		8677BA672AE27081002BD395 /* CSTotalAmountEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSTotalAmountEditVM.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -365,6 +369,7 @@
 			isa = PBXGroup;
 			children = (
 				8677BA5F2AE2631F002BD395 /* CSTitleEditView */,
+				8677BA642AE27058002BD395 /* CSTotalAmountEditView */,
 				8677BA552ADFF579002BD395 /* CSEditMainView */,
 			);
 			path = SplitEditFlow;
@@ -381,8 +386,8 @@
 		8677BA552ADFF579002BD395 /* CSEditMainView */ = {
 			isa = PBXGroup;
 			children = (
-				8677BA542ADFF571002BD395 /* ViewModel */,
 				8677BA5A2ADFF6D4002BD395 /* CSEditListVC.swift */,
+				8677BA542ADFF571002BD395 /* ViewModel */,
 				8677BA5E2AE2487D002BD395 /* Cell */,
 			);
 			path = CSEditMainView;
@@ -403,6 +408,15 @@
 				8677BA622AE26399002BD395 /* CSTitleEditVM.swift */,
 			);
 			path = CSTitleEditView;
+			sourceTree = "<group>";
+		};
+		8677BA642AE27058002BD395 /* CSTotalAmountEditView */ = {
+			isa = PBXGroup;
+			children = (
+				8677BA652AE27079002BD395 /* CSTotalAmountEditVC.swift */,
+				8677BA672AE27081002BD395 /* CSTotalAmountEditVM.swift */,
+			);
+			path = CSTotalAmountEditView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -501,6 +515,7 @@
 				8677BA592ADFF5B6002BD395 /* CSEditListVM.swift in Sources */,
 				60115E182ADD19CD0050D32C /* NumberFormatterHelper.swift in Sources */,
 				60115E2D2ADE221D0050D32C /* CSMemberConfirmCell.swift in Sources */,
+				8677BA682AE27081002BD395 /* CSTotalAmountEditVM.swift in Sources */,
 				8677BA5D2AE00C58002BD395 /* CSEditListCell.swift in Sources */,
 				1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */,
 				60115E162ADCDB840050D32C /* CSTotalAmountInputVM.swift in Sources */,
@@ -531,6 +546,7 @@
 				1A3852F52ADE5A9F00E9A20B /* Split.swift in Sources */,
 				1A3852FB2ADE5ADA00E9A20B /* ExclItem.swift in Sources */,
 				60115E262ADD2CB00050D32C /* CSMemberInputSearchFooter.swift in Sources */,
+				8677BA662AE27079002BD395 /* CSTotalAmountEditVC.swift in Sources */,
 				6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */,
 				60115E1D2ADD2B5E0050D32C /* CSMemberInputVC.swift in Sources */,
 				1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */,
