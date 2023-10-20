@@ -52,7 +52,7 @@ class ExclMemberCell: UICollectionViewCell, Reusable {
         }
     }
 
-    func configure(item: Target) {
+    func configure(item: ExclMember) {
         name.text = item.name
         name.textColor = item.isTarget ? UIColor(hex: 0xF8F7F4) : UIColor(hex: 0x202020)
         
