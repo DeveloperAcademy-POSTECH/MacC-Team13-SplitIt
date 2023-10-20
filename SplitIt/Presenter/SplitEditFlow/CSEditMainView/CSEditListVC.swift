@@ -215,8 +215,8 @@ class CSEditListVC: UIViewController {
 // MARK: CSEditListView/Navigation-PUSH
 extension CSEditListVC {
     private func pushTitleEditViewController() {
-        let vc = CSTitleInputVC()
-        navigationController?.pushViewController(vc, animated: true)
+        let vc = CSTitleEditVC()
+        navigationController?.pushViewController(vc, animated: false)
     }
     
     private func pushTotalPriceEditViewController() {

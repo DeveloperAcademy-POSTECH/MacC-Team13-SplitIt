@@ -40,7 +40,7 @@ final class CSEditListVM {
     }
     
     var totalObservable: Observable<String> {
-        return data.map { "\($0.totalAmount)" }
+        return data.map { "\($0.totalAmount) rkw" }
     }
 
     var membersObservable: Observable<String> {
@@ -88,3 +88,4 @@ final class CSEditListVM {
     }
     
 }
+

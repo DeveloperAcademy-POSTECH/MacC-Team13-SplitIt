@@ -57,6 +57,8 @@
 		8677BA592ADFF5B6002BD395 /* CSEditListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA582ADFF5B6002BD395 /* CSEditListVM.swift */; };
 		8677BA5B2ADFF6D4002BD395 /* CSEditListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA5A2ADFF6D4002BD395 /* CSEditListVC.swift */; };
 		8677BA5D2AE00C58002BD395 /* CSEditListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA5C2AE00C58002BD395 /* CSEditListCell.swift */; };
+		8677BA612AE26349002BD395 /* CSTitleEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA602AE26349002BD395 /* CSTitleEditVC.swift */; };
+		8677BA632AE26399002BD395 /* CSTitleEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA622AE26399002BD395 /* CSTitleEditVM.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +106,8 @@
 		8677BA582ADFF5B6002BD395 /* CSEditListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSEditListVM.swift; sourceTree = "<group>"; };
 		8677BA5A2ADFF6D4002BD395 /* CSEditListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSEditListVC.swift; sourceTree = "<group>"; };
 		8677BA5C2AE00C58002BD395 /* CSEditListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSEditListCell.swift; sourceTree = "<group>"; };
+		8677BA602AE26349002BD395 /* CSTitleEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSTitleEditVC.swift; sourceTree = "<group>"; };
+		8677BA622AE26399002BD395 /* CSTitleEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSTitleEditVM.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -360,8 +364,8 @@
 		8677BA512ADFF3A2002BD395 /* SplitEditFlow */ = {
 			isa = PBXGroup;
 			children = (
-				8677BA552ADFF579002BD395 /* View */,
-				8677BA542ADFF571002BD395 /* ViewModel */,
+				8677BA5F2AE2631F002BD395 /* CSTitleEditView */,
+				8677BA552ADFF579002BD395 /* CSEditMainView */,
 			);
 			path = SplitEditFlow;
 			sourceTree = "<group>";
@@ -374,13 +378,14 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
-		8677BA552ADFF579002BD395 /* View */ = {
+		8677BA552ADFF579002BD395 /* CSEditMainView */ = {
 			isa = PBXGroup;
 			children = (
+				8677BA542ADFF571002BD395 /* ViewModel */,
 				8677BA5A2ADFF6D4002BD395 /* CSEditListVC.swift */,
 				8677BA5E2AE2487D002BD395 /* Cell */,
 			);
-			path = View;
+			path = CSEditMainView;
 			sourceTree = "<group>";
 		};
 		8677BA5E2AE2487D002BD395 /* Cell */ = {
@@ -389,6 +394,15 @@
 				8677BA5C2AE00C58002BD395 /* CSEditListCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		8677BA5F2AE2631F002BD395 /* CSTitleEditView */ = {
+			isa = PBXGroup;
+			children = (
+				8677BA602AE26349002BD395 /* CSTitleEditVC.swift */,
+				8677BA622AE26399002BD395 /* CSTitleEditVM.swift */,
+			);
+			path = CSTitleEditView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -493,10 +507,12 @@
 				60115E312ADE715E0050D32C /* CSMemberConfirmHeaderVM.swift in Sources */,
 				60115E2F2ADE3EDA0050D32C /* CSMemberConfirmHeader.swift in Sources */,
 				60115E142ADCDB570050D32C /* CSTotalAmountInputVC.swift in Sources */,
+				8677BA632AE26399002BD395 /* CSTitleEditVM.swift in Sources */,
 				1A3853052ADE5B7B00E9A20B /* RealmExclItem.swift in Sources */,
 				6078ACD02ADA74AC00995811 /* HomeVC.swift in Sources */,
 				60115DF72ADBF2980050D32C /* UIColor+.swift in Sources */,
 				1A3852F92ADE5AC200E9A20B /* CSMember.swift in Sources */,
+				8677BA612AE26349002BD395 /* CSTitleEditVC.swift in Sources */,
 				60115E102ADC195C0050D32C /* CreateStore.swift in Sources */,
 				1A3852F72ADE5AB200E9A20B /* CSInfo.swift in Sources */,
 				60115E1F2ADD2B660050D32C /* CSMemberInputVM.swift in Sources */,
