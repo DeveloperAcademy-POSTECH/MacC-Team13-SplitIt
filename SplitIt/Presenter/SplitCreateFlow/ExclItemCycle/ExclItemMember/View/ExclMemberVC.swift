@@ -172,13 +172,13 @@ class ExclMemberVC: UIViewController {
             .asDriver()
             .drive(onNext: { [weak self] indexPath in
                 guard let self = self else { return }
-
-                var sections = viewModel.sections.value
-                var sectionModel = sections[indexPath.section]
-
+                let sections = viewModel.sections.value
+                let sectionModel = sections[indexPath.section]
+                
                 switch sectionModel.type {
                 case .button(_:):
-                    print(">>> 따로 계산할 항목 추가하기")
+                    let vc = ExclItemNameInputVC()
+                    self.navigationController?.pushViewController(vc, animated: true)
                 case .data(let target):
                     let tappedExclMemberIdx = target.items[indexPath.row].exclMemberIdx
                     SplitRepository.share.toggleExclMember(exclMemberIdx: tappedExclMemberIdx)
