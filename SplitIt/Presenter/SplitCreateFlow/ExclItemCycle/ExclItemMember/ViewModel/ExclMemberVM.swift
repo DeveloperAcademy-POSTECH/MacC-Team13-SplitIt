@@ -13,8 +13,8 @@ class ExclMemberVM {
     
     var disposeBag = DisposeBag()
     
-    let sections = BehaviorRelay<[TargetSectionModel]>(value: [])
-
+    let sections = BehaviorRelay<[ExclMemberSectionModel]>(value: [])
+    
     struct Input {
         let viewDidLoad: Driver<Void> // viewDidLoad
         let nextButtonTapSend: Driver<Void> // 다음 버튼
@@ -27,40 +27,73 @@ class ExclMemberVM {
     
     
     func transform(input: Input) -> Output {
-        // section 입력
-        let items1 = [Target(name: "나", isTarget: false),Target(name: "하태민", isTarget: false), Target(name: "제롬", isTarget: false), Target(name: "완", isTarget: false), Target(name: "조채원", isTarget: false)]
-        let dataSection = TargetSection(title: "술", price: "9,000", items: items1)
-        let dataSectionModel = TargetSectionModel(type: .data(dataSection))
-        
-        let items2 = [Target(name: "가나다라마바", isTarget: false),Target(name: "가나다", isTarget: false), Target(name: "가나", isTarget: false), Target(name: "가나다라", isTarget: false), Target(name: "키득키득입니다만", isTarget: false)]
-        let dataSection2 = TargetSection(title: "돼지고기", price: "11,000", items: items2)
-        let dataSectionModel2 = TargetSectionModel(type: .data(dataSection2))
-        
-        let items3 = [Target(name: "안녕", isTarget: false),Target(name: "하세요", isTarget: false), Target(name: "반갑습니다", isTarget: false), Target(name: "어쩌라구요", isTarget: false), Target(name: "몰라요", isTarget: false), Target(name: "으아악", isTarget: false),Target(name: "안녕", isTarget: false),Target(name: "하세요", isTarget: false), Target(name: "반갑습니다", isTarget: false), Target(name: "어쩌라구요", isTarget: false), Target(name: "몰라요", isTarget: false), Target(name: "으아악", isTarget: false)]
-        let dataSection3 = TargetSection(title: "백화점", price: "5,500,000", items: items3)
-        let dataSectionModel3 = TargetSectionModel(type: .data(dataSection3))
-        
-        let buttonSectionModel = TargetSectionModel(type: .button(TargetSection.button))
         let presentResultView = input.nextButtonTapSend.asDriver()
+        let allExclMemberListRepository = SplitRepository.share.exclMemberArr
+        let exclItemListRepository = SplitRepository.share.exclItemArr
         
         input.viewDidLoad
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                // MARK: Repository로부터 차수 데이터 받아오기
-                
-                
-                sections.accept([dataSectionModel,dataSectionModel2,dataSectionModel3, buttonSectionModel])
+                // MARK: 삭제 예정
+                //fetchSections()
             })
             .disposed(by: disposeBag)
 
         presentResultView
             .drive(onNext: {
                 // MARK: ResultView 로 전환될 때의 비즈니스 로직
-
             })
             .disposed(by: disposeBag)
-
+        
+        // MARK: ExclMember가 바뀌면 item관련 Repository에게 신호를 전함
+        allExclMemberListRepository
+            .map{ _ in return exclItemListRepository.value }
+            .bind(to: exclItemListRepository)
+            .disposed(by: disposeBag)
+        
+        // MARK: item관련 Repository를 RxDatasource의 Section 타입에 맞게 변환하여 bind
+        exclItemListRepository
+            // MARK: type => data
+            .map{ repo -> [ExclMemberSectionModel] in
+                var exclMemberSectionModels: [ExclMemberSectionModel] = []
+                repo.forEach { exclItem in
+                    let exclMemberList = allExclMemberListRepository.value.filter{ $0.exclItemIdx == exclItem.exclItemIdx }
+                    let exclMemberSectionModel = ExclMemberSectionModel(type: .data(ExclMemberSection(exclItem: exclItem, items: exclMemberList)))
+                    exclMemberSectionModels.append(exclMemberSectionModel)
+                }
+                return exclMemberSectionModels
+            }
+            // MARK: type => addButton
+            .map{ sectionModels in
+                var result = sectionModels
+                let addButton = ExclMemberSectionModel.addExclItemButton
+                result.append(addButton)
+                return result
+            }
+            .bind(to: sections)
+            .disposed(by: disposeBag)
         return Output(presentResultView: presentResultView)
+    }
+    
+    // MARK: Repository로부터 ExclItem관련 Sections를 self.sections에 bind (삭제 예정)
+    func fetchSections() {
+        let allExclMemberList = SplitRepository.share.exclMemberArr.value
+        let exclItemList = SplitRepository.share.exclItemArr.value
+        
+        let targets = exclItemList.map { exclItem in
+            let idx = exclItem.exclItemIdx
+            let exclMemberList = allExclMemberList.filter{ $0.exclItemIdx == idx }
+            return ExclMemberSection(exclItem: exclItem, items: exclMemberList)
+        }
+        
+        var targetModels = targets.map {
+            ExclMemberSectionModel(type: ExclMemberSectionType.data($0))
+        }
+        
+        let addExclItemButton = ExclMemberSectionModel.addExclItemButton
+        targetModels.append(addExclItemButton)
+        
+        sections.accept(targetModels)
     }
 }
 

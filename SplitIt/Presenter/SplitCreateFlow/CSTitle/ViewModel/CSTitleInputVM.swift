@@ -14,6 +14,7 @@ class CSTitleInputVM {
     var disposeBag = DisposeBag()
     
     let maxTextCount = 12
+    
     struct Input {
         let nextButtonTapped: ControlEvent<Void> // 다음 버튼
         let title: Driver<String> // TitleTextField의 text
@@ -35,8 +36,7 @@ class CSTitleInputVM {
             .asDriver()
             .withLatestFrom(input.title)
             .drive(onNext: {
-                CreateStore.shared.setCurrentCSInfoTitle(title: $0)
-                CreateStore.shared.printAll()
+                SplitRepository.share.inputCSInfoWithTitle(title: $0)
             })
             .disposed(by: disposeBag)
         

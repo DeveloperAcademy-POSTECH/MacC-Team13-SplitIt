@@ -29,21 +29,21 @@ class CSMemberConfirmVM {
         let showSmartSplitCycle = input.smartSplitTap.asDriver()
         let showEqualSplitCycle = input.equalSplitTap.asDriver()
         let memberList = BehaviorSubject<[String]>(value: [])
+        let currentMembers = SplitRepository.share.csMemberArr
         
         input.viewDidLoad
             .drive(onNext: {
-                let currentMember = CreateStore.shared.getCurrentCSInfoCSMember()
-                memberList.onNext(currentMember)
+                memberList.onNext(currentMembers.value.map{$0.name})
             })
             .disposed(by: disposeBag)
         
-        showSmartSplitCycle
-            .withLatestFrom(memberList.asDriver(onErrorJustReturn: []))
-            .drive(onNext: {
-                CreateStore.shared.setCurrentCSInfoCSMember(members: $0)
-                CreateStore.shared.printAll()
-            })
-            .disposed(by: disposeBag)
+//        showSmartSplitCycle
+//            .withLatestFrom(memberList.asDriver(onErrorJustReturn: []))
+//            .drive(onNext: {
+//                CreateStore.shared.setCurrentCSInfoCSMember(members: $0)
+//                CreateStore.shared.printAll()
+//            })
+//            .disposed(by: disposeBag)
 
         return Output(showSmartSplitCycle: showSmartSplitCycle,
                       showEqualSplitCycle: showEqualSplitCycle,

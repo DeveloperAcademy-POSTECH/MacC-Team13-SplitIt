@@ -32,13 +32,12 @@ class CSMemberConfirmHeaderVM {
         let totalAmountDriver = BehaviorRelay<String>(value: "")
         
         input.viewDidLoad
-            .drive(onNext: { [weak self] in
-                guard let self = self else { return }
-                let currentMember = CreateStore.shared.getCurrentCSInfoCSMember()
-                let currentTitle = CreateStore.shared.getCurrentCSInfoTitle()
-                let currentTotalAmount = CreateStore.shared.getCurrentCSInfoTotalAmount()
-                // MARK: currentTotalAmount도 얻어와야함
-                memberList.accept(currentMember)
+            .drive(onNext: {
+                let currentMembers = SplitRepository.share.csMemberArr.value.map{$0.name}
+                let currentTitle = SplitRepository.share.csInfoArr.value.first!.title
+                let currentTotalAmount = SplitRepository.share.csInfoArr.value.first!.totalAmount
+
+                memberList.accept(currentMembers)
                 title.accept(currentTitle)
                 totalAmount.accept(currentTotalAmount)
             })

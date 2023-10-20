@@ -123,7 +123,7 @@ class ExclItemNameInputVC: UIViewController {
     
     func setBinding() {
         let input = ExclItemNameInputVM.Input(nextButtonTapped: nextButton.rx.tap,
-                                         name: nameTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""))
+                                              name: nameTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""))
         let output = viewModel.transform(input: input)
         
         output.showExclItemPriceView
