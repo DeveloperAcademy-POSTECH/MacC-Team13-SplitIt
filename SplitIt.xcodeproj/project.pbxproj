@@ -21,6 +21,12 @@
 		1A4DB22B2ADE68E400616243 /* SplitRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB22A2ADE68E400616243 /* SplitRepository.swift */; };
 		1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */; };
 		1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2522ADEB24F00616243 /* MemberLog.swift */; };
+		1A4DB2582ADFC93200616243 /* HistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2572ADFC93200616243 /* HistoryVC.swift */; };
+		1A4DB25A2ADFC93C00616243 /* HistoryVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2592ADFC93C00616243 /* HistoryVM.swift */; };
+		1A4DB25F2ADFF63F00616243 /* HistorySplitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB25E2ADFF63F00616243 /* HistorySplitCell.swift */; };
+		1A4DB2612AE0076D00616243 /* HistorySplitCellVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2602AE0076D00616243 /* HistorySplitCellVM.swift */; };
+		1A57D2722AE0AE4300755A31 /* CreateDateSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A57D2712AE0AE4300755A31 /* CreateDateSection.swift */; };
+		1A57D2742AE158FD00755A31 /* HistorySectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A57D2732AE158FD00755A31 /* HistorySectionHeader.swift */; };
 		60115DF72ADBF2980050D32C /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115DF62ADBF2980050D32C /* UIColor+.swift */; };
 		60115DF92ADBF2E10050D32C /* HomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115DF82ADBF2E10050D32C /* HomeVM.swift */; };
 		60115DFC2ADBF8860050D32C /* RxAppState in Frameworks */ = {isa = PBXBuildFile; productRef = 60115DFB2ADBF8860050D32C /* RxAppState */; };
@@ -102,6 +108,12 @@
 		1A4DB22A2ADE68E400616243 /* SplitRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitRepository.swift; sourceTree = "<group>"; };
 		1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMemberLog.swift; sourceTree = "<group>"; };
 		1A4DB2522ADEB24F00616243 /* MemberLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberLog.swift; sourceTree = "<group>"; };
+		1A4DB2572ADFC93200616243 /* HistoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVC.swift; sourceTree = "<group>"; };
+		1A4DB2592ADFC93C00616243 /* HistoryVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVM.swift; sourceTree = "<group>"; };
+		1A4DB25E2ADFF63F00616243 /* HistorySplitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySplitCell.swift; sourceTree = "<group>"; };
+		1A4DB2602AE0076D00616243 /* HistorySplitCellVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySplitCellVM.swift; sourceTree = "<group>"; };
+		1A57D2712AE0AE4300755A31 /* CreateDateSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDateSection.swift; sourceTree = "<group>"; };
+		1A57D2732AE158FD00755A31 /* HistorySectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySectionHeader.swift; sourceTree = "<group>"; };
 		60115DF62ADBF2980050D32C /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		60115DF82ADBF2E10050D32C /* HomeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVM.swift; sourceTree = "<group>"; };
 		60115E002ADC01150050D32C /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
@@ -216,9 +228,47 @@
 			path = Repository;
 			sourceTree = "<group>";
 		};
+		1A4DB2542ADFC8F500616243 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				1A57D2712AE0AE4300755A31 /* CreateDateSection.swift */,
+				1A4DB2562ADFC90F00616243 /* ViewModel */,
+				1A4DB2552ADFC90000616243 /* View */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		1A4DB2552ADFC90000616243 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1A4DB25B2ADFF5D800616243 /* Cell */,
+				1A4DB2572ADFC93200616243 /* HistoryVC.swift */,
+				1A57D2732AE158FD00755A31 /* HistorySectionHeader.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		1A4DB2562ADFC90F00616243 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				1A4DB2592ADFC93C00616243 /* HistoryVM.swift */,
+				1A4DB2602AE0076D00616243 /* HistorySplitCellVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		1A4DB25B2ADFF5D800616243 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				1A4DB25E2ADFF63F00616243 /* HistorySplitCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		60115DF22ADBF0DD0050D32C /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
+				1A4DB2542ADFC8F500616243 /* History */,
 				DE73D6DE2AE0D0E700ABF3EF /* MyInfoDetail */,
 				DE1711BE2AE0BA750097850D /* MyInfo */,
 				60115E042ADC18110050D32C /* SplitCreateFlow */,
@@ -716,11 +766,14 @@
 				DE1711C42AE0BAB30097850D /* MyInfoVC.swift in Sources */,
 				60115E242ADD2BE20050D32C /* CSMemberInputSearchCell.swift in Sources */,
 				60115E122ADC19D40050D32C /* NavigationHeader.swift in Sources */,
+				1A57D2742AE158FD00755A31 /* HistorySectionHeader.swift in Sources */,
 				60AD20E42ADEC15700EFACCD /* ExclItemNameInputVM.swift in Sources */,
 				60115E182ADD19CD0050D32C /* NumberFormatterHelper.swift in Sources */,
 				60115E2D2ADE221D0050D32C /* CSMemberConfirmCell.swift in Sources */,
 				1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */,
+				1A4DB25F2ADFF63F00616243 /* HistorySplitCell.swift in Sources */,
 				60115E162ADCDB840050D32C /* CSTotalAmountInputVM.swift in Sources */,
+				1A4DB25A2ADFC93C00616243 /* HistoryVM.swift in Sources */,
 				60115E312ADE715E0050D32C /* CSMemberConfirmHeaderVM.swift in Sources */,
 				60115E2F2ADE3EDA0050D32C /* CSMemberConfirmHeader.swift in Sources */,
 				DE73D6E72AE0D20600ABF3EF /* BankListData.swift in Sources */,
@@ -745,6 +798,7 @@
 				1A4DB2292ADE61E800616243 /* RealmManager.swift in Sources */,
 				1A3853032ADE5B4500E9A20B /* RealmCSMember.swift in Sources */,
 				1A3853012ADE5B3100E9A20B /* RealmCSInfo.swift in Sources */,
+				1A4DB2612AE0076D00616243 /* HistorySplitCellVM.swift in Sources */,
 				60115E012ADC01150050D32C /* UITextField+.swift in Sources */,
 				60115E2B2ADE21CB0050D32C /* CSMemberConfirmVM.swift in Sources */,
 				1A3853072ADE5B9D00E9A20B /* RealmExclMember.swift in Sources */,
@@ -753,8 +807,10 @@
 				60115DF92ADBF2E10050D32C /* HomeVM.swift in Sources */,
 				60AD20F92ADF83DE00EFACCD /* ExclAddCell.swift in Sources */,
 				60115E0E2ADC19250050D32C /* CSTitleInputVM.swift in Sources */,
+				1A4DB2582ADFC93200616243 /* HistoryVC.swift in Sources */,
 				1A3852FF2ADE5B1B00E9A20B /* RealmSplit.swift in Sources */,
 				60115E0C2ADC18F90050D32C /* CSTitleInputVC.swift in Sources */,
+				1A57D2722AE0AE4300755A31 /* CreateDateSection.swift in Sources */,
 				1A3852F52ADE5A9F00E9A20B /* Split.swift in Sources */,
 				C24535152AE0071C0060D756 /* SPButton.swift in Sources */,
 				DE1711C22AE0BA9B0097850D /* MyInfoVM.swift in Sources */,
