@@ -65,6 +65,18 @@
 		60AD20FB2ADF842C00EFACCD /* ExclMemberSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD20FA2ADF842C00EFACCD /* ExclMemberSectionHeader.swift */; };
 		60AD20FD2ADF846600EFACCD /* ExclMemberSectionBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AD20FC2ADF846600EFACCD /* ExclMemberSectionBackground.swift */; };
 		60C6F0802AE158950092836E /* ExclMemberSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C6F07F2AE158950092836E /* ExclMemberSection.swift */; };
+		C2A7978D2AE2740D0049E709 /* ONEMobileBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2A7978A2AE2740D0049E709 /* ONEMobileBold.ttf */; };
+		C2A7978E2AE2740D0049E709 /* ONEMobileLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2A7978B2AE2740D0049E709 /* ONEMobileLight.ttf */; };
+		C2A7978F2AE2740D0049E709 /* ONEMobileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2A7978C2AE2740D0049E709 /* ONEMobileRegular.ttf */; };
+		C2A797912AE2748E0049E709 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A797902AE2748E0049E709 /* UIFont+.swift */; };
+		C2A797942AE274F10049E709 /* SPTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A797932AE274F10049E709 /* SPTextField.swift */; };
+		C2A797962AE275110049E709 /* SPButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A797952AE275110049E709 /* SPButton.swift */; };
+		C2A7979C2AE276E90049E709 /* HistorySplitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A7979B2AE276E90049E709 /* HistorySplitCell.swift */; };
+		C2A7979E2AE2776B0049E709 /* HistorySplitCellVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A7979D2AE2776B0049E709 /* HistorySplitCellVM.swift */; };
+		C2A797A02AE277AF0049E709 /* CreateDateSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A7979F2AE277AF0049E709 /* CreateDateSection.swift */; };
+		C2A797A22AE277F90049E709 /* HistorySectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A797A12AE277F90049E709 /* HistorySectionHeader.swift */; };
+		C2A797A42AE278190049E709 /* HistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A797A32AE278190049E709 /* HistoryVC.swift */; };
+		C2A797A62AE2784B0049E709 /* HistoryVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A797A52AE2784B0049E709 /* HistoryVM.swift */; };
 		DE1711C22AE0BA9B0097850D /* MyInfoVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1711C12AE0BA9B0097850D /* MyInfoVM.swift */; };
 		DE1711C42AE0BAB30097850D /* MyInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1711C32AE0BAB30097850D /* MyInfoVC.swift */; };
 		DE1711C62AE0BACE0097850D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1711C52AE0BACE0097850D /* User.swift */; };
@@ -134,6 +146,18 @@
 		60AD20FA2ADF842C00EFACCD /* ExclMemberSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclMemberSectionHeader.swift; sourceTree = "<group>"; };
 		60AD20FC2ADF846600EFACCD /* ExclMemberSectionBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclMemberSectionBackground.swift; sourceTree = "<group>"; };
 		60C6F07F2AE158950092836E /* ExclMemberSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclMemberSection.swift; sourceTree = "<group>"; };
+		C2A7978A2AE2740D0049E709 /* ONEMobileBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileBold.ttf; sourceTree = "<group>"; };
+		C2A7978B2AE2740D0049E709 /* ONEMobileLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileLight.ttf; sourceTree = "<group>"; };
+		C2A7978C2AE2740D0049E709 /* ONEMobileRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileRegular.ttf; sourceTree = "<group>"; };
+		C2A797902AE2748E0049E709 /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
+		C2A797932AE274F10049E709 /* SPTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPTextField.swift; sourceTree = "<group>"; };
+		C2A797952AE275110049E709 /* SPButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPButton.swift; sourceTree = "<group>"; };
+		C2A7979B2AE276E90049E709 /* HistorySplitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySplitCell.swift; sourceTree = "<group>"; };
+		C2A7979D2AE2776B0049E709 /* HistorySplitCellVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySplitCellVM.swift; sourceTree = "<group>"; };
+		C2A7979F2AE277AF0049E709 /* CreateDateSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDateSection.swift; sourceTree = "<group>"; };
+		C2A797A12AE277F90049E709 /* HistorySectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySectionHeader.swift; sourceTree = "<group>"; };
+		C2A797A32AE278190049E709 /* HistoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVC.swift; sourceTree = "<group>"; };
+		C2A797A52AE2784B0049E709 /* HistoryVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVM.swift; sourceTree = "<group>"; };
 		DE1711C12AE0BA9B0097850D /* MyInfoVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoVM.swift; sourceTree = "<group>"; };
 		DE1711C32AE0BAB30097850D /* MyInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoVC.swift; sourceTree = "<group>"; };
 		DE1711C52AE0BACE0097850D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -207,6 +231,7 @@
 		60115DF22ADBF0DD0050D32C /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
+				C2A797972AE276B50049E709 /* History */,
 				DE73D6DE2AE0D0E700ABF3EF /* MyInfoDetail */,
 				DE1711BE2AE0BA750097850D /* MyInfo */,
 				60115E042ADC18110050D32C /* SplitCreateFlow */,
@@ -228,6 +253,8 @@
 		60115DF42ADBF1F80050D32C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C2A797922AE274C30049E709 /* Components */,
+				C2A797872AE273E90049E709 /* Assets */,
 				60115DF52ADBF2580050D32C /* Extensions */,
 				60115E172ADD19CD0050D32C /* NumberFormatterHelper.swift */,
 			);
@@ -239,6 +266,7 @@
 			children = (
 				60115DF62ADBF2980050D32C /* UIColor+.swift */,
 				60115E002ADC01150050D32C /* UITextField+.swift */,
+				C2A797902AE2748E0049E709 /* UIFont+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -501,6 +529,78 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		C2A797872AE273E90049E709 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				C2A797882AE273F80049E709 /* Fonts */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		C2A797882AE273F80049E709 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				C2A797892AE273FD0049E709 /* Korean */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		C2A797892AE273FD0049E709 /* Korean */ = {
+			isa = PBXGroup;
+			children = (
+				C2A7978A2AE2740D0049E709 /* ONEMobileBold.ttf */,
+				C2A7978B2AE2740D0049E709 /* ONEMobileLight.ttf */,
+				C2A7978C2AE2740D0049E709 /* ONEMobileRegular.ttf */,
+			);
+			path = Korean;
+			sourceTree = "<group>";
+		};
+		C2A797922AE274C30049E709 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				C2A797932AE274F10049E709 /* SPTextField.swift */,
+				C2A797952AE275110049E709 /* SPButton.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		C2A797972AE276B50049E709 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				C2A797992AE276C40049E709 /* View */,
+				C2A797982AE276BD0049E709 /* ViewModel */,
+				C2A7979F2AE277AF0049E709 /* CreateDateSection.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		C2A797982AE276BD0049E709 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				C2A7979D2AE2776B0049E709 /* HistorySplitCellVM.swift */,
+				C2A797A52AE2784B0049E709 /* HistoryVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		C2A797992AE276C40049E709 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C2A7979A2AE276C90049E709 /* Cell */,
+				C2A797A12AE277F90049E709 /* HistorySectionHeader.swift */,
+				C2A797A32AE278190049E709 /* HistoryVC.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		C2A7979A2AE276C90049E709 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				C2A7979B2AE276E90049E709 /* HistorySplitCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		DE1711BE2AE0BA750097850D /* MyInfo */ = {
 			isa = PBXGroup;
 			children = (
@@ -654,7 +754,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2A7978E2AE2740D0049E709 /* ONEMobileLight.ttf in Resources */,
 				6078ACD82ADA74AD00995811 /* LaunchScreen.storyboard in Resources */,
+				C2A7978D2AE2740D0049E709 /* ONEMobileBold.ttf in Resources */,
+				C2A7978F2AE2740D0049E709 /* ONEMobileRegular.ttf in Resources */,
 				6078ACD52ADA74AD00995811 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -675,7 +778,10 @@
 				60115E182ADD19CD0050D32C /* NumberFormatterHelper.swift in Sources */,
 				60115E2D2ADE221D0050D32C /* CSMemberConfirmCell.swift in Sources */,
 				1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */,
+				C2A797A62AE2784B0049E709 /* HistoryVM.swift in Sources */,
+				C2A797A42AE278190049E709 /* HistoryVC.swift in Sources */,
 				60115E162ADCDB840050D32C /* CSTotalAmountInputVM.swift in Sources */,
+				C2A797912AE2748E0049E709 /* UIFont+.swift in Sources */,
 				60115E312ADE715E0050D32C /* CSMemberConfirmHeaderVM.swift in Sources */,
 				60115E2F2ADE3EDA0050D32C /* CSMemberConfirmHeader.swift in Sources */,
 				DE73D6E72AE0D20600ABF3EF /* BankListData.swift in Sources */,
@@ -683,19 +789,22 @@
 				60AD20F22ADF812300EFACCD /* ExclMemberVM.swift in Sources */,
 				60AD20E22ADEC15000EFACCD /* ExclItemNameInputVC.swift in Sources */,
 				60C6F0802AE158950092836E /* ExclMemberSection.swift in Sources */,
+				C2A797962AE275110049E709 /* SPButton.swift in Sources */,
 				1A3853052ADE5B7B00E9A20B /* RealmExclItem.swift in Sources */,
 				6078ACD02ADA74AC00995811 /* HomeVC.swift in Sources */,
+				C2A7979C2AE276E90049E709 /* HistorySplitCell.swift in Sources */,
 				DE73D6ED2AE0D2C300ABF3EF /* BankListModalVC.swift in Sources */,
 				60115DF72ADBF2980050D32C /* UIColor+.swift in Sources */,
 				1A3852F92ADE5AC200E9A20B /* CSMember.swift in Sources */,
 				60115E102ADC195C0050D32C /* CreateStore.swift in Sources */,
+				C2A797942AE274F10049E709 /* SPTextField.swift in Sources */,
 				1A3852F72ADE5AB200E9A20B /* CSInfo.swift in Sources */,
 				60115E1F2ADD2B660050D32C /* CSMemberInputVM.swift in Sources */,
+				C2A7979E2AE2776B0049E709 /* HistorySplitCellVM.swift in Sources */,
 				DE73D6E92AE0D27500ABF3EF /* Bank.swift in Sources */,
 				60AD20E92ADEC8AD00EFACCD /* ExclItemPriceInputVC.swift in Sources */,
 				DE73D6E32AE0D12300ABF3EF /* MyBankAccountVC.swift in Sources */,
 				6078ACCC2ADA74AC00995811 /* AppDelegate.swift in Sources */,
-				60AD20F42ADF827400EFACCD /* ExclMemberSection.swift in Sources */,
 				DE73D6EB2AE0D29000ABF3EF /* BankManager.swift in Sources */,
 				1A4DB2292ADE61E800616243 /* RealmManager.swift in Sources */,
 				1A3853032ADE5B4500E9A20B /* RealmCSMember.swift in Sources */,
@@ -715,6 +824,7 @@
 				1A3852FB2ADE5ADA00E9A20B /* ExclItem.swift in Sources */,
 				DE1711CA2AE0BAEA0097850D /* UserData.swift in Sources */,
 				60115E262ADD2CB00050D32C /* CSMemberInputSearchFooter.swift in Sources */,
+				C2A797A02AE277AF0049E709 /* CreateDateSection.swift in Sources */,
 				DE1711C62AE0BACE0097850D /* User.swift in Sources */,
 				6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */,
 				60AD20F02ADF811A00EFACCD /* ExclMemberVC.swift in Sources */,
@@ -728,6 +838,7 @@
 				60AD20EB2ADEC8BA00EFACCD /* ExclItemPriceInputVM.swift in Sources */,
 				DE73D6EF2AE0D2D500ABF3EF /* BankCell.swift in Sources */,
 				60AD20F72ADF838300EFACCD /* ExclMemberCell.swift in Sources */,
+				C2A797A22AE277F90049E709 /* HistorySectionHeader.swift in Sources */,
 				60AD20FD2ADF846600EFACCD /* ExclMemberSectionBackground.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
