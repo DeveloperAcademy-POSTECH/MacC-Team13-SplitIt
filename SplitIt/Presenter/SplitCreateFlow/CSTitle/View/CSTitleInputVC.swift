@@ -153,7 +153,6 @@ extension CSTitleInputVC: UITextFieldDelegate {
     }
     
     @objc private func keyboardWillShow(_ notification: Notification) {
-        
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let keyboardHeight: CGFloat
             keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
