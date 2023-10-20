@@ -23,9 +23,7 @@ class MemberLogVM {
         
     }
     
-    
-    
-    
+
 
     struct Input {
         let deleteTapped: Driver<Void>
