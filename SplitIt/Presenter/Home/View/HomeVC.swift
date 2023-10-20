@@ -65,8 +65,8 @@ class HomeVC: UIViewController {
             .drive(onNext: {
                 // MARK: 제리가 연결할 뷰로 수정
                 print("제리뷰 이동") // 수정 후 삭제
-                let vc = HistoryVC()
-                self.navigationController?.pushViewController(vc, animated: true)
+//                let vc = HomeVC()
+//                self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
     }
