@@ -18,7 +18,7 @@ class MemberLogVM {
     var inputFriend = ""
 
     init() {
-        memberList = BehaviorRelay<[MemberLog]>(value: SplitRepository.share.memberLogArr.value.sorted { $0.name < $1.name})
+        memberList = BehaviorRelay<[MemberLog]>(value: SplitRepository.share.memberLogArr.value.sorted { $0.name < $1.name })
     }
 
     struct Input {

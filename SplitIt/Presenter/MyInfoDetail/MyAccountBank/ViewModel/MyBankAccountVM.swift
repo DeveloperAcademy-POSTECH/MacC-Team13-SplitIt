@@ -48,16 +48,14 @@ class MyBankAccountVM {
         let kakaoTapped = input.kakaoTapeed
         let naverTapped = input.naverTapped
         
-        //var updatedPayData = self.payData.value
-
         var inputAccount: String = ""
         var inputName: String = ""
         
-        
-        
         inputNameText
             .bind(onNext: { text in
-                inputName = text
+                if text != "" {
+                    inputName = text
+                }
             })
             .disposed(by: disposeBag)
         
@@ -95,12 +93,16 @@ class MyBankAccountVM {
         editDoneBtnTapped
             .drive(onNext: {
                 print("수정버튼 눌림")
-                if inputName != "" {
-                    UserDefaults.standard.set(inputName, forKey: "userName")
-                }
+                
                 if inputAccount != "" {
                     UserDefaults.standard.set(inputAccount, forKey: "userAccount")
                 }
+                
+                if inputName != "" {
+                    UserDefaults.standard.set(inputName, forKey: "userName")
+                }
+                
+               
                 
             })
             .disposed(by: disposeBag)

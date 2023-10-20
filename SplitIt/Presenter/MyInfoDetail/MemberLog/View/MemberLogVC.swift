@@ -41,7 +41,7 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
         
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
-
+        
     }
     
     
@@ -99,6 +99,7 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
             $0.placeholder = "친구이름을 입력하세요"
             $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 38, height: $0.frame.height))
             $0.leftViewMode = .always
+           $0.autocapitalizationType = .none
             
         }
         
@@ -116,14 +117,13 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
             .bind { [weak self] text in
                 guard let self = self else { return }
                 
-                if text == "" {
-                    viewModel.filteredMemberList = repo.memberLogArr
+                if text.isEmpty {
+                    self.viewModel.filteredMemberList.accept(SplitRepository.share.memberLogArr.value.sorted { $0.name < $1.name })
                 } else {
                     self.viewModel.filterMembers(with: text)
                 }
             }
             .disposed(by: disposeBag)
-        
         
         viewModel.filteredMemberList
             .bind(to: tableView.rx.items(cellIdentifier: "MemberCell", cellType: MemberCell.self)) { (row, member, cell) in
@@ -134,15 +134,14 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
                     .subscribe(onNext: { [self] in
                         self.showDeteleActionSheet(memIdx: member.memberLogIdx)
                         print(member.memberLogIdx)
-                        //tableView.reloadData()
                     })
                     .disposed(by: cell.disposeBag)
-                    
+                
             }
             .disposed(by: disposeBag)
         
-
-
+        
+        
     }
     
     func showDeteleActionSheet(memIdx: String) {
@@ -157,7 +156,7 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
         }))
         present(actionSheet, animated: true)
     }
-   
+    
 }
 
 
