@@ -108,7 +108,8 @@ class MyInfoVC: UIViewController {
         
         output.moveTofriendListView
             .subscribe(onNext: {
-                print("친구뷰 이동")
+                let memberLogVC = MemberLogVC()
+                self.navigationController?.pushViewController(memberLogVC, animated: true)
                 
             })
             .disposed(by: disposeBag)
