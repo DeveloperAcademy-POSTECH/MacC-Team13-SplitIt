@@ -66,6 +66,15 @@ extension UIFont {
     }
     
     /**
+     12pt / Korean / SmallButtonText
+     - parameters:
+        - property: $korean-small-button-text
+     */
+    class var KoreanSmallButtonText: UIFont {
+        return UIFont(name: "ONEMobileBold", size: 12)!
+    }
+    
+    /**
      15pt / Korean / Caption 1
      - parameters:
         - property: $korean-caption1
