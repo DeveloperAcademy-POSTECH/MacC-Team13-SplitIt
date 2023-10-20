@@ -20,7 +20,6 @@ extension SPButton {
         case primaryPear
         case primaryMushroom
         case primaryRadish
-        case secondary
         case warningRed
         
         // MARK: Pressed Normal Button Styles
@@ -30,12 +29,17 @@ extension SPButton {
         case primaryPearPressed
         case primaryMushroomPressed
         case primaryRadishPressed
-        case secondaryPressed
         case warningRedPressed
         
         // MARK: Active Square Button Styles
         case squarePrimaryCalmshell
+        case squarePrimaryWatermelon
         case squareWarningRed
+        
+        // MARK: Pressed Square Button Styles
+        case squarePrimaryCalmshellPressed
+        case squarePrimaryWatermelonPressed
+        case squareWarningRedPressed
         
         // MARK: Active Half Button Styles
         case halfSmartSplit
@@ -79,6 +83,7 @@ final class SPButton: UIButton {
         setCurrencyLabel(style: style)
         
         switch style {
+            
         // 활성 버튼, Unpressed 상태
         case .primaryCalmshell:
             self.backgroundColor = .SurfaceBrandCalmshell
@@ -115,64 +120,52 @@ final class SPButton: UIButton {
             self.configureCommonPropertiesForNormal()
             self.configureActiveProperties()
             self.configureUnpressedProperties()
-        
-        case .secondary:
-            self.backgroundColor = .SurfaceDeactivate
-            self.configureCommonPropertiesForNormal()
-            self.configureActiveProperties()
-            self.configureUnpressedProperties()
             
         case .warningRed:
-            self.backgroundColor = .SurfaceWarn
+            self.backgroundColor = .SurfaceWarnRed
             self.configureCommonPropertiesForNormal()
             self.configureActiveProperties()
             self.configureUnpressedProperties()
         
         // 비활성 버튼, Pressed 상태
         case .primaryCalmshellPressed:
-            self.backgroundColor = .SurfaceBrandCalmshell
+            self.backgroundColor = .SurfaceBrandCalmshellPressed
             self.configureCommonPropertiesForNormal()
             self.configureActiveProperties()
             self.configurePressedProperties()
         
         case .primaryWatermelonPressed:
-            self.backgroundColor = .SurfaceBrandWatermelon
+            self.backgroundColor = .SurfaceBrandWatermelonPressed
             self.configureCommonPropertiesForNormal()
             self.configureActiveProperties()
             self.configurePressedProperties()
 
         case .primaryCherryPressed:
-            self.backgroundColor = .SurfaceBrandCherry
+            self.backgroundColor = .SurfaceBrandCherryPressed
             self.configureCommonPropertiesForNormal()
             self.configureActiveProperties()
             self.configurePressedProperties()
 
         case .primaryPearPressed:
-            self.backgroundColor = .SurfaceBrandPear
+            self.backgroundColor = .SurfaceBrandPearPressed
             self.configureCommonPropertiesForNormal()
             self.configureActiveProperties()
             self.configurePressedProperties()
 
         case .primaryMushroomPressed:
-            self.backgroundColor = .SurfaceBrandMushroom
+            self.backgroundColor = .SurfaceBrandMushroomPressed
             self.configureCommonPropertiesForNormal()
             self.configureActiveProperties()
             self.configurePressedProperties()
         
         case .primaryRadishPressed:
-            self.backgroundColor = .SurfaceBrandRadish
-            self.configureCommonPropertiesForNormal()
-            self.configureActiveProperties()
-            self.configurePressedProperties()
-
-        case .secondaryPressed:
-            self.backgroundColor = .SurfaceDeactivate
+            self.backgroundColor = .SurfaceBrandRadishPressed
             self.configureCommonPropertiesForNormal()
             self.configureActiveProperties()
             self.configurePressedProperties()
 
         case .warningRedPressed:
-            self.backgroundColor = .SurfaceWarn
+            self.backgroundColor = .SurfaceWarnRedPressed
             self.configureCommonPropertiesForNormal()
             self.configureActiveProperties()
             self.configurePressedProperties()
@@ -182,13 +175,38 @@ final class SPButton: UIButton {
             self.backgroundColor = .SurfaceBrandCalmshell
             self.configureCommonPropertiesForSquare()
             self.configureActiveProperties()
-            self.configureUnpressedProperties()
+            self.configureUnpressedPropertiesForSquare()
             
-        case .squareWarningRed:
-            self.backgroundColor = .SurfaceWarn
+        case .squarePrimaryWatermelon:
+            self.backgroundColor = .SurfaceBrandWatermelon
             self.configureCommonPropertiesForSquare()
             self.configureActiveProperties()
-            self.configureUnpressedProperties()
+            self.configureUnpressedPropertiesForSquare()
+            
+        case .squareWarningRed:
+            self.backgroundColor = .SurfaceWarnRed
+            self.configureCommonPropertiesForSquare()
+            self.configureActiveProperties()
+            self.configureUnpressedPropertiesForSquare()
+            
+        // 비활성, 사각 버튼 Pressed 상태
+        case .squarePrimaryCalmshellPressed:
+            self.backgroundColor = .SurfaceBrandCalmshellPressed
+            self.configureCommonPropertiesForSquare()
+            self.configureActiveProperties()
+            self.configurePressedPropertiesForSquare()
+            
+        case .squarePrimaryWatermelonPressed:
+            self.backgroundColor = .SurfaceBrandWatermelonPressed
+            self.configureCommonPropertiesForSquare()
+            self.configureActiveProperties()
+            self.configurePressedPropertiesForSquare()
+            
+        case .squareWarningRedPressed:
+            self.backgroundColor = .SurfaceWarnRedPressed
+            self.configureCommonPropertiesForSquare()
+            self.configureActiveProperties()
+            self.configurePressedPropertiesForSquare()
             
         // 활성 하프 버튼
         case .halfSmartSplit:
@@ -217,19 +235,19 @@ final class SPButton: UIButton {
             
         // 비활성, 하프 버튼 Pressed 상태
         case .halfSmartSplitPressed:
-            self.backgroundColor = .SurfaceBrandCalmshell
+            self.backgroundColor = .SurfaceBrandCalmshellPressed
             self.configureCommonPropertiesForHalf()
             self.configureActiveProperties()
             self.configurePressedProperties()
             
         case .halfEqualSplitPressed:
-            self.backgroundColor = .SurfaceBrandCalmshell
+            self.backgroundColor = .SurfaceBrandCalmshellPressed
             self.configureCommonPropertiesForHalf()
             self.configureActiveProperties()
             self.configurePressedProperties()
         
         case .halfSharePressed:
-            self.backgroundColor = .SurfaceBrandCalmshell
+            self.backgroundColor = .SurfaceBrandCalmshellPressed
             self.configureCommonPropertiesForHalf()
             self.configureActiveProperties()
             self.configurePressedProperties()
@@ -251,7 +269,7 @@ final class SPButton: UIButton {
             self.backgroundColor = .SurfaceBrandCalmshell
             self.configureCommonPropertiesForSquare()
             self.configureDeactiveProperties()
-            self.configurePressedProperties()
+            self.configurePressedPropertiesForSquare()
             
         case .halfSmartSplitDeactivate:
             self.backgroundColor = .SurfaceBrandCalmshell
@@ -318,15 +336,26 @@ final class SPButton: UIButton {
         self.layer.shadowColor = UIColor.BorderDeactivate.cgColor
     }
     
-    // 사용자가 탭하기 전 프로퍼티
+    // 일반 버튼, 사용자가 탭하기 전 프로퍼티
     private func configureUnpressedProperties() {
         self.layer.shadowOffset = CGSize(width: 0, height: 8)
     }
     
-    // 사용자가 탭한 뒤 프로퍼티
+    // 일반 버튼, 사용자가 탭한 뒤 프로퍼티
     private func configurePressedProperties() {
         self.isEnabled = false
         self.layer.shadowOffset = CGSize(width: 0, height: 3)
+    }
+    
+    // 사각 버튼, 사용자가 탭하기 전 프로퍼티
+    private func configureUnpressedPropertiesForSquare() {
+        self.layer.shadowOffset = CGSize(width: 0, height: 3)
+    }
+    
+    // 사각 버튼, 사용자가 탭한 뒤 프로퍼티
+    private func configurePressedPropertiesForSquare() {
+        self.isEnabled = false
+        self.layer.shadowOffset = CGSize(width: 0, height: 1)
     }
     
     private func setCurrencyIcon(style: SPButton.Style) {
@@ -351,8 +380,6 @@ final class SPButton: UIButton {
             break
         case .primaryRadish:
             break
-        case .secondary:
-            break
         case .warningRed:
             break
         case .primaryCalmshellPressed:
@@ -367,17 +394,23 @@ final class SPButton: UIButton {
             break
         case .primaryRadishPressed:
             break
-        case .secondaryPressed:
-            break
         case .warningRedPressed:
             break
         case .squarePrimaryCalmshell:
+            break
+        case .squarePrimaryWatermelon:
             break
         case .squareWarningRed:
             break
         case .deactivate:
             break
         case .squareDeactivate:
+            break
+        case .squarePrimaryCalmshellPressed:
+            break
+        case .squarePrimaryWatermelonPressed:
+            break
+        case .squareWarningRedPressed:
             break
         case .halfSmartSplit:
             currencyIcon.image = UIImage(named:"SplitIconDefault")
@@ -427,8 +460,6 @@ final class SPButton: UIButton {
             break
         case .primaryRadish:
             break
-        case .secondary:
-            break
         case .warningRed:
             break
         case .primaryCalmshellPressed:
@@ -443,13 +474,19 @@ final class SPButton: UIButton {
             break
         case .primaryRadishPressed:
             break
-        case .secondaryPressed:
-            break
         case .warningRedPressed:
             break
         case .squarePrimaryCalmshell:
             break
+        case .squarePrimaryWatermelon:
+            break
         case .squareWarningRed:
+            break
+        case .squarePrimaryCalmshellPressed:
+            break
+        case .squarePrimaryWatermelonPressed:
+            break
+        case .squareWarningRedPressed:
             break
         case .deactivate:
             break
