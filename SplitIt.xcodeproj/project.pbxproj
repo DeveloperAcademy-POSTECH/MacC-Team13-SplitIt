@@ -378,9 +378,17 @@
 			isa = PBXGroup;
 			children = (
 				8677BA5A2ADFF6D4002BD395 /* CSEditListVC.swift */,
-				8677BA5C2AE00C58002BD395 /* CSEditListCell.swift */,
+				8677BA5E2AE2487D002BD395 /* Cell */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		8677BA5E2AE2487D002BD395 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				8677BA5C2AE00C58002BD395 /* CSEditListCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

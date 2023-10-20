@@ -22,16 +22,25 @@ class CSEditListVC: UIViewController {
     let header = NavigationHeader()
     
     let titleEditBtn = UIButton(type: .system)
+    let titleLabel = UILabel()
     lazy var titleStackView: UIStackView = {
-        return setStackView(titleBtn: titleEditBtn ,st: "이름")
+        return setStackView(titleBtn: titleEditBtn ,
+                            st: "이름",
+                            view: titleLabel)
     }()
     let totalAmountEditBtn = UIButton(type: .system)
+    let totalAmountLabel = UILabel()
     lazy var totalAmountStack: UIStackView = {
-        return setStackView(titleBtn: totalAmountEditBtn ,st: "사용한 총액")
+        return setStackView(titleBtn: totalAmountEditBtn ,
+                            st: "사용한 총액",
+                            view: totalAmountLabel)
     }()
     let memberEditBtn = UIButton(type: .system)
+    let memberLabel = UILabel()
     lazy var memberStack: UIStackView = {
-        return setStackView(titleBtn: memberEditBtn ,st: "함께한 사람들")
+        return setStackView(titleBtn: memberEditBtn ,
+                            st: "함께한 사람들",
+                            view: memberLabel)
     }()
     
     let tableHeaderLabel = UILabel()
@@ -156,37 +165,17 @@ class CSEditListVC: UIViewController {
     }
     
     func setBinding() {
-        for case let label as UILabel in titleStackView.arrangedSubviews {
-             viewModel.titleObservable
-                 .bind(to: label.rx.text)
-                 .disposed(by: disposeBag)
-         }
+        viewModel.titleObservable
+            .bind(to: titleLabel.rx.text)
+            .disposed(by: disposeBag)
         
-//        for case let button as UIButton in titleStackView.arrangedSubviews {
-//            viewModel.
-//                .bind(to: button.rx.title(for: .normal))
-//                .disposed(by: disposeBag)
-//
-//            // 버튼 액션 추가
-//            button.rx.tap
-//                .subscribe(onNext: { [weak self] in
-//                    self?.buttonTapped()
-//                })
-//                .disposed(by: disposeBag)
-//        }
-
+        viewModel.totalObservable
+            .bind(to: totalAmountLabel.rx.text)
+            .disposed(by: disposeBag)
         
-        for case let label as UILabel in totalAmountStack.arrangedSubviews {
-             viewModel.totalObservable
-                 .bind(to: label.rx.text)
-                 .disposed(by: disposeBag)
-         }
-        
-        for case let label as UILabel in memberStack.arrangedSubviews {
-             viewModel.membersObservable
-                 .bind(to: label.rx.text)
-                 .disposed(by: disposeBag)
-         }
+        viewModel.membersObservable
+            .bind(to: memberLabel.rx.text)
+            .disposed(by: disposeBag)
         
         viewModel.itemsObservable
             .bind(to: tableView.rx.items(cellIdentifier: "CSEditListCell", cellType: CSEditListCell.self)) { _, item, cell in
@@ -197,7 +186,7 @@ class CSEditListVC: UIViewController {
         let input = CSEditListVM.Input(titleBtnTap: titleEditBtn.rx.tap,
                                               totalPriceTap: totalAmountEditBtn.rx.tap,
                                               memberTap: memberEditBtn.rx.tap,
-                                              exclItemTap: tableView.rx.itemSelected)
+                                       exclItemTap: tableView.rx.itemSelected.asControlEvent(), delCSInfoTap: delButton.rx.tap)
         
         let output = viewModel.transform(input: input)
         
@@ -215,6 +204,9 @@ class CSEditListVC: UIViewController {
                 self.pushExclItemEditViewController(index: $0)
             })
             .disposed(by: disposeBag)
+//        output.popDelCSInfo
+//            .subscribe { }
+//            .disposed(by: disposeBag)
     }
 
 }
@@ -223,43 +215,77 @@ class CSEditListVC: UIViewController {
 // MARK: CSEditListView/Navigation-PUSH
 extension CSEditListVC {
     private func pushTitleEditViewController() {
-//        let vc = CSTitleEditView()
-        let vc = UIViewController()
-        vc.view.backgroundColor = .white
-//        viewModel.titleObservable
-//            .bind(to: vc.textField.rx.text)
-//            .disposed(by: disposeBag)
+        let vc = CSTitleInputVC()
         navigationController?.pushViewController(vc, animated: true)
     }
     
     private func pushTotalPriceEditViewController() {
-//        let vc = CSTotalPriceEditView()
-        let vc = UIViewController()
+        let vc = CSTotalAmountInputVC()
         vc.view.backgroundColor = .white
-//        viewModel.totalObservable
-//            .bind(to: vc.textField.rx.text)
-//            .disposed(by: disposeBag)
         navigationController?.pushViewController(vc, animated: true)
     }
     
     private func pushMemberEditViewController() {
-//        let vc = CSMemberEditView()
-        let vc = UIViewController()
+        let vc = CSMemberInputVC()
         vc.view.backgroundColor = .white
-//        viewModel.membersObservable
-//            .bind(to: vc.label.rx.text)
-//            .disposed(by: disposeBag)
         navigationController?.pushViewController(vc, animated: true)
     }
     
     private func pushExclItemEditViewController(index: IndexPath) {
-//        let vc = CSExclItemEditView()
-        let vc = UIViewController()
-        vc.view.backgroundColor = .white
-//        viewModel.itemsObservable
-//            .map { $0[index.section].itemName }
-//            .bind(to: vc.label.rx.text)
-//            .disposed(by: disposeBag)
-        navigationController?.pushViewController(vc, animated: true)
+//        let vc = UIViewController()
+//        vc.view.backgroundColor = .white
+//        navigationController?.pushViewController(vc, animated: true)
     }
+}
+
+
+func setStackView(titleBtn: UIButton, st: String, view: UILabel) -> UIStackView {
+    let titleLB = UILabel()
+    titleLB.do { label in
+        label.text = st
+        label.textColor = .lightGray
+        label.font = .systemFont(ofSize: 12)
+    }
+    
+    titleBtn.do { button in
+        button.setTitle("수정하기", for: .normal)
+        button.tintColor = .lightGray
+        button.titleLabel?.font = .systemFont(ofSize: 12)
+        button.titleLabel?.textAlignment = .left
+    }
+    
+    let roundView = UIView(frame: .zero)
+    roundView.do { view in
+        view.layer.cornerRadius = 8
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor(red: 0.486, green: 0.486, blue: 0.486, alpha: 1).cgColor
+    }
+    
+    view.font = .systemFont(ofSize: 15)
+    
+    [view, titleBtn].forEach { view in
+        roundView.addSubview(view)
+    }
+    
+    view.snp.makeConstraints { make in
+        make.leading.equalToSuperview().inset(16)
+        make.centerY.equalToSuperview()
+    }
+    
+    titleBtn.snp.makeConstraints { make in
+        make.trailing.equalToSuperview().inset(16)
+        make.centerY.equalToSuperview()
+    }
+    
+    roundView.snp.makeConstraints { make in
+        make.height.equalTo(43)
+    }
+    
+    let titleStackView = UIStackView(arrangedSubviews: [titleLB,roundView])
+    titleStackView.do { stack in
+        stack.axis = .vertical
+        stack.spacing = 4
+    }
+    
+    return titleStackView
 }

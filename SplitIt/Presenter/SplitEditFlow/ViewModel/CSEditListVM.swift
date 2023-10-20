@@ -59,8 +59,8 @@ final class CSEditListVM {
         let titleBtnTap: ControlEvent<Void>
         let totalPriceTap: ControlEvent<Void>
         let memberTap: ControlEvent<Void>
-//        let sectionHeaderSelectedSubject: ControlEvent<CSEditListHeader>
         let exclItemTap: ControlEvent<IndexPath>
+        let delCSInfoTap: ControlEvent<Void>
     }
     
     struct Output {
@@ -69,6 +69,7 @@ final class CSEditListVM {
         let pushMemberEditVC: Observable<Void>
 //        let sectionHeaderSelectedObservable: Observable<CSEditListHeader>
         let pushExclItemEditVC: Observable<IndexPath>
+        let popDelCSInfo: Observable<Void>
 //        let pushExclItemEditVC: Observable<Void>
     }
     
@@ -77,56 +78,13 @@ final class CSEditListVM {
         let price = input.totalPriceTap.asObservable()
         let member = input.memberTap.asObservable()
         let exclcell = input.exclItemTap.asObservable()
+        let delbtn = input.delCSInfoTap.asObservable()
         
-        return Output(pushTitleEditVC: title, pushPriceEditVC: price, pushMemberEditVC: member, pushExclItemEditVC: exclcell)
+        return Output(pushTitleEditVC: title,
+                      pushPriceEditVC: price,
+                      pushMemberEditVC: member,
+                      pushExclItemEditVC: exclcell,
+                      popDelCSInfo: delbtn)
     }
     
-}
-
-func setStackView(titleBtn: UIButton, st: String) -> UIStackView {
-    let view = UILabel()
-    view.font = .systemFont(ofSize: 15)
-    let titleLB = UILabel()
-    
-    titleLB.do { label in
-        titleLB.text = st
-        titleLB.textColor = .lightGray
-        titleLB.font = .systemFont(ofSize: 12)
-    }
-    
-    titleBtn.do { button in
-        button.setTitle("수정하기", for: .normal)
-        button.tintColor = .lightGray
-        button.titleLabel?.font = .systemFont(ofSize: 12)
-        button.titleLabel?.textAlignment = .left
-    }
-    
-    let roundView = UIView(frame: .zero)
-    roundView.layer.cornerRadius = 8
-    roundView.layer.borderWidth = 1
-    roundView.layer.borderColor = UIColor(red: 0.486, green: 0.486, blue: 0.486, alpha: 1).cgColor
-    
-    roundView.addSubview(view)
-    roundView.addSubview(titleBtn)
-    
-    view.snp.makeConstraints { make in
-        make.leading.equalToSuperview().inset(16)
-        make.centerY.equalToSuperview()
-    }
-    
-    titleBtn.snp.makeConstraints { make in
-        make.trailing.equalToSuperview().inset(16)
-        make.centerY.equalToSuperview()
-    }
-    
-    roundView.snp.makeConstraints { make in
-        make.height.equalTo(43)
-    }
-    
-    
-    let titleStackView = UIStackView(arrangedSubviews: [titleLB,roundView])
-    titleStackView.axis = .vertical
-    titleStackView.spacing = 4
-    
-    return titleStackView
 }
