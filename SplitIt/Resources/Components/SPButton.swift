@@ -53,6 +53,9 @@ extension SPButton {
         case halfSharePressed
         case halfExitPressed
         
+        // MARK: Active Small Button Style
+        case smallButton
+        
         // MARK: Deactive Button Style
         case deactivate
         case squareDeactivate
@@ -258,6 +261,12 @@ final class SPButton: UIButton {
             self.configureActiveProperties()
             self.configurePressedProperties()
             
+        // 작은 버튼
+        case .smallButton:
+            self.backgroundColor = .SurfaceSelected
+            self.configureCommonPropertiesForSmall()
+            self.configureActiveProperties()
+            
         // 비활성 버튼
         case .deactivate:
             self.backgroundColor = .SurfaceBrandCalmshell
@@ -299,7 +308,6 @@ final class SPButton: UIButton {
     
     // 공통 프로퍼티
     private func configureCommonProperties() {
-        self.titleLabel?.font = UIFont.KoreanButtonText
         self.layer.masksToBounds = false
         self.layer.borderWidth = 1
         self.layer.shadowRadius = 0
@@ -308,17 +316,26 @@ final class SPButton: UIButton {
     
     // 둥근 버튼 프로퍼티
     private func configureCommonPropertiesForNormal() {
+        self.titleLabel?.font = UIFont.KoreanButtonText
         self.layer.cornerRadius = 24
     }
     
     // 사각 버튼 프로퍼티
     private func configureCommonPropertiesForSquare() {
+        self.titleLabel?.font = UIFont.KoreanButtonText
         self.layer.cornerRadius = 8
     }
     
     // 하프 버튼 프로퍼티
     private func configureCommonPropertiesForHalf() {
+        self.titleLabel?.font = UIFont.KoreanButtonText
         self.layer.cornerRadius = 42
+    }
+    
+    // 작은 버튼 프로퍼티
+    private func configureCommonPropertiesForSmall() {
+        self.titleLabel?.font = UIFont.KoreanSmallButtonText
+        self.layer.cornerRadius = 16
     }
     
     // 활성 상태 프로퍼티
@@ -358,6 +375,7 @@ final class SPButton: UIButton {
         self.layer.shadowOffset = CGSize(width: 0, height: 1)
     }
     
+    // 하프 버튼에 아이콘 추가
     private func setCurrencyIcon(style: SPButton.Style) {
         self.addSubview(currencyIcon)
         
@@ -412,6 +430,9 @@ final class SPButton: UIButton {
             break
         case .squareWarningRedPressed:
             break
+        case .smallButton:
+            break
+            
         case .halfSmartSplit:
             currencyIcon.image = UIImage(named:"SplitIconDefault")
         case .halfEqualSplit:
@@ -439,6 +460,7 @@ final class SPButton: UIButton {
         }
     }
     
+    // 하프 버튼에 라벨 추가
     private func setCurrencyLabel(style: SPButton.Style) {
         self.addSubview(currencyLabel)
         
@@ -492,6 +514,9 @@ final class SPButton: UIButton {
             break
         case .squareDeactivate:
             break
+        case .smallButton:
+            break
+            
         case .halfSmartSplit:
             self.configureHalfButtonStringSmartSplitProperties()
             self.configureHalfButtonFontProperties()
@@ -542,7 +567,7 @@ final class SPButton: UIButton {
         }
     }
     
-    // 하프 버튼 폰트 및 타입페이스 설정
+    // 하프 버튼 폰트 및 타입페이스 일괄 설정
     private func configureHalfButtonFontProperties() {
         currencyLabel.font = UIFont.KoreanButtonText
     }
