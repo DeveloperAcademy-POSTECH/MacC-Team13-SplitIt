@@ -4,9 +4,9 @@
 <dict>
 	<key>UIAppFonts</key>
 	<array>
-		<string>ONEMobileLight</string>
-		<string>ONEMobileRegular</string>
-		<string>ONEMobileBold</string>
+		<string>ONEMobileLight.ttf</string>
+		<string>ONEMobileRegular.ttf</string>
+		<string>ONEMobileBold.ttf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
