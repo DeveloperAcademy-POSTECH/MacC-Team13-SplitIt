@@ -93,12 +93,26 @@ extension UIColor {
      */
     class var SurfaceBrandCalmshell: UIColor { return UIColor.AppColorBrandCalmshell }
     
+    
+     /** 브랜드 색상 'Calmshell'이 적용되는 Button의 Pressed 상태를 위한 색상입니다.
+     - parameters:
+        - property: $surface-brand-calmshell
+     */
+    class var SurfaceBrandCalmshellPressed: UIColor { return UIColor.AppColorBrandCalmshellPressed }
+    
     /**
      브랜드 색상 'Watermelon'이 적용되는 면의 색상입니다.
      - parameters:
         - property: $surface-brand-watermelon
      */
     class var SurfaceBrandWatermelon: UIColor { return UIColor.AppColorBrandWatermelon }
+    
+    /**
+     브랜드 색상 'Watermelon'이 적용되는 Button의 Pressed 상태를 위한 색상입니다.
+     - parameters:
+        - property: $surface-brand-watermelon
+     */
+    class var SurfaceBrandWatermelonPressed: UIColor { return UIColor.AppColorBrandWatermelonPressed }
     
     /**
      브랜드 색상 'Cherry'가 적용되는 면의 색상입니다.
@@ -108,11 +122,25 @@ extension UIColor {
     class var SurfaceBrandCherry: UIColor { return UIColor.AppColorBrandCherry }
     
     /**
+     브랜드 색상 'Cherry'가 적용되는 Button의 Pressed 상태를 위한 색상입니다.
+     - parameters:
+        - property: $surface-brand-cherry
+     */
+    class var SurfaceBrandCherryPressed: UIColor { return UIColor.AppColorBrandCherryPressed }
+    
+    /**
      브랜드 색상 'Pear'가 적용되는 면의 색상입니다.
      - parameters:
         - property: $surface-brand-pear
      */
     class var SurfaceBrandPear: UIColor { return UIColor.AppColorBrandPear }
+    
+    /**
+     브랜드 색상 'Pear'가 적용되는 Button의 Pressed 상태를 위한 색상입니다.
+     - parameters:
+        - property: $surface-brand-pear
+     */
+    class var SurfaceBrandPearPressed: UIColor { return UIColor.AppColorBrandPearPressed }
     
     /**
      브랜드 색상 'Mushroom'이 적용되는 면의 색상입니다.
@@ -122,11 +150,25 @@ extension UIColor {
     class var SurfaceBrandMushroom: UIColor { return UIColor.AppColorBrandMushroom }
     
     /**
+     브랜드 색상 'Mushroom'이 적용되는 Button의 Pressed 상태를 위한 색상입니다.
+     - parameters:
+        - property: $surface-brand-mushroom
+     */
+    class var SurfaceBrandMushroomPressed: UIColor { return UIColor.AppColorBrandMushroomPressed }
+    
+    /**
      브랜드 색상 'Radish'가 적용되는 면의 색상입니다.
      - parameters:
         - property: $surface-brand-radish
      */
     class var SurfaceBrandRadish: UIColor { return UIColor.AppColorBrandRadish }
+    
+    /**
+     브랜드 색상 'Radish'가 적용되는 Button의 Pressed 상태를 위한 색상입니다.
+     - parameters:
+        - property: $surface-brand-radish
+     */
+    class var SurfaceBrandRadishPressed: UIColor { return UIColor.AppColorBrandRadishPressed }
 
     /**
      흰색의 면의 색상입니다.
@@ -136,11 +178,19 @@ extension UIColor {
     class var SurfaceWhite: UIColor { return UIColor.AppColorGrayscaleBase }
 
     /**
+     주의 및 경고의 색상이 적용되는 Button의 Pressed 상태를 위한 색상입니다.
+     - parameters:
+        - property: $surface-warn
+     */
+    class var SurfaceWarnRed: UIColor { return UIColor.AppColorStatusWarnRedPressed }
+    
+    /**
      주의 및 경고의 면의 색상입니다.
      - parameters:
         - property: $surface-warn
      */
-    class var SurfaceWarn: UIColor { return UIColor.AppColorStatusWarnRed }
+    class var SurfaceWarnRedPressed: UIColor { return UIColor.AppColorStatusWarnRed }
+
 
 
     // MARK: Border Colors
@@ -188,6 +238,15 @@ extension UIColor {
     class var AppColorBrandPear: UIColor { return UIColor(hex: 0xDEF358) }
     class var AppColorBrandMushroom: UIColor { return UIColor(hex: 0xF1D367) }
     class var AppColorBrandRadish: UIColor { return UIColor(hex: 0xFFCBB7) }
+    
+    // MARK: Pressed Colors
+    class var AppColorBrandCalmshellPressed: UIColor { return UIColor(hex: 0xEEEDE8) }
+    class var AppColorBrandWatermelonPressed: UIColor { return UIColor(hex: 0x3C9293) }
+    class var AppColorBrandCherryPressed: UIColor { return UIColor(hex: 0xEE778D) }
+    class var AppColorBrandPearPressed: UIColor { return UIColor(hex: 0xAFD73D) }
+    class var AppColorBrandMushroomPressed: UIColor { return UIColor(hex: 0xF3C245) }
+    class var AppColorBrandRadishPressed: UIColor { return UIColor(hex: 0xFFB598) }
+    class var AppColorStatusWarnRedPressed: UIColor { return UIColor(hex: 0xD84961) }
 
     // MARK: Grayscale Colors
     class var AppColorGrayscaleBase: UIColor { return UIColor(hex: 0xFFFFFF) }
