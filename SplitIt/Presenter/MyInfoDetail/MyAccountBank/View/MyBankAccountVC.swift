@@ -13,6 +13,7 @@ import Then
 
 class MyBankAccountVC: UIViewController {
     
+    let keysToMonitor = ["userName", "userBank", "userAccount"]
     let clearButton = UIButton()
     
     let viewModel = MyBankAccountVM()
@@ -55,19 +56,38 @@ class MyBankAccountVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        setupObservables()
         setAddView()
         setLayout()
         setAttribute()
         setBinding()
         setPay()
         asapRxData()
+        
     }
+    
+    func setupObservables() {
+            let textObservable1 = nameTextField.rx.text.orEmpty
+            let textObservable2 = accountTextField.rx.text.orEmpty
+
+            Observable.combineLatest(textObservable1, textObservable2)
+                .subscribe(onNext: { text1, text2 in
+                    if !text1.isEmpty && !text2.isEmpty {
+                        self.editDoneBtn.isEnabled = true
+                        self.editDoneBtn.backgroundColor = .black
+                    } else {
+                        self.editDoneBtn.isEnabled = false
+                        self.editDoneBtn.backgroundColor = .gray
+                    }
+                })
+                .disposed(by: disposeBag)
+        }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         setKeyboardNotification()
+        //editDoneBtnSetting()
         self.nameTextField.becomeFirstResponder()
     }
     
@@ -411,7 +431,17 @@ class MyBankAccountVC: UIViewController {
             $0.titleLabel?.textColor = .white
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 20
-            $0.backgroundColor = .black
+           // $0.backgroundColor = .black
+//
+//            if userDefault.object(forKey: "userName") != nil &&
+//                userDefault.object(forKey: "userBank") != nil &&
+//                userDefault.object(forKey: "userAccount") != nil {
+//                $0.isEnabled = true
+//                $0.backgroundColor = .black
+//            } else {
+//                $0.isEnabled = false
+//                $0.backgroundColor = .gray
+//            }
         }
         
         leftBar.do {
@@ -438,6 +468,30 @@ class MyBankAccountVC: UIViewController {
 //        print("눌림")
 //
 //    }
+    
+    
+    func editDoneBtnSetting() {
+       
+
+        // UserDefaults의 변경 사항을 모니터링하는 Observable
+        let userDefaultsObservable = Observable.merge(keysToMonitor.map { key in
+            userDefault.rx.observe(String.self, key)
+        })
+
+        // 버튼 속성 업데이트
+        userDefaultsObservable.subscribe(onNext: { _ in
+            if self.userDefault.object(forKey: "userName") != nil &&
+                self.userDefault.object(forKey: "userBank") != nil &&
+                self.userDefault.object(forKey: "userAccount") != nil {
+                self.editDoneBtn.isEnabled = true
+                self.editDoneBtn.backgroundColor = .black
+            } else {
+                self.editDoneBtn.isEnabled = false
+                self.editDoneBtn.backgroundColor = .gray
+            }
+        }).disposed(by: disposeBag)
+    }
+    
     
     func setBinding() {
         

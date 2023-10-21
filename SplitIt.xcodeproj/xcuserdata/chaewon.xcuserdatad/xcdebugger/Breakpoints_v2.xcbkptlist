@@ -14,8 +14,8 @@
             filePath = "SplitIt/Presenter/MyInfoDetail/MyAccountBank/View/MyBankAccountVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
             landmarkName = "setLayout()"
             landmarkType = "7">
          </BreakpointContent>
