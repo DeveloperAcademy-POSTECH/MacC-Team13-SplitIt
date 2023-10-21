@@ -225,8 +225,7 @@ extension CSEditListVC {
     }
     
     private func pushMemberEditViewController() {
-        let vc = CSMemberInputVC()
-        vc.view.backgroundColor = .white
+        let vc = CSMemberEditVC()
         navigationController?.pushViewController(vc, animated: true)
     }
     

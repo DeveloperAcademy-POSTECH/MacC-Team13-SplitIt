@@ -61,6 +61,9 @@
 		8677BA632AE26399002BD395 /* CSTitleEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA622AE26399002BD395 /* CSTitleEditVM.swift */; };
 		8677BA662AE27079002BD395 /* CSTotalAmountEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA652AE27079002BD395 /* CSTotalAmountEditVC.swift */; };
 		8677BA682AE27081002BD395 /* CSTotalAmountEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA672AE27081002BD395 /* CSTotalAmountEditVM.swift */; };
+		8677BA6B2AE3C0DC002BD395 /* CSMemberEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA6A2AE3C0DC002BD395 /* CSMemberEditVC.swift */; };
+		8677BA6D2AE3C162002BD395 /* CSMemberEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA6C2AE3C162002BD395 /* CSMemberEditVM.swift */; };
+		8677BA6F2AE3C232002BD395 /* CSMemberEditCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA6E2AE3C232002BD395 /* CSMemberEditCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -112,6 +115,9 @@
 		8677BA622AE26399002BD395 /* CSTitleEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSTitleEditVM.swift; sourceTree = "<group>"; };
 		8677BA652AE27079002BD395 /* CSTotalAmountEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSTotalAmountEditVC.swift; sourceTree = "<group>"; };
 		8677BA672AE27081002BD395 /* CSTotalAmountEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSTotalAmountEditVM.swift; sourceTree = "<group>"; };
+		8677BA6A2AE3C0DC002BD395 /* CSMemberEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberEditVC.swift; sourceTree = "<group>"; };
+		8677BA6C2AE3C162002BD395 /* CSMemberEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberEditVM.swift; sourceTree = "<group>"; };
+		8677BA6E2AE3C232002BD395 /* CSMemberEditCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberEditCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -368,6 +374,7 @@
 		8677BA512ADFF3A2002BD395 /* SplitEditFlow */ = {
 			isa = PBXGroup;
 			children = (
+				8677BA692AE3C0A0002BD395 /* CSMemberEditView */,
 				8677BA5F2AE2631F002BD395 /* CSTitleEditView */,
 				8677BA642AE27058002BD395 /* CSTotalAmountEditView */,
 				8677BA552ADFF579002BD395 /* CSEditMainView */,
@@ -417,6 +424,16 @@
 				8677BA672AE27081002BD395 /* CSTotalAmountEditVM.swift */,
 			);
 			path = CSTotalAmountEditView;
+			sourceTree = "<group>";
+		};
+		8677BA692AE3C0A0002BD395 /* CSMemberEditView */ = {
+			isa = PBXGroup;
+			children = (
+				8677BA6A2AE3C0DC002BD395 /* CSMemberEditVC.swift */,
+				8677BA6C2AE3C162002BD395 /* CSMemberEditVM.swift */,
+				8677BA6E2AE3C232002BD395 /* CSMemberEditCell.swift */,
+			);
+			path = CSMemberEditView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -516,6 +533,7 @@
 				60115E182ADD19CD0050D32C /* NumberFormatterHelper.swift in Sources */,
 				60115E2D2ADE221D0050D32C /* CSMemberConfirmCell.swift in Sources */,
 				8677BA682AE27081002BD395 /* CSTotalAmountEditVM.swift in Sources */,
+				8677BA6D2AE3C162002BD395 /* CSMemberEditVM.swift in Sources */,
 				8677BA5D2AE00C58002BD395 /* CSEditListCell.swift in Sources */,
 				1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */,
 				60115E162ADCDB840050D32C /* CSTotalAmountInputVM.swift in Sources */,
@@ -529,10 +547,12 @@
 				1A3852F92ADE5AC200E9A20B /* CSMember.swift in Sources */,
 				8677BA612AE26349002BD395 /* CSTitleEditVC.swift in Sources */,
 				60115E102ADC195C0050D32C /* CreateStore.swift in Sources */,
+				8677BA6F2AE3C232002BD395 /* CSMemberEditCell.swift in Sources */,
 				1A3852F72ADE5AB200E9A20B /* CSInfo.swift in Sources */,
 				60115E1F2ADD2B660050D32C /* CSMemberInputVM.swift in Sources */,
 				6078ACCC2ADA74AC00995811 /* AppDelegate.swift in Sources */,
 				1A4DB2292ADE61E800616243 /* RealmManager.swift in Sources */,
+				8677BA6B2AE3C0DC002BD395 /* CSMemberEditVC.swift in Sources */,
 				1A3853032ADE5B4500E9A20B /* RealmCSMember.swift in Sources */,
 				1A3853012ADE5B3100E9A20B /* RealmCSInfo.swift in Sources */,
 				60115E012ADC01150050D32C /* UITextField+.swift in Sources */,
