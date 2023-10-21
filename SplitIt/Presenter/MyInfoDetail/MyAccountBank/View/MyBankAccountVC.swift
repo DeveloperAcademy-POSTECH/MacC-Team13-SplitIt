@@ -20,7 +20,7 @@ class MyBankAccountVC: UIViewController {
     let payData = PayData.shared.payData
     let maxCharacterCount = 8
     let userDefault = UserDefaults.standard
-    
+    var isBankSelected: Bool = false
     let header = NavigationHeader()
     
     var nameLabel = UILabel()
@@ -47,7 +47,7 @@ class MyBankAccountVC: UIViewController {
     let naverPayView = UIView()
     
     let nameClearBtn = UIButton()
-   // let accountClearBtn = UIButton()
+    // let accountClearBtn = UIButton()
     
     
     private let editDoneBtn = UIButton()
@@ -55,7 +55,7 @@ class MyBankAccountVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        setupObservables()
         setAddView()
         setLayout()
         setAttribute()
@@ -63,7 +63,38 @@ class MyBankAccountVC: UIViewController {
         setPay()
         asapRxData()
     }
-
+    
+    
+    func setupObservables() {
+        let nameTextCheck = nameTextField.rx.text.orEmpty
+        let accountTextCheck = accountTextField.rx.text.orEmpty
+        
+        
+        Observable.combineLatest(nameTextCheck, accountTextCheck)
+            .subscribe(onNext: { text1, text2 in
+                
+                if self.userDefault.string(forKey: "userName") != nil && // 값이 있다면!
+                    self.userDefault.string(forKey: "userBank") != nil &&
+                    self.userDefault.string(forKey: "userAccount") != nil {
+                    
+                    self.editDoneBtn.isEnabled = true
+                    self.editDoneBtn.backgroundColor = .black
+                } else {
+                    
+                    if !text1.isEmpty && !text2.isEmpty && self.isBankSelected {
+                        self.editDoneBtn.isEnabled = true
+                        self.editDoneBtn.backgroundColor = .black
+                    } else {
+                        self.editDoneBtn.isEnabled = false
+                        self.editDoneBtn.backgroundColor = .gray
+                        
+                    }
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -89,8 +120,8 @@ class MyBankAccountVC: UIViewController {
         }
         
         //nameTextField.addSubview(nameClearBtn)
-       // accountTextField.addSubview(accountClearBtn)
-      
+        // accountTextField.addSubview(accountClearBtn)
+        
     }
     
     func setLayout() {
@@ -117,7 +148,7 @@ class MyBankAccountVC: UIViewController {
             make.centerY.equalToSuperview()
         }
         
-       
+        
         
         bankLabel.snp.makeConstraints { make in
             make.top.equalTo(nameTextField.snp.bottom).offset(16)
@@ -155,11 +186,11 @@ class MyBankAccountVC: UIViewController {
             make.width.equalTo(330)
         }
         
-//        accountClearBtn.snp.makeConstraints { make in
-//            make.height.width.equalTo(40)
-//            make.right.equalToSuperview().offset(-50)
-//            make.top.equalTo(accountTextField.snp.top).offset(10)
-//        }
+        //        accountClearBtn.snp.makeConstraints { make in
+        //            make.height.width.equalTo(40)
+        //            make.right.equalToSuperview().offset(-50)
+        //            make.top.equalTo(accountTextField.snp.top).offset(10)
+        //        }
         
         payLabel.snp.makeConstraints { make in
             make.top.equalTo(accountTextField.snp.bottom).offset(16)
@@ -219,7 +250,7 @@ class MyBankAccountVC: UIViewController {
     }
     
     
- 
+    
     func setAttribute() {
         nameTextField.rx.text.orEmpty
             .map { text -> String in
@@ -261,32 +292,32 @@ class MyBankAccountVC: UIViewController {
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.gray.cgColor
-
+            
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
             //$0.rightView = nameClearBtn
             //$0.clearButtonMode = .whileEditing
             
-          
+            
             
             //placeholder의 색깔
             if UserDefaults.standard.string(forKey: "userName") == nil {
                 $0.attributedPlaceholder = NSAttributedString(string: "이름을 입력해주세요",
                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
             } else {
-//                $0.attributedPlaceholder = NSAttributedString(string: UserDefaults.standard.string(forKey: "userName")!,
-//                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                //                $0.attributedPlaceholder = NSAttributedString(string: UserDefaults.standard.string(forKey: "userName")!,
+                //                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
                 
                 $0.placeholder = userDefault.string(forKey: "userName")
             }
             $0.font = UIFont.systemFont(ofSize: 15)
-           
+            
             $0.clipsToBounds = true
             
             //textField의 앞부분의 빈공간 구현
             $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: $0.frame.height))
             $0.leftViewMode = .always
-
+            
         }
         //            clearButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         //            clearButton.setTitle("X", for: .normal)
@@ -341,63 +372,63 @@ class MyBankAccountVC: UIViewController {
         }
         
         
-      
+        
         accountTextField.do {
             $0.layer.cornerRadius = 8
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.gray.cgColor
             $0.keyboardType = .numberPad
-          //  $0.clearButtonMode = .whileEditing
+            //  $0.clearButtonMode = .whileEditing
             
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
-//
-//            clearButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-//            clearButton.setTitle("X", for: .normal)
-//            clearButton.setTitleColor(.black, for: .normal)
-//            clearButton.addTarget(self, action: #selector(clearText), for: .touchUpInside)
-//
-//
-//            $0.rightView = clearButton
-//            $0.rightViewMode = .whileEditing
+            //
+            //            clearButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            //            clearButton.setTitle("X", for: .normal)
+            //            clearButton.setTitleColor(.black, for: .normal)
+            //            clearButton.addTarget(self, action: #selector(clearText), for: .touchUpInside)
+            //
+            //
+            //            $0.rightView = clearButton
+            //            $0.rightViewMode = .whileEditing
             
             
             if UserDefaults.standard.string(forKey: "userAccount") == nil {
-            $0.attributedPlaceholder = NSAttributedString(string: "계좌번호를 입력해주세요",
-                                                          attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+                $0.attributedPlaceholder = NSAttributedString(string: "계좌번호를 입력해주세요",
+                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
             } else {
-//                $0.attributedPlaceholder = NSAttributedString(string: UserDefaults.standard.string(forKey: "userAccount")!,
-//                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                //                $0.attributedPlaceholder = NSAttributedString(string: UserDefaults.standard.string(forKey: "userAccount")!,
+                //                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
                 $0.placeholder = userDefault.string(forKey: "userAccount")
             }
             
-
+            
             $0.font = UIFont.systemFont(ofSize: 15)
             $0.clipsToBounds = true
             
             //textField의 앞부분의 빈공간 구현
             $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: $0.frame.height))
             $0.leftViewMode = .always
-//
-////
-//            let clearButton = UIButton(type: .custom)
-//            clearButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-//            clearButton.setTitle("X", for: .normal)
-//            clearButton.setTitleColor(.black, for: .normal)
-//            //clearButton.addTarget(self, action: #selector(clearText), for: .touchUpInside)
-//
-//            // 텍스트 필드 설정
-//            $0.rightView = clearButton
-//            $0.rightViewMode = .whileEditing
-
+            //
+            ////
+            //            let clearButton = UIButton(type: .custom)
+            //            clearButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            //            clearButton.setTitle("X", for: .normal)
+            //            clearButton.setTitleColor(.black, for: .normal)
+            //            //clearButton.addTarget(self, action: #selector(clearText), for: .touchUpInside)
+            //
+            //            // 텍스트 필드 설정
+            //            $0.rightView = clearButton
+            //            $0.rightViewMode = .whileEditing
+            
             
         }
         
-//        accountClearBtn.do {
-//            $0.setImage(UIImage(systemName: "x.circle.fill"), for: .normal)
-//        }
-//
+        //        accountClearBtn.do {
+        //            $0.setImage(UIImage(systemName: "x.circle.fill"), for: .normal)
+        //        }
+        //
         payLabel.do {
             $0.text = "간편페이 사용여부"
             $0.font = UIFont.systemFont(ofSize: 12)
@@ -432,12 +463,6 @@ class MyBankAccountVC: UIViewController {
         
     }
     
-//    @objc func clearText(sender: UIButton) {
-//
-//            accountTextField.text = ""
-//        print("눌림")
-//
-//    }
     
     func setBinding() {
         
@@ -445,7 +470,7 @@ class MyBankAccountVC: UIViewController {
         let tossTap = addTapGesture(to: tossPayView)
         let kakaoTap = addTapGesture(to: kakaoPayView)
         let naverTap = addTapGesture(to: naverPayView)
-   
+        
         
         let input = MyBankAccountVM.Input(inputNameText: nameTextField.rx.text.orEmpty.changed,
                                           editDoneBtnTapped: editDoneBtn.rx.tap.asDriver(),
@@ -455,8 +480,8 @@ class MyBankAccountVC: UIViewController {
                                           kakaoTapeed: kakaoTap.rx.event.asObservable().map { _ in () },
                                           naverTapped: naverTap.rx.event.asObservable().map { _ in () },
                                           nameTextFieldClearTapped: nameClearBtn.rx.tap.asControlEvent()
-//                                          nameTextFieldClearTapped: nameClearBtn.rx.tap.asDriver(),
-//                                          accountTextFieldClearTapped: accountClearBtn.rx.tap.asDriver()
+                                          //                                          nameTextFieldClearTapped: nameClearBtn.rx.tap.asDriver(),
+                                          //                                          accountTextFieldClearTapped: accountClearBtn.rx.tap.asDriver()
         )
         
         let output = viewModel.transform(input: input)
@@ -483,8 +508,8 @@ class MyBankAccountVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
-
-
+        
+        
         nameClearBtn.rx.tap
             .bind { [weak self] in
                 self?.nameTextField.text = ""
@@ -514,7 +539,7 @@ class MyBankAccountVC: UIViewController {
                 self.kakaoPayView.backgroundColor = value ? UIColor.systemYellow : UIColor.gray
             })
             .disposed(by: disposeBag)
-
+        
         userDefault.rx
             .observe(Bool.self, "naverPay")
             .subscribe(onNext: { value in
@@ -528,11 +553,16 @@ class MyBankAccountVC: UIViewController {
             .subscribe(onNext: { value in
                 guard let value = value else { return }
                 self.bankNameLabel.text = value
+                self.isBankSelected = true
                 
             })
+            .disposed(by: disposeBag)
         
-
-            
+        
+        
+        
+        
+        
     }
     
     func addTapGesture(to view: UIView) -> UITapGestureRecognizer {
@@ -556,7 +586,7 @@ class MyBankAccountVC: UIViewController {
 }
 
 extension MyBankAccountVC: UITextFieldDelegate {
- 
+    
     func setKeyboardNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
