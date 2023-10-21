@@ -256,7 +256,7 @@ class MyBankAccountVC: UIViewController {
 
             
             //$0.rightView = nameClearBtn
-            $0.clearButtonMode = .whileEditing
+            //$0.clearButtonMode = .whileEditing
             
           
             
@@ -338,7 +338,7 @@ class MyBankAccountVC: UIViewController {
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.gray.cgColor
-            $0.clearButtonMode = .whileEditing
+          //  $0.clearButtonMode = .whileEditing
             
 //
 //            clearButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
