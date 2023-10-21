@@ -49,6 +49,7 @@ class CSMemberEditVM {
         let textFieldCounter = BehaviorRelay<String>(value: "")
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
         let showCSMemberConfirmView = input.nextButtonTapSend.asDriver()
+        let csmemberUpdate = input.nextButtonTapSend.asObservable()
 
         memberList
             .asDriver()
@@ -138,13 +139,14 @@ class CSMemberEditVM {
             .drive(textFieldIsValid)
             .disposed(by: disposeBag)
         
-        showCSMemberConfirmView
-            .map { }
-            .drive { _ in
-//                SplitRepository.share.createCSMember(name: )
+        csmemberUpdate
+            .subscribe { _ in
+                print("왜실행됌????????/")
+                //                SplitRepository.share.createCSMember(name: )
                 print("\(SplitRepository.share.csMemberArr.value.map({ $0.name })))")
                 SplitRepository.share.updateDataToDB()
             }
+            .disposed(by: disposeBag)
 
         return Output(memberList: memberList,
                       searchList: searchList,
