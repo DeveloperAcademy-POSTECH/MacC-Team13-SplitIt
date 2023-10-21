@@ -1,5 +1,5 @@
 //
-//  ExclItemNameEditVC.swift
+//  CSExclItemPriceVC.swift
 //  SplitIt
 //
 //  Created by 주환 on 2023/10/21.
@@ -9,20 +9,20 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class ExclItemNameEditVC: UIViewController {
+class ExclItemPriceEditVC: UIViewController {
     
     var disposeBag = DisposeBag()
-    let viewModel: ExclItemNameEditVM
+    
+    let viewModel: ExclItemPriceEditVM
     
     let header = NavigationHeader()
     let titleMessage = UILabel()
-    let nameTextFiled = UITextField()
-    let nameTextSuffix = UILabel()
-    let textFiledCounter = UILabel()
+    let priceTextField = UITextField()
+    let currencyLabel = UILabel()
     let textFiledNotice = UILabel()
     let nextButton = UIButton()
     
-    init(viewModel: ExclItemNameEditVM) {
+    init(viewModel: ExclItemPriceEditVM) {
         self.disposeBag = DisposeBag()
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -44,7 +44,7 @@ class ExclItemNameEditVC: UIViewController {
         super.viewWillAppear(animated)
         
         setKeyboardNotification()
-        self.nameTextFiled.becomeFirstResponder()
+        self.priceTextField.becomeFirstResponder()
     }
     
     func setAttribute() {
@@ -55,11 +55,11 @@ class ExclItemNameEditVC: UIViewController {
         }
         
         titleMessage.do {
-            $0.text = "따로 계산할 것은 무엇인가요?"
             $0.font = .systemFont(ofSize: 18)
         }
         
-        nameTextFiled.do {
+        priceTextField.do {
+            $0.keyboardType = .numberPad
             $0.layer.cornerRadius = 8
             $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
             $0.layer.borderWidth = 1
@@ -67,8 +67,8 @@ class ExclItemNameEditVC: UIViewController {
             $0.font = .systemFont(ofSize: 24)
         }
         
-        nameTextSuffix.do {
-            $0.text = "값"
+        currencyLabel.do {
+            $0.text = "KRW"
             $0.font = .systemFont(ofSize: 15)
         }
         
@@ -85,11 +85,11 @@ class ExclItemNameEditVC: UIViewController {
     }
     
     func setLayout() {
-        [header,titleMessage,nameTextFiled,textFiledCounter,textFiledNotice,nextButton].forEach {
+        [header,titleMessage,priceTextField,textFiledNotice,nextButton].forEach {
             view.addSubview($0)
         }
         
-        nameTextFiled.addSubview(nameTextSuffix)
+        priceTextField.addSubview(currencyLabel)
         
         header.snp.makeConstraints {
             $0.height.equalTo(30)
@@ -102,24 +102,19 @@ class ExclItemNameEditVC: UIViewController {
             $0.centerX.equalToSuperview()
         }
         
-        nameTextFiled.snp.makeConstraints {
+        priceTextField.snp.makeConstraints {
             $0.top.equalTo(titleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(60)
         }
         
-        nameTextSuffix.snp.makeConstraints {
+        currencyLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(20)
         }
         
-        textFiledCounter.snp.makeConstraints {
-            $0.top.equalTo(nameTextFiled.snp.bottom).offset(6)
-            $0.trailing.equalTo(nameTextFiled.snp.trailing).inset(6)
-        }
-        
         textFiledNotice.snp.makeConstraints {
-            $0.top.equalTo(nameTextFiled.snp.bottom).offset(6)
+            $0.top.equalTo(priceTextField.snp.bottom).offset(6)
             $0.centerX.equalToSuperview()
         }
         
@@ -131,51 +126,34 @@ class ExclItemNameEditVC: UIViewController {
     }
     
     func setBinding() {
-        let input = ExclItemNameEditVM.Input(nextButtonTapped: nextButton.rx.tap,
-                                              name: nameTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""))
+        let input = ExclItemPriceEditVM.Input(nextButtonTapped: nextButton.rx.tap.asDriver(),
+                                               price: priceTextField.rx.text.orEmpty.asDriver(onErrorJustReturn: ""))
         let output = viewModel.transform(input: input)
         
-        output.showExclItemPriceView
+        output.title
+            .map(viewModel.mapTitleMessage)
+            .drive(titleMessage.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.totalAmount
+            .drive(priceTextField.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.showExclItemTargetView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let vc = ExclItemPriceEditVC(viewModel: ExclItemPriceEditVM(indexPath: viewModel.indexPath))
-                self.navigationController?.pushViewController(vc, animated: false)
+//                let vc = ExclMemberVC()
+//                self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
         
-        output.nameCount
-            .drive(textFiledCounter.rx.text)
-            .disposed(by: disposeBag)
-        
-        output.textFieldIsValid
-            .distinctUntilChanged()
-            .drive(onNext: { [weak self] isValid in
-                guard let self = self else { return }
-                self.textFiledCounter.textColor = isValid
-                ? UIColor(hex: 0xCCCCCC)
-                : UIColor(hex: 0xFF3030)
-            })
-            .disposed(by: disposeBag)
-        
-        output.textFieldIsValid
-            .map { [weak self] isValid -> String in
-                guard let self = self else { return "" }
-                if !isValid {
-                    return String(self.nameTextFiled.text?.prefix(self.viewModel.maxTextCount) ?? "")
-                } else {
-                    return self.nameTextFiled.text ?? ""
-                }
-            }
-            .drive(nameTextFiled.rx.text)
-            .disposed(by: disposeBag)
-        
-        output.exclTitle
-            .bind(to: nameTextFiled.rx.text)
+        output.exclPrice
+            .bind(to: priceTextField.rx.text)
             .disposed(by: disposeBag)
     }
 }
 
-extension ExclItemNameEditVC: UITextFieldDelegate {
+extension ExclItemPriceEditVC: UITextFieldDelegate {
     func setKeyboardNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -206,4 +184,5 @@ extension ExclItemNameEditVC: UITextFieldDelegate {
     func setKeyboardObserverRemove() {
         NotificationCenter.default.removeObserver(self)
     }
+    
 }
