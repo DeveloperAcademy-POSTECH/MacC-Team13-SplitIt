@@ -15,7 +15,6 @@ class CSMemberEditVM {
     
     let maxTextCount = 12
     
-    let csinfo = SplitRepository.share.csInfoArr.value.first?.csInfoIdx
     let memberList = SplitRepository.share.csMemberArr
     let isOverayViewHidden = BehaviorRelay<Bool>(value: false) // CSMemberInputVC
     let currentSearchText = BehaviorRelay<String>(value: "") // CSMemberInputSearchFooter
@@ -143,8 +142,7 @@ class CSMemberEditVM {
         csmemberUpdate
             .subscribe { _ in
                 print("왜실행됌????????/")
-                guard let csidx = self.csinfo else { return }
-                SplitRepository.share.deleteCSMemberAndRelatedData(csMemberIdx: csidx)
+                SplitRepository.share.updateDataToDB()
             }
             .disposed(by: disposeBag)
 
