@@ -58,6 +58,7 @@ class HomeVC: UIViewController {
                 // MARK: 모아나가 연결할 뷰로 수정
                 let vc = MyInfoVC()
                 self.navigationController?.pushViewController(vc, animated: true)
+                
             })
             .disposed(by: disposeBag)
         
