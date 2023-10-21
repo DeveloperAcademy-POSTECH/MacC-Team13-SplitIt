@@ -18,13 +18,18 @@ class MyInfoVC: UIViewController {
     var viewModel = MyInfoVM()
     var disposeBag = DisposeBag()
     let userDefault = UserDefaults.standard
+    var backViewHeightConstraint: Constraint?
     
     let header = NavigationHeader()
     let userNameLabel = UILabel()
     let userName = UILabel()
     let userBar = UIView()
     
+    let backView = UIView()
+    var backViewHeight: CGFloat = 104
+    
     let accountView = UIView()
+    let tmpView = UIView()
     let accountInfoLabel = UILabel()
     
     let accountEditView = UIView()
@@ -62,6 +67,15 @@ class MyInfoVC: UIViewController {
     
     let privacyBtn = UIButton()
     
+    
+    let mainLabel = UILabel() //반갑습니다 정산자님
+    let subLabel = UILabel() // 정산받을 곳을 ~ 시작해보세요!
+    
+    let emptyAccountEditView = UIView()
+    let emptyAccountEditLabel = UILabel() //시작하기
+    let emptyAccountEditChevron = UIImageView()
+    
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -70,6 +84,7 @@ class MyInfoVC: UIViewController {
         setAttribute()
         setLayout()
         setBinding()
+       
         
     }
     
@@ -77,16 +92,54 @@ class MyInfoVC: UIViewController {
            super.viewWillAppear(animated)
            userNewInfo()
        }
+    
+ 
 
-       func userNewInfo() {
-           self.userName.text = UserDefaults.standard.string(forKey: "userName")
-           self.accountBankLabel.text = UserDefaults.standard.string(forKey: "userBank")
-           self.accountLabel.text = UserDefaults.standard.string(forKey: "userAccount")
-           
-           self.tossPayBtn.backgroundColor = userDefault.bool(forKey: "tossPay") ? UIColor.systemBlue : UIColor.gray
-           self.kakaoPayBtn.backgroundColor = userDefault.bool(forKey: "kakaoPay") ? UIColor.systemYellow : UIColor.gray
-           self.naverPayBtn.backgroundColor = userDefault.bool(forKey: "naverPay") ? UIColor.systemGreen : UIColor.gray
-       }
+    func userNewInfo() {
+        
+        //userDefault.set("냐냐ㅑㄴ", forKey: "userName")
+        if let tmpuserName = UserDefaults.standard.string(forKey: "userName"), !tmpuserName.isEmpty {
+               accountView.isHidden = false
+               tmpView.isHidden = true
+                backViewHeight = 235
+            
+            backView.snp.removeConstraints()
+
+            // backView 제약 조건 재설정
+            backView.snp.makeConstraints { make in
+                make.height.equalTo(backViewHeight)
+                make.width.equalTo(330)
+                make.top.equalTo(view).offset(118)
+                make.centerX.equalTo(view)
+                
+            }
+           } else {
+               accountView.isHidden = true
+               tmpView.isHidden = false
+               backViewHeight = 104
+               
+               backView.snp.removeConstraints()
+
+               // backView 제약 조건 재설정
+               backView.snp.makeConstraints { make in
+                   make.height.equalTo(backViewHeight)
+                   make.width.equalTo(330)
+                   make.top.equalTo(view).offset(118)
+                   make.centerX.equalTo(view)
+               }
+           }
+        
+    
+        
+        
+        self.userName.text = UserDefaults.standard.string(forKey: "userName")
+        self.accountBankLabel.text = UserDefaults.standard.string(forKey: "userBank")
+        self.accountLabel.text = UserDefaults.standard.string(forKey: "userAccount")
+        
+        self.tossPayBtn.backgroundColor = userDefault.bool(forKey: "tossPay") ? UIColor.systemBlue : UIColor.gray
+        self.kakaoPayBtn.backgroundColor = userDefault.bool(forKey: "kakaoPay") ? UIColor.systemYellow : UIColor.gray
+        self.naverPayBtn.backgroundColor = userDefault.bool(forKey: "naverPay") ? UIColor.systemGreen : UIColor.gray
+    }
     
     func addTapGesture(to view: UIView) -> UITapGestureRecognizer {
         let tapGesture = UITapGestureRecognizer()
@@ -99,11 +152,12 @@ class MyInfoVC: UIViewController {
         let friendListTap = addTapGesture(to: friendListView)
         let exclItemTap = addTapGesture(to: exclItemListView)
         let editBtnTap = addTapGesture(to: accountEditView)
+        let startBtnTap = addTapGesture(to: emptyAccountEditView)
         
         let input = MyInfoVM.Input(privacyBtnTapped: privacyBtn.rx.tap.asDriver(),
                                    friendListViewTapped: friendListTap.rx.event.asObservable().map { _ in () },
                                    exclItemViewTapped: exclItemTap.rx.event.asObservable().map { _ in () },
-                                   editAccountViewTapped: editBtnTap.rx.event.asObservable().map{ _ in () }
+                                   editAccountViewTapped: editBtnTap.rx.event.asObservable().map{ _ in () }, emptyEditAccountViewTapped: startBtnTap.rx.event.asObservable().map{ _ in () }
         )
                 
         let output = viewModel.transform(input: input)
@@ -130,7 +184,9 @@ class MyInfoVC: UIViewController {
         output.moveToExclItemListView
             .subscribe(onNext: {
                 print("먹지 않은 뷰 이동")
-        
+                for key in UserDefaults.standard.dictionaryRepresentation().keys {
+                    UserDefaults.standard.removeObject(forKey: key.description)
+                }
             })
             .disposed(by: disposeBag)
         
@@ -143,18 +199,37 @@ class MyInfoVC: UIViewController {
                 
             })
             .disposed(by: disposeBag)
+        
+        output.moveToInitAccountView
+            .subscribe(onNext: {
+                print("계좌수정뷰 이동")
+                let bankVC = MyBankAccountVC()
+                self.navigationController?.pushViewController(bankVC, animated: true)
+                
+            })
+            .disposed(by: disposeBag)
     }
 
     func setAddView() {
-        [header, accountView, splitLabel,friendView, privacyBtn].forEach {
+        
+       // myInfoEmptyVC.tmpView = self.tmpView
+        
+        [header, backView, splitLabel,friendView, privacyBtn].forEach {
             view.addSubview($0)
         }
+        
+        backView.addSubview(tmpView)
+        backView.addSubview(accountView)
+        
+        
         [userNameLabel, userName, userBar, accountInfoLabel, accountBankLabel, accountLabel,socialPayLabel, tossPayBtn, tossPayLabel, kakaoPayBtn, kakaoPayLabel, naverPayBtn, naverPayLabel, accountEditView].forEach {
             accountView.addSubview($0)
         }
+
         [accountEditLabel, accountEditChevron].forEach {
             accountEditView.addSubview($0)
         }
+        
         [friendBar,friendListView, exclItemListView].forEach {
             friendView.addSubview($0)
         }
@@ -166,11 +241,21 @@ class MyInfoVC: UIViewController {
             exclItemListView.addSubview($0)
         }
         
+        
+        [mainLabel, subLabel, emptyAccountEditView].forEach{
+            tmpView.addSubview($0)
+        }
+        [emptyAccountEditLabel, emptyAccountEditChevron].forEach {
+            emptyAccountEditView.addSubview($0)
+        }
+        
 
     }
     
     func setAttribute() {
         view.backgroundColor = .white
+        tmpView.backgroundColor = .white
+        backView.backgroundColor = .white
         
         let privacyBtnString = NSAttributedString(string: "개인정보 처리방침", attributes: [
             NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
@@ -331,8 +416,8 @@ class MyInfoVC: UIViewController {
         }
         
         exclItemLabel.do {
-            $0.text = "따로 계산한 것들"
-            $0.font = UIFont.systemFont(ofSize: 15)
+            $0.text = "일단 userDefault초기화댐 원래는 따로 먹은 것들"
+            $0.font = UIFont.systemFont(ofSize: 9)
         }
 
         
@@ -344,6 +429,42 @@ class MyInfoVC: UIViewController {
             $0.setAttributedTitle(privacyBtnString, for: .normal)
         }
         
+        
+        
+        let emptyString = NSMutableAttributedString(string: "시작하기")
+        emptyString.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: emptyString.length))
+        
+        
+        tmpView.do {
+            $0.layer.cornerRadius = 8
+            $0.layer.borderWidth = 1
+            $0.layer.borderColor = UIColor.gray.cgColor
+        }
+        
+        mainLabel.do {
+            $0.text = "반갑습니다 정산자님 🥳"
+            $0.font = UIFont.systemFont(ofSize: 21)
+        }
+        
+        subLabel.do {
+            $0.text = "정산받을 곳을 입력하고 바로 정산을 시작해보세요!"
+            $0.font = UIFont.systemFont(ofSize: 12)
+            $0.textColor = UIColor.gray
+        }
+        emptyAccountEditView.do {
+            $0.backgroundColor = .clear
+        }
+        
+        emptyAccountEditLabel.do {
+            $0.attributedText = attributedString
+            $0.font = UIFont.systemFont(ofSize: 13)
+        }
+     
+        
+        emptyAccountEditChevron.do {
+            $0.image = UIImage(systemName: "chevron.right")
+            $0.tintColor = UIColor.gray
+        }
     }
     
     func setLayout() {
@@ -354,27 +475,34 @@ class MyInfoVC: UIViewController {
             $0.leading.trailing.equalToSuperview()
         }
         
+        tmpView.snp.makeConstraints { make in
+            make.height.equalTo(104)
+            make.width.equalTo(330)
+            make.center.equalTo(backView)
+        }
+       
         accountView.snp.makeConstraints { make in
             make.height.equalTo(230)
             make.width.equalTo(330)
-            make.top.equalToSuperview().offset(118)
-            make.centerX.equalToSuperview()
+            //make.top.equalTo(backView).offset(118)
+            make.center.equalTo(backView)
         }
         
+        
         userName.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(16)
-            make.left.equalToSuperview().offset(16)
+            make.top.equalTo(accountView).offset(16)
+            make.left.equalTo(accountView).offset(16)
         }
         
         userNameLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(20)
+            make.top.equalTo(accountView).offset(20)
             make.left.equalTo(userName.snp.right).offset(5)
         }
         
         accountEditView.snp.makeConstraints { make in
             make.width.equalTo(60)
             make.height.equalTo(18)
-            make.right.equalToSuperview().offset(-16)
+            make.right.equalTo(accountView).offset(-16)
             make.bottom.equalTo(userBar.snp.bottom).offset(-8)
         }
         
@@ -395,8 +523,8 @@ class MyInfoVC: UIViewController {
         userBar.snp.makeConstraints { make in
             make.height.equalTo(1)
             make.width.equalTo(298)
-            make.top.equalToSuperview().offset(50)
-            make.centerX.equalToSuperview()
+            make.top.equalTo(accountView).offset(50)
+            make.centerX.equalTo(accountView)
         }
         
         
@@ -404,6 +532,8 @@ class MyInfoVC: UIViewController {
             make.top.equalTo(userBar.snp.top).offset(16)
             make.left.equalTo(accountView.snp.left).offset(16)
         }
+        
+       
         
         accountBankLabel.snp.makeConstraints { make in
             make.top.equalTo(accountInfoLabel.snp.bottom).offset(2)
@@ -460,7 +590,7 @@ class MyInfoVC: UIViewController {
         }
         
         splitLabel.snp.makeConstraints { make in
-            make.top.equalTo(accountView.snp.bottom).offset(16)
+            make.top.equalTo(backView.snp.bottom).offset(16) //dddd
             make.left.equalToSuperview().offset(40)
         }
         
@@ -541,6 +671,39 @@ class MyInfoVC: UIViewController {
             make.bottom.equalToSuperview().offset(-54)
             make.centerX.equalToSuperview()
         }
+        
+        
+        mainLabel.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(16)
+            make.top.equalToSuperview().offset(20)
+        }
+        
+        subLabel.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(16)
+            make.top.equalTo(mainLabel.snp.bottom).offset(4)
+        }
+        
+        emptyAccountEditView.snp.makeConstraints { make in
+            make.width.equalTo(60)
+            make.height.equalTo(18)
+            make.right.equalToSuperview().offset(-16)
+            make.bottom.equalToSuperview().offset(-12)
+        }
+        
+        emptyAccountEditLabel.snp.makeConstraints { make in
+            make.width.equalTo(45)
+            make.height.equalTo(18)
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview()
+        }
+        
+        emptyAccountEditChevron.snp.makeConstraints { make in
+            make.height.equalTo(18)
+            make.width.equalTo(9)
+            make.centerY.equalToSuperview()
+            make.right.equalToSuperview()
+        }
+        
     }
     
 

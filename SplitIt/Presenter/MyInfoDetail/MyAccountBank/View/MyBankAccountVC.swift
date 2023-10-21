@@ -415,7 +415,7 @@ class MyBankAccountVC: UIViewController {
                 modalVC.modalTransitionStyle = .coverVertical
                 modalVC.selectedBankName
                     .bind { bankName in
-                        self?.userDefault.set(bankName, forKey: "userName")
+                        self?.userDefault.set(bankName, forKey: "userBank")
                         print(bankName)
                     }
                     .disposed(by: modalVC.disposeBag)

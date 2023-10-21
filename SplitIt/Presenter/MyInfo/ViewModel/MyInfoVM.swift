@@ -24,6 +24,7 @@ class MyInfoVM: UIViewController {
         let friendListViewTapped: Observable<Void>
         let exclItemViewTapped: Observable<Void>
         let editAccountViewTapped: Observable<Void>
+        let emptyEditAccountViewTapped: Observable<Void>
     }
     
     struct Output {
@@ -31,6 +32,7 @@ class MyInfoVM: UIViewController {
         let moveTofriendListView: Observable<Void>
         let moveToExclItemListView: Observable<Void>
         let moveToEditAccountView: Observable<Void>
+        let moveToInitAccountView: Observable<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -38,6 +40,7 @@ class MyInfoVM: UIViewController {
         let friendListViewTapped = input.friendListViewTapped
         let exclItemViewTapped = input.exclItemViewTapped
         let editAccountViewTap = input.editAccountViewTapped
+        let emptyEditAccountViewTapped = input.emptyEditAccountViewTapped
         
         repo.fetchMemberLog()
         
@@ -48,7 +51,8 @@ class MyInfoVM: UIViewController {
         let output = Output(moveToPrivacyView: privacyBtnTapped,
                             moveTofriendListView: friendListViewTapped,
                             moveToExclItemListView: exclItemViewTapped,
-                            moveToEditAccountView: editAccountViewTap
+                            moveToEditAccountView: editAccountViewTap,
+                            moveToInitAccountView: emptyEditAccountViewTapped
         )
         
         return output
