@@ -33,7 +33,7 @@ class MemberLogVM {
     var filteredMemberList = BehaviorRelay<[MemberLog]>(value: [])
     
     func filterMembers(with text: String) {
-        var filteredMembers = memberList.value.filter { $0.name.contains(text) }
+        let filteredMembers = memberList.value.filter { $0.name.contains(text) }
         filteredMemberList.accept(filteredMembers)
     }
 

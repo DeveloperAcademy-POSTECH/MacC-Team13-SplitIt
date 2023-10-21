@@ -43,13 +43,13 @@ class MemberCell: UITableViewCell {
     func setLayout() {
         nameLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
-            make.left.equalToSuperview().offset(16)
+            make.left.equalToSuperview().offset(20)
         }
         
         deleteBtn.snp.makeConstraints { make in
             make.width.height.equalTo(20)
             make.top.equalToSuperview().offset(10)
-            make.right.equalToSuperview().offset(-10)
+            make.right.equalToSuperview().offset(-15)
         }
         
     }

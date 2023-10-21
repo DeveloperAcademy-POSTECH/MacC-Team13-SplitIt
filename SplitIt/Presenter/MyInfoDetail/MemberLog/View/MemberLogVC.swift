@@ -95,18 +95,23 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
         searchBarTextField.do {
             $0.clipsToBounds = true
             $0.layer.borderColor = UIColor.black.cgColor
+            $0.layer.cornerRadius = 16
             $0.layer.borderWidth = 1
-            $0.placeholder = "친구이름을 입력하세요"
+            $0.placeholder = "친구 이름을 입력하세요"
             $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 38, height: $0.frame.height))
             $0.leftViewMode = .always
             $0.autocapitalizationType = .none
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
-            
-        }
+            $0.layer.cornerRadius = 10
+            $0.layer.masksToBounds = true
         
+        }
+
+       
         searchImage.do {
             $0.image = UIImage(systemName: "magnifyingglass")
+            $0.tintColor = UIColor.gray
         }
         
         
