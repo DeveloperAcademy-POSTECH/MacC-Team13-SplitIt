@@ -13,6 +13,8 @@ import Then
 
 class MyBankAccountVC: UIViewController {
     
+    let clearButton = UIButton()
+    
     let viewModel = MyBankAccountVM()
     var disposeBag = DisposeBag()
     let payData = PayData.shared.payData
@@ -44,11 +46,15 @@ class MyBankAccountVC: UIViewController {
     let kakaoPayView = UIView()
     let naverPayView = UIView()
     
+    let nameClearBtn = UIButton()
+   // let accountClearBtn = UIButton()
+    
     
     private let editDoneBtn = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         setAddView()
         setLayout()
@@ -58,11 +64,12 @@ class MyBankAccountVC: UIViewController {
         asapRxData()
     }
 
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        setKeyboardNotification()
+        self.nameTextField.becomeFirstResponder()
     }
-    
     
     func setAddView() {
         [header, nameLabel, nameTextField,
@@ -80,6 +87,9 @@ class MyBankAccountVC: UIViewController {
         [leftBar, rightBar, tossPayView, kakaoPayView, naverPayView].forEach {
             payView.addSubview($0)
         }
+        
+        //nameTextField.addSubview(nameClearBtn)
+       // accountTextField.addSubview(accountClearBtn)
       
     }
     
@@ -103,9 +113,11 @@ class MyBankAccountVC: UIViewController {
         }
         
         nameCountLabel.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-5)
+            make.right.equalToSuperview().offset(-25)
             make.centerY.equalToSuperview()
         }
+        
+       
         
         bankLabel.snp.makeConstraints { make in
             make.top.equalTo(nameTextField.snp.bottom).offset(16)
@@ -142,6 +154,12 @@ class MyBankAccountVC: UIViewController {
             make.height.equalTo(40)
             make.width.equalTo(330)
         }
+        
+//        accountClearBtn.snp.makeConstraints { make in
+//            make.height.width.equalTo(40)
+//            make.right.equalToSuperview().offset(-50)
+//            make.top.equalTo(accountTextField.snp.top).offset(10)
+//        }
         
         payLabel.snp.makeConstraints { make in
             make.top.equalTo(accountTextField.snp.bottom).offset(16)
@@ -191,7 +209,7 @@ class MyBankAccountVC: UIViewController {
         
         
         editDoneBtn.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             make.centerX.equalToSuperview()
             make.height.equalTo(50)
             make.width.equalTo(300)
@@ -199,28 +217,14 @@ class MyBankAccountVC: UIViewController {
         
         
     }
-    func setPay() {
-        
-        var tossPayBtn = PayButton(labelText: "토스뱅크", btn: UIImage(systemName: "dollarsign.square.fill")!, check: UIImage(systemName: "checkmark.circle.fill")!)
-        
-        var kakaoPayBtn = PayButton(labelText: "카카오페이", btn: UIImage(systemName: "dollarsign.square.fill")!, check: UIImage(systemName: "checkmark.circle.fill")!)
-        
-        var naverPayBtn = PayButton(labelText: "네이버페이", btn: UIImage(systemName: "dollarsign.square.fill")!, check: UIImage(systemName: "checkmark.circle.fill")!)
-        
-        tossPayBtn.setupConstraints(in: tossPayView)
-        kakaoPayBtn.setupConstraints(in: kakaoPayView)
-        naverPayBtn.setupConstraints(in: naverPayView)
-        
-        
-        
-    }
+    
     
  
     func setAttribute() {
         nameTextField.rx.text.orEmpty
             .map { text -> String in
                 let cnt = min(text.count, 8)
-                return "(\(cnt) / 8)"
+                return "(\(cnt)/8)"
             }
             .bind(to: nameCountLabel.rx.text)
             .disposed(by: disposeBag)
@@ -249,19 +253,31 @@ class MyBankAccountVC: UIViewController {
             $0.font = UIFont.systemFont(ofSize: 12)
             $0.textColor = UIColor.gray
         }
-        
+        nameCountLabel.do {
+            $0.textColor = .gray
+        }
         nameTextField.do {
             $0.layer.cornerRadius = 8
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.gray.cgColor
+
+            $0.autocorrectionType = .no
+            $0.spellCheckingType = .no
+            //$0.rightView = nameClearBtn
+            //$0.clearButtonMode = .whileEditing
+            
+          
             
             //placeholder의 색깔
             if UserDefaults.standard.string(forKey: "userName") == nil {
                 $0.attributedPlaceholder = NSAttributedString(string: "이름을 입력해주세요",
                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
             } else {
-                $0.placeholder = UserDefaults.standard.string(forKey: "userName")
+//                $0.attributedPlaceholder = NSAttributedString(string: UserDefaults.standard.string(forKey: "userName")!,
+//                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                
+                $0.placeholder = userDefault.string(forKey: "userName")
             }
             $0.font = UIFont.systemFont(ofSize: 15)
            
@@ -270,7 +286,21 @@ class MyBankAccountVC: UIViewController {
             //textField의 앞부분의 빈공간 구현
             $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: $0.frame.height))
             $0.leftViewMode = .always
-            
+
+        }
+        //            clearButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        //            clearButton.setTitle("X", for: .normal)
+        //            clearButton.setTitleColor(.black, for: .normal)
+        //            clearButton.addTarget(self, action: #selector(clearText), for: .touchUpInside)
+        //
+        //
+        //            $0.rightView = clearButton
+        //            $0.rightViewMode = .whileEditing
+        
+        nameClearBtn.do {
+            $0.setImage(UIImage(systemName: "x.circle.fill"), for: .normal)
+            $0.frame = CGRect(x: 30, y: 0, width: 50, height: 30)
+            $0.setTitleColor(.black, for: .normal)
         }
         
         bankLabel.do {
@@ -291,10 +321,10 @@ class MyBankAccountVC: UIViewController {
         bankNameLabel.do {
             if UserDefaults.standard.string(forKey: "userBank") == nil {
                 $0.text = "은행을 선택해주세요"
-                $0.textColor = .gray
+                $0.tintColor = .gray
             } else {
                 $0.text = UserDefaults.standard.string(forKey: "userBank")
-                $0.textColor = .black
+                $0.tintColor = .black
             }
             $0.font = UIFont.systemFont(ofSize: 15)
             
@@ -311,32 +341,63 @@ class MyBankAccountVC: UIViewController {
         }
         
         
+      
         accountTextField.do {
             $0.layer.cornerRadius = 8
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.gray.cgColor
+            $0.keyboardType = .numberPad
+          //  $0.clearButtonMode = .whileEditing
+            
+            $0.autocorrectionType = .no
+            $0.spellCheckingType = .no
+//
+//            clearButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+//            clearButton.setTitle("X", for: .normal)
+//            clearButton.setTitleColor(.black, for: .normal)
+//            clearButton.addTarget(self, action: #selector(clearText), for: .touchUpInside)
+//
+//
+//            $0.rightView = clearButton
+//            $0.rightViewMode = .whileEditing
+            
             
             if UserDefaults.standard.string(forKey: "userAccount") == nil {
             $0.attributedPlaceholder = NSAttributedString(string: "계좌번호를 입력해주세요",
                                                           attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
             } else {
-                $0.placeholder = UserDefaults.standard.string(forKey: "userAccount")
+//                $0.attributedPlaceholder = NSAttributedString(string: UserDefaults.standard.string(forKey: "userAccount")!,
+//                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                $0.placeholder = userDefault.string(forKey: "userAccount")
             }
             
-            
-            
+
             $0.font = UIFont.systemFont(ofSize: 15)
-            //$0.placeholder = userData.value.account
             $0.clipsToBounds = true
             
             //textField의 앞부분의 빈공간 구현
             $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: $0.frame.height))
             $0.leftViewMode = .always
-            
+//
+////
+//            let clearButton = UIButton(type: .custom)
+//            clearButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+//            clearButton.setTitle("X", for: .normal)
+//            clearButton.setTitleColor(.black, for: .normal)
+//            //clearButton.addTarget(self, action: #selector(clearText), for: .touchUpInside)
+//
+//            // 텍스트 필드 설정
+//            $0.rightView = clearButton
+//            $0.rightViewMode = .whileEditing
+
             
         }
         
+//        accountClearBtn.do {
+//            $0.setImage(UIImage(systemName: "x.circle.fill"), for: .normal)
+//        }
+//
         payLabel.do {
             $0.text = "간편페이 사용여부"
             $0.font = UIFont.systemFont(ofSize: 12)
@@ -360,6 +421,7 @@ class MyBankAccountVC: UIViewController {
         rightBar.do {
             $0.backgroundColor = .gray
         }
+        
         payView.do {
             $0.backgroundColor = .clear
             $0.layer.cornerRadius = 8
@@ -368,19 +430,14 @@ class MyBankAccountVC: UIViewController {
             
         }
         
-//        tossPayView.do {
-//            $0.backgroundColor = .gray
-//        }
-//
-//        kakaoPayView.do {
-//            $0.backgroundColor = .gray
-//        }
-//
-//        naverPayView.do {
-//            $0.backgroundColor = .gray
-//        }
-        
     }
+    
+//    @objc func clearText(sender: UIButton) {
+//
+//            accountTextField.text = ""
+//        print("눌림")
+//
+//    }
     
     func setBinding() {
         
@@ -388,6 +445,7 @@ class MyBankAccountVC: UIViewController {
         let tossTap = addTapGesture(to: tossPayView)
         let kakaoTap = addTapGesture(to: kakaoPayView)
         let naverTap = addTapGesture(to: naverPayView)
+   
         
         let input = MyBankAccountVM.Input(inputNameText: nameTextField.rx.text.orEmpty.changed,
                                           editDoneBtnTapped: editDoneBtn.rx.tap.asDriver(),
@@ -395,8 +453,10 @@ class MyBankAccountVC: UIViewController {
                                           inputAccountText: accountTextField.rx.text.orEmpty.asObservable(),
                                           tossTapped: tossTap.rx.event.asObservable().map { _ in () },
                                           kakaoTapeed: kakaoTap.rx.event.asObservable().map { _ in () },
-                                          naverTapped: naverTap.rx.event.asObservable().map { _ in () }
-                                          
+                                          naverTapped: naverTap.rx.event.asObservable().map { _ in () },
+                                          nameTextFieldClearTapped: nameClearBtn.rx.tap.asControlEvent()
+//                                          nameTextFieldClearTapped: nameClearBtn.rx.tap.asDriver(),
+//                                          accountTextFieldClearTapped: accountClearBtn.rx.tap.asDriver()
         )
         
         let output = viewModel.transform(input: input)
@@ -422,6 +482,17 @@ class MyBankAccountVC: UIViewController {
                 self?.present(modalVC, animated: true, completion: nil)
             })
             .disposed(by: disposeBag)
+        
+
+
+        nameClearBtn.rx.tap
+            .bind { [weak self] in
+                self?.nameTextField.text = ""
+                print("눌림")
+            }
+            .disposed(by: disposeBag)
+        
+        
     }
     
     
@@ -459,6 +530,9 @@ class MyBankAccountVC: UIViewController {
                 self.bankNameLabel.text = value
                 
             })
+        
+
+            
     }
     
     func addTapGesture(to view: UIView) -> UITapGestureRecognizer {
@@ -466,9 +540,50 @@ class MyBankAccountVC: UIViewController {
         view.addGestureRecognizer(tapGesture)
         return tapGesture
     }
+    func setPay() {
+        
+        var tossPayBtn = PayButton(labelText: "토스뱅크", btn: UIImage(systemName: "dollarsign.square.fill")!, check: UIImage(systemName: "checkmark.circle.fill")!)
+        
+        var kakaoPayBtn = PayButton(labelText: "카카오페이", btn: UIImage(systemName: "dollarsign.square.fill")!, check: UIImage(systemName: "checkmark.circle.fill")!)
+        
+        var naverPayBtn = PayButton(labelText: "네이버페이", btn: UIImage(systemName: "dollarsign.square.fill")!, check: UIImage(systemName: "checkmark.circle.fill")!)
+        
+        tossPayBtn.setupConstraints(in: tossPayView)
+        kakaoPayBtn.setupConstraints(in: kakaoPayView)
+        naverPayBtn.setupConstraints(in: naverPayView)
+        
+    }
 }
 
 extension MyBankAccountVC: UITextFieldDelegate {
+ 
+    func setKeyboardNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
     
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight: CGFloat
+            keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
+            self.editDoneBtn.snp.updateConstraints {
+                $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(keyboardHeight + 26)
+            }
+        }
+    }
+    
+    @objc private func keyboardWillHide() {
+        self.editDoneBtn.snp.updateConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+    }
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func setKeyboardObserverRemove() {
+        NotificationCenter.default.removeObserver(self)
+    }
 }
-

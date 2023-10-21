@@ -94,6 +94,7 @@
 		DE73D6F92AE1983A00ABF3EF /* MemberLogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D6F82AE1983A00ABF3EF /* MemberLogVM.swift */; };
 		DE73D6FC2AE1993F00ABF3EF /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D6FB2AE1993F00ABF3EF /* MemberCell.swift */; };
 		DE73D70B2AE3C1FC00ABF3EF /* MyInfoEmptyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D70A2AE3C1FC00ABF3EF /* MyInfoEmptyVC.swift */; };
+		DE73D70D2AE3EA0C00ABF3EF /* ClearButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D70C2AE3EA0C00ABF3EF /* ClearButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -178,6 +179,7 @@
 		DE73D6F82AE1983A00ABF3EF /* MemberLogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberLogVM.swift; sourceTree = "<group>"; };
 		DE73D6FB2AE1993F00ABF3EF /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		DE73D70A2AE3C1FC00ABF3EF /* MyInfoEmptyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoEmptyVC.swift; sourceTree = "<group>"; };
+		DE73D70C2AE3EA0C00ABF3EF /* ClearButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -664,6 +666,7 @@
 				DE73D6F02AE1104B00ABF3EF /* PayButton.swift */,
 				DE73D6E22AE0D12300ABF3EF /* MyBankAccountVC.swift */,
 				DE73D6EC2AE0D2C300ABF3EF /* BankListModalVC.swift */,
+				DE73D70C2AE3EA0C00ABF3EF /* ClearButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -857,6 +860,7 @@
 				60115E2B2ADE21CB0050D32C /* CSMemberConfirmVM.swift in Sources */,
 				1A3853072ADE5B9D00E9A20B /* RealmExclMember.swift in Sources */,
 				DE1711C82AE0BADD0097850D /* SocialPay.swift in Sources */,
+				DE73D70D2AE3EA0C00ABF3EF /* ClearButton.swift in Sources */,
 				60AD20FB2ADF842C00EFACCD /* ExclMemberSectionHeader.swift in Sources */,
 				60115DF92ADBF2E10050D32C /* HomeVM.swift in Sources */,
 				60AD20F92ADF83DE00EFACCD /* ExclAddCell.swift in Sources */,
