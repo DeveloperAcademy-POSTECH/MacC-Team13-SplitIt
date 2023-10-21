@@ -99,7 +99,9 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
             $0.placeholder = "친구이름을 입력하세요"
             $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 38, height: $0.frame.height))
             $0.leftViewMode = .always
-           $0.autocapitalizationType = .none
+            $0.autocapitalizationType = .none
+            $0.autocorrectionType = .no
+            $0.spellCheckingType = .no
             
         }
         

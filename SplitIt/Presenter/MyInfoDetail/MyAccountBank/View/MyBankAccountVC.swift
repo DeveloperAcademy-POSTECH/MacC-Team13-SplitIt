@@ -55,6 +55,7 @@ class MyBankAccountVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         setAddView()
         setLayout()
         setAttribute()
@@ -63,6 +64,13 @@ class MyBankAccountVC: UIViewController {
         asapRxData()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        setKeyboardNotification()
+        self.nameTextField.becomeFirstResponder()
+    }
+    
     func setAddView() {
         [header, nameLabel, nameTextField,
          bankLabel, bankView,
@@ -201,7 +209,7 @@ class MyBankAccountVC: UIViewController {
         
         
         editDoneBtn.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             make.centerX.equalToSuperview()
             make.height.equalTo(50)
             make.width.equalTo(300)
@@ -254,7 +262,8 @@ class MyBankAccountVC: UIViewController {
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.gray.cgColor
 
-            
+            $0.autocorrectionType = .no
+            $0.spellCheckingType = .no
             //$0.rightView = nameClearBtn
             //$0.clearButtonMode = .whileEditing
             
@@ -338,8 +347,11 @@ class MyBankAccountVC: UIViewController {
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.gray.cgColor
+            $0.keyboardType = .numberPad
           //  $0.clearButtonMode = .whileEditing
             
+            $0.autocorrectionType = .no
+            $0.spellCheckingType = .no
 //
 //            clearButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
 //            clearButton.setTitle("X", for: .normal)
@@ -544,6 +556,34 @@ class MyBankAccountVC: UIViewController {
 }
 
 extension MyBankAccountVC: UITextFieldDelegate {
+ 
+    func setKeyboardNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
     
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight: CGFloat
+            keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
+            self.editDoneBtn.snp.updateConstraints {
+                $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(keyboardHeight + 26)
+            }
+        }
+    }
+    
+    @objc private func keyboardWillHide() {
+        self.editDoneBtn.snp.updateConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+    }
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func setKeyboardObserverRemove() {
+        NotificationCenter.default.removeObserver(self)
+    }
 }
-
