@@ -12,8 +12,14 @@ import UIKit
 class ExclItemNameEditVM {
     
     var disposeBag = DisposeBag()
+    var indexPath: IndexPath
     
     let maxTextCount = 8
+    
+    init(indexPath: IndexPath) {
+        self.indexPath = indexPath
+    }
+    
     struct Input {
         let nextButtonTapped: ControlEvent<Void> // 다음 버튼
         let name: Driver<String>
@@ -23,6 +29,7 @@ class ExclItemNameEditVM {
         let showExclItemPriceView: Driver<Void>
         let nameCount: Driver<String>
         let textFieldIsValid: Driver<Bool>
+        let exclTitle: Observable<String>
     }
     
     func transform(input: Input) -> Output {
@@ -30,12 +37,21 @@ class ExclItemNameEditVM {
         let showExclItemPriceView = input.nextButtonTapped
         let textFieldCount = BehaviorRelay<String>(value: "")
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
+        let data = SplitRepository.share.exclItemArr.map { $0[self.indexPath.row] }
+        var exclIdx = ""
+        let exclName = data.map { $0.name }.asObservable()
+        
+        data.map { $0.exclItemIdx }.subscribe { st in
+            exclIdx = st
+        }.disposed(by: disposeBag)
 
         showExclItemPriceView
             .asDriver()
             .withLatestFrom(input.name)
             .drive(onNext: {
-                SplitRepository.share.createExclItemWithName(name: $0)
+                if exclIdx != "" {
+                    SplitRepository.share.editExclItemName(exclItemIdx: exclIdx, name: $0)
+                }
             })
             .disposed(by: disposeBag)
         
@@ -55,9 +71,12 @@ class ExclItemNameEditVM {
             .drive(textFieldIsValid)
             .disposed(by: disposeBag)
         
+        
+        
         return Output(showExclItemPriceView: showExclItemPriceView.asDriver(),
                       nameCount: textFieldCount.asDriver(),
-                      textFieldIsValid: textFieldIsValid.asDriver())
+                      textFieldIsValid: textFieldIsValid.asDriver(),
+                      exclTitle: exclName )
     }
 
 }

@@ -16,11 +16,9 @@ import RxDataSources
 class CSEditListVC: UIViewController {
     
     var disposeBag = DisposeBag()
-    
     let viewModel = CSEditListVM()
     
     let header = NavigationHeader()
-    
     let titleEditBtn = UIButton(type: .system)
     let titleLabel = UILabel()
     lazy var titleStackView: UIStackView = {
@@ -230,7 +228,7 @@ extension CSEditListVC {
     }
     
     private func pushExclItemEditViewController(index: IndexPath) {
-        let vc = ExclItemNameEditVC()
+        let vc = ExclItemNameEditVC(viewModel: ExclItemNameEditVM(indexPath: index))
         navigationController?.pushViewController(vc, animated: true)
     }
 }

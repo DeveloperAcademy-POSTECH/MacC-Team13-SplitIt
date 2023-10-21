@@ -12,8 +12,7 @@ import RxCocoa
 class ExclItemNameEditVC: UIViewController {
     
     var disposeBag = DisposeBag()
-    
-    let viewModel = ExclItemNameEditVM()
+    let viewModel: ExclItemNameEditVM
     
     let header = NavigationHeader()
     let titleMessage = UILabel()
@@ -22,6 +21,16 @@ class ExclItemNameEditVC: UIViewController {
     let textFiledCounter = UILabel()
     let textFiledNotice = UILabel()
     let nextButton = UIButton()
+    
+    init(viewModel: ExclItemNameEditVM) {
+        self.disposeBag = DisposeBag()
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -158,6 +167,10 @@ class ExclItemNameEditVC: UIViewController {
                 }
             }
             .drive(nameTextFiled.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.exclTitle
+            .bind(to: nameTextFiled.rx.text)
             .disposed(by: disposeBag)
     }
 }

@@ -25,6 +25,7 @@ class CSEditListCell: UITableViewCell, Reusable {
         btn.setTitle("수정하기", for: .normal)
         btn.setTitleColor(.lightGray, for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 12)
+        btn.isEnabled = false
         return btn
     }()
 
