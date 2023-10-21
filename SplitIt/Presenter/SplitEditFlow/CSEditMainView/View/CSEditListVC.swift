@@ -230,9 +230,8 @@ extension CSEditListVC {
     }
     
     private func pushExclItemEditViewController(index: IndexPath) {
-//        let vc = UIViewController()
-//        vc.view.backgroundColor = .white
-//        navigationController?.pushViewController(vc, animated: true)
+        let vc = ExclItemNameEditVC()
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

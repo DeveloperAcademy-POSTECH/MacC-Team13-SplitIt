@@ -64,6 +64,8 @@
 		8677BA6B2AE3C0DC002BD395 /* CSMemberEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA6A2AE3C0DC002BD395 /* CSMemberEditVC.swift */; };
 		8677BA6D2AE3C162002BD395 /* CSMemberEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA6C2AE3C162002BD395 /* CSMemberEditVM.swift */; };
 		8677BA6F2AE3C232002BD395 /* CSMemberEditCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8677BA6E2AE3C232002BD395 /* CSMemberEditCell.swift */; };
+		86B5C69C2AE3DEA50017C048 /* ExclItemNameEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B5C69B2AE3DEA50017C048 /* ExclItemNameEditVC.swift */; };
+		86B5C69E2AE3DF130017C048 /* ExclItemNameEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B5C69D2AE3DF130017C048 /* ExclItemNameEditVM.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -118,6 +120,8 @@
 		8677BA6A2AE3C0DC002BD395 /* CSMemberEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberEditVC.swift; sourceTree = "<group>"; };
 		8677BA6C2AE3C162002BD395 /* CSMemberEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberEditVM.swift; sourceTree = "<group>"; };
 		8677BA6E2AE3C232002BD395 /* CSMemberEditCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberEditCell.swift; sourceTree = "<group>"; };
+		86B5C69B2AE3DEA50017C048 /* ExclItemNameEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemNameEditVC.swift; sourceTree = "<group>"; };
+		86B5C69D2AE3DF130017C048 /* ExclItemNameEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemNameEditVM.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -374,6 +378,7 @@
 		8677BA512ADFF3A2002BD395 /* SplitEditFlow */ = {
 			isa = PBXGroup;
 			children = (
+				86B5C69A2AE3DD800017C048 /* CSExclItemView */,
 				8677BA692AE3C0A0002BD395 /* CSMemberEditView */,
 				8677BA5F2AE2631F002BD395 /* CSTitleEditView */,
 				8677BA642AE27058002BD395 /* CSTotalAmountEditView */,
@@ -434,6 +439,15 @@
 				8677BA6E2AE3C232002BD395 /* CSMemberEditCell.swift */,
 			);
 			path = CSMemberEditView;
+			sourceTree = "<group>";
+		};
+		86B5C69A2AE3DD800017C048 /* CSExclItemView */ = {
+			isa = PBXGroup;
+			children = (
+				86B5C69B2AE3DEA50017C048 /* ExclItemNameEditVC.swift */,
+				86B5C69D2AE3DF130017C048 /* ExclItemNameEditVM.swift */,
+			);
+			path = CSExclItemView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -562,6 +576,7 @@
 				60115E0E2ADC19250050D32C /* CSTitleInputVM.swift in Sources */,
 				1A3852FF2ADE5B1B00E9A20B /* RealmSplit.swift in Sources */,
 				60115E0C2ADC18F90050D32C /* CSTitleInputVC.swift in Sources */,
+				86B5C69E2AE3DF130017C048 /* ExclItemNameEditVM.swift in Sources */,
 				8677BA5B2ADFF6D4002BD395 /* CSEditListVC.swift in Sources */,
 				1A3852F52ADE5A9F00E9A20B /* Split.swift in Sources */,
 				1A3852FB2ADE5ADA00E9A20B /* ExclItem.swift in Sources */,
@@ -571,6 +586,7 @@
 				60115E1D2ADD2B5E0050D32C /* CSMemberInputVC.swift in Sources */,
 				1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */,
 				1A4DB22B2ADE68E400616243 /* SplitRepository.swift in Sources */,
+				86B5C69C2AE3DEA50017C048 /* ExclItemNameEditVC.swift in Sources */,
 				1A3852FD2ADE5B0100E9A20B /* ExclMember.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
