@@ -320,32 +320,34 @@ extension SplitRepository {
             }
         }
         
-        csMemberArr.accept(newCSMembers)
-        realmManager.deleteCSMember(csMemberIdxArr: [deleteCSMember!.csInfoIdx])
-        
-        // 만약 csMember가 하나도 없다면 해당 csInfo 아래 모든 데이터 삭제
-        if newCSMembers.isEmpty {
-            deleteCSInfoAndRelatedData(csInfoIdx: deleteCSMember!.csInfoIdx)
-        
-        // 아니라면 해당 csMember와 이름이 같은 해당 차수의 exclMember만 삭제
-        } else {
-            let csMemberName = deleteCSMember!.name
-            let csInfoIdx = deleteCSMember!.csInfoIdx
-            let exclMembers: [ExclMember] = exclMemberArr.value
-            var deleteExclMembers: [ExclMember] = []
-            var newExclMembers: [ExclMember] = []
-            let exclItemIdxArr: [String] = exclItemArr.value.filter { $0.csInfoIdx == csInfoIdx }.map { $0.exclItemIdx }
+        if let deleteCSMember = deleteCSMember {
+            csMemberArr.accept(newCSMembers)
+            realmManager.deleteCSMember(csMemberIdxArr: [deleteCSMember.csInfoIdx])
             
-            for member in exclMembers {
-                if member.name == csMemberName && exclItemIdxArr.contains(member.exclItemIdx) {
-                    deleteExclMembers.append(member)
-                } else {
-                    newExclMembers.append(member)
+            
+            // 만약 csMember가 하나도 없다면 해당 csInfo 아래 모든 데이터 삭제
+            if newCSMembers.isEmpty {
+                deleteCSInfoAndRelatedData(csInfoIdx: deleteCSMember.csInfoIdx)
+                
+                // 아니라면 해당 csMember와 이름이 같은 해당 차수의 exclMember만 삭제
+            } else {
+                let csMemberName = deleteCSMember.name
+                let csInfoIdx = deleteCSMember.csInfoIdx
+                let exclMembers: [ExclMember] = exclMemberArr.value
+                var deleteExclMembers: [ExclMember] = []
+                var newExclMembers: [ExclMember] = []
+                let exclItemIdxArr: [String] = exclItemArr.value.filter { $0.csInfoIdx == csInfoIdx }.map { $0.exclItemIdx }
+                
+                for member in exclMembers {
+                    if member.name == csMemberName && exclItemIdxArr.contains(member.exclItemIdx) {
+                        deleteExclMembers.append(member)
+                    } else {
+                        newExclMembers.append(member)
+                    }
                 }
+                exclMemberArr.accept(newExclMembers)
+                realmManager.deleteExclMember(exclMemberIdxArr: deleteExclMembers.map { $0.exclMemberIdx })
             }
-            
-            exclMemberArr.accept(newExclMembers)
-            realmManager.deleteExclMember(exclMemberIdxArr: deleteExclMembers.map { $0.exclMemberIdx })
         }
     }
     
