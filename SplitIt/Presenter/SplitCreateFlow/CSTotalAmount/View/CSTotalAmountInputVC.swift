@@ -63,7 +63,6 @@ class CSTotalAmountInputVC: UIViewController {
         
         nextButton.do {
             $0.setTitle("다음으로", for: .normal)
-            $0.applyStyle(.deactivate)
         }
     }
     
@@ -122,8 +121,7 @@ class CSTotalAmountInputVC: UIViewController {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.nextButton.applyStyle(.primaryMushroomPressed)
-                
-                let vc = CSMemberInputVC()
+                let vc = CSMemberPageController()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)

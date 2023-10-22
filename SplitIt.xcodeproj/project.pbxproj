@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A07DF062AE51F060081E543 /* CSMemberPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A07DF052AE51F060081E543 /* CSMemberPageController.swift */; };
+		1A07DF092AE55E8F0081E543 /* ExclPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A07DF082AE55E8F0081E543 /* ExclPageController.swift */; };
+		1A07DF0B2AE569660081E543 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A07DF0A2AE569660081E543 /* UIButton+.swift */; };
 		1A3852F52ADE5A9F00E9A20B /* Split.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3852F42ADE5A9F00E9A20B /* Split.swift */; };
 		1A3852F72ADE5AB200E9A20B /* CSInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3852F62ADE5AB200E9A20B /* CSInfo.swift */; };
 		1A3852F92ADE5AC200E9A20B /* CSMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3852F82ADE5AC200E9A20B /* CSMember.swift */; };
@@ -115,6 +118,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1A07DF052AE51F060081E543 /* CSMemberPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberPageController.swift; sourceTree = "<group>"; };
+		1A07DF082AE55E8F0081E543 /* ExclPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclPageController.swift; sourceTree = "<group>"; };
+		1A07DF0A2AE569660081E543 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
 		1A3852F42ADE5A9F00E9A20B /* Split.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Split.swift; sourceTree = "<group>"; };
 		1A3852F62ADE5AB200E9A20B /* CSInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSInfo.swift; sourceTree = "<group>"; };
 		1A3852F82ADE5AC200E9A20B /* CSMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMember.swift; sourceTree = "<group>"; };
@@ -235,6 +241,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A07DF072AE55E750081E543 /* ExclPageController */ = {
+			isa = PBXGroup;
+			children = (
+				1A07DF082AE55E8F0081E543 /* ExclPageController.swift */,
+			);
+			path = ExclPageController;
+			sourceTree = "<group>";
+		};
 		1A3852F22ADE5A4F00E9A20B /* RealmModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -311,6 +325,7 @@
 				60115DF62ADBF2980050D32C /* UIColor+.swift */,
 				60115E002ADC01150050D32C /* UITextField+.swift */,
 				C2A797902AE2748E0049E709 /* UIFont+.swift */,
+				1A07DF0A2AE569660081E543 /* UIButton+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -419,6 +434,7 @@
 				60115E252ADD2CB00050D32C /* CSMemberInputSearchFooter.swift */,
 				60115E282ADE21C40050D32C /* CSMemberConfirmVC.swift */,
 				60115E2E2ADE3EDA0050D32C /* CSMemberConfirmHeader.swift */,
+				1A07DF052AE51F060081E543 /* CSMemberPageController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -478,6 +494,7 @@
 		60AD20DD2ADEC0BC00EFACCD /* ExclItemCycle */ = {
 			isa = PBXGroup;
 			children = (
+				1A07DF072AE55E750081E543 /* ExclPageController */,
 				60AD20EC2ADF7AED00EFACCD /* ExclItemMember */,
 				60AD20E52ADEC88D00EFACCD /* ExclItemPrice */,
 				60AD20E02ADEC10700EFACCD /* ExclItemName */,
@@ -930,6 +947,7 @@
 			files = (
 				60115E292ADE21C40050D32C /* CSMemberConfirmVC.swift in Sources */,
 				60115E222ADD2BC80050D32C /* CSMemberInputCell.swift in Sources */,
+				1A07DF062AE51F060081E543 /* CSMemberPageController.swift in Sources */,
 				DE1711C42AE0BAB30097850D /* MyInfoVC.swift in Sources */,
 				869D1AE12AE52BC600D166B1 /* CSTotalAmountEditVM.swift in Sources */,
 				60115E242ADD2BE20050D32C /* CSMemberInputSearchCell.swift in Sources */,
@@ -938,6 +956,7 @@
 				869D1AD32AE52AD900D166B1 /* CSTitleEditVC.swift in Sources */,
 				869D1ADF2AE52BB300D166B1 /* CSTotalAmountEditVC.swift in Sources */,
 				60AD20E42ADEC15700EFACCD /* ExclItemNameInputVM.swift in Sources */,
+				1A07DF0B2AE569660081E543 /* UIButton+.swift in Sources */,
 				60115E182ADD19CD0050D32C /* NumberFormatterHelper.swift in Sources */,
 				869D1AE42AE52BFF00D166B1 /* ExclItemNameEditVC.swift in Sources */,
 				60115E2D2ADE221D0050D32C /* CSMemberConfirmCell.swift in Sources */,
@@ -987,6 +1006,7 @@
 				60115E012ADC01150050D32C /* UITextField+.swift in Sources */,
 				60115E2B2ADE21CB0050D32C /* CSMemberConfirmVM.swift in Sources */,
 				1A3853072ADE5B9D00E9A20B /* RealmExclMember.swift in Sources */,
+				1A07DF092AE55E8F0081E543 /* ExclPageController.swift in Sources */,
 				DE1711C82AE0BADD0097850D /* SocialPay.swift in Sources */,
 				60AD20FB2ADF842C00EFACCD /* ExclMemberSectionHeader.swift in Sources */,
 				60115DF92ADBF2E10050D32C /* HomeVM.swift in Sources */,
@@ -1158,7 +1178,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3NP4Z3WZ94;
+				DEVELOPMENT_TEAM = B9U954AWHU;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SplitIt/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1185,7 +1205,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3NP4Z3WZ94;
+				DEVELOPMENT_TEAM = B9U954AWHU;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SplitIt/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
