@@ -85,7 +85,7 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
     }
     
     func setAttribute() {
-        
+        tableView.backgroundColor = .SurfaceBrandCalmshell
         view.backgroundColor = .SurfaceBrandCalmshell
         
         header.do {
