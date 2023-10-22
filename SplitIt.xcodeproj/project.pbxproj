@@ -21,6 +21,14 @@
 		1A4DB22B2ADE68E400616243 /* SplitRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB22A2ADE68E400616243 /* SplitRepository.swift */; };
 		1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */; };
 		1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2522ADEB24F00616243 /* MemberLog.swift */; };
+		6009C8142AE29DF4008B9EC1 /* ResultVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6009C8132AE29DF4008B9EC1 /* ResultVC.swift */; };
+		6009C8162AE29DFB008B9EC1 /* ResultVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6009C8152AE29DFB008B9EC1 /* ResultVM.swift */; };
+		6009C8192AE29E5D008B9EC1 /* ResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6009C8182AE29E5D008B9EC1 /* ResultCell.swift */; };
+		6009C81B2AE2A300008B9EC1 /* ResultSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6009C81A2AE2A300008B9EC1 /* ResultSection.swift */; };
+		6009C81D2AE2B684008B9EC1 /* CSInfoAddCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6009C81C2AE2B684008B9EC1 /* CSInfoAddCell.swift */; };
+		6009C81F2AE2B813008B9EC1 /* ResultSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6009C81E2AE2B813008B9EC1 /* ResultSectionHeader.swift */; };
+		6009C8212AE2BC13008B9EC1 /* SectionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6009C8202AE2BC13008B9EC1 /* SectionFactory.swift */; };
+		6009C8232AE2C27A008B9EC1 /* ResultSectionBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6009C8222AE2C27A008B9EC1 /* ResultSectionBackground.swift */; };
 		60115DF72ADBF2980050D32C /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115DF62ADBF2980050D32C /* UIColor+.swift */; };
 		60115DF92ADBF2E10050D32C /* HomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115DF82ADBF2E10050D32C /* HomeVM.swift */; };
 		60115DFC2ADBF8860050D32C /* RxAppState in Frameworks */ = {isa = PBXBuildFile; productRef = 60115DFB2ADBF8860050D32C /* RxAppState */; };
@@ -96,6 +104,14 @@
 		1A4DB22A2ADE68E400616243 /* SplitRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitRepository.swift; sourceTree = "<group>"; };
 		1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMemberLog.swift; sourceTree = "<group>"; };
 		1A4DB2522ADEB24F00616243 /* MemberLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberLog.swift; sourceTree = "<group>"; };
+		6009C8132AE29DF4008B9EC1 /* ResultVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultVC.swift; sourceTree = "<group>"; };
+		6009C8152AE29DFB008B9EC1 /* ResultVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultVM.swift; sourceTree = "<group>"; };
+		6009C8182AE29E5D008B9EC1 /* ResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCell.swift; sourceTree = "<group>"; };
+		6009C81A2AE2A300008B9EC1 /* ResultSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultSection.swift; sourceTree = "<group>"; };
+		6009C81C2AE2B684008B9EC1 /* CSInfoAddCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSInfoAddCell.swift; sourceTree = "<group>"; };
+		6009C81E2AE2B813008B9EC1 /* ResultSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultSectionHeader.swift; sourceTree = "<group>"; };
+		6009C8202AE2BC13008B9EC1 /* SectionFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionFactory.swift; sourceTree = "<group>"; };
+		6009C8222AE2C27A008B9EC1 /* ResultSectionBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultSectionBackground.swift; sourceTree = "<group>"; };
 		60115DF62ADBF2980050D32C /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		60115DF82ADBF2E10050D32C /* HomeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVM.swift; sourceTree = "<group>"; };
 		60115E002ADC01150050D32C /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
@@ -204,9 +220,49 @@
 			path = Repository;
 			sourceTree = "<group>";
 		};
+		6009C8102AE29DC7008B9EC1 /* Result */ = {
+			isa = PBXGroup;
+			children = (
+				6009C8122AE29DD4008B9EC1 /* ViewModel */,
+				6009C8112AE29DD1008B9EC1 /* View */,
+			);
+			path = Result;
+			sourceTree = "<group>";
+		};
+		6009C8112AE29DD1008B9EC1 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6009C8172AE29E00008B9EC1 /* Cell */,
+				6009C8132AE29DF4008B9EC1 /* ResultVC.swift */,
+				6009C81A2AE2A300008B9EC1 /* ResultSection.swift */,
+				6009C81E2AE2B813008B9EC1 /* ResultSectionHeader.swift */,
+				6009C8202AE2BC13008B9EC1 /* SectionFactory.swift */,
+				6009C8222AE2C27A008B9EC1 /* ResultSectionBackground.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6009C8122AE29DD4008B9EC1 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				6009C8152AE29DFB008B9EC1 /* ResultVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		6009C8172AE29E00008B9EC1 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				6009C8182AE29E5D008B9EC1 /* ResultCell.swift */,
+				6009C81C2AE2B684008B9EC1 /* CSInfoAddCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		60115DF22ADBF0DD0050D32C /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
+				6009C8102AE29DC7008B9EC1 /* Result */,
 				DE73D6DE2AE0D0E700ABF3EF /* MyInfoDetail */,
 				DE1711BE2AE0BA750097850D /* MyInfo */,
 				60115E042ADC18110050D32C /* SplitCreateFlow */,
@@ -666,6 +722,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6009C8232AE2C27A008B9EC1 /* ResultSectionBackground.swift in Sources */,
 				60115E292ADE21C40050D32C /* CSMemberConfirmVC.swift in Sources */,
 				60115E222ADD2BC80050D32C /* CSMemberInputCell.swift in Sources */,
 				DE1711C42AE0BAB30097850D /* MyInfoVC.swift in Sources */,
@@ -675,10 +732,13 @@
 				60115E182ADD19CD0050D32C /* NumberFormatterHelper.swift in Sources */,
 				60115E2D2ADE221D0050D32C /* CSMemberConfirmCell.swift in Sources */,
 				1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */,
+				6009C81F2AE2B813008B9EC1 /* ResultSectionHeader.swift in Sources */,
 				60115E162ADCDB840050D32C /* CSTotalAmountInputVM.swift in Sources */,
 				60115E312ADE715E0050D32C /* CSMemberConfirmHeaderVM.swift in Sources */,
+				6009C8162AE29DFB008B9EC1 /* ResultVM.swift in Sources */,
 				60115E2F2ADE3EDA0050D32C /* CSMemberConfirmHeader.swift in Sources */,
 				DE73D6E72AE0D20600ABF3EF /* BankListData.swift in Sources */,
+				6009C81B2AE2A300008B9EC1 /* ResultSection.swift in Sources */,
 				60115E142ADCDB570050D32C /* CSTotalAmountInputVC.swift in Sources */,
 				60AD20F22ADF812300EFACCD /* ExclMemberVM.swift in Sources */,
 				60AD20E22ADEC15000EFACCD /* ExclItemNameInputVC.swift in Sources */,
@@ -691,11 +751,12 @@
 				60115E102ADC195C0050D32C /* CreateStore.swift in Sources */,
 				1A3852F72ADE5AB200E9A20B /* CSInfo.swift in Sources */,
 				60115E1F2ADD2B660050D32C /* CSMemberInputVM.swift in Sources */,
+				6009C8142AE29DF4008B9EC1 /* ResultVC.swift in Sources */,
 				DE73D6E92AE0D27500ABF3EF /* Bank.swift in Sources */,
 				60AD20E92ADEC8AD00EFACCD /* ExclItemPriceInputVC.swift in Sources */,
 				DE73D6E32AE0D12300ABF3EF /* MyBankAccountVC.swift in Sources */,
+				6009C8212AE2BC13008B9EC1 /* SectionFactory.swift in Sources */,
 				6078ACCC2ADA74AC00995811 /* AppDelegate.swift in Sources */,
-				60AD20F42ADF827400EFACCD /* ExclMemberSection.swift in Sources */,
 				DE73D6EB2AE0D29000ABF3EF /* BankManager.swift in Sources */,
 				1A4DB2292ADE61E800616243 /* RealmManager.swift in Sources */,
 				1A3853032ADE5B4500E9A20B /* RealmCSMember.swift in Sources */,
@@ -703,6 +764,7 @@
 				60115E012ADC01150050D32C /* UITextField+.swift in Sources */,
 				60115E2B2ADE21CB0050D32C /* CSMemberConfirmVM.swift in Sources */,
 				1A3853072ADE5B9D00E9A20B /* RealmExclMember.swift in Sources */,
+				6009C8192AE29E5D008B9EC1 /* ResultCell.swift in Sources */,
 				DE1711C82AE0BADD0097850D /* SocialPay.swift in Sources */,
 				60AD20FB2ADF842C00EFACCD /* ExclMemberSectionHeader.swift in Sources */,
 				60115DF92ADBF2E10050D32C /* HomeVM.swift in Sources */,
@@ -715,6 +777,7 @@
 				1A3852FB2ADE5ADA00E9A20B /* ExclItem.swift in Sources */,
 				DE1711CA2AE0BAEA0097850D /* UserData.swift in Sources */,
 				60115E262ADD2CB00050D32C /* CSMemberInputSearchFooter.swift in Sources */,
+				6009C81D2AE2B684008B9EC1 /* CSInfoAddCell.swift in Sources */,
 				DE1711C62AE0BACE0097850D /* User.swift in Sources */,
 				6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */,
 				60AD20F02ADF811A00EFACCD /* ExclMemberVC.swift in Sources */,
