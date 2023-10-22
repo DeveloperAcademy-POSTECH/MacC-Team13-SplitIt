@@ -66,7 +66,7 @@ class HomeVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        output.showMoanaView
+        output.showInfoView
             .drive(onNext: {
                 // MARK: 모아나가 연결할 뷰로 수정
                 let vc = MyInfoVC()
@@ -76,7 +76,7 @@ class HomeVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        output.showMoanaView
+        output.showInfoView
             .delay(.milliseconds(500))
            .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
@@ -84,7 +84,7 @@ class HomeVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        output.showJerryView
+        output.showHistoryView
             .drive(onNext: {
                 // MARK: 제리가 연결할 뷰로 수정
                 print("제리뷰 이동 & 히스토리뷰 이동") // 수정 후 삭제
@@ -94,7 +94,7 @@ class HomeVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        output.showJerryView
+        output.showHistoryView
             .delay(.milliseconds(500))
            .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
