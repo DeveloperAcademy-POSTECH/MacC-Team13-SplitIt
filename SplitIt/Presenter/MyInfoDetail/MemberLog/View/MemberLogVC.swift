@@ -86,7 +86,7 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
     
     func setAttribute() {
         
-        view.backgroundColor = .white
+        view.backgroundColor = .SurfaceBrandCalmshell
         
         header.do {
             $0.configureBackButton(viewController: self)

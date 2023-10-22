@@ -54,7 +54,7 @@ class MyBankAccountVC: UIViewController {
     // let accountClearBtn = UIButton()
     
     
-    private let editDoneBtn = UIButton()
+    private let editDoneBtn = SPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,10 +87,10 @@ class MyBankAccountVC: UIViewController {
                     
                     if !text1.isEmpty && !text2.isEmpty && self.isBankSelected {
                         self.editDoneBtn.isEnabled = true
-                        self.editDoneBtn.backgroundColor = .black
+                        self.editDoneBtn.applyStyle(.primaryWatermelon)
                     } else {
                         self.editDoneBtn.isEnabled = false
-                        self.editDoneBtn.backgroundColor = .gray
+                        self.editDoneBtn.applyStyle(.deactivate)
                         
                     }
                 }
@@ -148,7 +148,7 @@ class MyBankAccountVC: UIViewController {
         }
         
         nameCountLabel.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-25)
+            make.right.equalToSuperview().offset(-12)
             make.centerY.equalToSuperview()
         }
         
@@ -246,8 +246,8 @@ class MyBankAccountVC: UIViewController {
         editDoneBtn.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             make.centerX.equalToSuperview()
-            make.height.equalTo(50)
-            make.width.equalTo(300)
+            make.height.equalTo(48)
+            make.width.equalTo(330)
         }
         
         
@@ -277,7 +277,7 @@ class MyBankAccountVC: UIViewController {
             .disposed(by: disposeBag)
         
         
-        view.backgroundColor = .white
+        view.backgroundColor = .SurfaceBrandCalmshell
         
         
         header.do {
@@ -286,11 +286,12 @@ class MyBankAccountVC: UIViewController {
         
         nameLabel.do {
             $0.text = "이름"
-            $0.font = UIFont.systemFont(ofSize: 12)
-            $0.textColor = UIColor.gray
+            $0.font = UIFont.KoreanCaption2
+            $0.textColor = UIColor.TextPrimary
         }
         nameCountLabel.do {
-            $0.textColor = .gray
+            $0.textColor = .TextSecondary
+            $0.font = UIFont.KoreanCaption2
         }
         nameTextField.do {
             $0.layer.cornerRadius = 8
@@ -305,7 +306,7 @@ class MyBankAccountVC: UIViewController {
             //placeholder의 색깔
             if UserDefaults.standard.string(forKey: "userName") == nil {
                 $0.attributedPlaceholder = NSAttributedString(string: "이름을 입력해주세요",
-                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextDeactivate])
             } else {
                 //MARK: 토마토, 수정뷰로 넘어왔을 때, 검은색 글자면은 이미 입력되어있는 것처럼 보여서 회색으로 처리해두었어요
                 //                $0.attributedPlaceholder = NSAttributedString(string: UserDefaults.standard.string(forKey: "userName")!,
@@ -318,7 +319,7 @@ class MyBankAccountVC: UIViewController {
             $0.clipsToBounds = true
             
             //textField의 앞부분의 빈공간 구현
-            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: $0.frame.height))
+            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
             $0.leftViewMode = .always
             
         }
@@ -330,10 +331,9 @@ class MyBankAccountVC: UIViewController {
         
         bankLabel.do {
             $0.text = "은행"
-            $0.font = UIFont.systemFont(ofSize: 12)
-            $0.textColor = UIColor.systemGray
+            $0.font = UIFont.KoreanCaption2
+            $0.textColor = UIColor.TextPrimary
         }
-        
         
         bankView.do {
             $0.layer.cornerRadius = 8
@@ -346,26 +346,24 @@ class MyBankAccountVC: UIViewController {
         bankNameLabel.do {
             if UserDefaults.standard.string(forKey: "userBank") == nil {
                 $0.text = "은행을 선택해주세요"
-                $0.tintColor = .gray
+                $0.tintColor = .TextPrimary
             } else {
                 $0.text = UserDefaults.standard.string(forKey: "userBank")
-                $0.tintColor = .black
+                $0.tintColor = .TextPrimary
             }
-            $0.font = UIFont.systemFont(ofSize: 15)
+            $0.font = UIFont.KoreanCaption1
             
         }
         
         bankArrowImage.do {
-            $0.image = UIImage(systemName: "arrowtriangle.down.fill")
+            $0.image = UIImage(named: "ArrowTriangleIconDown")
         }
         
         accountLabel.do {
             $0.text = "계좌번호"
-            $0.font = UIFont.systemFont(ofSize: 12)
-            $0.textColor = UIColor.gray
+            $0.font = UIFont.KoreanCaption2
+            $0.textColor = UIColor.TextPrimary
         }
-        
-        
         
         accountTextField.do {
             $0.layer.cornerRadius = 8
@@ -393,27 +391,30 @@ class MyBankAccountVC: UIViewController {
             $0.clipsToBounds = true
             
             //textField의 앞부분의 빈공간 구현
-            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: $0.frame.height))
+            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
             $0.leftViewMode = .always
-       
-            
+//
+//            $0.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
+//            $0.rightViewMode = .always
+//
             
         }
         
         payLabel.do {
             $0.text = "간편페이 사용여부"
-            $0.font = UIFont.systemFont(ofSize: 12)
-            $0.textColor = UIColor.gray
+            $0.font = UIFont.KoreanCaption2
+            $0.textColor = UIColor.TextPrimary
         }
         
         
         editDoneBtn.do {
             $0.setTitle("계좌정보 수정완료", for: .normal)
-            $0.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-            $0.titleLabel?.textColor = .white
-            $0.clipsToBounds = true
-            $0.layer.cornerRadius = 20
-            $0.backgroundColor = .black
+//            $0.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+//            $0.titleLabel?.textColor = .white
+//            $0.clipsToBounds = true
+//            $0.layer.cornerRadius = 20
+//            $0.backgroundColor = .black
+//            $0.applyStyle(.primaryWatermelon)
         }
         
         leftBar.do {
@@ -450,7 +451,6 @@ class MyBankAccountVC: UIViewController {
                                           tossTapped: tossTap.rx.event.asObservable().map { _ in () },
                                           kakaoTapeed: kakaoTap.rx.event.asObservable().map { _ in () },
                                           naverTapped: naverTap.rx.event.asObservable().map { _ in () }
-                                         
         )
         
         let output = viewModel.transform(input: input)

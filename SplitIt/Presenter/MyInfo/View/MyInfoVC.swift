@@ -257,9 +257,9 @@ class MyInfoVC: UIViewController {
     
     func setAttribute() {
         
-        view.backgroundColor = .white
-        emptyView.backgroundColor = .white
-        backView.backgroundColor = .white
+        view.backgroundColor = .SurfaceBrandCalmshell
+        emptyView.backgroundColor = .clear
+        backView.backgroundColor = .clear
         
         
         let privacyBtnString = NSAttributedString(string: "개인정보 처리방침", attributes: [
@@ -374,59 +374,56 @@ class MyInfoVC: UIViewController {
         
         splitLabel.do {
             $0.text = "정산 기록"
-            $0.font = UIFont.systemFont(ofSize: 12)
-            $0.textColor = UIColor.gray
+            $0.font = UIFont.KoreanCaption2
+            $0.textColor = UIColor.TextSecondary
         }
         
         
         friendView.do {
-            $0.layer.cornerRadius = 16
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.layer.cornerRadius = 8
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
             $0.backgroundColor = .clear
         }
         
         friendBar.do {
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.layer.borderColor = UIColor.BorderDeactivate.cgColor
             $0.layer.borderWidth = 1
         }
         
         friendListView.backgroundColor = .clear
         
         friendImage.do {
-            $0.image = UIImage(systemName: "person.2.fill")
-            $0.tintColor = UIColor.gray
+            $0.image = UIImage(named: "MemberIcon")
         }
         
         friendChevron.do {
-            $0.image = UIImage(systemName: "chevron.right")
-            $0.tintColor = UIColor.gray
+            $0.image = UIImage(named: "ChevronRightIconDefault")
         }
         
         friendListLabel.do {
             $0.text = "나와 함께한 사람들"
-            $0.font = UIFont.systemFont(ofSize: 15)
+            $0.font = UIFont.KoreanCaption1
         }
         
         exclItemListView.backgroundColor = .clear
         
         exclItemImage.do {
-            $0.image = UIImage(systemName: "star.fill")
-            $0.tintColor = UIColor.gray
+            $0.image = UIImage(named: "SplitIconSmall")
         }
         exclItemChevron.do {
-            $0.image = UIImage(systemName: "chevron.right")
-            $0.tintColor = UIColor.gray
+            $0.image = UIImage(named: "ChevronRightIconDefault")
         }
         
         exclItemLabel.do {
-            $0.text = "일단 userDefault초기화댐 원래는 따로 먹은 것들"
-            $0.font = UIFont.systemFont(ofSize: 9)
+            $0.text = "따로 계산한 것들" // 모아나: 일단 userDefault초기화댐 원래는 따로 먹은 것들
+            $0.font = UIFont.KoreanCaption1
         }
 
         
         privacyBtn.do {
-            $0.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+            $0.titleLabel?.font = UIFont.KoreanCaption2
+            $0.titleLabel?.textColor = UIColor.TextSecondary
             $0.clipsToBounds = true
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 0
@@ -442,26 +439,27 @@ class MyInfoVC: UIViewController {
         emptyView.do {
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
         }
         
         mainLabel.do {
-            $0.text = "반갑습니다 정산자님 🥳"
-            $0.font = UIFont.systemFont(ofSize: 21)
+            $0.text = "정산자님, 반갑습니다 🥳"
+            $0.font = UIFont.KoreanSubtitle
         }
         
         subLabel.do {
-            $0.text = "정산받을 곳을 입력하고 바로 정산을 시작해보세요!"
-            $0.font = UIFont.systemFont(ofSize: 12)
-            $0.textColor = UIColor.gray
+            $0.text = "정산받을 곳을 입력하여 정산을 준비해보세요"
+            $0.font = UIFont.KoreanCaption2
+            $0.textColor = UIColor.TextPrimary
         }
+        
         emptyAccountEditView.do {
             $0.backgroundColor = .clear
         }
         
         emptyAccountEditLabel.do {
             $0.attributedText = emptyString
-            $0.font = UIFont.systemFont(ofSize: 13)
+            $0.font = UIFont.KoreanCaption2
         }
      
         
@@ -526,7 +524,7 @@ class MyInfoVC: UIViewController {
         userBar.snp.makeConstraints { make in
             make.height.equalTo(1)
             make.width.equalTo(298)
-            make.top.equalTo(accountView).offset(50)
+            make.top.equalTo(accountView).offset(16)
             make.centerX.equalTo(accountView)
         }
         
@@ -610,27 +608,23 @@ class MyInfoVC: UIViewController {
         }
         
         friendImage.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
-            make.top.equalToSuperview().offset(16)
+            make.top.equalToSuperview().offset(4)
         }
         
         friendListLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(50)
-            make.top.equalToSuperview().offset(20)
-            make.height.equalTo(16)
+            make.left.equalTo(friendImage.snp.right).offset(20)
+            make.centerY.equalTo(friendImage.snp.centerY)
         }
         
         friendChevron.snp.makeConstraints { make in
-            make.height.equalTo(21)
-            make.width.equalTo(12)
-            make.top.equalToSuperview().offset(16)
-            make.right.equalToSuperview().offset(-16)
+            make.centerY.equalTo(friendImage.snp.centerY)
+            make.right.equalToSuperview()
         }
-        
         
         friendBar.snp.makeConstraints { make in
             make.height.equalTo(1)
-            make.width.equalTo(298)
+            make.left.equalTo(friendImage.snp.left)
+            make.right.equalTo(friendChevron.snp.right)
             make.centerY.equalToSuperview()
             make.centerX.equalToSuperview()
         }
@@ -643,21 +637,18 @@ class MyInfoVC: UIViewController {
         }
         
         exclItemImage.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
-            make.bottom.equalToSuperview().offset(-10)
+            make.centerX.equalTo(friendImage)
+            make.bottom.equalToSuperview().offset(-4)
         }
         
         exclItemLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(50)
-            make.bottom.equalToSuperview().offset(-10)
-            make.height.equalTo(16)
+            make.left.equalTo(friendListLabel.snp.left)
+            make.centerY.equalTo(exclItemImage.snp.centerY)
         }
         
         exclItemChevron.snp.makeConstraints { make in
-            make.height.equalTo(21)
-            make.width.equalTo(12)
-            make.bottom.equalToSuperview().offset(-10)
-            make.right.equalToSuperview().offset(-16)
+            make.centerY.equalTo(exclItemImage.snp.centerY)
+            make.right.equalToSuperview()
         }
         
         privacyBtn.snp.makeConstraints { make in
