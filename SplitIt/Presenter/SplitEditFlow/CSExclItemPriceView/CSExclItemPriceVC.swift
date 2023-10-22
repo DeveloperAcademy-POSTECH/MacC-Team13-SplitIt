@@ -142,8 +142,8 @@ class ExclItemPriceEditVC: UIViewController {
         output.showExclItemTargetView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-//                let vc = ExclMemberVC()
-//                self.navigationController?.pushViewController(vc, animated: true)
+                let vc = ExclMemberEditVC(viewModel: ExclMemberEditVM(index: viewModel.indexPath))
+                self.navigationController?.pushViewController(vc, animated: false)
             })
             .disposed(by: disposeBag)
         

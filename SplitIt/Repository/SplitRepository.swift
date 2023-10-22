@@ -320,18 +320,19 @@ extension SplitRepository {
             }
         }
         
+        if let deleteCSMember = deleteCSMember {
             csMemberArr.accept(newCSMembers)
-            realmManager.deleteCSMember(csMemberIdxArr: [deleteCSMember!.csInfoIdx])
+            realmManager.deleteCSMember(csMemberIdxArr: [deleteCSMember.csInfoIdx])
             
             
             // 만약 csMember가 하나도 없다면 해당 csInfo 아래 모든 데이터 삭제
             if newCSMembers.isEmpty {
-                deleteCSInfoAndRelatedData(csInfoIdx: deleteCSMember!.csInfoIdx)
+                deleteCSInfoAndRelatedData(csInfoIdx: deleteCSMember.csInfoIdx)
                 
                 // 아니라면 해당 csMember와 이름이 같은 해당 차수의 exclMember만 삭제
             } else {
-                let csMemberName = deleteCSMember!.name
-                let csInfoIdx = deleteCSMember!.csInfoIdx
+                let csMemberName = deleteCSMember.name
+                let csInfoIdx = deleteCSMember.csInfoIdx
                 let exclMembers: [ExclMember] = exclMemberArr.value
                 var deleteExclMembers: [ExclMember] = []
                 var newExclMembers: [ExclMember] = []
@@ -347,7 +348,7 @@ extension SplitRepository {
                 exclMemberArr.accept(newExclMembers)
                 realmManager.deleteExclMember(exclMemberIdxArr: deleteExclMembers.map { $0.exclMemberIdx })
             }
-        
+        }
     }
     
     /// exclItemIdx를 기준으로 exclItem 삭제 및 연관 데이터 전체 삭제
