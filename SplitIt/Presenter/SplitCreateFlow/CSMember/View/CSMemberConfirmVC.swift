@@ -16,7 +16,6 @@ class CSMemberConfirmVC: UIViewController {
     
     let viewModel = CSMemberConfirmVM()
     
-    let header = NaviHeader()
     let titleMessage = UILabel()
     let subTitleMessage = UILabel()
     let tableView = UITableView(frame: .zero, style: .plain)
@@ -36,11 +35,6 @@ class CSMemberConfirmVC: UIViewController {
 
     func setAttribute() {
         view.backgroundColor = UIColor(hex: 0xF8F7F4)
-        
-        header.do {
-            $0.applyStyle(.csMember)
-            $0.setBackButton(viewController: self)
-        }
 
         titleMessage.do {
             $0.text = "좋아요 :D"
@@ -99,21 +93,15 @@ class CSMemberConfirmVC: UIViewController {
     }
     
     func setLayout() {
-        [header, titleMessage, subTitleMessage, equalSplitButton, smartSplitButton, tableView, bottomDescription].forEach {
+        [titleMessage, subTitleMessage, equalSplitButton, smartSplitButton, tableView, bottomDescription].forEach {
             view.addSubview($0)
         }
         
         equalSplitButton.addSubview(equalSplitImage)
         smartSplitButton.addSubview(smartSplitImage)
         
-        header.snp.makeConstraints {
-            $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
-            $0.leading.trailing.equalToSuperview()
-        }
-        
         titleMessage.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(20)
+            $0.top.equalToSuperview().offset(20)
             $0.centerX.equalToSuperview()
         }
         
@@ -178,8 +166,7 @@ class CSMemberConfirmVC: UIViewController {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.smartSplitButton.applyStyle(.halfSmartSplitPressed)
-                
-                let vc = ExclItemNameInputVC()
+                let vc = ExclPageController()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)

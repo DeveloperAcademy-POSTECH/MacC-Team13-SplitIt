@@ -32,9 +32,13 @@ class ExclAddCell: UICollectionViewCell, Reusable {
             $0.backgroundColor = UIColor.clear
         }
         
+        let attributedString = NSMutableAttributedString.init(string: "따로 계산할 항목 추가하기")
+        attributedString.addAttribute(NSAttributedString.Key.underlineStyle, value: 1, range: NSRange.init(location: 0, length: attributedString.length))
+        
         addLabel.do {
-            $0.text = "따로 계산할 항목 추가하기"
-            $0.font = .systemFont(ofSize: 16, weight: .bold)
+            $0.font = .KoreanButtonText
+            $0.textColor = .TextSecondary
+            $0.attributedText = attributedString
         }
     }
     

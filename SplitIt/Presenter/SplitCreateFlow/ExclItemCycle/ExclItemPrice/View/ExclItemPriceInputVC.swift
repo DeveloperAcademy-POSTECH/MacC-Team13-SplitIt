@@ -9,18 +9,22 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+protocol ExclItemPricePageChangeDelegate: AnyObject {
+    func changePageToThirdView()
+}
+
 class ExclItemPriceInputVC: UIViewController {
     
     var disposeBag = DisposeBag()
     
     let viewModel = ExclItemPriceInputVM()
     
-    let header = NavigationHeader()
+    weak var pageChangeDelegate: ExclItemPricePageChangeDelegate?
+    
     let titleMessage = UILabel()
-    let priceTextField = UITextField()
-    let currencyLabel = UILabel()
+    let priceTextField = SPTextField()
     let textFiledNotice = UILabel()
-    let nextButton = UIButton()
+    let nextButton = SPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,65 +34,37 @@ class ExclItemPriceInputVC: UIViewController {
         setBinding()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        setKeyboardNotification()
-        self.priceTextField.becomeFirstResponder()
-    }
-    
     func setAttribute() {
-        view.backgroundColor = UIColor(hex: 0xF8F7F4)
-        
-        header.do {
-            $0.configureBackButton(viewController: self)
-        }
+        view.backgroundColor = .SurfacePrimary
         
         titleMessage.do {
-            $0.font = .systemFont(ofSize: 18)
+            $0.font = .KoreanBody
+            $0.textColor = .TextPrimary
         }
         
         priceTextField.do {
-            $0.keyboardType = .numberPad
-            $0.layer.cornerRadius = 8
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
-            $0.layer.borderWidth = 1
-            $0.textAlignment = .center
-            $0.font = .systemFont(ofSize: 24)
-        }
-        
-        currencyLabel.do {
-            $0.text = "KRW"
-            $0.font = .systemFont(ofSize: 15)
+            $0.applyStyle(.number)
+            $0.font = .KoreanTitle3
         }
         
         textFiledNotice.do {
             $0.text = "여기에 사용을 돕는 문구가 들어가요"
-            $0.font = .systemFont(ofSize: 12)
+            $0.font = .KoreanCaption2
+            $0.textColor = .TextSecondary
         }
         
         nextButton.do {
             $0.setTitle("다음으로", for: .normal)
-            $0.layer.cornerRadius = 24
-            $0.backgroundColor = UIColor(hex: 0x19191B)
         }
     }
     
     func setLayout() {
-        [header,titleMessage,priceTextField,textFiledNotice,nextButton].forEach {
+        [titleMessage,priceTextField,textFiledNotice,nextButton].forEach {
             view.addSubview($0)
         }
         
-        priceTextField.addSubview(currencyLabel)
-        
-        header.snp.makeConstraints {
-            $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview()
-        }
-        
         titleMessage.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(30)
+            $0.top.equalToSuperview().offset(30)
             $0.centerX.equalToSuperview()
         }
         
@@ -98,18 +74,13 @@ class ExclItemPriceInputVC: UIViewController {
             $0.height.equalTo(60)
         }
         
-        currencyLabel.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().inset(20)
-        }
-        
         textFiledNotice.snp.makeConstraints {
             $0.top.equalTo(priceTextField.snp.bottom).offset(6)
             $0.centerX.equalToSuperview()
         }
         
         nextButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-10)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(48)
         }
@@ -129,48 +100,28 @@ class ExclItemPriceInputVC: UIViewController {
             .drive(priceTextField.rx.text)
             .disposed(by: disposeBag)
         
+        output.totalAmount
+            .distinctUntilChanged()
+            .drive(onNext: { [weak self] str in
+                guard let self = self else { return }
+                self.nextButton.applyStyle(str == "0" ? .deactivate : .primaryPear)
+            })
+            .disposed(by: disposeBag)
+        
         output.showExclItemTargetView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let vc = ExclMemberVC()
-                self.navigationController?.pushViewController(vc, animated: true)
+                self.nextButton.applyStyle(.primaryPearPressed)
+                pageChangeDelegate?.changePageToThirdView()
+            })
+            .disposed(by: disposeBag)
+        
+        output.showExclItemTargetView
+            .delay(.milliseconds(500))
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.nextButton.applyStyle(.primaryPear)
             })
             .disposed(by: disposeBag)
     }
 }
-
-extension ExclItemPriceInputVC: UITextFieldDelegate {
-    func setKeyboardNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let keyboardHeight: CGFloat
-            keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
-            self.nextButton.snp.updateConstraints {
-                $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(keyboardHeight + 26)
-            }
-        }
-    }
-    
-    @objc private func keyboardWillHide() {
-        self.nextButton.snp.updateConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-        }
-    }
-    
-    func setKeyboardObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    func setKeyboardObserverRemove() {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-}
-
-
