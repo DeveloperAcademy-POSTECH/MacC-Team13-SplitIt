@@ -22,7 +22,7 @@ struct PayButton {
         
         self.label = UILabel()
         self.label.text = labelText
-        self.label.font = UIFont.systemFont(ofSize: 11)
+        self.label.font = UIFont.KoreanCaption2
         
         self.btnImage = UIImageView()
         self.btnImage.image = btn
