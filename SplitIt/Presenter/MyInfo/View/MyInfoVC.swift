@@ -46,13 +46,16 @@ class MyInfoVC: UIViewController {
     
     let socialPayLabel = UILabel()
     
-    let tossPayBtn = UIButton()
+    let tossView = UIView()
+    let tossPayBtn = UIImageView()
     let tossPayLabel = UILabel()
     
-    let kakaoPayBtn = UIButton()
+    let kakaoView = UIView()
+    let kakaoPayBtn = UIImageView()
     let kakaoPayLabel = UILabel()
     
-    let naverPayBtn = UIButton()
+    let naverView = UIView()
+    let naverPayBtn = UIImageView()
     let naverPayLabel = UILabel()
 
     //>>>accountView 끝
@@ -96,8 +99,7 @@ class MyInfoVC: UIViewController {
         setAttribute()
         setLayout()
         setBinding()
-       
-        
+            
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -106,7 +108,6 @@ class MyInfoVC: UIViewController {
        }
     
  
-
     func userNewInfo() {
 
         if let tmpuserName = UserDefaults.standard.string(forKey: "userName"), !tmpuserName.isEmpty { //userDefaults에 값이 있을 떄
@@ -144,9 +145,7 @@ class MyInfoVC: UIViewController {
         self.accountBankLabel.text = UserDefaults.standard.string(forKey: "userBank")
         self.accountLabel.text = UserDefaults.standard.string(forKey: "userAccount")
         
-        self.tossPayBtn.backgroundColor = userDefault.bool(forKey: "tossPay") ? UIColor.systemBlue : UIColor.gray
-        self.kakaoPayBtn.backgroundColor = userDefault.bool(forKey: "kakaoPay") ? UIColor.systemYellow : UIColor.gray
-        self.naverPayBtn.backgroundColor = userDefault.bool(forKey: "naverPay") ? UIColor.systemGreen : UIColor.gray
+
     }
     
     
@@ -215,7 +214,6 @@ class MyInfoVC: UIViewController {
     }
 
     func setAddView() {
- 
         
         [header, backView, splitLabel,friendView, privacyBtn].forEach {
             view.addSubview($0)
@@ -224,15 +222,28 @@ class MyInfoVC: UIViewController {
         backView.addSubview(emptyView)
         backView.addSubview(accountView)
         
-        
-        [userNameLabel, userName, userBar, accountInfoLabel, accountBankLabel, accountLabel,socialPayLabel, tossPayBtn, tossPayLabel, kakaoPayBtn, kakaoPayLabel, naverPayBtn, naverPayLabel, accountEditView].forEach {
+        [userNameLabel, userName, userBar, accountInfoLabel, accountBankLabel, accountLabel,socialPayLabel,accountEditView].forEach {
             accountView.addSubview($0)
         }
+       
 
         [accountEditLabel, accountEditChevron].forEach {
             accountEditView.addSubview($0)
         }
         
+        [tossPayBtn, tossPayLabel].forEach {
+            tossView.addSubview($0)
+        }
+        
+        [kakaoPayBtn, kakaoPayLabel].forEach {
+            kakaoView.addSubview($0)
+        }
+        
+        [naverPayBtn, naverPayLabel].forEach {
+            naverView.addSubview($0)
+        }
+        
+      
         [friendBar,friendListView, exclItemListView].forEach {
             friendView.addSubview($0)
         }
@@ -333,43 +344,40 @@ class MyInfoVC: UIViewController {
         
         
         tossPayBtn.do {
-            $0.setTitle("토스", for: .normal)
-            $0.clipsToBounds = true
-            $0.layer.cornerRadius = 12
-            $0.titleLabel?.font = .systemFont(ofSize: 13)
+            $0.image = UIImage(named: "TossPayIconDefault")
+
         }
         
         tossPayLabel.do {
             $0.text = "토스뱅크"
             $0.font = UIFont.systemFont(ofSize: 12)
+            $0.textAlignment = .center
         }
         
         
         kakaoPayBtn.do {
-            $0.setTitle("카카오", for: .normal)
-            $0.clipsToBounds = true
-            $0.layer.cornerRadius = 12
-            $0.titleLabel?.font = .systemFont(ofSize: 13)
+            $0.image = UIImage(named: "KakaoPayIconDefault")
+
 
         }
         
         kakaoPayLabel.do {
             $0.text = "카카오페이"
             $0.font = UIFont.systemFont(ofSize: 12)
+            $0.textAlignment = .center
         }
         
             
         naverPayBtn.do {
-            $0.setTitle("네이버", for: .normal)
-            $0.clipsToBounds = true
-            $0.layer.cornerRadius = 12
-            $0.titleLabel?.font = .systemFont(ofSize: 13)
+            $0.image = UIImage(named: "NaverPayIconDefault")
+
 
         }
         
         naverPayLabel.do {
             $0.text = "네이버페이"
             $0.font = UIFont.systemFont(ofSize: 12)
+            $0.textAlignment = .center
         }
         
         splitLabel.do {
@@ -524,7 +532,7 @@ class MyInfoVC: UIViewController {
         userBar.snp.makeConstraints { make in
             make.height.equalTo(1)
             make.width.equalTo(298)
-            make.top.equalTo(accountView).offset(16)
+            make.top.equalTo(userName.snp.bottom).offset(4)
             make.centerX.equalTo(accountView)
         }
         
@@ -560,7 +568,7 @@ class MyInfoVC: UIViewController {
         
         tossPayLabel.snp.makeConstraints { make in
             make.top.equalTo(tossPayBtn.snp.bottom).offset(6)
-            make.left.equalTo(accountView.snp.left).offset(18)
+            make.left.equalTo(accountView.snp.left).offset(22)
         }
         
         
