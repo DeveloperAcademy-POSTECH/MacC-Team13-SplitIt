@@ -71,7 +71,16 @@ class HomeVC: UIViewController {
                 // MARK: 모아나가 연결할 뷰로 수정
                 let vc = MyInfoVC()
                 self.navigationController?.pushViewController(vc, animated: true)
+                self.myInfoButton.backgroundColor = UIColor.lightGray
                 
+            })
+            .disposed(by: disposeBag)
+        
+        output.showMoanaView
+            .delay(.milliseconds(500))
+           .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+               self.myInfoButton.backgroundColor = UIColor.white
             })
             .disposed(by: disposeBag)
         
@@ -81,6 +90,15 @@ class HomeVC: UIViewController {
                 print("제리뷰 이동 & 히스토리뷰 이동") // 수정 후 삭제
 //                let vc = HomeVC()
 //                self.navigationController?.pushViewController(vc, animated: true)
+                self.historyButton.backgroundColor = UIColor.lightGray
+            })
+            .disposed(by: disposeBag)
+        
+        output.showJerryView
+            .delay(.milliseconds(500))
+           .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+               self.historyButton.backgroundColor = UIColor.white
             })
             .disposed(by: disposeBag)
     }
@@ -89,9 +107,6 @@ class HomeVC: UIViewController {
         view.backgroundColor = .systemBackground
         
         myInfoButton.do {
-//            $0.setImage(UIImage(systemName: "person.fill",
-//                                withConfiguration: UIImage.SymbolConfiguration(pointSize: 26, weight: .regular)), for: .normal)
-//            $0.tintColor = UIColor.black
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.black.cgColor
@@ -146,34 +161,14 @@ class HomeVC: UIViewController {
             $0.image = UIImage(named: "SplitItLogo")
             $0.tintColor = UIColor.black
         }
-//        mainTextView.do {
-//            $0.frame = CGRect(x: 0, y: 0, width: 280, height: 200)
-//            $0.backgroundColor = UIColor.systemBlue
-//            let bottomRoundedPath = UIBezierPath(roundedRect: $0.bounds, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 8, height: 8))
-//                let maskLayer = CAShapeLayer()
-//                maskLayer.path = bottomRoundedPath.cgPath
-//                $0.layer.mask = maskLayer
-//
-//
-//
-//        }
         
         mainTextLabel.do {
             $0.text = "각자 먹고 쓴 만큼,\n똑똑하게 나누어 낼 수 있어요!"
-           // $0.font = UIFont.systemFont(ofSize: 15)
             $0.font = .KoreanCaption1
             $0.textColor = UIColor.black
             $0.numberOfLines = 0
             $0.textAlignment = .right
         }
-        
-//        subTextLabel.do {
-//            $0.text = "스플리릿 시간입니다!"
-//            $0.font = UIFont.systemFont(ofSize: 21)
-//            $0.textColor = UIColor.black
-//        }
-        
-        
         
         splitItButton.do {
             $0.applyStyle(.primaryWatermelon)
@@ -250,12 +245,7 @@ class HomeVC: UIViewController {
             $0.right.equalToSuperview().offset(-20)
             $0.bottom.equalToSuperview().offset(-20)
         }
-        
-//        subTextLabel.snp.makeConstraints {
-//            $0.top.equalTo(mainTextLabel.snp.bottom).offset(4)
-//            $0.centerX.equalToSuperview()
-//        }
-        
+
         splitItButton.snp.makeConstraints {
             $0.bottom.equalToSuperview().offset(-134)
             $0.height.equalTo(48)
@@ -263,28 +253,6 @@ class HomeVC: UIViewController {
             $0.centerX.equalToSuperview()
         }
         
-//        devider.snp.makeConstraints {
-//            $0.bottom.equalTo(recentSplitTextLabel.snp.top).offset(-16.5)
-//            $0.horizontalEdges.equalToSuperview().inset(25)
-//            $0.height.equalTo(1)
-//        }
-        
-//        recentSplitTextLabel.snp.makeConstraints {
-//            $0.bottom.equalTo(recentSplitCollectionView.snp.top).offset(-8.5)
-//            $0.leading.equalToSuperview().inset(30)
-//        }
-//
-       
-//        historyButtonLabel.snp.makeConstraints {
-//            $0.trailing.equalTo(historyButtonImage.snp.leading).offset(-8)
-//            $0.centerY.equalToSuperview()
-//        }
-        
-//        recentSplitCollectionView.snp.makeConstraints {
-//            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-40)
-//            $0.horizontalEdges.equalToSuperview().inset(30)
-//            $0.height.equalTo(94)
-//        }
     }
 }
 
