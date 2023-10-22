@@ -52,7 +52,7 @@ class CSMemberConfirmHeaderVM {
         totalAmount
             .asDriver()
             .map { numberFormatter.formattedString(from: $0) }
-            .map { String("\($0) KRW")}
+            .map { String("\($0) ")}
             .drive(totalAmountDriver)
             .disposed(by: disposeBag)
 

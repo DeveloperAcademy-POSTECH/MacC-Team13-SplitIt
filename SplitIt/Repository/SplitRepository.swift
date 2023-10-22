@@ -95,11 +95,6 @@ extension SplitRepository {
         csMemberArr.accept(csMembers)
     }
     
-    // TODO: 친구 목록에 있는 경우 친구모델에서 name만 빼와서 csMember 생성 - 기존 친구 목록에 있는 경우 동작
-    func createCSMemberFromFriend() {
-        
-    }
-    
     /// CSInfoIdx, name으로 ExclItem 생성
     func createExclItemWithName(name: String) {
         let newExclItem: ExclItem = ExclItem(csInfoIdx: currentCSInfo!.csInfoIdx, name: name)
@@ -321,7 +316,7 @@ extension SplitRepository {
         }
         
         csMemberArr.accept(newCSMembers)
-        realmManager.deleteCSMember(csMemberIdxArr: [deleteCSMember!.csInfoIdx])
+        realmManager.deleteCSMember(csMemberIdxArr: [deleteCSMember!.csMemberIdx])
         
         // 만약 csMember가 하나도 없다면 해당 csInfo 아래 모든 데이터 삭제
         if newCSMembers.isEmpty {

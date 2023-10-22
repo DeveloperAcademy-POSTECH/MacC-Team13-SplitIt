@@ -15,12 +15,11 @@ class CSTotalAmountInputVC: UIViewController {
     
     let viewModel = CSTotalAmountInputVM()
     
-    let header = NavigationHeader()
+    let header = NaviHeader()
     let titleMessage = UILabel()
-    let totalAmountTextFiled = UITextField()
-    let currencyLabel = UILabel()
+    let totalAmountTextFiled = SPTextField()
     let textFiledNotice = UILabel()
-    let nextButton = UIButton()
+    let nextButton = SPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,36 +37,33 @@ class CSTotalAmountInputVC: UIViewController {
     }
     
     func setAttribute() {
-        view.backgroundColor = UIColor(hex: 0xF8F7F4)
+        view.backgroundColor = .SurfacePrimary
         
         header.do {
-            $0.configureBackButton(viewController: self)
+            $0.applyStyle(.csPrice)
+            $0.setBackButton(viewController: self)
         }
         
         titleMessage.do {
             $0.text = "총 얼마를 사용하셨나요?"
+            $0.font = .KoreanBody
+            $0.textColor = .TextPrimary
         }
         
         totalAmountTextFiled.do {
-            $0.keyboardType = .numberPad
-            $0.layer.cornerRadius = 8
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
-            $0.layer.borderWidth = 1
-            $0.textAlignment = .center
-        }
-        
-        currencyLabel.do {
-            $0.text = "KRW"
+            $0.applyStyle(.number)
+            $0.font = .KoreanTitle3
         }
         
         textFiledNotice.do {
             $0.text = "여기에 사용을 돕는 문구가 들어가요"
+            $0.font = .KoreanCaption2
+            $0.textColor = .TextSecondary
         }
         
         nextButton.do {
             $0.setTitle("다음으로", for: .normal)
-            $0.layer.cornerRadius = 24
-            $0.backgroundColor = UIColor(hex: 0x19191B)
+            $0.applyStyle(.deactivate)
         }
     }
     
@@ -76,11 +72,9 @@ class CSTotalAmountInputVC: UIViewController {
             view.addSubview($0)
         }
         
-        totalAmountTextFiled.addSubview(currencyLabel)
-        
         header.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             $0.leading.trailing.equalToSuperview()
         }
         
@@ -90,14 +84,9 @@ class CSTotalAmountInputVC: UIViewController {
         }
         
         totalAmountTextFiled.snp.makeConstraints {
-            $0.top.equalTo(titleMessage.snp.bottom).offset(53)
+            $0.top.equalTo(titleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(60)
-        }
-        
-        currencyLabel.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().inset(20)
         }
         
         textFiledNotice.snp.makeConstraints {
@@ -121,13 +110,31 @@ class CSTotalAmountInputVC: UIViewController {
             .drive(totalAmountTextFiled.rx.text)
             .disposed(by: disposeBag)
         
+        output.totalAmount
+            .distinctUntilChanged()
+            .drive(onNext: { [weak self] str in
+                guard let self = self else { return }
+                self.nextButton.applyStyle(str == "0" ? .deactivate : .primaryMushroom)
+            })
+            .disposed(by: disposeBag)
+        
         output.showCSMemberInputView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
+                self.nextButton.applyStyle(.primaryMushroomPressed)
+                
                 let vc = CSMemberInputVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
-            .disposed(by: disposeBag)   
+            .disposed(by: disposeBag)
+        
+        output.showCSMemberInputView
+            .delay(.milliseconds(500))
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.nextButton.applyStyle(.primaryMushroom)
+            })
+            .disposed(by: disposeBag)
     }
 }
 

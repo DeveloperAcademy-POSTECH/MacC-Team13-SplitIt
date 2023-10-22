@@ -15,12 +15,12 @@ class CSTitleInputVC: UIViewController {
     
     let viewModel = CSTitleInputVM()
     
-    let header = NavigationHeader()
+    let header = NaviHeader()
     let titleMessage = UILabel()
-    let titleTextFiled = UITextField()
+    let titleTextFiled = SPTextField()
     let textFiledCounter = UILabel()
     let textFiledNotice = UILabel()
-    let nextButton = UIButton()
+    let nextButton = SPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,31 +38,39 @@ class CSTitleInputVC: UIViewController {
     }
     
     func setAttribute() {
-        view.backgroundColor = UIColor(hex: 0xF8F7F4)
+        view.backgroundColor = .SurfacePrimary
         
         header.do {
-            $0.configureBackButton(viewController: self)
+            $0.applyStyle(.csTitle)
+            $0.setBackButton(viewController: self)
         }
         
         titleMessage.do {
             $0.text = "어디에 돈을 쓰셨나요?"
+            $0.font = .KoreanBody
+            $0.textColor = .TextPrimary
         }
         
         titleTextFiled.do {
-            $0.layer.cornerRadius = 8
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
-            $0.layer.borderWidth = 1
-            $0.textAlignment = .center
+            $0.applyStyle(.normal)
+            $0.font = .KoreanTitle3
+            $0.autocorrectionType = .no
+            $0.spellCheckingType = .no
         }
         
         textFiledNotice.do {
             $0.text = "여기에 사용을 돕는 문구가 들어가요"
+            $0.font = .KoreanCaption2
+            $0.textColor = .TextSecondary
+        }
+        
+        textFiledCounter.do {
+            $0.font = .KoreanCaption2
         }
         
         nextButton.do {
             $0.setTitle("다음으로", for: .normal)
-            $0.layer.cornerRadius = 24
-            $0.backgroundColor = UIColor(hex: 0x19191B)
+            $0.applyStyle(.deactivate )
         }
     }
     
@@ -73,7 +81,7 @@ class CSTitleInputVC: UIViewController {
         
         header.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             $0.leading.trailing.equalToSuperview()
         }
         
@@ -83,7 +91,7 @@ class CSTitleInputVC: UIViewController {
         }
         
         titleTextFiled.snp.makeConstraints {
-            $0.top.equalTo(titleMessage.snp.bottom).offset(53)
+            $0.top.equalTo(titleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(60)
         }
@@ -113,8 +121,17 @@ class CSTitleInputVC: UIViewController {
         output.showCSTotalAmountView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
+                nextButton.applyStyle(.primaryWatermelonPressed)
                 let vc = CSTotalAmountInputVC()
                 self.navigationController?.pushViewController(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        output.showCSTotalAmountView
+            .delay(.milliseconds(500))
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                nextButton.applyStyle(.primaryWatermelon)
             })
             .disposed(by: disposeBag)
         
@@ -122,13 +139,21 @@ class CSTitleInputVC: UIViewController {
             .drive(textFiledCounter.rx.text)
             .disposed(by: disposeBag)
         
+        output.titleCount
+            .distinctUntilChanged()
+            .drive(onNext: { str in
+                guard let count = str.first else { return }
+                self.nextButton.applyStyle(count == "0" ? .deactivate : .primaryWatermelon)
+            })
+            .disposed(by: disposeBag)
+        
         output.textFieldIsValid
             .distinctUntilChanged()
             .drive(onNext: { [weak self] isValid in
                 guard let self = self else { return }
                 self.textFiledCounter.textColor = isValid
-                ? UIColor(hex: 0xCCCCCC)
-                : UIColor(hex: 0xFF3030)
+                ? .TextSecondary
+                : .AppColorStatusError
             })
             .disposed(by: disposeBag)
         

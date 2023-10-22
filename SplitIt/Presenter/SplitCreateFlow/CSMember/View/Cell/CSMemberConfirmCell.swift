@@ -26,17 +26,16 @@ class CSMemberConfirmCell: UITableViewCell, Reusable {
     }
 
     func setAttribute() {
-        self.backgroundColor = UIColor(hex: 0xE5E4E0)
+        self.backgroundColor = .AppColorGrayscale25K
         
         contentView.do {
-            $0.backgroundColor = UIColor(hex: 0xF8F7F4)
             $0.layer.cornerRadius = 16
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
         }
         
         name.do {
-            $0.textColor = UIColor(hex: 0x202020)
+            $0.textColor = .TextPrimary
         }
     }
     
@@ -64,13 +63,15 @@ class CSMemberConfirmCell: UITableViewCell, Reusable {
     
     private func configureUniqueMember(name: String) {
         self.name.text = "\(name) (나)"
-        self.name.textColor = UIColor(hex: 0xF1F1F1)
-        contentView.backgroundColor = UIColor(hex: 0x343434)
+        self.name.font = .KoreanCaption1
+        self.name.textColor = .TextInvert
+        contentView.backgroundColor = .BorderPrimary
     }
     
     private func configureMember(name: String) {
         self.name.text = name
-        self.name.textColor = UIColor(hex: 0x202020)
-        contentView.backgroundColor = UIColor(hex: 0xF8F7F4)
+        self.name.font = .KoreanCaption1
+        self.name.textColor = .TextPrimary
+        contentView.backgroundColor = .SurfacePrimary
     }
 }
