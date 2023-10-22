@@ -17,7 +17,7 @@ class MyBankAccountVC: UIViewController {
     
     let viewModel = MyBankAccountVM()
     var disposeBag = DisposeBag()
-    let payData = PayData.shared.payData
+   // let payData = PayData.shared.payData
     let maxCharacterCount = 8
     let userDefault = UserDefaults.standard
     var isBankSelected: Bool = false

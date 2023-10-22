@@ -12,7 +12,7 @@ import SnapKit
 class MyBankAccountVM {
     
     var disposeBag = DisposeBag()
-    let payData = PayData.shared.payData
+    //let payData = PayData.shared.payData
     let userDefault = UserDefaults.standard
     
     
