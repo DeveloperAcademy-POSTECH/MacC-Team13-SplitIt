@@ -15,12 +15,12 @@ import RealmSwift
 
 class MyInfoVC: UIViewController {
     
+    let header = NavigationHeader()
+    
     var viewModel = MyInfoVM()
     var disposeBag = DisposeBag()
     let userDefault = UserDefaults.standard
     var backViewHeightConstraint: Constraint?
-    
-    let header = NavigationHeader()
     
     let backView = UIView() //emptyView와 accountView 생성되는 뷰
     var backViewHeight: CGFloat = 104

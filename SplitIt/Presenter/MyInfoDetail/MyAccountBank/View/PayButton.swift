@@ -8,6 +8,8 @@
 import UIKit
 import SnapKit
 
+
+//간편페이류 버튼 - 토스뱅크, 카카오페이, 네이버페이
 struct PayButton {
     
     var btnView = UIView()

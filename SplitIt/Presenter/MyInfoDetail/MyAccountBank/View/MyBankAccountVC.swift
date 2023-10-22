@@ -11,20 +11,22 @@ import RxCocoa
 import SnapKit
 import Then
 
+
 class MyBankAccountVC: UIViewController {
     
     let clearButton = UIButton()
     
-    let viewModel = MyBankAccountVM()
-    var disposeBag = DisposeBag()
-   // let payData = PayData.shared.payData
-    let maxCharacterCount = 8
-    let userDefault = UserDefaults.standard
-    var isBankSelected: Bool = false
     let header = NavigationHeader()
     
+    let viewModel = MyBankAccountVM()
+    var disposeBag = DisposeBag()
+    let maxCharacterCount = 8
+    let userDefault = UserDefaults.standard
+    
+    var isBankSelected: Bool = false
+    
     var nameLabel = UILabel()
-    var nameTextField = UITextField()
+    var nameTextField = UITextField() //사용자 이름 받는 곳
     var nameCountLabel = UILabel()
     
     let bankView = UIView()
@@ -47,6 +49,8 @@ class MyBankAccountVC: UIViewController {
     let naverPayView = UIView()
     
     let nameClearBtn = UIButton()
+    
+    //추후에 textField 전체 삭제 버튼 구현
     // let accountClearBtn = UIButton()
     
     
@@ -55,7 +59,7 @@ class MyBankAccountVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupObservables()
+        checkUserInfo()
         setAddView()
         setLayout()
         setAttribute()
@@ -64,11 +68,11 @@ class MyBankAccountVC: UIViewController {
         asapRxData()
     }
     
-    
-    func setupObservables() {
+    //수정버튼 활성화 비활성화 선택해주는 함수
+    //MARK: 토마토! 버튼의 background 설정해두었어요 나중에 컨포넌트 바꿀 때 여기 색상 지우시면 될거에요
+    func checkUserInfo() {
         let nameTextCheck = nameTextField.rx.text.orEmpty
         let accountTextCheck = accountTextField.rx.text.orEmpty
-        
         
         Observable.combineLatest(nameTextCheck, accountTextCheck)
             .subscribe(onNext: { text1, text2 in
@@ -252,6 +256,7 @@ class MyBankAccountVC: UIViewController {
     
     
     func setAttribute() {
+        //이름 글자수 카운트
         nameTextField.rx.text.orEmpty
             .map { text -> String in
                 let cnt = min(text.count, 8)
@@ -260,7 +265,7 @@ class MyBankAccountVC: UIViewController {
             .bind(to: nameCountLabel.rx.text)
             .disposed(by: disposeBag)
         
-        
+        //이름 글자수 제한
         nameTextField.rx.controlEvent(.editingChanged)
             .subscribe(onNext: { [weak self] _ in
                 guard let text = self?.nameTextField.text else { return }
@@ -295,16 +300,14 @@ class MyBankAccountVC: UIViewController {
             
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
-            //$0.rightView = nameClearBtn
-            //$0.clearButtonMode = .whileEditing
-            
-            
+            $0.clearButtonMode = .whileEditing
             
             //placeholder의 색깔
             if UserDefaults.standard.string(forKey: "userName") == nil {
                 $0.attributedPlaceholder = NSAttributedString(string: "이름을 입력해주세요",
                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
             } else {
+                //MARK: 토마토, 수정뷰로 넘어왔을 때, 검은색 글자면은 이미 입력되어있는 것처럼 보여서 회색으로 처리해두었어요
                 //                $0.attributedPlaceholder = NSAttributedString(string: UserDefaults.standard.string(forKey: "userName")!,
                 //                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
                 
@@ -319,15 +322,6 @@ class MyBankAccountVC: UIViewController {
             $0.leftViewMode = .always
             
         }
-        //            clearButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        //            clearButton.setTitle("X", for: .normal)
-        //            clearButton.setTitleColor(.black, for: .normal)
-        //            clearButton.addTarget(self, action: #selector(clearText), for: .touchUpInside)
-        //
-        //
-        //            $0.rightView = clearButton
-        //            $0.rightViewMode = .whileEditing
-        
         nameClearBtn.do {
             $0.setImage(UIImage(systemName: "x.circle.fill"), for: .normal)
             $0.frame = CGRect(x: 30, y: 0, width: 50, height: 30)
@@ -379,21 +373,12 @@ class MyBankAccountVC: UIViewController {
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.gray.cgColor
             $0.keyboardType = .numberPad
-            //  $0.clearButtonMode = .whileEditing
+            $0.clearButtonMode = .whileEditing
             
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
-            //
-            //            clearButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-            //            clearButton.setTitle("X", for: .normal)
-            //            clearButton.setTitleColor(.black, for: .normal)
-            //            clearButton.addTarget(self, action: #selector(clearText), for: .touchUpInside)
-            //
-            //
-            //            $0.rightView = clearButton
-            //            $0.rightViewMode = .whileEditing
-            
-            
+
+            //MARK: 토마토, 수정뷰로 넘어왔을 때, 검은색 글자면은 이미 입력되어있는 것처럼 보여서 회색으로 처리해두었어요
             if UserDefaults.standard.string(forKey: "userAccount") == nil {
                 $0.attributedPlaceholder = NSAttributedString(string: "계좌번호를 입력해주세요",
                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
@@ -410,25 +395,11 @@ class MyBankAccountVC: UIViewController {
             //textField의 앞부분의 빈공간 구현
             $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: $0.frame.height))
             $0.leftViewMode = .always
-            //
-            ////
-            //            let clearButton = UIButton(type: .custom)
-            //            clearButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-            //            clearButton.setTitle("X", for: .normal)
-            //            clearButton.setTitleColor(.black, for: .normal)
-            //            //clearButton.addTarget(self, action: #selector(clearText), for: .touchUpInside)
-            //
-            //            // 텍스트 필드 설정
-            //            $0.rightView = clearButton
-            //            $0.rightViewMode = .whileEditing
+       
             
             
         }
         
-        //        accountClearBtn.do {
-        //            $0.setImage(UIImage(systemName: "x.circle.fill"), for: .normal)
-        //        }
-        //
         payLabel.do {
             $0.text = "간편페이 사용여부"
             $0.font = UIFont.systemFont(ofSize: 12)
@@ -480,8 +451,7 @@ class MyBankAccountVC: UIViewController {
                                           kakaoTapeed: kakaoTap.rx.event.asObservable().map { _ in () },
                                           naverTapped: naverTap.rx.event.asObservable().map { _ in () },
                                           nameTextFieldClearTapped: nameClearBtn.rx.tap.asControlEvent()
-                                          //                                          nameTextFieldClearTapped: nameClearBtn.rx.tap.asDriver(),
-                                          //                                          accountTextFieldClearTapped: accountClearBtn.rx.tap.asDriver()
+                                         
         )
         
         let output = viewModel.transform(input: input)
@@ -522,7 +492,7 @@ class MyBankAccountVC: UIViewController {
     
     
     
-    
+    //변경되는 값에 따라 바로 UI 변경되도록 하는 함수
     func asapRxData() {
         userDefault.rx
             .observe(Bool.self, "tossPay")
@@ -557,11 +527,7 @@ class MyBankAccountVC: UIViewController {
                 
             })
             .disposed(by: disposeBag)
-        
-        
-        
-        
-        
+ 
         
     }
     
@@ -570,6 +536,8 @@ class MyBankAccountVC: UIViewController {
         view.addGestureRecognizer(tapGesture)
         return tapGesture
     }
+    
+    //간편페이류 기본 설정
     func setPay() {
         
         var tossPayBtn = PayButton(labelText: "토스뱅크", btn: UIImage(systemName: "dollarsign.square.fill")!, check: UIImage(systemName: "checkmark.circle.fill")!)

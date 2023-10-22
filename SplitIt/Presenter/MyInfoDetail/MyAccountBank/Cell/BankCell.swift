@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Then
 
 class BankCell: UICollectionViewCell {
     
@@ -15,7 +16,7 @@ class BankCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        
         setAddView()
         setLayout()
         setAttribute()
@@ -23,13 +24,13 @@ class BankCell: UICollectionViewCell {
     }
 
     func setAddView() {
-        contentView.addSubview(nameLabel)
-        contentView.addSubview(bar)
+        [nameLabel, bar].forEach {
+            contentView.addSubview($0)
+        }
     }
     
     func setLayout() {
         nameLabel.snp.makeConstraints { make in
-          
             make.height.equalTo(24)
             make.centerY.equalToSuperview()
             make.left.equalToSuperview().offset(10)
@@ -47,9 +48,12 @@ class BankCell: UICollectionViewCell {
         
         nameLabel.textAlignment = .left
         
-        bar.layer.borderWidth = 1
-        bar.layer.masksToBounds = true
-        bar.layer.borderColor = UIColor.gray.cgColor
+        bar.do {
+            $0.layer.borderWidth = 1
+            $0.layer.masksToBounds = true
+            $0.layer.borderColor = UIColor.gray.cgColor
+        }
+       
         
     }
     
