@@ -340,6 +340,7 @@ final class SPButton: UIButton {
     
     // 활성 상태 프로퍼티
     private func configureActiveProperties() {
+        self.isEnabled = true
         self.setTitleColor(.TextPrimary, for: .normal)
         self.layer.borderColor = UIColor.BorderPrimary.cgColor
         self.layer.shadowColor = UIColor.BorderPrimary.cgColor
