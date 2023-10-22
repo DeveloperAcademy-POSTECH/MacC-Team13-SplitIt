@@ -32,9 +32,7 @@ class ExclItemPriceEditVM {
     
     func transform(input: Input) -> Output {
         let maxCurrency = 10000000
-        let currentExclItemName = CreateStore.shared.getCurrentExclItemName()
         let numberFormatter = NumberFormatterHelper()
-        
         let title = BehaviorRelay<String>(value: "")
         let priceResult = BehaviorRelay<Int>(value: 0)
         let showExclItemTargetView = input.nextButtonTapped.asDriver()
@@ -42,9 +40,14 @@ class ExclItemPriceEditVM {
         let data = SplitRepository.share.exclItemArr.map { $0[self.indexPath.row] }
         var exclIdx = ""
         let exclName = data.map { String($0.price) }.asObservable()
+        var currentExclItemName = ""
         
         data.map { $0.exclItemIdx }.subscribe { st in
             exclIdx = st
+        }.disposed(by: disposeBag)
+        
+        data.map { $0.name }.subscribe { st in
+            currentExclItemName = st
         }.disposed(by: disposeBag)
         
         title.accept(currentExclItemName)

@@ -44,7 +44,7 @@ class CSEditListVC: UIViewController {
     let tableHeaderLabel = UILabel()
     let tableView = UITableView(frame: .zero, style: .plain)
     let exclAddButton = UIButton(type: .system)
-    let saveButton = UIButton(type: .system)
+    let saveButton = SPButton()
     let delButton = UIButton(type: .system)
     
 
@@ -88,8 +88,7 @@ class CSEditListVC: UIViewController {
         
         saveButton.do { btn in
             btn.setTitle("수정하기", for: .normal)
-            btn.layer.borderWidth = 1
-            btn.layer.cornerRadius = 24
+            btn.applyStyle(.primaryPear)
         }
         
         delButton.do { btn in
@@ -189,22 +188,37 @@ class CSEditListVC: UIViewController {
         let output = viewModel.transform(input: input)
         
         output.pushTitleEditVC
-            .subscribe(onNext: { self.pushTitleEditViewController()})
-            .disposed(by: disposeBag)
-        output.pushPriceEditVC
-            .subscribe(onNext: { self.pushTotalPriceEditViewController()})
-            .disposed(by: disposeBag)
-        output.pushMemberEditVC
-            .subscribe(onNext: { self.pushMemberEditViewController()})
-            .disposed(by: disposeBag)
-        output.pushExclItemEditVC
-            .subscribe(onNext: {
-                self.pushExclItemEditViewController(index: $0)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.pushTitleEditViewController()
             })
             .disposed(by: disposeBag)
-//        output.popDelCSInfo
-//            .subscribe { }
-//            .disposed(by: disposeBag)
+        output.pushPriceEditVC
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.pushTotalPriceEditViewController()})
+            .disposed(by: disposeBag)
+        output.pushMemberEditVC
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.pushMemberEditViewController()})
+            .disposed(by: disposeBag)
+        output.pushExclItemEditVC
+            .subscribe(onNext: { [weak self] index in
+                guard let self = self else { return }
+                self.pushExclItemEditViewController(index: index)
+            })
+            .disposed(by: disposeBag)
+        
+//        output
+        
+        output.popDelCSInfo
+            .subscribe { [weak self] _ in
+                guard let self = self else { return }
+                self.navigationController?.popViewController(animated: false)
+            }
+            .disposed(by: disposeBag)
+        
     }
 
 }

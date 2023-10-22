@@ -20,7 +20,7 @@ class ExclMemberEditVC: UIViewController {
     let header = NavigationHeader()
     let titleMessage = UILabel()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-    let nextButton = UIButton()
+    let nextButton = SPButton()
     
     init(viewModel: ExclMemberEditVM) {
         self.disposeBag = DisposeBag()
@@ -43,18 +43,18 @@ class ExclMemberEditVC: UIViewController {
         view.backgroundColor = UIColor(hex: 0xF8F7F4)
         
         header.do {
+            $0.configureTitle(title: "모임 수정하기")
             $0.configureBackButton(viewController: self)
         }
         
         titleMessage.do {
-            $0.text = "계산에서 제외할 사람을 선택해주세요"
+            $0.text = "계산에서 제외할 사람을 다시 선택해주세요"
             $0.font = .systemFont(ofSize: 18)
         }
         
         nextButton.do {
             $0.setTitle("저장하기", for: .normal)
-            $0.layer.cornerRadius = 24
-            $0.backgroundColor = UIColor(hex: 0x19191B)
+            $0.applyStyle(.primaryPear)
         }
         setCollectionView()
     }

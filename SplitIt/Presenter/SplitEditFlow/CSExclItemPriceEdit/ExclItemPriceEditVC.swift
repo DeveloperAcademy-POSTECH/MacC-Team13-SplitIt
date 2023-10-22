@@ -20,7 +20,7 @@ class ExclItemPriceEditVC: UIViewController {
     let priceTextField = UITextField()
     let currencyLabel = UILabel()
     let textFiledNotice = UILabel()
-    let nextButton = UIButton()
+    let nextButton = SPButton()
     
     init(viewModel: ExclItemPriceEditVM) {
         self.disposeBag = DisposeBag()
@@ -51,6 +51,7 @@ class ExclItemPriceEditVC: UIViewController {
         view.backgroundColor = UIColor(hex: 0xF8F7F4)
         
         header.do {
+            $0.configureTitle(title: "모임 수정하기")
             $0.configureBackButton(viewController: self)
         }
         
@@ -78,9 +79,8 @@ class ExclItemPriceEditVC: UIViewController {
         }
         
         nextButton.do {
-            $0.setTitle("다음으로", for: .normal)
-            $0.layer.cornerRadius = 24
-            $0.backgroundColor = UIColor(hex: 0x19191B)
+            $0.setTitle("저장하기", for: .normal)
+            $0.applyStyle(.primaryPear)
         }
     }
     
