@@ -112,6 +112,7 @@
 		DE73D6F92AE1983A00ABF3EF /* MemberLogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D6F82AE1983A00ABF3EF /* MemberLogVM.swift */; };
 		DE73D6FC2AE1993F00ABF3EF /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D6FB2AE1993F00ABF3EF /* MemberCell.swift */; };
 		DE73D70B2AE3C1FC00ABF3EF /* MyInfoEmptyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D70A2AE3C1FC00ABF3EF /* MyInfoEmptyVC.swift */; };
+		DE73D7112AE5477400ABF3EF /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D7102AE5477400ABF3EF /* SplashVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -214,6 +215,7 @@
 		DE73D6F82AE1983A00ABF3EF /* MemberLogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberLogVM.swift; sourceTree = "<group>"; };
 		DE73D6FB2AE1993F00ABF3EF /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		DE73D70A2AE3C1FC00ABF3EF /* MyInfoEmptyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoEmptyVC.swift; sourceTree = "<group>"; };
+		DE73D7102AE5477400ABF3EF /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -280,6 +282,7 @@
 				60115E042ADC18110050D32C /* SplitCreateFlow */,
 				60115DF32ADBF10B0050D32C /* Home */,
 				60115E112ADC19D40050D32C /* NavigationHeader.swift */,
+				DE73D7102AE5477400ABF3EF /* SplashVC.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -996,6 +999,7 @@
 				60115E0C2ADC18F90050D32C /* CSTitleInputVC.swift in Sources */,
 				1A3852F52ADE5A9F00E9A20B /* Split.swift in Sources */,
 				869D1AF22AE52C9B00D166B1 /* ExclMemberEditSectionModel.swift in Sources */,
+				DE73D7112AE5477400ABF3EF /* SplashVC.swift in Sources */,
 				DE1711C22AE0BA9B0097850D /* MyInfoVM.swift in Sources */,
 				1A3852FB2ADE5ADA00E9A20B /* ExclItem.swift in Sources */,
 				60115E262ADD2CB00050D32C /* CSMemberInputSearchFooter.swift in Sources */,
