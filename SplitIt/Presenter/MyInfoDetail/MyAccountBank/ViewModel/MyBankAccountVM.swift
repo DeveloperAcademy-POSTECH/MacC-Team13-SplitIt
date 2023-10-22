@@ -12,7 +12,6 @@ import SnapKit
 class MyBankAccountVM {
     
     var disposeBag = DisposeBag()
-    let payData = PayData.shared.payData
     let userDefault = UserDefaults.standard
     
     
@@ -24,8 +23,6 @@ class MyBankAccountVM {
         let tossTapped: Observable<Void>
         let kakaoTapeed: Observable<Void>
         let naverTapped: Observable<Void>
-        let nameTextFieldClearTapped: ControlEvent<Void>
-       // let accountTextFieldClearTapped: Observable<Void>
         
     }
     
@@ -36,8 +33,7 @@ class MyBankAccountVM {
         let toggleTossPay: Observable<Void>
         let toggleKakaoPay: Observable<Void>
         let togglenaverPay: Observable<Void>
-        let nameTextFieldClear: ControlEvent<Void>
-//        let accountTextFieldClear: Driver<Void>
+
         
     }
     
@@ -50,17 +46,11 @@ class MyBankAccountVM {
         let tossTapped = input.tossTapped
         let kakaoTapped = input.kakaoTapeed
         let naverTapped = input.naverTapped
-        let nameTextFieldClear = input.nameTextFieldClearTapped
-//        let accountTextFieldClear = input.accountTextFieldClearTapped
-        
-        
+
+
         var inputAccount: String = ""
         var inputName: String = ""
-                
-        
-  
-        
-        
+
         inputNameText
             .bind(onNext: { text in
                 if text != "" {
@@ -123,9 +113,8 @@ class MyBankAccountVM {
                             showBankModel: selectBackTapped,
                             toggleTossPay: tossTapped,
                             toggleKakaoPay: kakaoTapped,
-                            togglenaverPay: naverTapped,
-                            nameTextFieldClear: nameTextFieldClear
-//                            accountTextFieldClear: accountTextFieldClear
+                            togglenaverPay: naverTapped
+                         
         )
         
         return output

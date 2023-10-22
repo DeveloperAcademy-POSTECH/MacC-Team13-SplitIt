@@ -12,9 +12,7 @@ import SafariServices
 
 class MyInfoVM: UIViewController {
     
-    let payData = PayData.shared.payData
     let disposeBag = DisposeBag()
-    
     let repo = SplitRepository.share
     let userDefault = UserDefaults.standard
     
@@ -51,6 +49,8 @@ class MyInfoVM: UIViewController {
             userDefault.set(false, forKey: "kakaoPay")
             userDefault.set(false, forKey: "naverPay")
         }
+        
+      
         
         let output = Output(moveToPrivacyView: privacyBtnTapped,
                             moveTofriendListView: friendListViewTapped,
