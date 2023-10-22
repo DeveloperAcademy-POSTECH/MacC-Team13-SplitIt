@@ -55,7 +55,7 @@ class MemberCell: UITableViewCell {
     }
     
     func setAttribute() {
-        
+        contentView.backgroundColor = .SurfaceBrandCalmshell
         nameLabel.font = UIFont.systemFont(ofSize: 18)
         nameLabel.textColor = .black
         
