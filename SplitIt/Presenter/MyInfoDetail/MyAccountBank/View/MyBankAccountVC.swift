@@ -449,8 +449,7 @@ class MyBankAccountVC: UIViewController {
                                           inputAccountText: accountTextField.rx.text.orEmpty.asObservable(),
                                           tossTapped: tossTap.rx.event.asObservable().map { _ in () },
                                           kakaoTapeed: kakaoTap.rx.event.asObservable().map { _ in () },
-                                          naverTapped: naverTap.rx.event.asObservable().map { _ in () },
-                                          nameTextFieldClearTapped: nameClearBtn.rx.tap.asControlEvent()
+                                          naverTapped: naverTap.rx.event.asObservable().map { _ in () }
                                          
         )
         
