@@ -14,7 +14,6 @@ final class CSEditListVM {
     var disposeBag = DisposeBag()
     
     let dataModel = SplitRepository.share
-    
     private var data: Observable<CSInfo> = Observable.just(CSInfo.init(splitIdx: ""))
     
     init(splitIdx: String = "652fe13e384fd0feba2561be") {
@@ -28,8 +27,7 @@ final class CSEditListVM {
             .disposed(by: disposeBag)
         disposeBag = DisposeBag()
         
-//        data = dataModel.csInfoArr.map { $0.first! }.asObservable()
-//        data = Observavle.just(CSInfo.init(splitIdx: ""))
+        data = dataModel.csInfoArr.map { $0.first! }.asObservable()
     }
     
     var itemsObservable: Observable<[ExclItem]> {
@@ -64,6 +62,7 @@ final class CSEditListVM {
         let totalPriceTap: ControlEvent<Void>
         let memberTap: ControlEvent<Void>
         let exclItemTap: ControlEvent<IndexPath>
+        let addExclItemTap: ControlEvent<UITapGestureRecognizer>
         let saveButtonTap: ControlEvent<Void>
         let delCSInfoTap: ControlEvent<UITapGestureRecognizer>
     }
@@ -74,6 +73,7 @@ final class CSEditListVM {
         let pushMemberEditVC: Observable<Void>
         let popVCinSaveBtn: Observable<Void>
         let pushExclItemEditVC: Observable<IndexPath>
+        let pushExclItemAddVC: Observable<UITapGestureRecognizer>
         let popDelCSInfo: Observable<UITapGestureRecognizer>
 //        let pushExclItemEditVC: Observable<Void>
     }
@@ -85,12 +85,14 @@ final class CSEditListVM {
         let exclcell = input.exclItemTap.asObservable()
         let savebtn = input.saveButtonTap.asObservable()
         let delbtn = input.delCSInfoTap.asObservable()
+        let addExcl = input.addExclItemTap.asObservable()
         
         return Output(pushTitleEditVC: title,
                       pushPriceEditVC: price,
                       pushMemberEditVC: member,
                       popVCinSaveBtn: savebtn,
                       pushExclItemEditVC: exclcell,
+                      pushExclItemAddVC: addExcl,
                       popDelCSInfo: delbtn)
     }
     

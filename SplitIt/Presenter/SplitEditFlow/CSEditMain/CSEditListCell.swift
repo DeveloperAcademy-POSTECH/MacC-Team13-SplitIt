@@ -9,7 +9,7 @@ import SnapKit
 import Reusable
 import RxSwift
 
-class CSEditListCell: UITableViewCell, Reusable {
+final class CSEditListCell: UITableViewCell, Reusable {
     
     var disposeBag = DisposeBag()
     

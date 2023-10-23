@@ -13,12 +13,12 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-class CSEditListVC: UIViewController {
+final class CSEditListVC: UIViewController {
     
     var disposeBag = DisposeBag()
     let viewModel = CSEditListVM()
     
-    let header = NavigationHeader()
+    let header = NaviHeader()
     let titleEditBtn = UIButton(type: .system)
     let titleLabel = UILabel()
     lazy var titleStackView: UIStackView = {
@@ -46,7 +46,8 @@ class CSEditListVC: UIViewController {
     let exclAddButton = UILabel()
     let saveButton = SPButton()
     let delButton = UILabel()
-    let tapGesture = UITapGestureRecognizer()
+    let tapDelBtn = UITapGestureRecognizer()
+    let tapAddExclItem = UITapGestureRecognizer()
     
 
     override func viewDidLoad() {
@@ -60,8 +61,7 @@ class CSEditListVC: UIViewController {
         view.backgroundColor = UIColor(hex: 0xF8F7F4)
         
         header.do {
-            $0.configureBackButton(viewController: self)
-            $0.configureTitle(title: "모임 수정하기")
+            $0.applyStyle(.edit)
         }
         
         tableHeaderLabel.do { label in
@@ -86,10 +86,11 @@ class CSEditListVC: UIViewController {
         
         exclAddButton.do { btn in
             btn.attributedText = atrString
-//            btn.setTitle("따로 계산할 것 추가하기", for: .normal)
             btn.textAlignment = .center
             btn.font = .KoreanCaption2
             btn.tintColor = .TextSecondary
+            btn.isUserInteractionEnabled = true
+            btn.addGestureRecognizer(self.tapAddExclItem)
         }
         
         saveButton.do { btn in
@@ -106,7 +107,7 @@ class CSEditListVC: UIViewController {
             btn.font = .KoreanButtonText
             btn.textColor = .TextSecondary
             btn.isUserInteractionEnabled = true
-            btn.addGestureRecognizer(self.tapGesture)
+            btn.addGestureRecognizer(self.tapDelBtn)
         }
         
     }
@@ -196,9 +197,10 @@ class CSEditListVC: UIViewController {
         let input = CSEditListVM.Input(titleBtnTap: titleEditBtn.rx.tap,
                                     totalPriceTap: totalAmountEditBtn.rx.tap,
                                     memberTap: memberEditBtn.rx.tap,
-                                    exclItemTap: tableView.rx.itemSelected.asControlEvent(),
+                                       exclItemTap: tableView.rx.itemSelected.asControlEvent(),
+                                       addExclItemTap: tapAddExclItem.rx.event,
                                     saveButtonTap: saveButton.rx.tap,
-                                       delCSInfoTap: tapGesture.rx.event)
+                                       delCSInfoTap: tapDelBtn.rx.event)
         
         let output = viewModel.transform(input: input)
         
@@ -246,6 +248,13 @@ class CSEditListVC: UIViewController {
 //                SplitRepository.share.deleteCSInfoAndRelatedData(csInfoIdx: "")
                 self.navigationController?.popViewController(animated: true)
             })
+            .disposed(by: disposeBag)
+        
+        output.pushExclItemAddVC
+            .subscribe { _ in
+//                let vc = UIViewController()
+//
+            }
             .disposed(by: disposeBag)
         
     }
