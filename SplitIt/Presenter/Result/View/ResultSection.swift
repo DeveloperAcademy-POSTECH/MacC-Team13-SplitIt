@@ -10,7 +10,7 @@ import RxDataSources
 struct Result {
     var name: [String]
     var payment: Int
-    var exclItems: [String]
+    var exclItems: [ExclItem]
 }
 
 struct ResultSection {
