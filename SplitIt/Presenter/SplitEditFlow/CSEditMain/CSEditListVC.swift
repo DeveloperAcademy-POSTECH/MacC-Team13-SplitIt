@@ -15,6 +15,8 @@ import RxDataSources
 
 final class CSEditListVC: UIViewController {
     
+    weak var pageChangeDelegate: CSMemberPageChangeDelegate?
+    
     var disposeBag = DisposeBag()
     let viewModel = CSEditListVM()
     
@@ -251,12 +253,14 @@ final class CSEditListVC: UIViewController {
             .disposed(by: disposeBag)
         
         output.pushExclItemAddVC
-            .subscribe { _ in
-//                let vc = UIViewController()
+            .subscribe { [weak self] _ in
+                guard let self = self else { return }
+//                SplitRepository.share.currentCSInfo
+                let vc = ExclPageController()
+                self.navigationController?.pushViewController(vc, animated: true)
 //
             }
             .disposed(by: disposeBag)
-        
     }
 
 }
