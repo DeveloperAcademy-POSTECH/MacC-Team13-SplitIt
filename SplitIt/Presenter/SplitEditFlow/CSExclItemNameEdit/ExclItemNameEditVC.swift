@@ -13,6 +13,7 @@ class ExclItemNameEditVC: UIViewController {
     
     var disposeBag = DisposeBag()
     let viewModel: ExclItemNameEditVM
+    weak var pageChangeDelegate: ExclItemNamePageChangeDelegate?
     
     let header = NaviHeader()
     let titleMessage = UILabel()
@@ -139,8 +140,9 @@ class ExclItemNameEditVC: UIViewController {
         output.showExclItemPriceView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
+                guard let index = viewModel.indexPath else { return }
                 self.nextButton.applyStyle(.primaryPearPressed)
-                let vc = ExclItemPriceEditVC(viewModel: ExclItemPriceEditVM(indexPath: viewModel.indexPath))
+                let vc = ExclItemPriceEditVC(viewModel: ExclItemPriceEditVM(indexPath: index))
                 self.navigationController?.pushViewController(vc, animated: false)
             })
             .disposed(by: disposeBag)

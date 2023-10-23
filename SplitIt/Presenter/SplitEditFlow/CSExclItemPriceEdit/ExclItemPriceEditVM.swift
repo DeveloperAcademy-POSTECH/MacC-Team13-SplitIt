@@ -12,10 +12,14 @@ import UIKit
 class ExclItemPriceEditVM {
     
     var disposeBag = DisposeBag()
-    var indexPath: IndexPath
+    var indexPath: IndexPath?
     
     init(indexPath: IndexPath) {
         self.indexPath = indexPath
+    }
+    
+    init() {
+        
     }
     
     struct Input {
@@ -36,21 +40,8 @@ class ExclItemPriceEditVM {
         let title = BehaviorRelay<String>(value: "")
         let priceResult = BehaviorRelay<Int>(value: 0)
         let showExclItemTargetView = input.nextButtonTapped.asDriver()
-        
-        let data = SplitRepository.share.exclItemArr.map { $0[self.indexPath.row] }
-        var exclIdx = ""
-        let exclName = data.map { String($0.price) }.asObservable()
         var currentExclItemName = ""
-        
-        data.map { $0.exclItemIdx }.subscribe { st in
-            exclIdx = st
-        }.disposed(by: disposeBag)
-        
-        data.map { $0.name }.subscribe { st in
-            currentExclItemName = st
-        }.disposed(by: disposeBag)
-        
-        title.accept(currentExclItemName)
+        var exclIdx = ""
         
         let totalAmountString = input.price
             .map { numberFormatter.number(from: $0) ?? 0 }
@@ -62,17 +53,43 @@ class ExclItemPriceEditVM {
             .map { numberFormatter.formattedString(from: $0) }
             .asDriver(onErrorJustReturn: "0")
         
-        showExclItemTargetView
-            .withLatestFrom(priceResult.asDriver())
-            .drive(onNext: { price in
-                SplitRepository.share.editExclItemPrice(exclItemIdx: exclIdx, price: Int(price))
-            })
-            .disposed(by: disposeBag)
+        if let indexPath = indexPath {
+            let data = SplitRepository.share.exclItemArr.map { $0[indexPath.row] }
+            let exclName = data.map { String($0.price) }.asObservable()
+            
+            data.map { $0.exclItemIdx }.subscribe { st in
+                exclIdx = st
+            }.disposed(by: disposeBag)
+            
+            data.map { $0.name }.subscribe { st in
+                currentExclItemName = st
+            }.disposed(by: disposeBag)
+            title.accept(currentExclItemName)
+            
+            showExclItemTargetView
+                .withLatestFrom(priceResult.asDriver())
+                .drive(onNext: { price in
+                    SplitRepository.share.editExclItemPrice(exclItemIdx: exclIdx, price: Int(price))
+                })
+                .disposed(by: disposeBag)
+            
+            return Output(showExclItemTargetView: showExclItemTargetView,
+                          totalAmount: totalAmountString,
+                          title: title.asDriver(),
+                          exclPrice: exclName)
+        } else {
+            input.price
+                .drive { st in
+                    let pri = Int(st)!
+                    SplitRepository.share.inputExclItemPrice(price: pri)
+                }
+            
+            return Output(showExclItemTargetView: showExclItemTargetView,
+                          totalAmount: totalAmountString,
+                          title: title.asDriver(),
+                          exclPrice: Observable.just(""))
+        }
         
-        return Output(showExclItemTargetView: showExclItemTargetView,
-                      totalAmount: totalAmountString,
-                      title: title.asDriver(),
-                      exclPrice: exclName)
     }
     
     func mapTitleMessage(_ text: String) -> String {
