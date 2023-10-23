@@ -197,7 +197,8 @@ final class CSEditListVC: UIViewController {
         let input = CSEditListVM.Input(titleBtnTap: titleEditBtn.rx.tap,
                                     totalPriceTap: totalAmountEditBtn.rx.tap,
                                     memberTap: memberEditBtn.rx.tap,
-                                    exclItemTap: tableView.rx.itemSelected.asControlEvent(),
+                                       exclItemTap: tableView.rx.itemSelected.asControlEvent(),
+                                       addExclItemTap: tapAddExclItem.rx.event,
                                     saveButtonTap: saveButton.rx.tap,
                                        delCSInfoTap: tapDelBtn.rx.event)
         
@@ -247,6 +248,13 @@ final class CSEditListVC: UIViewController {
 //                SplitRepository.share.deleteCSInfoAndRelatedData(csInfoIdx: "")
                 self.navigationController?.popViewController(animated: true)
             })
+            .disposed(by: disposeBag)
+        
+        output.pushExclItemAddVC
+            .subscribe { _ in
+//                let vc = UIViewController()
+//
+            }
             .disposed(by: disposeBag)
         
     }
