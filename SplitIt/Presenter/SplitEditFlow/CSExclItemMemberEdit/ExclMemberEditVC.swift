@@ -217,12 +217,21 @@ class ExclMemberEditVC: UIViewController {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 // 현재 뷰 컨트롤러에서 3개의 뷰를 건너뛰어 이전 뷰로 돌아가기
+                self.nextButton.applyStyle(.primaryPearPressed)
                 if let navigationController = self.navigationController {
                     if let previousViewController = navigationController.viewControllers[navigationController.viewControllers.count - 4] as? CSEditListVC {
                         // navigationController.viewControllers 배열에서 해당 뷰 컨트롤러를 가져옵니다.
                         navigationController.popToViewController(previousViewController, animated: true)
                     }
                 }
+            })
+            .disposed(by: disposeBag)
+        
+        output.presentResultView
+            .delay(.milliseconds(500))
+           .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+               self.nextButton.applyStyle(.primaryPear)
             })
             .disposed(by: disposeBag)
         

@@ -174,13 +174,6 @@ class CSEditListVC: UIViewController {
     }
     
     func setBinding() {
-        let normalStyle = saveButton.rx
-            .tap
-            .map { false }
-        
-        let selectedStyle = saveButton.rx
-            .tap
-            .map { true }
         
         viewModel.titleObservable
             .bind(to: titleLabel.rx.text)
@@ -236,21 +229,22 @@ class CSEditListVC: UIViewController {
             .subscribe { [weak self] _ in
                 guard let self = self else { return }
                 self.navigationController?.popViewController(animated: true)
+                self.saveButton.applyStyle(.primaryPearPressed)
             }
+            .disposed(by: disposeBag)
+        
+        output.popVCinSaveBtn
+            .delay(.milliseconds(500), scheduler: MainScheduler.asyncInstance)
+           .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+               self.saveButton.applyStyle(.primaryPear)
+            })
             .disposed(by: disposeBag)
         
         output.popDelCSInfo
             .subscribe (onNext: {_ in
 //                SplitRepository.share.deleteCSInfoAndRelatedData(csInfoIdx: "")
                 self.navigationController?.popViewController(animated: true)
-            })
-            .disposed(by: disposeBag)
-        
-        Observable
-            .combineLatest(normalStyle, selectedStyle)
-            .subscribe(onNext: { [weak self] (normal, selected) in
-                self?.saveButton.isSelected = selected
-                self?.saveButton.applyStyle(selected ? .primaryPear : .primaryPearPressed)
             })
             .disposed(by: disposeBag)
         

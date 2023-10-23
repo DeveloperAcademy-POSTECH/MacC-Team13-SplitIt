@@ -28,7 +28,8 @@ final class CSEditListVM {
             .disposed(by: disposeBag)
         disposeBag = DisposeBag()
         
-        data = dataModel.csInfoArr.map { $0.first! }.asObservable()
+//        data = dataModel.csInfoArr.map { $0.first! }.asObservable()
+//        data = Observavle.just(CSInfo.init(splitIdx: ""))
     }
     
     var itemsObservable: Observable<[ExclItem]> {
@@ -47,6 +48,9 @@ final class CSEditListVM {
         return dataModel.csMemberArr
             .observe(on: MainScheduler.asyncInstance)
             .map {
+                if $0.count == 0 {
+                    return ""
+                }
                 if $0.count > 2 {
                     return "\($0[0].name), \( $0[1].name) 외 \($0.count - 2)인"
                 }

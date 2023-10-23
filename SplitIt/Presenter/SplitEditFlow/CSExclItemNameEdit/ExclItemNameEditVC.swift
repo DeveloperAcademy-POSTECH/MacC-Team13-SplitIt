@@ -140,8 +140,17 @@ class ExclItemNameEditVC: UIViewController {
         output.showExclItemPriceView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
+                self.nextButton.applyStyle(.primaryPearPressed)
                 let vc = ExclItemPriceEditVC(viewModel: ExclItemPriceEditVM(indexPath: viewModel.indexPath))
                 self.navigationController?.pushViewController(vc, animated: false)
+            })
+            .disposed(by: disposeBag)
+        
+        output.showExclItemPriceView
+            .delay(.milliseconds(500))
+           .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+               self.nextButton.applyStyle(.primaryPear)
             })
             .disposed(by: disposeBag)
         

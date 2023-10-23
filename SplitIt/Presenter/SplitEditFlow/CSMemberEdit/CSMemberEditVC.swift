@@ -261,6 +261,15 @@ class CSMemberEditVC: UIViewController {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.navigationController?.popViewController(animated: false)
+                self.nextButton.applyStyle(.primaryPearPressed)
+            })
+            .disposed(by: disposeBag)
+        
+        output.showCSMemberConfirmView
+            .delay(.milliseconds(500))
+           .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+               self.nextButton.applyStyle(.primaryPear)
             })
             .disposed(by: disposeBag)
         

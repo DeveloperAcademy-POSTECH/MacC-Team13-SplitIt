@@ -128,7 +128,16 @@ class CSTotalAmountEditVC: UIViewController {
         output.showCSMemberInputView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
+                self.nextButton.applyStyle(.primaryPearPressed)
                 self.navigationController?.popViewController(animated: false)
+            })
+            .disposed(by: disposeBag)
+        
+        output.showCSMemberInputView
+            .delay(.milliseconds(500))
+           .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+               self.nextButton.applyStyle(.primaryPear)
             })
             .disposed(by: disposeBag)
         
