@@ -256,9 +256,8 @@ final class CSEditListVC: UIViewController {
             .subscribe { [weak self] _ in
                 guard let self = self else { return }
 //                SplitRepository.share.currentCSInfo
-                let vc = ExclPageController()
+                let vc = ExclEditPageController()
                 self.navigationController?.pushViewController(vc, animated: true)
-//
             }
             .disposed(by: disposeBag)
     }

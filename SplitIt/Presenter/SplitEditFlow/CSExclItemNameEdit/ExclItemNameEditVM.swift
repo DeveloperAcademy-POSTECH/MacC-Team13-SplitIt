@@ -12,9 +12,13 @@ import UIKit
 class ExclItemNameEditVM {
     
     var disposeBag = DisposeBag()
-    var indexPath: IndexPath
+    var indexPath: IndexPath?
     
     let maxTextCount = 8
+    
+    init() {
+        
+    }
     
     init(indexPath: IndexPath) {
         self.indexPath = indexPath
@@ -37,23 +41,6 @@ class ExclItemNameEditVM {
         let showExclItemPriceView = input.nextButtonTapped
         let textFieldCount = BehaviorRelay<String>(value: "")
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
-        let data = SplitRepository.share.exclItemArr.map { $0[self.indexPath.row] }
-        var exclIdx = ""
-        let exclName = data.map { $0.name }.asObservable()
-        
-        data.map { $0.exclItemIdx }.subscribe { st in
-            exclIdx = st
-        }.disposed(by: disposeBag)
-
-        showExclItemPriceView
-            .asDriver()
-            .withLatestFrom(input.name)
-            .drive(onNext: {
-                if exclIdx != "" {
-                    SplitRepository.share.editExclItemName(exclItemIdx: exclIdx, name: $0)
-                }
-            })
-            .disposed(by: disposeBag)
         
         name
             .map { text in
@@ -71,12 +58,39 @@ class ExclItemNameEditVM {
             .drive(textFieldIsValid)
             .disposed(by: disposeBag)
         
+        if let indexPath = indexPath {
+            let data = SplitRepository.share.exclItemArr.map { $0[indexPath.row]   }
+            var exclIdx = ""
+            let exclName = data.map { $0.name }.asObservable()
+            
+            data.map { $0.exclItemIdx }.subscribe { st in
+                exclIdx = st
+            }.disposed(by: disposeBag)
+            
+            showExclItemPriceView
+                .asDriver()
+                .withLatestFrom(input.name)
+                .drive(onNext: {
+                    if exclIdx != "" {
+                        SplitRepository.share.editExclItemName(exclItemIdx: exclIdx, name: $0)
+                    }
+                })
+                .disposed(by: disposeBag)
+            
+            return Output(showExclItemPriceView: showExclItemPriceView.asDriver(),
+                          nameCount: textFieldCount.asDriver(),
+                          textFieldIsValid: textFieldIsValid.asDriver(),
+                          exclTitle: exclName )
+
+        } else {
+            name.drive(onNext: {             SplitRepository.share.createExclItemWithName(name: $0)})
+                .disposed(by: disposeBag)
+            return Output(showExclItemPriceView: showExclItemPriceView.asDriver(),
+                          nameCount: textFieldCount.asDriver(),
+                          textFieldIsValid: textFieldIsValid.asDriver(),
+                          exclTitle: Observable.just("") )
+        }
         
-        
-        return Output(showExclItemPriceView: showExclItemPriceView.asDriver(),
-                      nameCount: textFieldCount.asDriver(),
-                      textFieldIsValid: textFieldIsValid.asDriver(),
-                      exclTitle: exclName )
     }
 
 }

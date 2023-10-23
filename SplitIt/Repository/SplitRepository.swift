@@ -59,8 +59,6 @@ extension SplitRepository {
         let realmManager = RealmManager()
         csInfoArr.accept(realmManager.bringCSInfoWithCSInfoIdx(csInfoIdx: csInfoIdx))
         self.currentCSInfo = csInfoArr.value.filter { $0.csInfoIdx == csInfoIdx }.first
-        print(csInfoIdx)
-        print("\(currentCSInfo?.csInfoIdx)")
         
         guard let split = csInfoArr.value.first else { return }
         let splitIdx = split.splitIdx
