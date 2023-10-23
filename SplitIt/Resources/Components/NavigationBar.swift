@@ -179,9 +179,17 @@ final class NaviHeader: UIView {
     }
     
     func setBackButton(viewController: UIViewController) {
+        backButton.removeAllActions()
+        
         let backAction = UIAction { action in
             viewController.navigationController?.popViewController(animated: true)
         }
         backButton.addAction(backAction, for: .touchUpInside)
+    }
+    
+    func setBackButton(action: UIAction) {
+        backButton.removeAllActions()
+        
+        backButton.addAction(action, for: .touchUpInside)
     }
 }

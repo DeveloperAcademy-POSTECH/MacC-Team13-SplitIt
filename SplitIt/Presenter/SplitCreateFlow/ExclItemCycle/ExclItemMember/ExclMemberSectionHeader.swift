@@ -40,17 +40,17 @@ class ExclMemberSectionHeader: UICollectionReusableView, Reusable {
         self.do {
             $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             $0.layer.cornerRadius = 8
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
         }
         
         headerTitle.do {
-            $0.textColor = UIColor(hex: 0x202020)
-            $0.font = .systemFont(ofSize: 12, weight: .light)
+            $0.textColor = .TextPrimary
+            $0.font = .KoreanCaption2
         }
         
         deleteButton.do {
-            $0.setImage(UIImage(named: "XMark"), for: .normal)
+            $0.setImage(UIImage(named: "DeleteIconTypeC"), for: .normal)
         }
     }
     
@@ -92,6 +92,6 @@ class ExclMemberSectionHeader: UICollectionReusableView, Reusable {
     }
     
     func backgroundColor(forSectionIndex sectionIndex: Int) -> UIColor {
-        return sectionIndex % 2 == 1 ? UIColor(hex: 0xD3D3D3) : UIColor(hex: 0xF1F1F1)
+        return sectionIndex % 2 == 1 ? .AppColorGrayscale200 : .AppColorGrayscale50
     }
 }

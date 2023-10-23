@@ -9,6 +9,10 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+protocol CSMemberPageChangeDelegate: AnyObject {
+    func changePageToSecondView()
+}
+
 class CSMemberInputVC: UIViewController {
     
     var disposeBag = DisposeBag()
@@ -16,7 +20,8 @@ class CSMemberInputVC: UIViewController {
     
     let viewModel = CSMemberInputVM()
     
-    let header = NaviHeader()
+    weak var pageChangeDelegate: CSMemberPageChangeDelegate?
+    
     let titleMessage = UILabel()
     let textFieldCounter = UILabel()
     let textFiledNotice = UILabel()
@@ -36,20 +41,8 @@ class CSMemberInputVC: UIViewController {
         setBinding()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        setKeyboardNotification()
-        self.searchBar.becomeFirstResponder()
-    }
-    
     func setAttribute() {
         view.backgroundColor = .SurfacePrimary
-        
-        header.do {
-            $0.applyStyle(.csMember)
-            $0.setBackButton(viewController: self)
-        }
         
         titleMessage.do {
             $0.text = "누구와 함께했나요?"
@@ -64,7 +57,7 @@ class CSMemberInputVC: UIViewController {
         }
         
         textFiledNotice.do {
-            $0.text = "여기에 사용을 돕는 문구가 들어가요"
+            $0.text = "'나'는 이미 적어뒀어요!"
             $0.font = .KoreanCaption2
             $0.textColor = .TextSecondary
         }
@@ -138,18 +131,12 @@ class CSMemberInputVC: UIViewController {
     }
     
     func setLayout() {
-        [header, titleMessage, searchBar, textFiledNotice, textFieldCounter, nextButton, searchListTableView, collectionView].forEach {
+        [titleMessage, searchBar, textFiledNotice, textFieldCounter, nextButton, searchListTableView, collectionView].forEach {
             view.addSubview($0)
         }
         
-        header.snp.makeConstraints {
-            $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
-            $0.leading.trailing.equalToSuperview()
-        }
-        
         titleMessage.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(30)
+            $0.top.equalToSuperview().offset(30)
             $0.centerX.equalToSuperview()
         }
         
@@ -182,7 +169,7 @@ class CSMemberInputVC: UIViewController {
         }
         
         nextButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-10)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(48)
         }
@@ -281,9 +268,7 @@ class CSMemberInputVC: UIViewController {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.nextButton.applyStyle(.primaryCherryPressed)
-                
-                let vc = CSMemberConfirmVC()
-                self.navigationController?.pushViewController(vc, animated: true)
+                pageChangeDelegate?.changePageToSecondView()
             })
             .disposed(by: disposeBag)
         
@@ -387,29 +372,3 @@ extension CSMemberInputVC: UITableViewDelegate {
         return 40 - 4
     }
 }
-
-extension CSMemberInputVC: UITextFieldDelegate {
-    func setKeyboardNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let keyboardHeight: CGFloat
-            keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
-            self.nextButton.snp.updateConstraints {
-                $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(keyboardHeight + 26)
-            }
-        }
-    }
-    
-    func setKeyboardObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-    }
-    
-    func setKeyboardObserverRemove() {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-}
-

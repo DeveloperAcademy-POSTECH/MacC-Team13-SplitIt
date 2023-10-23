@@ -59,7 +59,7 @@ class CSTitleInputVC: UIViewController {
         }
         
         textFiledNotice.do {
-            $0.text = "여기에 사용을 돕는 문구가 들어가요"
+            $0.text = "ex) 광란의 곱창팟, 집들이 장보기, 노래방"
             $0.font = .KoreanCaption2
             $0.textColor = .TextSecondary
         }
@@ -70,7 +70,6 @@ class CSTitleInputVC: UIViewController {
         
         nextButton.do {
             $0.setTitle("다음으로", for: .normal)
-            $0.applyStyle(.deactivate )
         }
     }
     
@@ -121,7 +120,7 @@ class CSTitleInputVC: UIViewController {
         output.showCSTotalAmountView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                nextButton.applyStyle(.primaryWatermelonPressed)
+                self.nextButton.applyStyle(.primaryWatermelonPressed)
                 let vc = CSTotalAmountInputVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
@@ -131,7 +130,7 @@ class CSTitleInputVC: UIViewController {
             .delay(.milliseconds(500))
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                nextButton.applyStyle(.primaryWatermelon)
+                self.nextButton.applyStyle(.primaryWatermelon)
             })
             .disposed(by: disposeBag)
         
@@ -141,8 +140,8 @@ class CSTitleInputVC: UIViewController {
         
         output.titleCount
             .distinctUntilChanged()
-            .drive(onNext: { str in
-                guard let count = str.first else { return }
+            .drive(onNext: { [weak self] str in
+                guard let self = self, let count = str.first else { return }
                 self.nextButton.applyStyle(count == "0" ? .deactivate : .primaryWatermelon)
             })
             .disposed(by: disposeBag)
