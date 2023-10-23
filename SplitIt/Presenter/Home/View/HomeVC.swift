@@ -227,15 +227,17 @@ class HomeVC: UIViewController {
             $0.center.equalToSuperview()
             
         }
+        
         logoImage.snp.makeConstraints {
             $0.width.equalTo(130)
             $0.height.equalTo(92)
             $0.top.equalToSuperview().offset(20)
             $0.left.equalToSuperview().offset(20)
         }
+        
         mainTextView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(437)
-            $0.center.equalToSuperview()
+            $0.centerX.equalToSuperview()
             $0.width.equalTo(280)
             $0.height.equalTo(200)
         }
