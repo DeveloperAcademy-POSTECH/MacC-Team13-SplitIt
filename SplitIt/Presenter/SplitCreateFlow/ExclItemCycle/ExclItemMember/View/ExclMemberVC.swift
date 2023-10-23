@@ -18,10 +18,9 @@ class ExclMemberVC: UIViewController {
     
     var dataSource: RxCollectionViewSectionedReloadDataSource<ExclMemberSectionModel>!
     
-    let header = NavigationHeader()
     let titleMessage = UILabel()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-    let nextButton = UIButton()
+    let nextButton = SPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,21 +31,17 @@ class ExclMemberVC: UIViewController {
     }
     
     func setAttribute() {
-        view.backgroundColor = UIColor(hex: 0xF8F7F4)
-        
-        header.do {
-            $0.configureBackButton(viewController: self)
-        }
+        view.backgroundColor = .SurfacePrimary
         
         titleMessage.do {
             $0.text = "계산에서 제외할 사람을 선택해주세요"
-            $0.font = .systemFont(ofSize: 18)
+            $0.font = .KoreanBody
+            $0.textColor = .TextPrimary
         }
         
         nextButton.do {
-            $0.setTitle("다음으로", for: .normal)
-            $0.layer.cornerRadius = 24
-            $0.backgroundColor = UIColor(hex: 0x19191B)
+            $0.setTitle("결과 확인하기", for: .normal)
+            $0.applyStyle(.primaryPear)
         }
         
         setCollectionView()
@@ -177,7 +172,7 @@ class ExclMemberVC: UIViewController {
                 
                 switch sectionModel.type {
                 case .button(_:):
-                    let vc = ExclItemNameInputVC()
+                    let vc = ExclPageController()
                     self.navigationController?.pushViewController(vc, animated: true)
                 case .data(let target):
                     let tappedExclMemberIdx = target.items[indexPath.row].exclMemberIdx
@@ -188,18 +183,12 @@ class ExclMemberVC: UIViewController {
     }
     
     func setLayout() {
-        [header, titleMessage, collectionView, nextButton].forEach {
+        [titleMessage, collectionView, nextButton].forEach {
             view.addSubview($0)
         }
         
-        header.snp.makeConstraints {
-            $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview()
-        }
-        
         titleMessage.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(30)
+            $0.top.equalToSuperview().offset(30)
             $0.centerX.equalToSuperview()
         }
         
@@ -210,7 +199,7 @@ class ExclMemberVC: UIViewController {
         }
         
         nextButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-34)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(48)
         }
@@ -229,13 +218,21 @@ class ExclMemberVC: UIViewController {
         output.presentResultView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-
+                            
                 let vc = ResultVC()
                 self.navigationController?.pushViewController(vc, animated: true)
                 SplitRepository.share.updateDataToDB()
+
             })
             .disposed(by: disposeBag)
         
+        output.presentResultView
+            .delay(.milliseconds(500))
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.nextButton.applyStyle(.primaryPear)
+            })
+            .disposed(by: disposeBag)
     }
     
 }

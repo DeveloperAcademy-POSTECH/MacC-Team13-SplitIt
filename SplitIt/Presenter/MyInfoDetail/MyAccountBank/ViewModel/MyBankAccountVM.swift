@@ -12,9 +12,7 @@ import SnapKit
 class MyBankAccountVM {
     
     var disposeBag = DisposeBag()
-    let payData = PayData.shared.payData
-    let userData = UserData.shared.userData
-    
+    let userDefault = UserDefaults.standard
     
     
     struct Input {
@@ -35,7 +33,7 @@ class MyBankAccountVM {
         let toggleTossPay: Observable<Void>
         let toggleKakaoPay: Observable<Void>
         let togglenaverPay: Observable<Void>
-        
+
         
     }
     
@@ -48,50 +46,38 @@ class MyBankAccountVM {
         let tossTapped = input.tossTapped
         let kakaoTapped = input.kakaoTapeed
         let naverTapped = input.naverTapped
-        
-        var updatedPayData = self.payData.value
-        var inputAccount: String = userData.value.account
-        var inputName: String = userData.value.name
-        
-        
-        
+
+
+        var inputAccount: String = ""
+        var inputName: String = ""
+
         inputNameText
             .bind(onNext: { text in
-                print(text)
-                inputName = text
+                if text != "" {
+                    inputName = text
+                }
             })
             .disposed(by: disposeBag)
         
-        
         tossTapped
             .subscribe(onNext: {
-                if let index = updatedPayData.firstIndex(where: { $0.socialPayIdx == 1 }) {
-                    updatedPayData[index].isTrue.toggle()
-                    
-                }
-                self.payData.accept(updatedPayData)
-                print(updatedPayData)
+                let isToggled = !self.userDefault.bool(forKey: "tossPay")
+                self.userDefault.set(isToggled, forKey: "tossPay")
             })
             .disposed(by: disposeBag)
         
         
         kakaoTapped
             .subscribe(onNext: {
-                if let index = updatedPayData.firstIndex(where: { $0.socialPayIdx == 2 }) {
-                    updatedPayData[index].isTrue.toggle()
-                }
-                self.payData.accept(updatedPayData)
-                print(updatedPayData)
+                let iskakaoToggled = !self.userDefault.bool(forKey: "kakaoPay")
+                self.userDefault.set(iskakaoToggled, forKey: "kakaoPay")
             })
             .disposed(by: disposeBag)
         
         naverTapped
             .subscribe(onNext: {
-                if let index = updatedPayData.firstIndex(where: { $0.socialPayIdx == 3 }) {
-                    updatedPayData[index].isTrue.toggle()
-                }
-                self.payData.accept(updatedPayData)
-                print(updatedPayData)
+                let isnaverToggled = !self.userDefault.bool(forKey: "naverPay")
+                self.userDefault.set(isnaverToggled, forKey: "naverPay")
             })
             .disposed(by: disposeBag)
         
@@ -103,21 +89,32 @@ class MyBankAccountVM {
             })
             .disposed(by: disposeBag)
         
+        
         editDoneBtnTapped
             .drive(onNext: {
                 print("수정버튼 눌림")
-                UserData.shared.updateUserName(inputName == "" ? self.userData.value.name : inputName)
-                UserData.shared.updateUserAccount(inputAccount == "" ? self.userData.value.account : inputAccount)
+                
+                if inputAccount != "" {
+                    UserDefaults.standard.set(inputAccount, forKey: "userAccount")
+                }
+                
+                if inputName != "" {
+                    UserDefaults.standard.set(inputName, forKey: "userName")
+                }
+                
+               
                 
             })
             .disposed(by: disposeBag)
         
+     
         
         let output = Output(popToMyInfoView: editDoneBtnTapped,
                             showBankModel: selectBackTapped,
                             toggleTossPay: tossTapped,
                             toggleKakaoPay: kakaoTapped,
                             togglenaverPay: naverTapped
+                         
         )
         
         return output

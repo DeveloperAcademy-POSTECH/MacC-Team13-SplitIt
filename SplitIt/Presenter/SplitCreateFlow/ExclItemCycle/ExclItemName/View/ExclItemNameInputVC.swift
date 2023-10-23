@@ -9,19 +9,23 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+protocol ExclItemNamePageChangeDelegate: AnyObject {
+    func changePageToSecondView()
+}
+
 class ExclItemNameInputVC: UIViewController {
     
     var disposeBag = DisposeBag()
     
     let viewModel = ExclItemNameInputVM()
     
-    let header = NavigationHeader()
+    weak var pageChangeDelegate: ExclItemNamePageChangeDelegate?
+    
     let titleMessage = UILabel()
-    let nameTextFiled = UITextField()
-    let nameTextSuffix = UILabel()
+    let nameTextFiled = SPTextField()
     let textFiledCounter = UILabel()
     let textFiledNotice = UILabel()
-    let nextButton = UIButton()
+    let nextButton = SPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,65 +35,44 @@ class ExclItemNameInputVC: UIViewController {
         setBinding()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        setKeyboardNotification()
-        self.nameTextFiled.becomeFirstResponder()
-    }
-    
     func setAttribute() {
-        view.backgroundColor = UIColor(hex: 0xF8F7F4)
-        
-        header.do {
-            $0.configureBackButton(viewController: self)
-        }
+        view.backgroundColor = .SurfacePrimary
         
         titleMessage.do {
             $0.text = "따로 계산할 것은 무엇인가요?"
-            $0.font = .systemFont(ofSize: 18)
+            $0.font = .KoreanBody
+            $0.textColor = .TextPrimary
         }
         
         nameTextFiled.do {
-            $0.layer.cornerRadius = 8
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
-            $0.layer.borderWidth = 1
-            $0.textAlignment = .center
-            $0.font = .systemFont(ofSize: 24)
-        }
-        
-        nameTextSuffix.do {
-            $0.text = "값"
-            $0.font = .systemFont(ofSize: 15)
+            $0.applyStyle(.elseValue)
+            $0.font = .KoreanTitle3
+            $0.autocorrectionType = .no
+            $0.spellCheckingType = .no
         }
         
         textFiledNotice.do {
-            $0.text = "여기에 사용을 돕는 문구가 들어가요"
-            $0.font = .systemFont(ofSize: 12)
+            $0.text = "ex) 술, 삼겹살, 마라샹궈, 오이냉국"
+            $0.font = .KoreanCaption2
+            $0.textColor = .TextSecondary
+        }
+        
+        textFiledCounter.do {
+            $0.font = .KoreanCaption2
         }
         
         nextButton.do {
             $0.setTitle("다음으로", for: .normal)
-            $0.layer.cornerRadius = 24
-            $0.backgroundColor = UIColor(hex: 0x19191B)
         }
     }
     
     func setLayout() {
-        [header,titleMessage,nameTextFiled,textFiledCounter,textFiledNotice,nextButton].forEach {
+        [titleMessage,nameTextFiled,textFiledCounter,textFiledNotice,nextButton].forEach {
             view.addSubview($0)
         }
         
-        nameTextFiled.addSubview(nameTextSuffix)
-        
-        header.snp.makeConstraints {
-            $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview()
-        }
-        
         titleMessage.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(30)
+            $0.top.equalToSuperview().offset(30)
             $0.centerX.equalToSuperview()
         }
         
@@ -97,11 +80,6 @@ class ExclItemNameInputVC: UIViewController {
             $0.top.equalTo(titleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(60)
-        }
-        
-        nameTextSuffix.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().inset(20)
         }
         
         textFiledCounter.snp.makeConstraints {
@@ -115,7 +93,7 @@ class ExclItemNameInputVC: UIViewController {
         }
         
         nextButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-10)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(48)
         }
@@ -129,8 +107,16 @@ class ExclItemNameInputVC: UIViewController {
         output.showExclItemPriceView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let vc = ExclItemPriceInputVC()
-                self.navigationController?.pushViewController(vc, animated: true)
+                self.nextButton.applyStyle(.primaryPearPressed)
+                pageChangeDelegate?.changePageToSecondView()
+            })
+            .disposed(by: disposeBag)
+        
+        output.showExclItemPriceView
+            .delay(.milliseconds(500))
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.nextButton.applyStyle(.primaryPear)
             })
             .disposed(by: disposeBag)
         
@@ -138,13 +124,21 @@ class ExclItemNameInputVC: UIViewController {
             .drive(textFiledCounter.rx.text)
             .disposed(by: disposeBag)
         
+        output.nameCount
+            .distinctUntilChanged()
+            .drive(onNext: { str in
+                guard let count = str.first else { return }
+                self.nextButton.applyStyle(count == "0" ? .deactivate : .primaryPear)
+            })
+            .disposed(by: disposeBag)
+        
         output.textFieldIsValid
             .distinctUntilChanged()
             .drive(onNext: { [weak self] isValid in
                 guard let self = self else { return }
                 self.textFiledCounter.textColor = isValid
-                ? UIColor(hex: 0xCCCCCC)
-                : UIColor(hex: 0xFF3030)
+                ? .TextSecondary
+                : .AppColorStatusError
             })
             .disposed(by: disposeBag)
         
@@ -161,37 +155,3 @@ class ExclItemNameInputVC: UIViewController {
             .disposed(by: disposeBag)
     }
 }
-
-extension ExclItemNameInputVC: UITextFieldDelegate {
-    func setKeyboardNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let keyboardHeight: CGFloat
-            keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
-            self.nextButton.snp.updateConstraints {
-                $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(keyboardHeight + 26)
-            }
-        }
-    }
-    
-    @objc private func keyboardWillHide() {
-        self.nextButton.snp.updateConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-        }
-    }
-    
-    func setKeyboardObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    func setKeyboardObserverRemove() {
-        NotificationCenter.default.removeObserver(self)
-    }
-}
-

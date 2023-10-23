@@ -20,14 +20,14 @@ class HomeVM {
     
     struct Output {
         let showCreateSplit: Driver<Void>
-        let showMoanaView: Driver<Void>
-        let showJerryView: Driver<Void>
+        let showInfoView: Driver<Void>
+        let showHistoryView: Driver<Void>
     }
 
     func transform(input: Input) -> Output {
         let showCreateSplit = input.splitItButtonTapped.asDriver()
-        let showMoanaView = input.myInfoButtonTapped.asDriver()
-        let showJerryView = input.recentSplitButtonTapped.asDriver()
+        let showInfoView = input.myInfoButtonTapped.asDriver()
+        let showHistoryView = input.recentSplitButtonTapped.asDriver()
         
         showCreateSplit
             .drive(onNext: {
@@ -36,8 +36,8 @@ class HomeVM {
             .disposed(by: disposeBag)
 
         return Output(showCreateSplit: showCreateSplit,
-                      showMoanaView: showMoanaView,
-                      showJerryView: showJerryView)
+                      showInfoView: showInfoView,
+                      showHistoryView: showHistoryView)
     }
 }
 

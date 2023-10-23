@@ -9,6 +9,10 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+protocol CSMemberPageChangeDelegate: AnyObject {
+    func changePageToSecondView()
+}
+
 class CSMemberInputVC: UIViewController {
     
     var disposeBag = DisposeBag()
@@ -16,15 +20,18 @@ class CSMemberInputVC: UIViewController {
     
     let viewModel = CSMemberInputVM()
     
-    let header = NavigationHeader()
+    weak var pageChangeDelegate: CSMemberPageChangeDelegate?
+    
     let titleMessage = UILabel()
     let textFieldCounter = UILabel()
     let textFiledNotice = UILabel()
-    let searchBar = UITextField()
+    let searchBar = SPTextField()
     let searchListTableView = UITableView()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     
-    let nextButton = UIButton()
+    lazy var buttonBottomMinY: CGFloat = 0
+    
+    let nextButton = SPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,46 +41,29 @@ class CSMemberInputVC: UIViewController {
         setBinding()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        setKeyboardNotification()
-        self.searchBar.becomeFirstResponder()
-    }
-
     func setAttribute() {
-        view.backgroundColor = UIColor(hex: 0xF8F7F4)
-        
-        header.do {
-            $0.configureBackButton(viewController: self)
-        }
+        view.backgroundColor = .SurfacePrimary
         
         titleMessage.do {
             $0.text = "누구와 함께했나요?"
+            $0.font = .KoreanBody
+            $0.textColor = .TextPrimary
         }
         
         searchBar.do {
-            $0.layer.cornerRadius = 8
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
-            $0.layer.borderWidth = 1
-            $0.textAlignment = .center
+            $0.applyStyle(.normal)
+            $0.autocorrectionType = .no
+            $0.spellCheckingType = .no
         }
         
         textFiledNotice.do {
-            $0.text = "여기에 사용을 돕는 문구가 들어가요"
-            $0.font = .systemFont(ofSize: 12)
-            $0.textColor = UIColor(hex: 0x7C7C7C)
+            $0.text = "'나'는 이미 적어뒀어요!"
+            $0.font = .KoreanCaption2
+            $0.textColor = .TextSecondary
         }
         
         textFieldCounter.do {
-            $0.font = .systemFont(ofSize: 12)
-            $0.textColor = UIColor(hex: 0x7C7C7C)
-        }
-        
-        nextButton.do {
-            $0.setTitle("다음으로", for: .normal)
-            $0.layer.cornerRadius = 24
-            $0.backgroundColor = UIColor(hex: 0x19191B)
+            $0.font = .KoreanCaption2
         }
 
         setSearchTableView()
@@ -84,8 +74,8 @@ class CSMemberInputVC: UIViewController {
         searchListTableView.do {
             $0.register(cellType: CSMemberInputSearchCell.self)
             $0.register(headerFooterViewType: CSMemberInputSearchFooter.self)
-            $0.backgroundColor = UIColor(hex: 0xE5E4E0)
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
+            $0.backgroundColor = .AppColorGrayscale25K
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 8
             $0.layer.zPosition = 1
@@ -101,11 +91,11 @@ class CSMemberInputVC: UIViewController {
         let layout = createLayout()
 
         collectionView.do {
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
             $0.collectionViewLayout = layout
             $0.register(cellType: CSMemberInputCell.self)
-            $0.backgroundColor = UIColor(hex: 0xE5E4E0)
+            $0.backgroundColor = .AppColorGrayscale25K
             $0.layer.cornerRadius = 16
         }
     }
@@ -141,18 +131,12 @@ class CSMemberInputVC: UIViewController {
     }
     
     func setLayout() {
-        [header, titleMessage, searchBar, textFiledNotice, textFieldCounter, nextButton, searchListTableView, collectionView].forEach {
+        [titleMessage, searchBar, textFiledNotice, textFieldCounter, nextButton, searchListTableView, collectionView].forEach {
             view.addSubview($0)
         }
         
-        header.snp.makeConstraints {
-            $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview()
-        }
-        
         titleMessage.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(30)
+            $0.top.equalToSuperview().offset(30)
             $0.centerX.equalToSuperview()
         }
         
@@ -185,7 +169,7 @@ class CSMemberInputVC: UIViewController {
         }
         
         nextButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-10)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(48)
         }
@@ -214,6 +198,20 @@ class CSMemberInputVC: UIViewController {
                     csCell.configure(item: item, indexPath: cellIndexPath, viewModel: self.viewModel)
                 }
             }
+            .disposed(by: disposeBag)
+        
+        output.memberList
+            .map { $0.count }
+            .asDriver(onErrorJustReturn: 0)
+            .drive(onNext: { [weak self] membersCount in
+                guard let self = self else { return }
+                self.nextButton.setTitle(membersCount == 1
+                                         ? "혼자서 돈을 썼어요"
+                                         : "\(membersCount)명이서 돈을 썼어요", for: .normal)
+                self.nextButton.applyStyle(membersCount == 1
+                                           ? .deactivate
+                                           : .primaryCherry)
+            })
             .disposed(by: disposeBag)
         
         output.searchList
@@ -245,6 +243,16 @@ class CSMemberInputVC: UIViewController {
             .disposed(by: disposeBag)
         
         output.textFieldIsValid
+            .distinctUntilChanged()
+            .drive(onNext: { [weak self] isValid in
+                guard let self = self else { return }
+                self.textFieldCounter.textColor = isValid
+                ? .TextSecondary
+                : .AppColorStatusError
+            })
+            .disposed(by: disposeBag)
+        
+        output.textFieldIsValid
             .map { [weak self] isValid -> String in
                 guard let self = self else { return "" }
                 if !isValid {
@@ -259,8 +267,16 @@ class CSMemberInputVC: UIViewController {
         output.showCSMemberConfirmView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let vc = CSMemberConfirmVC()
-                self.navigationController?.pushViewController(vc, animated: true)
+                self.nextButton.applyStyle(.primaryCherryPressed)
+                pageChangeDelegate?.changePageToSecondView()
+            })
+            .disposed(by: disposeBag)
+        
+        output.showCSMemberConfirmView
+            .delay(.milliseconds(500))
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.nextButton.applyStyle(.primaryCherry)
             })
             .disposed(by: disposeBag)
         
@@ -356,37 +372,3 @@ extension CSMemberInputVC: UITableViewDelegate {
         return 40 - 4
     }
 }
-
-extension CSMemberInputVC: UITextFieldDelegate {
-    func setKeyboardNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let keyboardHeight: CGFloat
-            keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
-            self.nextButton.snp.updateConstraints {
-                $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(keyboardHeight + 26)
-            }
-        }
-    }
-    
-    @objc private func keyboardWillHide() {
-        self.nextButton.snp.updateConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-        }
-    }
-    
-    func setKeyboardObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    func setKeyboardObserverRemove() {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-}
-

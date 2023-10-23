@@ -20,6 +20,7 @@ class CSMemberConfirmHeader: UITableViewHeaderFooterView, Reusable {
     
     let title = UILabel()
     let totalAmount = UILabel()
+    let krwLabel = UILabel()
     let memberCount = UILabel()
 
     override init(reuseIdentifier: String?) {
@@ -36,33 +37,45 @@ class CSMemberConfirmHeader: UITableViewHeaderFooterView, Reusable {
     
     func setAttribute() {
         contentView.do {
-            $0.backgroundColor = UIColor(hex: 0xE5E4E0)
+            $0.backgroundColor = .SurfacePrimary
             // MARK: Bottom Border만 추가
 //            $0.layer.borderWidth = 1
 //            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
         }
         
         title.do {
-            $0.font = .systemFont(ofSize: 27)
+            $0.font = .KoreanTitle2
+            $0.textColor = .TextPrimary
         }
         
         totalAmount.do {
-            $0.font = .systemFont(ofSize: 22)
+            $0.font = .KoreanBody
+            $0.textColor = .TextPrimary
+        }
+        
+        krwLabel.do {
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextPrimary
         }
     }
     
     func setLayout() {
-        [title, totalAmount, memberCount].forEach { contentView.addSubview($0)
+        [title, totalAmount, krwLabel, memberCount].forEach { contentView.addSubview($0)
         }
 
         title.snp.makeConstraints {
             $0.top.equalToSuperview().inset(16)
-            $0.leading.equalToSuperview().inset(16)
+            $0.leading.equalToSuperview().inset(20)
         }
         
         totalAmount.snp.makeConstraints {
             $0.leading.equalTo(title.snp.leading)
             $0.bottom.equalToSuperview().inset(10)
+        }
+        
+        krwLabel.snp.makeConstraints {
+            $0.leading.equalTo(totalAmount.snp.trailing)
+            $0.bottom.equalTo(totalAmount.snp.bottom)
         }
         
         memberCount.snp.makeConstraints {
@@ -100,8 +113,8 @@ class CSMemberConfirmHeader: UITableViewHeaderFooterView, Reusable {
         let rangeLengh = text.distance(from: startIndex, to: endIndex)
         let largeTextRange = NSRange(location: location, length: rangeLengh)
         
-        let attributedText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)])
-        attributedText.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 22)], range: largeTextRange)
+        let attributedText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.font: UIFont.KoreanCaption1])
+        attributedText.addAttributes([NSAttributedString.Key.font: UIFont.KoreanBody], range: largeTextRange)
         return attributedText
     }
 }

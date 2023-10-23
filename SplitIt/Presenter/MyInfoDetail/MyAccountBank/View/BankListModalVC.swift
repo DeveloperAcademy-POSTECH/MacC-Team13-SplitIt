@@ -26,6 +26,7 @@ class BankListModalVC: UIViewController, UIScrollViewDelegate {
         
         collectionView.delegate = self
         
+        setAddView()
         setAttribute()
         setCollectionView()
         setLayout()
@@ -76,24 +77,27 @@ class BankListModalVC: UIViewController, UIScrollViewDelegate {
 
         collectionView.rx.modelSelected(Bank.self)
             .subscribe(onNext: { bank in
-                UserData.shared.updateUserBankName(bank.name)
+                UserDefaults.standard.set(bank.name, forKey: "userBank")
+               // UserData.shared.updateUserBankName(bank.name)
                 self.dismiss(animated: true, completion: nil)
                 self.selectedBankName.accept(bank.name)
             })
             .disposed(by: disposeBag)
     }
     
- 
+    func setAddView() {
+        [topView, collectionView].forEach {
+            view.addSubview($0)
+        }
+        
+        topView.addSubview(selectedBankLabel)
+    }
+    
     
     func setAttribute() {
-        view.addSubview(topView)
-        view.addSubview(collectionView)
-        topView.addSubview(selectedBankLabel)
         
         view.backgroundColor = .white
-        
         collectionView.backgroundColor = .white
-        
         topView.backgroundColor = .white
         
         selectedBankLabel.text = "정산받을 은행을 선택해주세요"

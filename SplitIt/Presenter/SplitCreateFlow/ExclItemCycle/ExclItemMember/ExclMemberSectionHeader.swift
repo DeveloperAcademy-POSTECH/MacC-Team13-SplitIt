@@ -1,3 +1,5 @@
+
+
 //
 //  ExclMemberSectionHeader.swift
 //  SplitIt
@@ -12,16 +14,23 @@ import Reusable
 import RxSwift
 import RxCocoa
 
-class ExclMemberSectionHeader: UICollectionReusableView, Reusable {
-    
+
+protocol CustomAlertVCDelegate: AnyObject {
+    func didDeleteItem(item: ExclMemberSection)
+}
+
+class ExclMemberSectionHeader: UICollectionReusableView, Reusable, CustomAlertVCDelegate {
+        
+
     var disposeBag = DisposeBag()
     
     let headerTitle = UILabel()
     let deleteButton = UIButton()
     
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         setAttribute()
         setLayout()
     }
@@ -36,21 +45,59 @@ class ExclMemberSectionHeader: UICollectionReusableView, Reusable {
         disposeBag = DisposeBag()
     }
     
+    
+    func configure(item: ExclMemberSection, sectionIndex: Int) {
+        let numberFormatter = NumberFormatterHelper()
+        
+        self.backgroundColor = backgroundColor(forSectionIndex: sectionIndex)
+        
+        let name = item.exclItem.name
+        let price = numberFormatter.formattedString(from: item.exclItem.price)
+        
+        headerTitle.text = "[\(name) 값 / \(price) KRW]"
+
+        deleteButton.rx.tap
+            .asDriver()
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                print("헤더 눌림")
+                self.presentCustomAlert(item: item, name: name)
+            })
+            .disposed(by: disposeBag)
+
+    }
+    
+    
+    private func presentCustomAlert(item: ExclMemberSection, name: String) {
+        print("헤더 눌림")
+        let customAlertVC = CustomAlertVC()
+        customAlertVC.modalPresentationStyle = .overFullScreen
+        customAlertVC.delegate = self
+        customAlertVC.item = item
+        customAlertVC.itemName = name
+        self.window?.rootViewController?.present(customAlertVC, animated: false)
+    }
+    
+    func didDeleteItem(item: ExclMemberSection) {
+           SplitRepository.share.deleteExclItemAndRelatedData(exclItemIdx: item.exclItem.exclItemIdx)
+           print("항목이 삭제되었습니다.")
+       }
+    
     func setAttribute() {
         self.do {
             $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             $0.layer.cornerRadius = 8
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
         }
         
         headerTitle.do {
-            $0.textColor = UIColor(hex: 0x202020)
-            $0.font = .systemFont(ofSize: 12, weight: .light)
+            $0.textColor = .TextPrimary
+            $0.font = .KoreanCaption2
         }
         
         deleteButton.do {
-            $0.setImage(UIImage(named: "XMark"), for: .normal)
+            $0.setImage(UIImage(named: "DeleteIconTypeC"), for: .normal)
         }
     }
     
@@ -68,30 +115,18 @@ class ExclMemberSectionHeader: UICollectionReusableView, Reusable {
         }
     }
 
-    func configure(item: ExclMemberSection, sectionIndex: Int) {
-        let numberFormatter = NumberFormatterHelper()
+//    func deleteSectionRelatedExclItem(item: ExclMemberSection) {
+//        SplitRepository.share.deleteExclItemAndRelatedData(exclItemIdx: item.exclItem.exclItemIdx)
+//    }
         
-        self.backgroundColor = backgroundColor(forSectionIndex: sectionIndex)
-        
-        let name = item.exclItem.name
-        let price = numberFormatter.formattedString(from: item.exclItem.price)
-        
-        headerTitle.text = "[\(name) 값 / \(price) KRW]"
-        
-        deleteButton.rx.tap
-            .asDriver()
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.deleteSectionRelatedExclItem(item: item)
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    func deleteSectionRelatedExclItem(item: ExclMemberSection) {
-        SplitRepository.share.deleteExclItemAndRelatedData(exclItemIdx: item.exclItem.exclItemIdx)
-    }
-    
     func backgroundColor(forSectionIndex sectionIndex: Int) -> UIColor {
-        return sectionIndex % 2 == 1 ? UIColor(hex: 0xD3D3D3) : UIColor(hex: 0xF1F1F1)
+        return sectionIndex % 2 == 1 ? .AppColorGrayscale200 : .AppColorGrayscale50
     }
+    
+    
+    
 }
+
+
+
+

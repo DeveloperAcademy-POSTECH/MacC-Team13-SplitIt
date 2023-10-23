@@ -54,6 +54,19 @@ extension SplitRepository {
         self.memberLogArr.accept(RealmManager().bringMemberLogAll())
     }
     
+    /// csInfoIdx가 일치하는 csInfo만 필터링해서 하위 모든 Arr 패치
+    func fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: String) {
+        let realmManager = RealmManager()
+        csInfoArr.accept(realmManager.bringCSInfoWithCSInfoIdx(csInfoIdx: csInfoIdx))
+        self.currentCSInfo = csInfoArr.value.filter { $0.csInfoIdx == csInfoIdx }.first
+        
+        guard let split = csInfoArr.value.first else { return }
+        let splitIdx = split.splitIdx
+        splitArr.accept(realmManager.bringSplitWithSplitIdx(splitIdx: splitIdx))
+        
+        fetchAllDataBaseSplit(true, realmManager: realmManager)
+    }
+    
     /// false면 split 기준, true면 csInfo 기준으로 하위 데이터 모두를 패치
     private func fetchAllDataBaseSplit(_ isCSInfoStart: Bool, realmManager: RealmManager) {
         if !isCSInfoStart {
@@ -93,11 +106,6 @@ extension SplitRepository {
         let newCSMember: CSMember = CSMember(csInfoIdx: currentCSInfo!.csInfoIdx, name: name)
         csMembers.append(newCSMember)
         csMemberArr.accept(csMembers)
-    }
-    
-    // TODO: 친구 목록에 있는 경우 친구모델에서 name만 빼와서 csMember 생성 - 기존 친구 목록에 있는 경우 동작
-    func createCSMemberFromFriend() {
-        
     }
     
     /// CSInfoIdx, name으로 ExclItem 생성
@@ -160,24 +168,6 @@ extension SplitRepository {
         exclItemArr.accept(exclItems)
         
         createExclMember(exclItemIdx: newExclItem.exclItemIdx)
-    }
-    
-    /// csInfoIdx가 일치하는 csInfo만 필터링해서 하위 모든 Arr 패치
-    func inputCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: String) {
-        let realmManager = RealmManager()
-        csInfoArr.accept(realmManager.bringCSInfoWithCSInfoIdx(csInfoIdx: csInfoIdx))
-        
-        guard let split = csInfoArr.value.first else { return }
-        let splitIdx = split.splitIdx
-        splitArr.accept(realmManager.bringSplitWithSplitIdx(splitIdx: splitIdx))
-        
-        fetchAllDataBaseSplit(true, realmManager: realmManager)
-        
-        print(splitArr.value)
-        print(csInfoArr.value)
-        print(csMemberArr.value)
-        print(exclItemArr.value)
-        print(exclMemberArr.value)
     }
 }
 
@@ -321,7 +311,7 @@ extension SplitRepository {
         }
         
         csMemberArr.accept(newCSMembers)
-        realmManager.deleteCSMember(csMemberIdxArr: [deleteCSMember!.csInfoIdx])
+        realmManager.deleteCSMember(csMemberIdxArr: [deleteCSMember!.csMemberIdx])
         
         // 만약 csMember가 하나도 없다면 해당 csInfo 아래 모든 데이터 삭제
         if newCSMembers.isEmpty {

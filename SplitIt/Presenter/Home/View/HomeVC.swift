@@ -21,16 +21,19 @@ class HomeVC: UIViewController {
     let viewModel = HomeVM()
     
     let myInfoButton: UIButton = UIButton()
-    let mainImage: UIView = UIView()
+    let myInfoButtonImage: UIImageView = UIImageView()
+    
+    let mainView: UIView = UIView()
+    let mainImage: UIImageView = UIImageView()
+    
+    let mainTextView: UIView = UIView()
+    let logoImage: UIImageView = UIImageView()
     let mainTextLabel: UILabel = UILabel()
-    let subTextLabel: UILabel = UILabel()
-    let splitItButton: UIButton = UIButton()
-    let devider: UIView = UIView()
-    let recentSplitTextLabel: UILabel = UILabel()
+    
+    let splitItButton: SPButton = SPButton()
     let historyButton: UIButton = UIButton()
-    let historyButtonLabel: UILabel = UILabel()
     let historyButtonImage: UIImageView = UIImageView()
-    let recentSplitCollectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,23 +53,53 @@ class HomeVC: UIViewController {
             .drive(onNext: {
                 let vc = CSTitleInputVC()
                 self.navigationController?.pushViewController(vc, animated: true)
+                self.splitItButton.applyStyle(.primaryWatermelonPressed)
             })
             .disposed(by: disposeBag)
         
-        output.showMoanaView
+        //버튼 원 상태로 돌아오게 만드는 버튼
+        output.showCreateSplit
+            .delay(.milliseconds(500))
+           .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+            self.splitItButton.applyStyle(.primaryWatermelon)
+            })
+            .disposed(by: disposeBag)
+        
+        output.showInfoView
             .drive(onNext: {
                 // MARK: 모아나가 연결할 뷰로 수정
                 let vc = MyInfoVC()
                 self.navigationController?.pushViewController(vc, animated: true)
+                self.myInfoButton.backgroundColor = UIColor.lightGray
+                
             })
             .disposed(by: disposeBag)
         
-        output.showJerryView
+        output.showInfoView
+            .delay(.milliseconds(500))
+           .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+               self.myInfoButton.backgroundColor = UIColor.white
+            })
+            .disposed(by: disposeBag)
+        
+        output.showHistoryView
             .drive(onNext: {
                 // MARK: 제리가 연결할 뷰로 수정
-                print("제리뷰 이동") // 수정 후 삭제
-//                let vc = HomeVC()
-//                self.navigationController?.pushViewController(vc, animated: true)
+                print("제리뷰 이동 & 히스토리뷰 이동") // 수정 후 삭제
+
+                let vc = CSEditListVC()
+                self.navigationController?.pushViewController(vc, animated: true)
+                self.historyButton.backgroundColor = UIColor.lightGray
+            })
+            .disposed(by: disposeBag)
+        
+        output.showHistoryView
+            .delay(.milliseconds(500))
+           .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+               self.historyButton.backgroundColor = UIColor.white
             })
             .disposed(by: disposeBag)
     }
@@ -75,131 +108,154 @@ class HomeVC: UIViewController {
         view.backgroundColor = .systemBackground
         
         myInfoButton.do {
-            $0.setImage(UIImage(systemName: "person.circle.fill",
-                                withConfiguration: UIImage.SymbolConfiguration(font: UIFont.systemFont(ofSize: 40))), for: .normal)
-            $0.tintColor = UIColor.gray
-        }
-        
-        mainImage.do {
-            $0.backgroundColor = UIColor.blue
-        }
-        
-        mainTextLabel.do {
-            $0.text = "혹시... 카드 긁으셨나요?"
-            $0.font = UIFont.systemFont(ofSize: 18)
-            $0.textColor = UIColor.black
-        }
-        
-        subTextLabel.do {
-            $0.text = "스플리릿 시간입니다!"
-            $0.font = UIFont.systemFont(ofSize: 21)
-            $0.textColor = UIColor.black
-        }
-        
-        splitItButton.do {
-            $0.setTitle("♦ Split it!", for: .normal)
-            $0.setTitleColor(UIColor.black, for: .normal)
-            $0.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-            $0.backgroundColor = UIColor.green
-            $0.layer.cornerRadius = 20
-            $0.clipsToBounds = true
+            $0.layer.cornerRadius = 8
+            $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.black.cgColor
         }
         
-        devider.do {
-            $0.backgroundColor = UIColor.gray
-            $0.layer.opacity = 0.3
+        myInfoButtonImage.do {
+            $0.image = UIImage(systemName:"person.fill")
+            $0.tintColor = UIColor.black
         }
         
-        recentSplitTextLabel.do {
-            $0.text = "최근 스플리릿 내역"
-            $0.font = UIFont.systemFont(ofSize: 21)
-            $0.textColor = UIColor.black
-        }
-        
-        historyButtonLabel.do {
-            $0.text = "더보기"
-            $0.font = UIFont.systemFont(ofSize: 12)
-            $0.textColor = UIColor.black
+        historyButton.do {
+            $0.layer.cornerRadius = 8
+            $0.layer.borderWidth = 1
+            $0.layer.borderColor = UIColor.black.cgColor
         }
         
         historyButtonImage.do {
-            $0.image = UIImage(systemName: "chevron.right")
+            $0.image = UIImage(systemName: "book.fill")
             $0.tintColor = UIColor.black
         }
+        
+
+        mainView.do {
+            $0.backgroundColor = .AppColorBrandWatermelon
+            
+            $0.clipsToBounds = true
+            $0.layer.cornerRadius = 50
+            $0.layer.maskedCorners = CACornerMask(arrayLiteral: .layerMinXMinYCorner, .layerMaxXMinYCorner)
+            $0.layer.cornerRadius = 8
+            $0.layer.borderColor = UIColor.black.cgColor
+            
+            $0.layer.borderWidth = 1
+        }
+        
+        mainImage.do {
+            $0.image = UIImage(named: "SmartSplitIconWhite")
+            
+        }
+        
+        mainTextView.do {
+            $0.backgroundColor = .white
+            $0.clipsToBounds = true
+            $0.layer.cornerRadius = 50
+            $0.layer.maskedCorners = CACornerMask(arrayLiteral: .layerMinXMaxYCorner, .layerMaxXMaxYCorner)
+            $0.layer.cornerRadius = 8
+            $0.layer.borderColor = UIColor.black.cgColor
+            $0.layer.borderWidth = 1
+            
+        }
+        
+        logoImage.do {
+            $0.image = UIImage(named: "SplitItLogo")
+            $0.tintColor = UIColor.black
+        }
+        
+        mainTextLabel.do {
+            $0.text = "각자 먹고 쓴 만큼,\n똑똑하게 나누어 낼 수 있어요!"
+            $0.font = .KoreanCaption1
+            $0.textColor = UIColor.black
+            $0.numberOfLines = 0
+            $0.textAlignment = .right
+        }
+        
+        splitItButton.do {
+            $0.applyStyle(.primaryWatermelon)
+            $0.setTitle("나의 영수증 만들기", for: .normal)
+            $0.setTitleColor(UIColor.black, for: .normal)
+            $0.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        }
+        
+       
     }
 
     func setLayout() {
-        [myInfoButton, mainImage, mainTextLabel, subTextLabel, splitItButton, devider, recentSplitTextLabel, historyButton, recentSplitCollectionView].forEach {
+        [myInfoButton, mainView, mainTextView, splitItButton,  historyButton].forEach {
             view.addSubview($0)
         }
-        
-        historyButton.addSubview(historyButtonLabel)
+        [mainTextLabel, logoImage].forEach {
+            mainTextView.addSubview($0)
+        }
+        myInfoButton.addSubview(myInfoButtonImage)
         historyButton.addSubview(historyButtonImage)
+        mainView.addSubview(mainImage)
+        
         
         myInfoButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(62)
+            $0.top.equalToSuperview().offset(110)
             $0.width.height.equalTo(40)
-            $0.trailing.equalToSuperview().inset(16)
+            $0.leading.equalToSuperview().inset(63)
         }
         
-        mainImage.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(180)
-            $0.centerX.equalToSuperview()
-            $0.width.height.equalTo(165)
-        }
-        
-        mainTextLabel.snp.makeConstraints {
-            $0.top.equalTo(mainImage.snp.bottom).offset(24)
-            $0.centerX.equalToSuperview()
-        }
-        
-        subTextLabel.snp.makeConstraints {
-            $0.top.equalTo(mainTextLabel.snp.bottom).offset(4)
-            $0.centerX.equalToSuperview()
-        }
-        
-        splitItButton.snp.makeConstraints {
-            $0.top.equalTo(subTextLabel.snp.bottom).offset(24)
-            $0.height.equalTo(48)
-            $0.width.equalTo(130)
-            $0.centerX.equalToSuperview()
-        }
-        
-        devider.snp.makeConstraints {
-            $0.bottom.equalTo(recentSplitTextLabel.snp.top).offset(-16.5)
-            $0.horizontalEdges.equalToSuperview().inset(25)
-            $0.height.equalTo(1)
-        }
-        
-        recentSplitTextLabel.snp.makeConstraints {
-            $0.bottom.equalTo(recentSplitCollectionView.snp.top).offset(-8.5)
-            $0.leading.equalToSuperview().inset(30)
+        myInfoButtonImage.snp.makeConstraints {
+            $0.width.equalTo(26)
+            $0.height.equalTo(28)
+            $0.center.equalToSuperview()
+   
         }
         
         historyButton.snp.makeConstraints {
-            $0.centerY.equalTo(recentSplitTextLabel.snp.centerY)
-            $0.trailing.equalToSuperview().inset(30)
-            $0.height.equalTo(25)
+            $0.left.equalTo(111)
+            $0.top.equalToSuperview().offset(110)
+            $0.width.height.equalTo(40)
         }
         
         historyButtonImage.snp.makeConstraints {
-            $0.trailing.equalToSuperview()
-            $0.centerY.equalToSuperview()
-            $0.width.equalTo(8)
-            $0.height.equalTo(13.8)
+            $0.center.equalToSuperview()
+            $0.width.equalTo(29)
+            $0.height.equalTo(24)
         }
         
-        historyButtonLabel.snp.makeConstraints {
-            $0.trailing.equalTo(historyButtonImage.snp.leading).offset(-8)
-            $0.centerY.equalToSuperview()
+        mainView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(158)
+            $0.centerX.equalToSuperview()
+            $0.width.height.equalTo(280)
         }
         
-        recentSplitCollectionView.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-40)
-            $0.horizontalEdges.equalToSuperview().inset(30)
-            $0.height.equalTo(94)
+        mainImage.snp.makeConstraints { 
+            $0.center.equalToSuperview()
+            
         }
+        
+        logoImage.snp.makeConstraints {
+            $0.width.equalTo(130)
+            $0.height.equalTo(92)
+            $0.top.equalToSuperview().offset(20)
+            $0.left.equalToSuperview().offset(20)
+        }
+        
+        mainTextView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(437)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(280)
+            $0.height.equalTo(200)
+        }
+        
+        
+        mainTextLabel.snp.makeConstraints {
+            $0.right.equalToSuperview().offset(-20)
+            $0.bottom.equalToSuperview().offset(-20)
+        }
+
+        splitItButton.snp.makeConstraints {
+            $0.bottom.equalToSuperview().offset(-134)
+            $0.height.equalTo(48)
+            $0.width.equalTo(220)
+            $0.centerX.equalToSuperview()
+        }
+        
     }
 }
 

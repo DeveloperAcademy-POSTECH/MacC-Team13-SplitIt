@@ -11,22 +11,26 @@ import RxCocoa
 import SnapKit
 import Then
 
+
 class MyBankAccountVC: UIViewController {
+    
+    let clearButton = UIButton()
+    
+    let header = NaviHeader()
     
     let viewModel = MyBankAccountVM()
     var disposeBag = DisposeBag()
-    let payData = PayData.shared.payData
-    let userData = UserData.shared.userData
     let maxCharacterCount = 8
+    let userDefault = UserDefaults.standard
     
-    let header = NavigationHeader()
+    var isBankSelected: Bool = false
     
     var nameLabel = UILabel()
-    var nameTextField = UITextField()
+    var nameTextField = UITextField() //사용자 이름 받는 곳
     var nameCountLabel = UILabel()
     
     let bankView = UIView()
-    let bankNameLabel = UILabel()
+    var bankNameLabel = UILabel()
     let bankArrowImage = UIImageView()
     
     let bankLabel = UILabel()
@@ -40,39 +44,72 @@ class MyBankAccountVC: UIViewController {
     let leftBar = UIView()
     let rightBar = UIView()
     
+    let tossPayBtn = UIImageView()
+    let kakaoPayBtn = UIImageView()
+    let naverPayBtn = UIImageView()
+    
+    let tossLabel = UILabel()
+    let kakaoLabel = UILabel()
+    let naverLabel = UILabel()
+    
     let tossPayView = UIView()
     let kakaoPayView = UIView()
     let naverPayView = UIView()
     
+    let nameClearBtn = UIButton()
     
-    private let editDoneBtn = UIButton()
+    
+    private let editDoneBtn = SPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        
+        checkUserInfo()
         setAddView()
         setLayout()
         setAttribute()
         setBinding()
-        setPay()
-        //payColor()
+        asapRxData()
     }
     
-    @objc func keyboardWillShow(notification: Notification) {
-        if let userInfo = notification.userInfo {
-            if let keyboardSize = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-                let keyboardHeight = keyboardSize.height
-                // 키보드가 나타날 때 수행할 작업을 여기에 추가하세요.
-            }
-        }
+    //수정버튼 활성화 비활성화 선택해주는 함수
+    //MARK: 토마토! 버튼의 background 설정해두었어요 나중에 컨포넌트 바꿀 때 여기 색상 지우시면 될거에요
+    func checkUserInfo() {
+        let nameTextCheck = nameTextField.rx.text.orEmpty
+        let accountTextCheck = accountTextField.rx.text.orEmpty
+        
+        Observable.combineLatest(nameTextCheck, accountTextCheck)
+            .subscribe(onNext: { text1, text2 in
+                
+                if self.userDefault.string(forKey: "userName") != nil && // 값이 있다면!
+                    self.userDefault.string(forKey: "userBank") != nil &&
+                    self.userDefault.string(forKey: "userAccount") != nil {
+                    
+                    self.editDoneBtn.isEnabled = true
+                    self.editDoneBtn.applyStyle(.primaryWatermelon)
+                    
+                } else {
+                    
+                    if !text1.isEmpty && !text2.isEmpty && self.isBankSelected {
+                        self.editDoneBtn.isEnabled = true
+                        self.editDoneBtn.applyStyle(.primaryWatermelon)
+                    } else {
+                        self.editDoneBtn.isEnabled = false
+                        self.editDoneBtn.applyStyle(.deactivate)
+                        
+                    }
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        setKeyboardNotification()
+        self.nameTextField.becomeFirstResponder()
+    }
     
     func setAddView() {
         [header, nameLabel, nameTextField,
@@ -90,16 +127,24 @@ class MyBankAccountVC: UIViewController {
         [leftBar, rightBar, tossPayView, kakaoPayView, naverPayView].forEach {
             payView.addSubview($0)
         }
-        // view.addSubview(tossPayView)
+        [tossLabel, tossPayBtn].forEach {
+            tossPayView.addSubview($0)
+        }
+        [kakaoLabel, kakaoPayBtn].forEach {
+            kakaoPayView.addSubview($0)
+        }
+        [naverLabel, naverPayBtn].forEach {
+            naverPayView.addSubview($0)
+        }
     }
     
     func setLayout() {
         header.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             $0.leading.trailing.equalToSuperview()
         }
-        
+ 
         nameLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(112)
             make.left.equalToSuperview().offset(36)
@@ -113,9 +158,11 @@ class MyBankAccountVC: UIViewController {
         }
         
         nameCountLabel.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-5)
+            make.right.equalToSuperview().offset(-12)
             make.centerY.equalToSuperview()
         }
+        
+        
         
         bankLabel.snp.makeConstraints { make in
             make.top.equalTo(nameTextField.snp.bottom).offset(16)
@@ -153,6 +200,8 @@ class MyBankAccountVC: UIViewController {
             make.width.equalTo(330)
         }
         
+
+        
         payLabel.snp.makeConstraints { make in
             make.top.equalTo(accountTextField.snp.bottom).offset(16)
             make.left.equalToSuperview().offset(36)
@@ -186,11 +235,38 @@ class MyBankAccountVC: UIViewController {
             make.left.equalToSuperview().offset(32)
         }
         
+        tossPayBtn.snp.makeConstraints { make in
+            make.width.height.equalTo(56)
+            make.top.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+        
+        tossLabel.snp.makeConstraints { make in
+            make.width.equalTo(60)
+            make.height.equalTo(17)
+            make.top.equalTo(tossPayBtn.snp.bottom).offset(6)
+            make.centerX.equalToSuperview()
+        }
+        
         kakaoPayView.snp.makeConstraints { make in
             make.height.equalTo(80)
             make.width.equalTo(56)
             make.center.equalToSuperview()
         }
+        
+        kakaoPayBtn.snp.makeConstraints { make in
+            make.width.height.equalTo(56)
+            make.top.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+        
+        kakaoLabel.snp.makeConstraints { make in
+            make.width.equalTo(60)
+            make.height.equalTo(17)
+            make.top.equalTo(kakaoPayBtn.snp.bottom).offset(6)
+            make.centerX.equalToSuperview()
+        }
+        
         
         naverPayView.snp.makeConstraints { make in
             make.height.equalTo(80)
@@ -199,52 +275,43 @@ class MyBankAccountVC: UIViewController {
             make.right.equalToSuperview().offset(-32)
         }
         
+        naverPayBtn.snp.makeConstraints { make in
+            make.width.height.equalTo(56)
+            make.top.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+        
+        
+        naverLabel.snp.makeConstraints { make in
+            make.width.equalTo(60)
+            make.height.equalTo(17)
+            make.top.equalTo(naverPayBtn.snp.bottom).offset(6)
+            make.centerX.equalToSuperview()
+        }
+        
+        
         
         editDoneBtn.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             make.centerX.equalToSuperview()
-            make.height.equalTo(50)
-            make.width.equalTo(300)
+            make.height.equalTo(48)
+            make.width.equalTo(330)
         }
         
         
     }
-    func setPay() {
-        
-        var tossPayBtn = PayButton(labelText: "토스뱅크", btn: UIImage(systemName: "dollarsign.square.fill")!, check: UIImage(systemName: "checkmark.circle.fill")!)
-        
-        var kakaoPayBtn = PayButton(labelText: "카카오페이", btn: UIImage(systemName: "dollarsign.square.fill")!, check: UIImage(systemName: "checkmark.circle.fill")!)
-        
-        var naverPayBtn = PayButton(labelText: "네이버페이", btn: UIImage(systemName: "dollarsign.square.fill")!, check: UIImage(systemName: "checkmark.circle.fill")!)
-        
-        tossPayBtn.setupConstraints(in: tossPayView)
-        kakaoPayBtn.setupConstraints(in: kakaoPayView)
-        naverPayBtn.setupConstraints(in: naverPayView)
-        
-        
-        
-    }
-    
-    
-    func addTapGesture(to view: UIView) -> UITapGestureRecognizer {
-        let tapGesture = UITapGestureRecognizer()
-        view.addGestureRecognizer(tapGesture)
-        return tapGesture
-    }
-    
     
     func setAttribute() {
-        //왜 9글자로 나옴,,,?
+        //이름 글자수 카운트
         nameTextField.rx.text.orEmpty
-        //.map { "(\($0.count)/8)" }
             .map { text -> String in
                 let cnt = min(text.count, 8)
-                return "(\(cnt) / 8)"
+                return "(\(cnt)/8)"
             }
             .bind(to: nameCountLabel.rx.text)
             .disposed(by: disposeBag)
         
-        
+        //이름 글자수 제한
         nameTextField.rx.controlEvent(.editingChanged)
             .subscribe(onNext: { [weak self] _ in
                 guard let text = self?.nameTextField.text else { return }
@@ -256,48 +323,68 @@ class MyBankAccountVC: UIViewController {
             .disposed(by: disposeBag)
         
         
+        view.backgroundColor = .SurfaceBrandCalmshell
         
         
-        view.backgroundColor = .white
+       
+            header.do {
+                $0.applyStyle(.myInfo)
+                $0.setBackButton(viewController: self)
+            }
+            
         
-        self.navigationController?.navigationBar.topItem?.title = ""
-        self.navigationItem.title = "내 정보 수정"
-        
-        header.do {
-            $0.configureBackButton(viewController: self)
-        }
         
         nameLabel.do {
             $0.text = "이름"
-            $0.font = UIFont.systemFont(ofSize: 12)
-            $0.textColor = UIColor.gray
+            $0.font = UIFont.KoreanCaption2
+            $0.textColor = UIColor.TextPrimary
         }
-        
+        nameCountLabel.do {
+            $0.textColor = .TextSecondary
+            $0.font = UIFont.KoreanCaption2
+        }
         nameTextField.do {
             $0.layer.cornerRadius = 8
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.gray.cgColor
-            //placeholder의 색깔을 정하기 위함
-            $0.attributedPlaceholder = NSAttributedString(string: "이름을 입력해주세요",
-                                                          attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
             
+            $0.autocorrectionType = .no
+            $0.spellCheckingType = .no
+            //$0.clearButtonMode = .whileEditing
+            
+            //placeholder의 색깔
+            if UserDefaults.standard.string(forKey: "userName") == nil {
+                $0.attributedPlaceholder = NSAttributedString(string: "이름을 입력해주세요",
+                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextDeactivate])
+            } else {
+                //MARK: 토마토, 수정뷰로 넘어왔을 때, 검은색 글자면은 이미 입력되어있는 것처럼 보여서 회색으로 처리해두었어요
+                //                $0.attributedPlaceholder = NSAttributedString(string: UserDefaults.standard.string(forKey: "userName")!,
+                //                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                
+                $0.placeholder = userDefault.string(forKey: "userName")
+            }
             $0.font = UIFont.systemFont(ofSize: 15)
-            //$0.placeholder = userData.value.name
+            
             $0.clipsToBounds = true
             
             //textField의 앞부분의 빈공간 구현
-            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: $0.frame.height))
+            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
             $0.leftViewMode = .always
             
         }
         
-        bankLabel.do {
-            $0.text = "은행"
-            $0.font = UIFont.systemFont(ofSize: 12)
-            $0.textColor = UIColor.systemGray
+        nameClearBtn.do {
+            $0.setImage(UIImage(systemName: "x.circle.fill"), for: .normal)
+            $0.frame = CGRect(x: 30, y: 0, width: 50, height: 30)
+            $0.setTitleColor(.black, for: .normal)
         }
         
+        bankLabel.do {
+            $0.text = "은행"
+            $0.font = UIFont.KoreanCaption2
+            $0.textColor = UIColor.TextPrimary
+        }
         
         bankView.do {
             $0.layer.cornerRadius = 8
@@ -308,50 +395,67 @@ class MyBankAccountVC: UIViewController {
         }
         
         bankNameLabel.do {
-            $0.text = "은행을 선택해주세요"
-            $0.font = UIFont.systemFont(ofSize: 15)
+            if UserDefaults.standard.string(forKey: "userBank") == nil {
+                $0.text = "은행을 선택해주세요"
+                $0.tintColor = .TextPrimary
+            } else {
+                $0.text = UserDefaults.standard.string(forKey: "userBank")
+                $0.tintColor = .TextPrimary
+            }
+            $0.font = UIFont.KoreanCaption1
             
         }
         
         bankArrowImage.do {
-            $0.image = UIImage(systemName: "arrowtriangle.down.fill")
+            $0.image = UIImage(named: "ArrowTriangleIconDown")
         }
         
         accountLabel.do {
             $0.text = "계좌번호"
-            $0.font = UIFont.systemFont(ofSize: 12)
-            $0.textColor = UIColor.gray
+            $0.font = UIFont.KoreanCaption2
+            $0.textColor = UIColor.TextPrimary
         }
-        
         
         accountTextField.do {
             $0.layer.cornerRadius = 8
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.gray.cgColor
-            $0.attributedPlaceholder = NSAttributedString(string: "   계좌번호를 입력해주세요",
-                                                          attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+            $0.keyboardType = .numberPad
+            $0.clearButtonMode = .whileEditing
+            
+            $0.autocorrectionType = .no
+            $0.spellCheckingType = .no
+
+            //MARK: 토마토, 수정뷰로 넘어왔을 때, 검은색 글자면은 이미 입력되어있는 것처럼 보여서 회색으로 처리해두었어요
+            if UserDefaults.standard.string(forKey: "userAccount") == nil {
+                $0.attributedPlaceholder = NSAttributedString(string: "계좌번호를 입력해주세요",
+                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+            } else {
+                $0.placeholder = userDefault.string(forKey: "userAccount")
+            }
+            
+            
             $0.font = UIFont.systemFont(ofSize: 15)
-            //$0.placeholder = userData.value.account
             $0.clipsToBounds = true
             
+            //textField의 앞부분의 빈공간 구현
+            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
+            $0.leftViewMode = .always
+
             
         }
         
         payLabel.do {
             $0.text = "간편페이 사용여부"
-            $0.font = UIFont.systemFont(ofSize: 12)
-            $0.textColor = UIColor.gray
+            $0.font = UIFont.KoreanCaption2
+            $0.textColor = UIColor.TextPrimary
         }
         
         
         editDoneBtn.do {
             $0.setTitle("계좌정보 수정완료", for: .normal)
-            $0.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-            $0.titleLabel?.textColor = .white
-            $0.clipsToBounds = true
-            $0.layer.cornerRadius = 20
-            $0.backgroundColor = .black
+
         }
         
         leftBar.do {
@@ -361,6 +465,7 @@ class MyBankAccountVC: UIViewController {
         rightBar.do {
             $0.backgroundColor = .gray
         }
+        
         payView.do {
             $0.backgroundColor = .clear
             $0.layer.cornerRadius = 8
@@ -368,19 +473,37 @@ class MyBankAccountVC: UIViewController {
             $0.layer.borderColor = UIColor.gray.cgColor
             
         }
-        
-        tossPayView.do {
-            $0.backgroundColor = UIColor.systemBlue
+        tossPayBtn.do {
+            $0.image = UIImage(named: "TossPayIconUnchecked")
         }
         
-        kakaoPayView.do {
-            $0.backgroundColor = UIColor.systemYellow
+        kakaoPayBtn.do {
+            $0.image = UIImage(named: "KakaoPayIconUnchecked")
         }
         
-        naverPayView.do {
-            $0.backgroundColor = UIColor.systemGreen
+        naverPayBtn.do {
+            $0.image = UIImage(named: "NaverPayIconUnchecked")
         }
         
+        tossLabel.do {
+            $0.text = "토스뱅크"
+            $0.font = .KoreanCaption2
+            $0.textAlignment = .center
+        }
+        
+        kakaoLabel.do {
+            $0.text = "카카오페이"
+            $0.font = .KoreanCaption2
+            $0.textAlignment = .center
+
+        }
+        
+        naverLabel.do {
+            $0.text = "네이버페이"
+            $0.font = .KoreanCaption2
+            $0.textAlignment = .center
+
+        }
     }
     
     func setBinding() {
@@ -390,9 +513,6 @@ class MyBankAccountVC: UIViewController {
         let kakaoTap = addTapGesture(to: kakaoPayView)
         let naverTap = addTapGesture(to: naverPayView)
         
-        var tossColor = false
-        var kakaoColor = false
-        var naverColor = false
         
         let input = MyBankAccountVM.Input(inputNameText: nameTextField.rx.text.orEmpty.changed,
                                           editDoneBtnTapped: editDoneBtn.rx.tap.asDriver(),
@@ -401,13 +521,12 @@ class MyBankAccountVC: UIViewController {
                                           tossTapped: tossTap.rx.event.asObservable().map { _ in () },
                                           kakaoTapeed: kakaoTap.rx.event.asObservable().map { _ in () },
                                           naverTapped: naverTap.rx.event.asObservable().map { _ in () }
-                                          
         )
         
         let output = viewModel.transform(input: input)
         
         output.popToMyInfoView
-            .drive(onNext:{
+            .drive(onNext:{ [self] in
                 self.navigationController?.popViewController(animated: true)
             })
             .disposed(by: disposeBag)
@@ -419,8 +538,8 @@ class MyBankAccountVC: UIViewController {
                 modalVC.modalPresentationStyle = .formSheet
                 modalVC.modalTransitionStyle = .coverVertical
                 modalVC.selectedBankName
-                    .bind { [weak self] bankName in
-                        self?.bankNameLabel.text = bankName
+                    .bind { bankName in
+                        self?.userDefault.set(bankName, forKey: "userBank")
                         print(bankName)
                     }
                     .disposed(by: modalVC.disposeBag)
@@ -428,45 +547,93 @@ class MyBankAccountVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        output.toggleTossPay
-            .subscribe(onNext: { [weak self] in
-                if tossColor { //true 일 때
-                    self?.tossPayView.backgroundColor = UIColor.systemBlue
-                } else {
-                    self?.tossPayView.backgroundColor = .gray
-                }
-                tossColor.toggle()
-            })
-            .disposed(by: disposeBag)
+       
         
-        output.toggleKakaoPay
-            .subscribe(onNext: { [weak self] in
-                if kakaoColor { //true 일 때
-                    self?.kakaoPayView.backgroundColor = UIColor.systemYellow
-                } else {
-                    self?.kakaoPayView.backgroundColor = .gray
-                }
-                kakaoColor.toggle()
-            })
-            .disposed(by: disposeBag)
-        
-        output.togglenaverPay
-            .subscribe(onNext: { [weak self] in
-                if naverColor { //true 일 때
-                    self?.naverPayView.backgroundColor = UIColor.systemGreen
-                } else {
-                    self?.naverPayView.backgroundColor = .gray
-                }
-                naverColor.toggle()
-            })
-            .disposed(by: disposeBag)
         
     }
     
+    //변경되는 값에 따라 바로 UI 변경되도록 하는 함수
+    func asapRxData() {
+        userDefault.rx
+            .observe(Bool.self, "tossPay")
+            .subscribe(onNext: { value in
+                guard let value = value else { return }
+                let newImage = value ? "TossPayIconChecked" : "TossPayIconUnchecked"
+                self.tossPayBtn.image = UIImage(named: newImage)
+                
+            })
+            .disposed(by: disposeBag)
+        
+        userDefault.rx
+            .observe(Bool.self, "kakaoPay")
+            .subscribe(onNext: { value in
+                guard let value = value else { return }
+                let newImage = value ? "KakaoPayIconChecked" : "KakaoPayIconUnchecked"
+                self.kakaoPayBtn.image = UIImage(named: newImage)
+            })
+            .disposed(by: disposeBag)
+        
+        userDefault.rx
+            .observe(Bool.self, "naverPay")
+            .subscribe(onNext: { value in
+                guard let value = value else { return }
+                let newImage = value ? "NaverPayIconChecked" : "NaverPayIconUnchecked"
+                self.naverPayBtn.image = UIImage(named: newImage)
+            })
+            .disposed(by: disposeBag)
+        
+        userDefault.rx
+            .observe(String.self, "userBank")
+            .subscribe(onNext: { value in
+                guard let value = value else { return }
+                self.bankNameLabel.text = value
+                self.isBankSelected = true
+                
+            })
+            .disposed(by: disposeBag)
+ 
+        
+    }
     
+    func addTapGesture(to view: UIView) -> UITapGestureRecognizer {
+        let tapGesture = UITapGestureRecognizer()
+        view.addGestureRecognizer(tapGesture)
+        return tapGesture
+    }
+    
+
+  
 }
 
 extension MyBankAccountVC: UITextFieldDelegate {
     
+    func setKeyboardNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight: CGFloat
+            keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
+            self.editDoneBtn.snp.updateConstraints {
+                $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(keyboardHeight + 26)
+            }
+        }
+    }
+    
+    @objc private func keyboardWillHide() {
+        self.editDoneBtn.snp.updateConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+    }
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func setKeyboardObserverRemove() {
+        NotificationCenter.default.removeObserver(self)
+    }
 }
-

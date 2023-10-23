@@ -16,17 +16,14 @@ class CSMemberConfirmVC: UIViewController {
     
     let viewModel = CSMemberConfirmVM()
     
-    let header = NavigationHeader()
     let titleMessage = UILabel()
     let subTitleMessage = UILabel()
     let tableView = UITableView(frame: .zero, style: .plain)
     let bottomDescription = UILabel()
-    let equalSplitButton = UIButton()
-    let equalSplitImage = UIImageView(image: UIImage(named: "XMark"))
-    let equalSplitLabel = UILabel()
-    let smartSplitButton = UIButton()
-    let smartSplitImage = UIImageView(image: UIImage(named: "XMark"))
-    let smartSplitLabel = UILabel()
+    let equalSplitButton = SPButton()
+    let equalSplitImage = UIImageView(image: UIImage(named: "EqualSplitIconDefault"))
+    let smartSplitButton = SPButton()
+    let smartSplitImage = UIImageView(image: UIImage(named: "SmartSplitIconDefault"))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,50 +35,31 @@ class CSMemberConfirmVC: UIViewController {
 
     func setAttribute() {
         view.backgroundColor = UIColor(hex: 0xF8F7F4)
-        
-        header.do {
-            $0.configureBackButton(viewController: self)
-        }
 
         titleMessage.do {
             $0.text = "좋아요 :D"
-            $0.font = .systemFont(ofSize: 24)
+            $0.font = .KoreanTitle3
+            $0.textColor = .TextPrimary
         }
         
         subTitleMessage.do {
             $0.text = "입력한 내용이 정확한지 확인해주세요"
-            $0.font = .systemFont(ofSize: 15)
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextPrimary
         }
         
         equalSplitButton.do {
-            $0.layer.cornerRadius = 42
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
-            $0.layer.borderWidth = 1
-            $0.backgroundColor = UIColor(hex: 0xF8F7F4)
-        }
-        
-        equalSplitLabel.do {
-            $0.text = "1/n 정산하기"
-            $0.textColor = UIColor(hex: 0x202020)
-            $0.font = .systemFont(ofSize: 16, weight: .bold)
+            $0.applyStyle(.halfEqualSplit)
         }
         
         smartSplitButton.do {
-            $0.layer.cornerRadius = 42
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
-            $0.layer.borderWidth = 1
-            $0.backgroundColor = UIColor(hex: 0xF8F7F4)
-        }
-        
-        smartSplitLabel.do {
-            $0.text = "쓴 만큼 정산하기"
-            $0.textColor = UIColor(hex: 0x202020)
-            $0.font = .systemFont(ofSize: 16, weight: .bold)
+            $0.applyStyle(.halfSmartSplit)
         }
         
         bottomDescription.do {
             $0.text = "위 내용으로 정산을 시작합니다"
-            $0.font = .systemFont(ofSize: 15)
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextSecondary
         }
         
         setTableView()
@@ -98,9 +76,8 @@ class CSMemberConfirmVC: UIViewController {
             $0.clipsToBounds = true
             $0.alwaysBounceVertical = false
             $0.showsVerticalScrollIndicator = false
-            $0.backgroundColor = UIColor(hex: 0xE5E4E0)
-//            $0.backgroundColor = UIColor(hex: 0xF8F7F4)
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
+            $0.backgroundColor = .AppColorGrayscale25K
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 8
             $0.rowHeight = rowHeight + interItemSpacing // 40
@@ -116,26 +93,15 @@ class CSMemberConfirmVC: UIViewController {
     }
     
     func setLayout() {
-        [header, titleMessage, subTitleMessage, equalSplitButton, smartSplitButton, tableView, bottomDescription].forEach {
+        [titleMessage, subTitleMessage, equalSplitButton, smartSplitButton, tableView, bottomDescription].forEach {
             view.addSubview($0)
         }
         
-        [equalSplitImage, equalSplitLabel].forEach {
-            equalSplitButton.addSubview($0)
-        }
-        
-        [smartSplitImage, smartSplitLabel].forEach {
-            smartSplitButton.addSubview($0)
-        }
-        
-        header.snp.makeConstraints {
-            $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview()
-        }
+        equalSplitButton.addSubview(equalSplitImage)
+        smartSplitButton.addSubview(smartSplitImage)
         
         titleMessage.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(20)
+            $0.top.equalToSuperview().offset(20)
             $0.centerX.equalToSuperview()
         }
         
@@ -147,46 +113,36 @@ class CSMemberConfirmVC: UIViewController {
         tableView.snp.makeConstraints {
             $0.top.equalTo(subTitleMessage.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(30)
-            $0.height.equalTo(360)
+            $0.height.equalTo(350)
         }
 
         bottomDescription.snp.makeConstraints {
-            $0.top.equalTo(tableView.snp.bottom).offset(20)
+            $0.top.equalTo(tableView.snp.bottom).offset(24)
             $0.centerX.equalToSuperview()
         }
         
         equalSplitButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(51)
-            $0.leading.equalToSuperview().inset(32)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(52)
+            $0.leading.equalToSuperview().inset(30)
             $0.width.height.equalTo(150)
         }
         
         equalSplitImage.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.width.height.equalTo(64)
-            $0.top.equalToSuperview().inset(24)
-        }
-        
-        equalSplitLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(25)
+            $0.width.height.equalTo(80)
+            $0.top.equalToSuperview().inset(14)
         }
         
         smartSplitButton.snp.makeConstraints {
             $0.centerY.equalTo(equalSplitButton.snp.centerY)
-            $0.trailing.equalToSuperview().inset(32)
+            $0.trailing.equalToSuperview().inset(30)
             $0.width.height.equalTo(150)
         }
         
         smartSplitImage.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.width.height.equalTo(64)
-            $0.top.equalToSuperview().inset(24)
-        }
-        
-        smartSplitLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(25)
+            $0.width.height.equalTo(80)
+            $0.top.equalToSuperview().inset(14)
         }
     }
     
@@ -209,15 +165,34 @@ class CSMemberConfirmVC: UIViewController {
         output.showSmartSplitCycle
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                
-                let vc = ExclItemNameInputVC()
+                self.smartSplitButton.applyStyle(.halfSmartSplitPressed)
+                let vc = ExclPageController()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
         
+        output.showSmartSplitCycle
+            .delay(.milliseconds(500))
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.smartSplitButton.applyStyle(.halfSmartSplit)
+            })
+            .disposed(by: disposeBag)
+        
         output.showEqualSplitCycle
-            .drive(onNext: {
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.equalSplitButton.applyStyle(.halfEqualSplitPressed)
+                
                 print(">>> 1/n 정산버튼 탭")
+            })
+            .disposed(by: disposeBag)
+        
+        output.showEqualSplitCycle
+            .delay(.milliseconds(500))
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.equalSplitButton.applyStyle(.halfEqualSplit)
             })
             .disposed(by: disposeBag)
     }

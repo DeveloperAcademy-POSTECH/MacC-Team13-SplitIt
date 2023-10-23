@@ -12,11 +12,9 @@ import SafariServices
 
 class MyInfoVM: UIViewController {
     
-    let userData = UserData.shared.userData
-    let payData = PayData.shared.payData
     let disposeBag = DisposeBag()
-    
     let repo = SplitRepository.share
+    let userDefault = UserDefaults.standard
     
     
     struct Input {
@@ -24,6 +22,7 @@ class MyInfoVM: UIViewController {
         let friendListViewTapped: Observable<Void>
         let exclItemViewTapped: Observable<Void>
         let editAccountViewTapped: Observable<Void>
+        let emptyEditAccountViewTapped: Observable<Void>
     }
     
     struct Output {
@@ -31,6 +30,7 @@ class MyInfoVM: UIViewController {
         let moveTofriendListView: Observable<Void>
         let moveToExclItemListView: Observable<Void>
         let moveToEditAccountView: Observable<Void>
+        let moveToInitAccountView: Observable<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -38,17 +38,26 @@ class MyInfoVM: UIViewController {
         let friendListViewTapped = input.friendListViewTapped
         let exclItemViewTapped = input.exclItemViewTapped
         let editAccountViewTap = input.editAccountViewTapped
-
-        repo.fetchMemberLog()
-        let members = repo.memberLogArr.value
-
+        let emptyEditAccountViewTapped = input.emptyEditAccountViewTapped
         
-
+        repo.fetchMemberLog()
+        
+        if userDefault.object(forKey: "tossPay") == nil ||
+           userDefault.object(forKey: "kakaoPay") == nil ||
+           userDefault.object(forKey: "naverPay") == nil {
+            userDefault.set(false, forKey: "tossPay")
+            userDefault.set(false, forKey: "kakaoPay")
+            userDefault.set(false, forKey: "naverPay")
+        }
+        
+        
+        
         let output = Output(moveToPrivacyView: privacyBtnTapped,
                             moveTofriendListView: friendListViewTapped,
                             moveToExclItemListView: exclItemViewTapped,
-                            moveToEditAccountView: editAccountViewTap
-                            )
+                            moveToEditAccountView: editAccountViewTap,
+                            moveToInitAccountView: emptyEditAccountViewTapped
+        )
         
         return output
     }

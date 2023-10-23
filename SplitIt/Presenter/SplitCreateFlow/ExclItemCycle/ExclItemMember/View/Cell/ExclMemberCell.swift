@@ -30,7 +30,7 @@ class ExclMemberCell: UICollectionViewCell, Reusable {
         contentView.do {
             $0.backgroundColor = UIColor.systemBackground
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor(hex: 0xCCCCCC).cgColor
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
         }
     }
     
@@ -54,11 +54,11 @@ class ExclMemberCell: UICollectionViewCell, Reusable {
 
     func configure(item: ExclMember) {
         name.text = item.name
-        name.textColor = item.isTarget ? UIColor(hex: 0xF8F7F4) : UIColor(hex: 0x202020)
+        name.textColor = item.isTarget ? .TextInvert : .TextPrimary
         
         contentView.do {
-            $0.backgroundColor = item.isTarget ? UIColor(hex: 0x202020) : UIColor.clear
-            $0.layer.borderColor = item.isTarget ? UIColor(hex: 0x202020).cgColor : UIColor(hex: 0xAFAFAF).cgColor
+            $0.backgroundColor = item.isTarget ? .SurfaceInvert : UIColor.clear
+            $0.layer.borderColor = item.isTarget ? UIColor.BorderPrimary.cgColor : UIColor.BorderTertiary.cgColor
             $0.layer.borderWidth = 1
         }
     }
