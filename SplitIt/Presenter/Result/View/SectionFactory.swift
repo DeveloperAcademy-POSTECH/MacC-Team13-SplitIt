@@ -168,7 +168,14 @@ enum DisplayLayoutFactory {
                                                        leading: -18,
                                                        bottom: 0,
                                                        trailing: -18)
-        section.boundarySupplementaryItems = [header]
+        
+        let footer = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .absolute(47)),
+            elementKind: UICollectionView.elementKindSectionFooter,
+            alignment: .bottom)
+        
+        section.boundarySupplementaryItems = [header, footer]
         
         let sectionBackground = NSCollectionLayoutDecorationItem.background(elementKind: ResultSectionBackground.reuseIdentifier)
         section.decorationItems = [ sectionBackground ]

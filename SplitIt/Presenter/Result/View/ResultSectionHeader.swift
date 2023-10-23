@@ -16,7 +16,8 @@ class ResultSectionHeader: UICollectionReusableView, Reusable {
     
     var disposeBag = DisposeBag()
     
-    var viewModel: ResultSectionHeaderVM!
+//    var viewModel: ResultSectionHeaderVM!
+    var viewModel: ResultVM!
     
     var indexPath = IndexPath()
     
@@ -41,6 +42,8 @@ class ResultSectionHeader: UICollectionReusableView, Reusable {
         
         setAttribute()
         setLayout()
+        
+        
     }
     
     required init?(coder: NSCoder) {
@@ -295,6 +298,16 @@ class ResultSectionHeader: UICollectionReusableView, Reusable {
         orderView.do {
             $0.layer.maskedCorners = [.layerMinXMinYCorner]
         }
+    }
+    
+    func setBinding() {
+        toggleButton.rx.tap
+            .map { [weak self] _ in
+                guard let self = self else { return 0 }
+                return self.indexPath.section
+            }
+            .bind(to: viewModel.tappedSectionIndex)
+            .disposed(by: disposeBag)
     }
 }
 
