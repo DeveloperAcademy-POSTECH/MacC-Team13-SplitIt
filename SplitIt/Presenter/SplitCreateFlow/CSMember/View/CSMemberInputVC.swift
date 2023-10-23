@@ -57,7 +57,7 @@ class CSMemberInputVC: UIViewController {
         }
         
         textFiledNotice.do {
-            $0.text = "여기에 사용을 돕는 문구가 들어가요"
+            $0.text = "'나'는 이미 적어뒀어요!"
             $0.font = .KoreanCaption2
             $0.textColor = .TextSecondary
         }
