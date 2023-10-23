@@ -16,7 +16,7 @@ class MyBankAccountVC: UIViewController {
     
     let clearButton = UIButton()
     
-    let header = NavigationHeader()
+    let header = NaviHeader()
     
     let viewModel = MyBankAccountVM()
     var disposeBag = DisposeBag()
@@ -144,10 +144,10 @@ class MyBankAccountVC: UIViewController {
     func setLayout() {
         header.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             $0.leading.trailing.equalToSuperview()
         }
-        
+ 
         nameLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(112)
             make.left.equalToSuperview().offset(36)
@@ -329,9 +329,13 @@ class MyBankAccountVC: UIViewController {
         view.backgroundColor = .SurfaceBrandCalmshell
         
         
-        header.do {
-            $0.configureBackButton(viewController: self)
-        }
+       
+            header.do {
+                $0.applyStyle(.myInfo)
+                $0.setBackButton(viewController: self)
+            }
+            
+        
         
         nameLabel.do {
             $0.text = "이름"

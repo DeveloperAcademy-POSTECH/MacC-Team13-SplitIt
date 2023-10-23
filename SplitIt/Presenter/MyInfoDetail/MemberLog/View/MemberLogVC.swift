@@ -15,7 +15,7 @@ import Then
 class MemberLogVC: UIViewController, UIScrollViewDelegate {
     let repo = SplitRepository.share
     
-    let header = NavigationHeader()
+    let header = NaviHeader()
     var searchImage = UIImageView()
     var tableView = UITableView()
     var searchBarTextField = UITextField()
@@ -56,7 +56,7 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
     func setLayout() {
         header.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             $0.leading.trailing.equalToSuperview()
         }
         
@@ -89,7 +89,8 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
         view.backgroundColor = .SurfaceBrandCalmshell
         
         header.do {
-            $0.configureBackButton(viewController: self)
+            $0.applyStyle(.friendSearch)
+            $0.setBackButton(viewController: self)
         }
         
         searchBarTextField.do {
