@@ -14,6 +14,7 @@ class ExclPageController: UIViewController, ExclItemNamePageChangeDelegate, Excl
     let exclItemNameInputVC = ExclItemNameInputVC()
     let exclItemPriceInputVC = ExclItemPriceInputVC()
     let exclMemberVC = ExclMemberVC()
+    let exclMemberSectionHeaderVC = ExclMemberSectionHeader()
     
     var controllCheck = 0
     
@@ -38,6 +39,7 @@ class ExclPageController: UIViewController, ExclItemNamePageChangeDelegate, Excl
             $0.setBackButton(viewController: self)
         }
     }
+    
     
     private func setPageControll() {
         exclItemNameInputVC.pageChangeDelegate = self
