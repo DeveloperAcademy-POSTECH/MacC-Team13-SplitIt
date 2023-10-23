@@ -9,11 +9,19 @@ import UIKit
 import Then
 import Reusable
 import SnapKit
+import RxCocoa
+import RxSwift
 
 class ResultCell: UICollectionViewCell, Reusable {
 
+    var disposeBag = DisposeBag()
+    
+    var viewModel =  ResultCellVM()
+    
     let name = UILabel()
     let payment = UILabel()
+    let collectionView = UICollectionView(frame: .zero,
+                                          collectionViewLayout: UICollectionViewLayout())
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,6 +37,21 @@ class ResultCell: UICollectionViewCell, Reusable {
     override func prepareForReuse() {
         super.prepareForReuse()
         
+        disposeBag = DisposeBag()
+        
+        collectionView.snp.removeConstraints()
+        payment.snp.removeConstraints()
+        
+        collectionView.snp.makeConstraints {
+            $0.top.equalTo(name.snp.bottom).offset(4)
+            $0.leading.trailing.equalToSuperview().inset(12)
+        }
+        
+        payment.snp.makeConstraints {
+            $0.top.equalTo(collectionView.snp.bottom).offset(4)
+            $0.trailing.equalToSuperview().inset(12)
+            $0.bottom.equalToSuperview().inset(8)
+        }
     }
     
     func setAttribute() {
@@ -43,19 +66,30 @@ class ResultCell: UICollectionViewCell, Reusable {
         }
         
         name.do {
+//            $0.text = "이름"
             $0.textColor = UIColor(hex: 0x202020)
             $0.font = .systemFont(ofSize: 12, weight: .light)
         }
         
         payment.do {
+//            $0.text = "금액"
             $0.textColor = UIColor(hex: 0x202020)
             $0.font = .systemFont(ofSize: 15, weight: .regular)
-            $0.text = "각 25000 KRW"
         }
+        
+        setCollectionView()
+    }
+    
+    func setCollectionView() {
+        collectionView.do {
+            $0.collectionViewLayout = DisplayLayoutFactory.createResultCellLayout()
+            $0.register(cellType: ResultExclItemCell.self)
+            $0.backgroundColor = UIColor(hex: 0xF8F7F4)
+        }    
     }
     
     func setLayout() {
-        [name, payment].forEach {
+        [name, payment, collectionView].forEach {
             contentView.addSubview($0)
         }
         
@@ -64,16 +98,63 @@ class ResultCell: UICollectionViewCell, Reusable {
             $0.leading.trailing.equalToSuperview().inset(12)
         }
         
-        // TODO: top 수정해야함 -> collectionView의 bottom으로
+        collectionView.snp.makeConstraints {
+            $0.top.equalTo(name.snp.bottom).offset(4)
+            $0.leading.trailing.equalToSuperview().inset(12)
+//            $0.height.equalTo(0)
+        }
+        
         payment.snp.makeConstraints {
-            $0.top.equalTo(name.snp.bottom).offset(28)
+            $0.top.equalTo(collectionView.snp.bottom).offset(4)
             $0.trailing.equalToSuperview().inset(12)
             $0.bottom.equalToSuperview().inset(8)
         }
     }
+    
+    func setBinding(item: [ExclItem]) {
+        let input = ResultCellVM.Input(exclItems: Driver<[ExclItem]>.just(item))
+        let output = viewModel.transform(input: input)
+        
+        output.exclItemNames
+            .bind(to: collectionView.rx.items(cellIdentifier: ResultExclItemCell.reuseIdentifier)) { row, item, cell in
+                if let cell = cell as? ResultExclItemCell {
+                    cell.configure(item: item)
+                }
+            }
+            .disposed(by: disposeBag)
+    }
 
     func configure(item: Result) {
         name.text = item.name.joined(separator: ", ")
+        payment.text = "각 \(item.payment) KRW"
+        
+//        print("명단: \(name.text)")
+//        print("제외항목: \(item.exclItems)")
+        setBinding(item: item.exclItems)
+//        print("---------")
+        
+        updateCollectionViewHeight()
+    }
+    
+    func updateCollectionViewHeight() {
+        
+        print(collectionView.collectionViewLayout.collectionViewContentSize)
+//        collectionView.snp.updateConstraints {
+//            $0.height.equalTo(collectionView.collectionViewLayout.collectionViewContentSize)
+//        }
+        
+        collectionView.snp.makeConstraints {
+            $0.height.equalTo(collectionView.collectionViewLayout.collectionViewContentSize)
+        }
+//        print("Height 설정")
+//        collectionView.snp.removeConstraints()
+//        collectionView.snp.makeConstraints {
+//            $0.top.equalTo(name.snp.bottom).offset(4)
+//            $0.leading.trailing.equalToSuperview().inset(12)
+//            $0.bottom.equalTo(payment.snp.top).offset(-4)
+//            $0.height.equalTo(collectionView.collectionViewLayout.collectionViewContentSize)
+//        }
+//        collectionView.reloadData()
     }
 }
 
