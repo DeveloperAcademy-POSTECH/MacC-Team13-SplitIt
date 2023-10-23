@@ -232,6 +232,7 @@ class ExclMemberVC: UIViewController {
 
                 let vc = ResultVC()
                 self.navigationController?.pushViewController(vc, animated: true)
+                SplitRepository.share.updateDataToDB()
             })
             .disposed(by: disposeBag)
         

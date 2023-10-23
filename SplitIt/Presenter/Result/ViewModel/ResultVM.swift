@@ -23,14 +23,12 @@ class ResultVM {
     
     let sections = BehaviorRelay<[ResultSection]>(value: [])
     let csInfos: BehaviorRelay<[CSInfo]> = SplitRepository.share.csInfoArr
-    
     let csMembers: BehaviorRelay<[CSMember]> = SplitRepository.share.csMemberArr
-    
     let results: BehaviorRelay<[Result]> = BehaviorRelay(value: [])
-    
-    
     let tappedSectionIndex = BehaviorRelay<Int>(value: -1) //TODO: 추후 ResultCellVM
+    
     struct Input {
+        let viewDidLoad: Driver<Void>
         let nextButtonTapSend: Driver<Void> // 다음 버튼
     }
     
@@ -38,130 +36,7 @@ class ResultVM {
         let presentResultView: Driver<Void>
         let splitTitle: Driver<String>
         let splitDateString: Driver<String>
-    }
-    
-    init() {
-        csInfos.map { csInfos -> [ResultSection] in
-            var sections: [ResultSection] = []
-            sections = csInfos.map { csInfo in
-                var results: [Result] = []
-                // 이제 각 items인 [Result]를 채워줘야함.
-                // 각 Result를 만들어서 results에 append 해야함
-                // name:[String], paymet:Int, exclItems:[ExclItem]이 들어감. //TODO: 추후 ExclItem교체
-                
-                // 먼저 name을 구해야함.
-                // csInfoIdx를 통해서 csMemberArr을 필터링 하여 csMembers를 구할 수 있음.
-                let currentMembers = SplitRepository.share.csMemberArr.value.filter { currentMember in
-                    return currentMember.csInfoIdx == csInfo.csInfoIdx
-                }
-                // 이 csMembers의 name들을 각각 Result에 뿌려줘야함
-                results = currentMembers.map { csMember -> Result in
-                    return Result(name: [csMember.name], payment: 0, exclItems: [])
-                }
-                
-                
-                // MARK: 계산로직
-                let exclItems = SplitRepository.share.exclItemArr.value.filter { exclItem in
-                    return exclItem.csInfoIdx == csInfo.csInfoIdx
-                }
-                
-                let totalExclItemsPayment = exclItems.map{ $0.price }.reduce(0, +)
-                let totalAmountExceptExclItem = csInfo.totalAmount - totalExclItemsPayment
-                let eqaulPayment = totalAmountExceptExclItem / results.count
-                
-                results = results.map { result -> Result in
-                    var resResult = result
-                    resResult.payment = eqaulPayment
-                    return resResult
-                }
-                
-                // 이제 각 exclItem을 모두 돌아보며
-                // 각 exclItem을 가진 csMember들을 모두 구하고
-                // 그 exclItem.price / csMember명수 만큼의 가격을
-                // 각 csMember에게 더해준다.
-                
-                let exclMembersValue = SplitRepository.share.exclMemberArr.value
-                
-                exclItems.forEach { exclItem in
-                    
-                    // 해당 exclItem에 연관된 멤버를 구함
-                    let relatedExclMembers = exclMembersValue.filter { exclMember in
-                        return exclMember.exclItemIdx == exclItem.exclItemIdx && exclMember.isTarget
-                    }
-                    // 돈낼사람들
-                    let payMembers = exclMembersValue.filter { exclMember in
-                        return exclMember.exclItemIdx == exclItem.exclItemIdx && !exclMember.isTarget
-                    }
-                    // 연관멤버의 수만큼 가격을 1/n
-                    let equalPrice = exclItem.price / payMembers.count
-                    
-                    // 기존 results를 돌아봄
-                    results = results.map { result in
-                        // 각 result를 봄
-                        var resResult = result
-                        
-                        // 해당 exclItem에서 제외된 멤버에게 exclItem을 추가해주기
-                        relatedExclMembers.forEach { relatedExclMember in
-                            if relatedExclMember.name == resResult.name.first! {
-                                resResult.exclItems.append(exclItem)
-                                // MARK: 여기 지금 안먹은사람한테 append하고있음
-                                //                                resResult.exclItems.append(exclItem.name)
-                                //TODO: 이부분 나중에 name이 아니라 exclItem 그대로 넣어줄것
-                            }
-                        }
-                        
-                        // 제외가 아닌 멤버에게 equalPrice더해주기, exclItem 추가
-                        payMembers.forEach { payMember in
-                            if payMember.name == resResult.name.first! {
-                                //TODO: 이부분 나중에 name이 아니라 exclItem 그대로 넣어줄것
-                                resResult.payment = resResult.payment + equalPrice
-                            }
-                        }
-                        return resResult
-                    }
-                }
-                //                //
-                //                results.forEach {
-                //                    print("이름: \($0.name.first!)")
-                //                    print("제외항목: \($0.exclItems)")
-                //                    print("낼 금액: \($0.payment)")
-                //                    print("---------------------")
-                //                }
-                
-                let resultSection = ResultSection(header: csInfo, items: results)
-                return resultSection
-            }
-            return sections
-        }
-        // 공통된 ExclItem을 가진 member를 reduce
-        .map { $0.map { section -> ResultSection in
-            var resultSection = section
-            let results = resultSection.items
-            var uniqueResults: [Result] = []
-            results.forEach { result in
-                if let index = uniqueResults.firstIndex(where: { $0.exclItems == result.exclItems }) {
-                    uniqueResults[index].name.append(contentsOf: result.name)
-                } else {
-                    uniqueResults.append(result)
-                }
-                resultSection.items = uniqueResults
-            }
-            return resultSection
-        }}
-        // addSplitButton 섹션 추가
-        .map { sections in
-            var resSections = sections
-            var lastSection = resSections.last!
-            lastSection.isFold = false
-            resSections.removeLast()
-            resSections.append(lastSection)
-            let addSplitSection = ResultSection(header: SplitRepository.share.csInfoArr.value[0], items: [])
-            resSections.append(addSplitSection)
-            return resSections
-        }
-        .asDriver(onErrorJustReturn: [])
-        .drive(sections)
-        .disposed(by: disposeBag)
+        let sections: BehaviorRelay<[ResultSection]>
     }
     
     func transform(input: Input) -> Output {
@@ -189,10 +64,155 @@ class ResultVM {
             .map{ $0.createDate }
             .map(dateFormatter.dateToResult)
             .asDriver()
+        
+        input.viewDidLoad
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                let splitIdx = SplitRepository.share.splitArr.value.first!.splitIdx
+                SplitRepository.share.fetchSplitArrFromDBWithSplitIdx(splitIdx: splitIdx)
+
+                var sectionsProvider: [ResultSection] = []
+                
+                self.csInfos.map { csInfos -> [ResultSection] in
+                    sectionsProvider = csInfos.map { csInfo in
+                        var results: [Result] = []
+                        // 이제 각 items인 [Result]를 채워줘야함.
+                        // 각 Result를 만들어서 results에 append 해야함
+                        // name:[String], paymet:Int, exclItems:[ExclItem]이 들어감. //TODO: 추후 ExclItem교체
+                        
+                        // 먼저 name을 구해야함.
+                        // csInfoIdx를 통해서 csMemberArr을 필터링 하여 csMembers를 구할 수 있음.
+                        let currentMembers = SplitRepository.share.csMemberArr.value.filter { currentMember in
+                            return currentMember.csInfoIdx == csInfo.csInfoIdx
+                        }
+                        // 이 csMembers의 name들을 각각 Result에 뿌려줘야함
+                        results = currentMembers.map { csMember -> Result in
+                            return Result(name: [csMember.name], payment: 0, exclItems: [])
+                        }
+                        
+                        
+                        // MARK: 계산로직
+                        let exclItems = SplitRepository.share.exclItemArr.value.filter { exclItem in
+                            return exclItem.csInfoIdx == csInfo.csInfoIdx
+                        }
+                        
+                        let totalExclItemsPayment = exclItems.map{ $0.price }.reduce(0, +)
+                        let totalAmountExceptExclItem = csInfo.totalAmount - totalExclItemsPayment
+                        
+                        var eqaulPayment = 0
+                        if results.count != 0 {
+                            eqaulPayment = totalAmountExceptExclItem / results.count
+                        }
+                        
+                        results = results.map { result -> Result in
+                            var resResult = result
+                            resResult.payment = eqaulPayment
+                            return resResult
+                        }
+                        
+                        // 이제 각 exclItem을 모두 돌아보며
+                        // 각 exclItem을 가진 csMember들을 모두 구하고
+                        // 그 exclItem.price / csMember명수 만큼의 가격을
+                        // 각 csMember에게 더해준다.
+                        
+                        let exclMembersValue = SplitRepository.share.exclMemberArr.value
+                        
+                        exclItems.forEach { exclItem in
+                            
+                            // 해당 exclItem에 연관된 멤버를 구함
+                            let relatedExclMembers = exclMembersValue.filter { exclMember in
+                                return exclMember.exclItemIdx == exclItem.exclItemIdx && exclMember.isTarget
+                            }
+                            // 돈낼사람들
+                            let payMembers = exclMembersValue.filter { exclMember in
+                                return exclMember.exclItemIdx == exclItem.exclItemIdx && !exclMember.isTarget
+                            }
+                            // 연관멤버의 수만큼 가격을 1/n
+                            let equalPrice = exclItem.price / payMembers.count
+                            
+                            // 기존 results를 돌아봄
+                            results = results.map { result in
+                                // 각 result를 봄
+                                var resResult = result
+                                
+                                // 해당 exclItem에서 제외된 멤버에게 exclItem을 추가해주기
+                                relatedExclMembers.forEach { relatedExclMember in
+                                    if relatedExclMember.name == resResult.name.first! {
+                                        resResult.exclItems.append(exclItem)
+                                        // MARK: 여기 지금 안먹은사람한테 append하고있음
+                                        //                                resResult.exclItems.append(exclItem.name)
+                                        //TODO: 이부분 나중에 name이 아니라 exclItem 그대로 넣어줄것
+                                    }
+                                }
+                                
+                                // 제외가 아닌 멤버에게 equalPrice더해주기, exclItem 추가
+                                payMembers.forEach { payMember in
+                                    if payMember.name == resResult.name.first! {
+                                        //TODO: 이부분 나중에 name이 아니라 exclItem 그대로 넣어줄것
+                                        resResult.payment = resResult.payment + equalPrice
+                                    }
+                                }
+                                return resResult
+                            }
+                        }
+                        //
+        //                results.forEach {
+        //                    print("이름: \($0.name.first!)")
+        //                    print("제외항목: \($0.exclItems)")
+        //                    print("낼 금액: \($0.payment)")
+        //                    print("---------------------")
+        //                }
+                        
+                        let resultSection = ResultSection(header: csInfo, items: results)
+                        return resultSection
+                    }
+                    return sectionsProvider
+                }
+                // 공통된 ExclItem을 가진 member를 reduce
+                .map { $0.map { section -> ResultSection in
+                    var resultSection = section
+                    let results = resultSection.items
+                    var uniqueResults: [Result] = []
+                    results.forEach { result in
+                        if let index = uniqueResults.firstIndex(where: { $0.exclItems == result.exclItems }) {
+                            uniqueResults[index].name.append(contentsOf: result.name)
+                        } else {
+                            uniqueResults.append(result)
+                        }
+                        resultSection.items = uniqueResults
+                    }
+                    return resultSection
+                }}
+                .map { sections -> [ResultSection] in
+                    var resSections = sections
+                    let resSection = ResultSection(header: resSections.last!.header, items: resSections.last!.items, isFold: false)
+                    resSections.removeLast()
+                    resSections.append(resSection)
+                    return resSections
+                }
+                // addSplitButton 섹션 추가
+                .map { sections in
+                    var resSections = sections
+                    var lastSection = resSections.last!
+                    lastSection.isFold = false
+                    resSections.removeLast()
+                    resSections.append(lastSection)
+                    let addSplitSection = ResultSection(header: SplitRepository.share.csInfoArr.value[0], items: [])
+                    resSections.append(addSplitSection)
+                    return resSections
+                }
+                .asDriver(onErrorJustReturn: [])
+                .drive(sections)
+                .disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
+        
+        
 
         return Output(presentResultView: presentResultView,
                       splitTitle: splitTitle,
-                      splitDateString: splitDateString)
+                      splitDateString: splitDateString,
+                      sections: sections)
     }
 }
 

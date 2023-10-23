@@ -19,9 +19,10 @@ struct ResultSection {
     // MARK: 기본으로 접혀있고 나중에 탭해서 열어줌
     var isFold: Bool = true
     
-    init(header: CSInfo, items: [Result]) {
+    init(header: CSInfo, items: [Result], isFold: Bool? = nil) {
         self.header = header
         self.items = items
+        self.isFold = isFold ?? true
     }
 }
 

@@ -21,6 +21,7 @@ class ResultVC: UIViewController {
     var disposeBag = DisposeBag()
     
     let viewModel = ResultVM()
+    let headerViewModel = ResultSectionHeaderVM()
     
     var dataSource: RxCollectionViewSectionedReloadDataSource<ResultSection>!
     
@@ -28,7 +29,6 @@ class ResultVC: UIViewController {
     let splitTitle = UILabel()
     let splitDate = UILabel()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-    
     let nextButton = UIButton()
     
     override func viewDidLoad() {
@@ -61,8 +61,6 @@ class ResultVC: UIViewController {
             $0.layer.cornerRadius = 24
             $0.backgroundColor = UIColor(hex: 0x19191B)
         }
-        
-        setCollectionView()
     }
     
     func setCollectionView() {
@@ -102,10 +100,22 @@ class ResultVC: UIViewController {
                 if indexPath.section == addSplitSection {
                     let addSplitHeader: AddSplitHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
                     
+                    addSplitHeader.viewModel.addSplitTapped
+                        .take(1)
+                        .observe(on: MainScheduler.asyncInstance)
+                        .subscribe(onNext: { [weak self] _ in
+                            guard let self = self else { return }
+                            let vc = CSTitleInputVC()
+                            self.navigationController?.pushViewController(vc, animated: true)
+                        }, onCompleted: {
+                            SplitRepository.share.createNewCS()
+                        })
+                        .disposed(by: addSplitHeader.disposeBag)
+                    
                     return addSplitHeader
                 } else {
                     let header: ResultSectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
-                    
+                    header.indexPath = indexPath
                     if section.isFold {
                         header.configureFold(item: section.header, sectionIndex: indexPath.section)
                     } else {
@@ -118,17 +128,19 @@ class ResultVC: UIViewController {
                             guard let self = self else { return }
                             // TODO: 나중엔 section 자체의 isFold도 바꿔줘서 collectionView를 다시그려주도록 해야함
                             
-                            let layout = DisplayLayoutFactory.createResultLayout(tappedIndex: indexPath.section, lastSection: addSplitSection)
+                            let layout = DisplayLayoutFactory.createResultLayout(tappedIndex: header.indexPath.section, lastSection: addSplitSection)
                             layout.register(ResultSectionBackground.self, forDecorationViewOfKind: ResultSectionBackground.reuseIdentifier)
                             collectionView.collectionViewLayout = layout
 
                             UIView.performWithoutAnimation {
-                                collectionView.reloadSections([indexPath.section, addSplitSection], animationStyle: .none)
+                                collectionView.reloadSections([header.indexPath.section, addSplitSection], animationStyle: .none)
                             }
+
+                            header.configureUnfold(item: section.header, sectionIndex: indexPath.section)
                             
                             var sections = viewModel.sections.value
                             sections.enumerated().forEach { index, section in
-                                if index == indexPath.section {
+                                if index == header.indexPath.section {
                                     sections[index].isFold = false
                                 } else {
                                     sections[index].isFold = true
@@ -179,8 +191,11 @@ class ResultVC: UIViewController {
     }
     
     func setBinding() {
-        let input = ResultVM.Input(nextButtonTapSend: nextButton.rx.tap.asDriver())
+        let input = ResultVM.Input(viewDidLoad: Driver<Void>.just(()),
+                                   nextButtonTapSend: nextButton.rx.tap.asDriver())
         let output = viewModel.transform(input: input)
+        
+        setCollectionView()
         
         viewModel.sections
             .asDriver()
@@ -204,5 +219,16 @@ class ResultVC: UIViewController {
                 //                self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
+//
+//        viewModel.addSplitHeaderTapped
+//            .observe(on: MainScheduler.asyncInstance)
+//            .subscribe(onNext: { _ in
+//                SplitRepository.share.createNewCS()
+//
+//                print("taptap")
+////                let vc = CSTitleInputVC()
+////                self.navigationController?.pushViewController(vc, animated: true)
+//            })
+//            .disposed(by: disposeBag)
     }
 }

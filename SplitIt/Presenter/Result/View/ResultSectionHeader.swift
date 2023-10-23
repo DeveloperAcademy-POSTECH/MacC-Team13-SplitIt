@@ -16,6 +16,10 @@ class ResultSectionHeader: UICollectionReusableView, Reusable {
     
     var disposeBag = DisposeBag()
     
+    var viewModel: ResultSectionHeaderVM!
+    
+    var indexPath = IndexPath()
+    
     let titleView = UIView()
     let titleInfo = UILabel()
     let orderView = UIView()
@@ -229,12 +233,11 @@ class ResultSectionHeader: UICollectionReusableView, Reusable {
         self.backgroundColor = .red
         self.clipsToBounds = true
         self.layer.cornerRadius = 24
-        
-        
     }
     
     // TODO: 접힐때의 Layout 및 값 설정
     func configureFold(item: CSInfo, sectionIndex: Int) {
+        print("fold: \(sectionIndex)")
         let numberFormatter = NumberFormatterHelper()
 
         orderView.backgroundColor = backgroundColor(forSectionIndex: sectionIndex)
@@ -250,6 +253,7 @@ class ResultSectionHeader: UICollectionReusableView, Reusable {
     
     // TODO: 펼칠때의 Layout 및 값 설정
     func configureUnfold(item: CSInfo, sectionIndex: Int) {
+        print("unfold: \(sectionIndex)")
         let numberFormatter = NumberFormatterHelper()
         
         orderView.backgroundColor = backgroundColor(forSectionIndex: sectionIndex)

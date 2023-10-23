@@ -128,10 +128,10 @@ class ResultCell: UICollectionViewCell, Reusable {
         name.text = item.name.joined(separator: ", ")
         payment.text = "각 \(item.payment) KRW"
         
-//        print("명단: \(name.text)")
-//        print("제외항목: \(item.exclItems)")
+        print("명단: \(name.text!)")
+        print("제외항목: \(item.exclItems)")
+        print("---------")
         setBinding(item: item.exclItems)
-//        print("---------")
         
         updateCollectionViewHeight()
     }

@@ -17,9 +17,13 @@ class AddSplitHeader: UICollectionReusableView, Reusable {
     var disposeBag = DisposeBag()
     
     let addLabel = UILabel()
+    let viewModel = AddSplitHeaderVM()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(setBinding))
+        self.addGestureRecognizer(tapGesture)
         
         setAttribute()
         setLayout()
@@ -60,6 +64,9 @@ class AddSplitHeader: UICollectionReusableView, Reusable {
         }
     }
     
+    @objc private func setBinding() {
+        viewModel.addSplitTapped.onNext(())
+    }
 }
   
 
