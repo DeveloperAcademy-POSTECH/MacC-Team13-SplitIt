@@ -14,7 +14,6 @@ final class CSEditListVM {
     var disposeBag = DisposeBag()
     
     let dataModel = SplitRepository.share
-    
     private var data: Observable<CSInfo> = Observable.just(CSInfo.init(splitIdx: ""))
     
     init(splitIdx: String = "652fe13e384fd0feba2561be") {
@@ -28,8 +27,7 @@ final class CSEditListVM {
             .disposed(by: disposeBag)
         disposeBag = DisposeBag()
         
-//        data = dataModel.csInfoArr.map { $0.first! }.asObservable()
-//        data = Observavle.just(CSInfo.init(splitIdx: ""))
+        data = dataModel.csInfoArr.map { $0.first! }.asObservable()
     }
     
     var itemsObservable: Observable<[ExclItem]> {
