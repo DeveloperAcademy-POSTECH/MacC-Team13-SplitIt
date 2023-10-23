@@ -335,10 +335,6 @@ class MyInfoVC: UIViewController {
         
         
         output.moveToExclItemListView
-//            .bind { [weak self] in
-//                self?.showCustomAlert()
-//            }
-//            .disposed(by: disposeBag)
             .subscribe(onNext: {
                 print("먹지 않은 뷰 이동")
                 //MARK: UserDefaults 초기화 버튼으로 임시 활용
@@ -888,23 +884,13 @@ class MyInfoVC: UIViewController {
         return tapGesture
     }
     
-//    func showCustomAlert() {
-//        let customAlertVC = CustomAlertVC()
-//        customAlertVC.modalPresentationStyle = .overCurrentContext
-//        present(customAlertVC, animated: true, completion: nil)
+
+//
+//    func showAccountInputAlert() {
+//        let vc = AccountAlertVC()
+//        vc.modalPresentationStyle = .overCurrentContext
+//        present(vc, animated: true, completion: nil)
 //    }
 //
-    func showCustomAlert() {
-        let vc = CustomAlertVC()
-        vc.modalPresentationStyle = .overCurrentContext
-        present(vc, animated: true, completion: nil)
-    }
-    
-    func showAccountInputAlert() {
-        let vc = AccountAlertVC()
-        vc.modalPresentationStyle = .overCurrentContext
-        present(vc, animated: true, completion: nil)
-    }
-    
 }
 
