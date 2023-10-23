@@ -218,10 +218,11 @@ class ExclMemberVC: UIViewController {
         output.presentResultView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.nextButton.applyStyle(.primaryPearPressed)
-                print("다음 ㄱㄱ")
-//                let vc = ExclItemPriceInputVC()
-//                self.navigationController?.pushViewController(vc, animated: true)
+                            
+                let vc = ResultVC()
+                self.navigationController?.pushViewController(vc, animated: true)
+                SplitRepository.share.updateDataToDB()
+
             })
             .disposed(by: disposeBag)
         
