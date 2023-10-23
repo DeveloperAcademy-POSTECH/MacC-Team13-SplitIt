@@ -56,7 +56,7 @@ class CSTotalAmountInputVC: UIViewController {
         }
         
         textFiledNotice.do {
-            $0.text = "여기에 사용을 돕는 문구가 들어가요"
+            $0.text = "설마, 천만원 이상을 쓰시진 않으셨죠?"
             $0.font = .KoreanCaption2
             $0.textColor = .TextSecondary
         }
