@@ -21,32 +21,6 @@ protocol CustomAlertVCDelegate: AnyObject {
 
 class ExclMemberSectionHeader: UICollectionReusableView, Reusable, CustomAlertVCDelegate {
         
-    func didDeleteItem(item: ExclMemberSection) {
-           SplitRepository.share.deleteExclItemAndRelatedData(exclItemIdx: item.exclItem.exclItemIdx)
-           print("항목이 삭제되었습니다.")
-       }
-    
-    func configure(item: ExclMemberSection, sectionIndex: Int) {
-        let numberFormatter = NumberFormatterHelper()
-        
-        self.backgroundColor = backgroundColor(forSectionIndex: sectionIndex)
-        
-        let name = item.exclItem.name
-        let price = numberFormatter.formattedString(from: item.exclItem.price)
-        
-        headerTitle.text = "[\(name) 값 / \(price) KRW]"
-
-        deleteButton.rx.tap
-            .asDriver()
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                print("헤더 눌림")
-                self.presentCustomAlert(item: item, name: name)
-            })
-            .disposed(by: disposeBag)
-
-    }
-    
 
     var disposeBag = DisposeBag()
     
@@ -72,6 +46,28 @@ class ExclMemberSectionHeader: UICollectionReusableView, Reusable, CustomAlertVC
     }
     
     
+    func configure(item: ExclMemberSection, sectionIndex: Int) {
+        let numberFormatter = NumberFormatterHelper()
+        
+        self.backgroundColor = backgroundColor(forSectionIndex: sectionIndex)
+        
+        let name = item.exclItem.name
+        let price = numberFormatter.formattedString(from: item.exclItem.price)
+        
+        headerTitle.text = "[\(name) 값 / \(price) KRW]"
+
+        deleteButton.rx.tap
+            .asDriver()
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                print("헤더 눌림")
+                self.presentCustomAlert(item: item, name: name)
+            })
+            .disposed(by: disposeBag)
+
+    }
+    
+    
     private func presentCustomAlert(item: ExclMemberSection, name: String) {
         print("헤더 눌림")
         let customAlertVC = CustomAlertVC()
@@ -81,6 +77,11 @@ class ExclMemberSectionHeader: UICollectionReusableView, Reusable, CustomAlertVC
         customAlertVC.itemName = name
         self.window?.rootViewController?.present(customAlertVC, animated: false)
     }
+    
+    func didDeleteItem(item: ExclMemberSection) {
+           SplitRepository.share.deleteExclItemAndRelatedData(exclItemIdx: item.exclItem.exclItemIdx)
+           print("항목이 삭제되었습니다.")
+       }
     
     func setAttribute() {
         self.do {
