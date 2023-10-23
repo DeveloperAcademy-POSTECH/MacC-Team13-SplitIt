@@ -8,6 +8,36 @@
 import UIKit
 
 enum DisplayLayoutFactory {
+    // MARK: CSMemberInputView의 Layout
+    static func createCSMemberInputLayout() -> UICollectionViewLayout {
+        let estimatedHeight: CGFloat = 28
+        let estimatedWidth: CGFloat = 120
+        
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .estimated(estimatedWidth),
+            heightDimension: .absolute(estimatedHeight)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.edgeSpacing = NSCollectionLayoutEdgeSpacing(
+            leading: .fixed(8), top: .fixed(0), trailing: .fixed(0), bottom: .fixed(0)
+        )
+        
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(estimatedHeight)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitems: [item]
+        )
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 8
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 8, bottom: 16, trailing: 16)
+        
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        return layout
+    }
     
     //MARK: - ResultView의 CompositionalLayout
     static func createResultLayout(tappedIndex: Int, lastSection: Int) -> UICollectionViewCompositionalLayout {
@@ -144,5 +174,35 @@ enum DisplayLayoutFactory {
         section.decorationItems = [ sectionBackground ]
         
         return section
+    }
+    
+    // MARK: CSMemberInputView의 Layout
+    static func createResultCellLayout() -> UICollectionViewLayout {
+        let estimatedHeight: CGFloat = 30.0
+        let estimatedWidth: CGFloat = 100.0
+        
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .estimated(estimatedWidth),
+            heightDimension: .absolute(20.0)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.edgeSpacing = NSCollectionLayoutEdgeSpacing(
+            leading: .fixed(8), top: .fixed(0), trailing: .fixed(0), bottom: .fixed(0)
+        )
+        
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(estimatedHeight)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitems: [item]
+        )
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 8
+        
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        return layout
     }
 }
