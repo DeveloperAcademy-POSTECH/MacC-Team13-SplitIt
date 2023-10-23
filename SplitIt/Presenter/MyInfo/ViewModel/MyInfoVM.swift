@@ -50,7 +50,7 @@ class MyInfoVM: UIViewController {
             userDefault.set(false, forKey: "naverPay")
         }
         
-      
+        
         
         let output = Output(moveToPrivacyView: privacyBtnTapped,
                             moveTofriendListView: friendListViewTapped,

@@ -118,7 +118,6 @@ class MyInfoVC: UIViewController {
         //asapRxData()
     }
     
-    
     func userNewInfo() {
         
         let tossValue = userDefault.bool(forKey: "tossPay")
@@ -300,8 +299,6 @@ class MyInfoVC: UIViewController {
         
     }
     
-    
-    
     func setBinding() {
         
         let friendListTap = addTapGesture(to: friendListView)
@@ -336,7 +333,12 @@ class MyInfoVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
+        
         output.moveToExclItemListView
+//            .bind { [weak self] in
+//                self?.showCustomAlert()
+//            }
+//            .disposed(by: disposeBag)
             .subscribe(onNext: {
                 print("먹지 않은 뷰 이동")
                 //MARK: UserDefaults 초기화 버튼으로 임시 활용
@@ -364,6 +366,8 @@ class MyInfoVC: UIViewController {
                 
             })
             .disposed(by: disposeBag)
+        
+       
     }
     
     func setAddView() {
@@ -448,7 +452,7 @@ class MyInfoVC: UIViewController {
         }
         
         userBar.do {
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.layer.borderColor = UIColor.BorderDeactivate.cgColor
             $0.layer.borderWidth = 1
         }
         
@@ -884,8 +888,23 @@ class MyInfoVC: UIViewController {
         return tapGesture
     }
     
+//    func showCustomAlert() {
+//        let customAlertVC = CustomAlertVC()
+//        customAlertVC.modalPresentationStyle = .overCurrentContext
+//        present(customAlertVC, animated: true, completion: nil)
+//    }
+//
+    func showCustomAlert() {
+        let vc = CustomAlertVC()
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: true, completion: nil)
+    }
     
-    
+    func showAccountInputAlert() {
+        let vc = AccountAlertVC()
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: true, completion: nil)
+    }
     
 }
 

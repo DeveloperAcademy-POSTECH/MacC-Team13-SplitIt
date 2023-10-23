@@ -58,9 +58,6 @@ class MyBankAccountVC: UIViewController {
     
     let nameClearBtn = UIButton()
     
-    //추후에 textField 전체 삭제 버튼 구현
-    // let accountClearBtn = UIButton()
-    
     
     private let editDoneBtn = SPButton()
     
@@ -354,7 +351,7 @@ class MyBankAccountVC: UIViewController {
             
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
-            $0.clearButtonMode = .whileEditing
+            //$0.clearButtonMode = .whileEditing
             
             //placeholder의 색깔
             if UserDefaults.standard.string(forKey: "userName") == nil {
@@ -458,12 +455,7 @@ class MyBankAccountVC: UIViewController {
         
         editDoneBtn.do {
             $0.setTitle("계좌정보 수정완료", for: .normal)
-//            $0.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-//            $0.titleLabel?.textColor = .white
-//            $0.clipsToBounds = true
-//            $0.layer.cornerRadius = 20
-//            $0.backgroundColor = .black
-//            $0.applyStyle(.primaryWatermelon)
+
         }
         
         leftBar.do {
@@ -555,14 +547,7 @@ class MyBankAccountVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        
-        
-        nameClearBtn.rx.tap
-            .bind { [weak self] in
-                self?.nameTextField.text = ""
-                print("눌림")
-            }
-            .disposed(by: disposeBag)
+       
         
         
     }

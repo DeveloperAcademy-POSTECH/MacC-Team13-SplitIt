@@ -115,6 +115,8 @@
 		DE73D6FC2AE1993F00ABF3EF /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D6FB2AE1993F00ABF3EF /* MemberCell.swift */; };
 		DE73D70B2AE3C1FC00ABF3EF /* MyInfoEmptyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D70A2AE3C1FC00ABF3EF /* MyInfoEmptyVC.swift */; };
 		DE73D7112AE5477400ABF3EF /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D7102AE5477400ABF3EF /* SplashVC.swift */; };
+		DE73D7132AE654D800ABF3EF /* CustomAlertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D7122AE654D800ABF3EF /* CustomAlertVC.swift */; };
+		DE73D7172AE65D1800ABF3EF /* AccountAlertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D7162AE65D1800ABF3EF /* AccountAlertVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -220,6 +222,8 @@
 		DE73D6FB2AE1993F00ABF3EF /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		DE73D70A2AE3C1FC00ABF3EF /* MyInfoEmptyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoEmptyVC.swift; sourceTree = "<group>"; };
 		DE73D7102AE5477400ABF3EF /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
+		DE73D7122AE654D800ABF3EF /* CustomAlertVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertVC.swift; sourceTree = "<group>"; };
+		DE73D7162AE65D1800ABF3EF /* AccountAlertVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountAlertVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -287,6 +291,7 @@
 		60115DF22ADBF0DD0050D32C /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
+				DE73D7142AE65C2700ABF3EF /* AlertView */,
 				869D1AC92AE5292A00D166B1 /* SplitEditFlow */,
 				C2A797972AE276B50049E709 /* History */,
 				DE73D6DE2AE0D0E700ABF3EF /* MyInfoDetail */,
@@ -853,6 +858,23 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		DE73D7142AE65C2700ABF3EF /* AlertView */ = {
+			isa = PBXGroup;
+			children = (
+				DE73D7152AE65C3C00ABF3EF /* View */,
+			);
+			path = AlertView;
+			sourceTree = "<group>";
+		};
+		DE73D7152AE65C3C00ABF3EF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DE73D7122AE654D800ABF3EF /* CustomAlertVC.swift */,
+				DE73D7162AE65D1800ABF3EF /* AccountAlertVC.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1017,6 +1039,7 @@
 				1A3852F52ADE5A9F00E9A20B /* Split.swift in Sources */,
 				869D1AF22AE52C9B00D166B1 /* ExclMemberEditSectionModel.swift in Sources */,
 				DE73D7112AE5477400ABF3EF /* SplashVC.swift in Sources */,
+				DE73D7172AE65D1800ABF3EF /* AccountAlertVC.swift in Sources */,
 				DE1711C22AE0BA9B0097850D /* MyInfoVM.swift in Sources */,
 				1A3852FB2ADE5ADA00E9A20B /* ExclItem.swift in Sources */,
 				60115E262ADD2CB00050D32C /* CSMemberInputSearchFooter.swift in Sources */,
@@ -1035,6 +1058,7 @@
 				DE73D6FC2AE1993F00ABF3EF /* MemberCell.swift in Sources */,
 				60AD20EB2ADEC8BA00EFACCD /* ExclItemPriceInputVM.swift in Sources */,
 				869D1AEB2AE52C4700D166B1 /* ExclItemPriceEditVM.swift in Sources */,
+				DE73D7132AE654D800ABF3EF /* CustomAlertVC.swift in Sources */,
 				DE73D6EF2AE0D2D500ABF3EF /* BankCell.swift in Sources */,
 				869D1AF42AE52CAC00D166B1 /* ExclMemberEditSectionHeader.swift in Sources */,
 				60AD20F72ADF838300EFACCD /* ExclMemberCell.swift in Sources */,
