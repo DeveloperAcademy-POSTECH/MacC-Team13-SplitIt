@@ -49,7 +49,7 @@ class ExclMemberEditVC: UIViewController {
         
         titleMessage.do {
             $0.text = "계산에서 제외할 사람을 다시 선택해주세요"
-            $0.font = .systemFont(ofSize: 18)
+            $0.font = .KoreanBody
         }
         
         nextButton.do {

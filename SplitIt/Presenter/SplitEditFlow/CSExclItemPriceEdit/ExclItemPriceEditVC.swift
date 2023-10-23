@@ -56,10 +56,11 @@ class ExclItemPriceEditVC: UIViewController {
         }
         
         titleMessage.do {
-            $0.font = .systemFont(ofSize: 18)
+            $0.font = .KoreanBody
         }
         
         priceTextField.do {
+            $0.font = .KoreanTitle3
             $0.keyboardType = .numberPad
             $0.layer.cornerRadius = 8
             $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
@@ -70,7 +71,7 @@ class ExclItemPriceEditVC: UIViewController {
         
         currencyLabel.do {
             $0.text = "KRW"
-            $0.font = .systemFont(ofSize: 15)
+            $0.font = .KoreanCaption1
         }
         
         textFiledNotice.do {

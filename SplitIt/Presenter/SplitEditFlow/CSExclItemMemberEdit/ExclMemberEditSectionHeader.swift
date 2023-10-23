@@ -53,7 +53,7 @@ class ExclMemberEditSectionHeader: UICollectionReusableView, Reusable {
         
         headerTitle.do {
             $0.textColor = UIColor(hex: 0x202020)
-            $0.font = .systemFont(ofSize: 12, weight: .light)
+            $0.font = .KoreanCaption2
         }
         
         deleteButton.do {

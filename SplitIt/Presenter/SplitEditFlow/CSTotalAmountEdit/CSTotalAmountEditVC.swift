@@ -47,9 +47,12 @@ class CSTotalAmountEditVC: UIViewController {
         
         titleMessage.do {
             $0.text = "총 얼마를 사용하셨나요?"
+            $0.tintColor = .TextPrimary
+            $0.font = .KoreanBody
         }
         
         totalAmountTextFiled.do {
+            $0.font = .KoreanTitle3
             $0.keyboardType = .numberPad
             $0.layer.cornerRadius = 8
             $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
@@ -59,6 +62,7 @@ class CSTotalAmountEditVC: UIViewController {
         
         currencyLabel.do {
             $0.text = "KRW"
+            $0.font = .KoreanTitle3
         }
         
         textFiledNotice.do {

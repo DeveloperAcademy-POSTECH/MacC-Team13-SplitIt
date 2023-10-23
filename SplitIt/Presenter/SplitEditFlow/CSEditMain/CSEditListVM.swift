@@ -17,7 +17,7 @@ final class CSEditListVM {
     
     private var data: Observable<CSInfo> = Observable.just(CSInfo.init(splitIdx: ""))
     
-    init() {
+    init(splitIdx: String = "652fe13e384fd0feba2561be") {
         dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: "652fe13e384fd0feba2561be")
         dataModel.csInfoArr
             .observe(on: MainScheduler.asyncInstance)
@@ -60,16 +60,17 @@ final class CSEditListVM {
         let totalPriceTap: ControlEvent<Void>
         let memberTap: ControlEvent<Void>
         let exclItemTap: ControlEvent<IndexPath>
-        let delCSInfoTap: ControlEvent<Void>
+        let saveButtonTap: ControlEvent<Void>
+        let delCSInfoTap: ControlEvent<UITapGestureRecognizer>
     }
     
     struct Output {
         let pushTitleEditVC: Observable<Void>
         let pushPriceEditVC: Observable<Void>
         let pushMemberEditVC: Observable<Void>
-//        let sectionHeaderSelectedObservable: Observable<CSEditListHeader>
+        let popVCinSaveBtn: Observable<Void>
         let pushExclItemEditVC: Observable<IndexPath>
-        let popDelCSInfo: Observable<Void>
+        let popDelCSInfo: Observable<UITapGestureRecognizer>
 //        let pushExclItemEditVC: Observable<Void>
     }
     
@@ -78,11 +79,13 @@ final class CSEditListVM {
         let price = input.totalPriceTap.asObservable()
         let member = input.memberTap.asObservable()
         let exclcell = input.exclItemTap.asObservable()
+        let savebtn = input.saveButtonTap.asObservable()
         let delbtn = input.delCSInfoTap.asObservable()
         
         return Output(pushTitleEditVC: title,
                       pushPriceEditVC: price,
                       pushMemberEditVC: member,
+                      popVCinSaveBtn: savebtn,
                       pushExclItemEditVC: exclcell,
                       popDelCSInfo: delbtn)
     }

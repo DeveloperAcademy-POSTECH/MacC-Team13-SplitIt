@@ -51,6 +51,7 @@ class CSMemberEditVC: UIViewController {
         
         titleMessage.do {
             $0.text = "누구와 함께했나요?"
+            $0.font = .KoreanBody
         }
         
         searchBar.do {

@@ -57,10 +57,12 @@ class ExclItemNameEditVC: UIViewController {
         
         titleMessage.do {
             $0.text = "어떤 이름으로 바꿔볼까요?"
-            $0.font = .systemFont(ofSize: 18)
+            $0.tintColor = .TextPrimary
+            $0.font = .KoreanBody
         }
         
         nameTextFiled.do {
+            $0.font = .KoreanTitle3
             $0.layer.cornerRadius = 8
             $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
             $0.layer.borderWidth = 1

@@ -43,9 +43,10 @@ class CSEditListVC: UIViewController {
     
     let tableHeaderLabel = UILabel()
     let tableView = UITableView(frame: .zero, style: .plain)
-    let exclAddButton = UIButton(type: .system)
+    let exclAddButton = UILabel()
     let saveButton = SPButton()
-    let delButton = UIButton(type: .system)
+    let delButton = UILabel()
+    let tapGesture = UITapGestureRecognizer()
     
 
     override func viewDidLoad() {
@@ -65,14 +66,14 @@ class CSEditListVC: UIViewController {
         
         tableHeaderLabel.do { label in
             label.text = "따로 계산할 것"
-            label.textColor = .lightGray
-            label.font = .systemFont(ofSize: 12)
+            label.textColor = .TextSecondary
+            label.font = .KoreanCaption2
         }
         
         tableView.do { view in
             view.register(cellType: CSEditListCell.self)
             view.rowHeight = UITableView.automaticDimension
-            view.estimatedRowHeight = 43
+            view.estimatedRowHeight = 42
             view.isScrollEnabled = false
             view.backgroundColor = UIColor(hex: 0xF8F7F4)
             view.layer.cornerRadius = 8
@@ -80,10 +81,15 @@ class CSEditListVC: UIViewController {
             view.layer.borderColor = UIColor(red: 0.486, green: 0.486, blue: 0.486, alpha: 1).cgColor
         }
         
+        let atrString = NSMutableAttributedString(string: "따로 계산할 것 추가하기")
+        atrString.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: atrString.length))
+        
         exclAddButton.do { btn in
-            btn.setTitle("따로 계산할 것 추가하기", for: .normal)
-            btn.titleLabel?.font = .systemFont(ofSize: 12)
-            btn.setTitleColor(.lightGray, for: .normal)
+            btn.attributedText = atrString
+//            btn.setTitle("따로 계산할 것 추가하기", for: .normal)
+            btn.textAlignment = .center
+            btn.font = .KoreanCaption2
+            btn.tintColor = .TextSecondary
         }
         
         saveButton.do { btn in
@@ -91,10 +97,16 @@ class CSEditListVC: UIViewController {
             btn.applyStyle(.primaryPear)
         }
         
+        let atrString2 = NSMutableAttributedString(string: "삭제하기")
+        atrString2.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: atrString2.length))
+        
         delButton.do { btn in
-            btn.setTitle("삭제하기", for: .normal)
-            btn.titleLabel?.font = .boldSystemFont(ofSize: 16)
-            btn.setTitleColor(.lightGray, for: .normal)
+            btn.attributedText = atrString2
+            btn.textAlignment = .center
+            btn.font = .KoreanButtonText
+            btn.textColor = .TextSecondary
+            btn.isUserInteractionEnabled = true
+            btn.addGestureRecognizer(self.tapGesture)
         }
         
     }
@@ -162,6 +174,14 @@ class CSEditListVC: UIViewController {
     }
     
     func setBinding() {
+        let normalStyle = saveButton.rx
+            .tap
+            .map { false }
+        
+        let selectedStyle = saveButton.rx
+            .tap
+            .map { true }
+        
         viewModel.titleObservable
             .bind(to: titleLabel.rx.text)
             .disposed(by: disposeBag)
@@ -181,9 +201,11 @@ class CSEditListVC: UIViewController {
             .disposed(by: disposeBag)
         
         let input = CSEditListVM.Input(titleBtnTap: titleEditBtn.rx.tap,
-                                              totalPriceTap: totalAmountEditBtn.rx.tap,
-                                              memberTap: memberEditBtn.rx.tap,
-                                       exclItemTap: tableView.rx.itemSelected.asControlEvent(), delCSInfoTap: delButton.rx.tap)
+                                    totalPriceTap: totalAmountEditBtn.rx.tap,
+                                    memberTap: memberEditBtn.rx.tap,
+                                    exclItemTap: tableView.rx.itemSelected.asControlEvent(),
+                                    saveButtonTap: saveButton.rx.tap,
+                                       delCSInfoTap: tapGesture.rx.event)
         
         let output = viewModel.transform(input: input)
         
@@ -210,13 +232,26 @@ class CSEditListVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
-//        output
-        
-        output.popDelCSInfo
+        output.popVCinSaveBtn
             .subscribe { [weak self] _ in
                 guard let self = self else { return }
-                self.navigationController?.popViewController(animated: false)
+                self.navigationController?.popViewController(animated: true)
             }
+            .disposed(by: disposeBag)
+        
+        output.popDelCSInfo
+            .subscribe (onNext: {_ in
+//                SplitRepository.share.deleteCSInfoAndRelatedData(csInfoIdx: "")
+                self.navigationController?.popViewController(animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        Observable
+            .combineLatest(normalStyle, selectedStyle)
+            .subscribe(onNext: { [weak self] (normal, selected) in
+                self?.saveButton.isSelected = selected
+                self?.saveButton.applyStyle(selected ? .primaryPear : .primaryPearPressed)
+            })
             .disposed(by: disposeBag)
         
     }
@@ -228,7 +263,7 @@ class CSEditListVC: UIViewController {
 extension CSEditListVC {
     private func pushTitleEditViewController() {
         let vc = CSTitleEditVC()
-        navigationController?.pushViewController(vc, animated: false)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     private func pushTotalPriceEditViewController() {
@@ -252,14 +287,14 @@ func setStackView(titleBtn: UIButton, st: String, view: UILabel) -> UIStackView 
     let titleLB = UILabel()
     titleLB.do { label in
         label.text = st
-        label.textColor = .lightGray
-        label.font = .systemFont(ofSize: 12)
+        label.textColor = .TextSecondary
+        label.font = .KoreanCaption2
     }
     
     titleBtn.do { button in
         button.setTitle("수정하기", for: .normal)
-        button.tintColor = .lightGray
-        button.titleLabel?.font = .systemFont(ofSize: 12)
+        button.tintColor = .TextSecondary
+        button.titleLabel?.font = .KoreanCaption2
         button.titleLabel?.textAlignment = .left
     }
     
@@ -270,7 +305,8 @@ func setStackView(titleBtn: UIButton, st: String, view: UILabel) -> UIStackView 
         view.layer.borderColor = UIColor(red: 0.486, green: 0.486, blue: 0.486, alpha: 1).cgColor
     }
     
-    view.font = .systemFont(ofSize: 15)
+    view.font = .KoreanCaption1
+    view.textColor = .TextPrimary
     
     [view, titleBtn].forEach { view in
         roundView.addSubview(view)
