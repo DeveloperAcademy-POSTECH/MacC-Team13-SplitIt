@@ -17,7 +17,7 @@ class ExclMemberEditVC: UIViewController {
     
     var dataSource: RxCollectionViewSectionedReloadDataSource<ExclMemberEditSectionModel>!
     
-    let header = NavigationHeader()
+    let header = NaviHeader()
     let titleMessage = UILabel()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     let nextButton = SPButton()
@@ -43,8 +43,7 @@ class ExclMemberEditVC: UIViewController {
         view.backgroundColor = UIColor(hex: 0xF8F7F4)
         
         header.do {
-            $0.configureTitle(title: "모임 수정하기")
-            $0.configureBackButton(viewController: self)
+            $0.applyStyle(.edit)
         }
         
         titleMessage.do {

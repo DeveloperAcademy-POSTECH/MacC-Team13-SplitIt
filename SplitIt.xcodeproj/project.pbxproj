@@ -87,6 +87,7 @@
 		869D1AF02AE52C8A00D166B1 /* ExclMemberEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869D1AEF2AE52C8A00D166B1 /* ExclMemberEditVM.swift */; };
 		869D1AF22AE52C9B00D166B1 /* ExclMemberEditSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869D1AF12AE52C9B00D166B1 /* ExclMemberEditSectionModel.swift */; };
 		869D1AF42AE52CAC00D166B1 /* ExclMemberEditSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869D1AF32AE52CAC00D166B1 /* ExclMemberEditSectionHeader.swift */; };
+		86D1E0C52AE6B4C100FBF610 /* ExclEditPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D1E0C42AE6B4C100FBF610 /* ExclEditPageController.swift */; };
 		C2A7978D2AE2740D0049E709 /* ONEMobileBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2A7978A2AE2740D0049E709 /* ONEMobileBold.ttf */; };
 		C2A7978E2AE2740D0049E709 /* ONEMobileLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2A7978B2AE2740D0049E709 /* ONEMobileLight.ttf */; };
 		C2A7978F2AE2740D0049E709 /* ONEMobileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2A7978C2AE2740D0049E709 /* ONEMobileRegular.ttf */; };
@@ -197,6 +198,7 @@
 		869D1AEF2AE52C8A00D166B1 /* ExclMemberEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclMemberEditVM.swift; sourceTree = "<group>"; };
 		869D1AF12AE52C9B00D166B1 /* ExclMemberEditSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclMemberEditSectionModel.swift; sourceTree = "<group>"; };
 		869D1AF32AE52CAC00D166B1 /* ExclMemberEditSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclMemberEditSectionHeader.swift; sourceTree = "<group>"; };
+		86D1E0C42AE6B4C100FBF610 /* ExclEditPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclEditPageController.swift; sourceTree = "<group>"; };
 		C2A7978A2AE2740D0049E709 /* ONEMobileBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileBold.ttf; sourceTree = "<group>"; };
 		C2A7978B2AE2740D0049E709 /* ONEMobileLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileLight.ttf; sourceTree = "<group>"; };
 		C2A7978C2AE2740D0049E709 /* ONEMobileRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileRegular.ttf; sourceTree = "<group>"; };
@@ -604,6 +606,7 @@
 		869D1AC92AE5292A00D166B1 /* SplitEditFlow */ = {
 			isa = PBXGroup;
 			children = (
+				86D1E0C32AE6B4AF00FBF610 /* ExclEditPageController */,
 				869D1AEC2AE52C5000D166B1 /* CSExclItemMemberEdit */,
 				869D1AE72AE52C1A00D166B1 /* CSExclItemPriceEdit */,
 				869D1AE22AE52BD200D166B1 /* CSExclItemNameEdit */,
@@ -680,6 +683,14 @@
 				869D1AF32AE52CAC00D166B1 /* ExclMemberEditSectionHeader.swift */,
 			);
 			path = CSExclItemMemberEdit;
+			sourceTree = "<group>";
+		};
+		86D1E0C32AE6B4AF00FBF610 /* ExclEditPageController */ = {
+			isa = PBXGroup;
+			children = (
+				86D1E0C42AE6B4C100FBF610 /* ExclEditPageController.swift */,
+			);
+			path = ExclEditPageController;
 			sourceTree = "<group>";
 		};
 		C2A797872AE273E90049E709 /* Assets */ = {
@@ -1014,6 +1025,7 @@
 				869D1AD52AE52AEC00D166B1 /* CSTitleEditVM.swift in Sources */,
 				DE73D71D2AE6CCBC00ABF3EF /* AlertController.swift in Sources */,
 				6078ACD02ADA74AC00995811 /* HomeVC.swift in Sources */,
+				86D1E0C52AE6B4C100FBF610 /* ExclEditPageController.swift in Sources */,
 				DE73D6F72AE1983200ABF3EF /* MemberLogVC.swift in Sources */,
 				C2A7979C2AE276E90049E709 /* HistorySplitCell.swift in Sources */,
 				DE73D6ED2AE0D2C300ABF3EF /* BankListModalVC.swift in Sources */,

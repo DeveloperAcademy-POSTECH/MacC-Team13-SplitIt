@@ -54,6 +54,19 @@ extension SplitRepository {
         self.memberLogArr.accept(RealmManager().bringMemberLogAll())
     }
     
+    /// csInfoIdx가 일치하는 csInfo만 필터링해서 하위 모든 Arr 패치
+    func fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: String) {
+        let realmManager = RealmManager()
+        csInfoArr.accept(realmManager.bringCSInfoWithCSInfoIdx(csInfoIdx: csInfoIdx))
+        self.currentCSInfo = csInfoArr.value.filter { $0.csInfoIdx == csInfoIdx }.first
+        
+        guard let split = csInfoArr.value.first else { return }
+        let splitIdx = split.splitIdx
+        splitArr.accept(realmManager.bringSplitWithSplitIdx(splitIdx: splitIdx))
+        
+        fetchAllDataBaseSplit(true, realmManager: realmManager)
+    }
+    
     /// false면 split 기준, true면 csInfo 기준으로 하위 데이터 모두를 패치
     private func fetchAllDataBaseSplit(_ isCSInfoStart: Bool, realmManager: RealmManager) {
         if !isCSInfoStart {
@@ -155,24 +168,6 @@ extension SplitRepository {
         exclItemArr.accept(exclItems)
         
         createExclMember(exclItemIdx: newExclItem.exclItemIdx)
-    }
-    
-    /// csInfoIdx가 일치하는 csInfo만 필터링해서 하위 모든 Arr 패치
-    func inputCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: String) {
-        let realmManager = RealmManager()
-        csInfoArr.accept(realmManager.bringCSInfoWithCSInfoIdx(csInfoIdx: csInfoIdx))
-        
-        guard let split = csInfoArr.value.first else { return }
-        let splitIdx = split.splitIdx
-        splitArr.accept(realmManager.bringSplitWithSplitIdx(splitIdx: splitIdx))
-        
-        fetchAllDataBaseSplit(true, realmManager: realmManager)
-        
-        print(splitArr.value)
-        print(csInfoArr.value)
-        print(csMemberArr.value)
-        print(exclItemArr.value)
-        print(exclMemberArr.value)
     }
 }
 

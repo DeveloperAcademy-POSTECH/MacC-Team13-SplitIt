@@ -14,22 +14,19 @@ final class CSEditListVM {
     var disposeBag = DisposeBag()
     
     let dataModel = SplitRepository.share
-    
-    private var data: Observable<CSInfo> = Observable.just(CSInfo.init(splitIdx: ""))
-    
-    init(splitIdx: String = "652fe13e384fd0feba2561be") {
-        dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: "652fe13e384fd0feba2561be")
-        dataModel.csInfoArr
+    private var data: Observable<CSInfo> {
+        return dataModel.csInfoArr
+            .asObservable()
             .observe(on: MainScheduler.asyncInstance)
-            .map { $0.first! }
-            .subscribe(onNext: {
-                self.dataModel.inputCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: $0.csInfoIdx)
-            })
-            .disposed(by: disposeBag)
-        disposeBag = DisposeBag()
-        
-//        data = dataModel.csInfoArr.map { $0.first! }.asObservable()
-//        data = Observavle.just(CSInfo.init(splitIdx: ""))
+            .take(1)
+            .flatMap { csInfoArray in
+                print(csInfoArray)
+                return csInfoArray.first.map(Observable.just) ?? Observable.empty()
+            }
+    }
+    
+    init(csinfoIdx: String = "652fe13e384fd0feba2561bf") {
+        dataModel.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: csinfoIdx)
     }
     
     var itemsObservable: Observable<[ExclItem]> {
@@ -64,6 +61,7 @@ final class CSEditListVM {
         let totalPriceTap: ControlEvent<Void>
         let memberTap: ControlEvent<Void>
         let exclItemTap: ControlEvent<IndexPath>
+        let addExclItemTap: ControlEvent<UITapGestureRecognizer>
         let saveButtonTap: ControlEvent<Void>
         let delCSInfoTap: ControlEvent<UITapGestureRecognizer>
     }
@@ -74,6 +72,7 @@ final class CSEditListVM {
         let pushMemberEditVC: Observable<Void>
         let popVCinSaveBtn: Observable<Void>
         let pushExclItemEditVC: Observable<IndexPath>
+        let pushExclItemAddVC: Observable<UITapGestureRecognizer>
         let popDelCSInfo: Observable<UITapGestureRecognizer>
 //        let pushExclItemEditVC: Observable<Void>
     }
@@ -85,12 +84,14 @@ final class CSEditListVM {
         let exclcell = input.exclItemTap.asObservable()
         let savebtn = input.saveButtonTap.asObservable()
         let delbtn = input.delCSInfoTap.asObservable()
+        let addExcl = input.addExclItemTap.asObservable()
         
         return Output(pushTitleEditVC: title,
                       pushPriceEditVC: price,
                       pushMemberEditVC: member,
                       popVCinSaveBtn: savebtn,
                       pushExclItemEditVC: exclcell,
+                      pushExclItemAddVC: addExcl,
                       popDelCSInfo: delbtn)
     }
     

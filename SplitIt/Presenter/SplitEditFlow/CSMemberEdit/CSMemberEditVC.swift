@@ -16,7 +16,7 @@ class CSMemberEditVC: UIViewController {
     
     let viewModel = CSMemberEditVM()
     
-    let header = NavigationHeader()
+    let header = NaviHeader()
     let titleMessage = UILabel()
     let textFieldCounter = UILabel()
     let textFiledNotice = UILabel()
@@ -45,8 +45,7 @@ class CSMemberEditVC: UIViewController {
         view.backgroundColor = UIColor(hex: 0xF8F7F4)
         
         header.do {
-            $0.configureTitle(title: "모임 수정하기")
-            $0.configureBackButton(viewController: self)
+            $0.applyStyle(.edit)
         }
         
         titleMessage.do {

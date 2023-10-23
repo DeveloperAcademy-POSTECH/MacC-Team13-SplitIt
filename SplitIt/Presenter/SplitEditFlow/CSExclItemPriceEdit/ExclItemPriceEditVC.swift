@@ -14,8 +14,9 @@ class ExclItemPriceEditVC: UIViewController {
     var disposeBag = DisposeBag()
     
     let viewModel: ExclItemPriceEditVM
+    weak var pageChangeDelegate: ExclItemPricePageChangeDelegate?
     
-    let header = NavigationHeader()
+    let header = NaviHeader()
     let titleMessage = UILabel()
     let priceTextField = UITextField()
     let currencyLabel = UILabel()
@@ -51,8 +52,7 @@ class ExclItemPriceEditVC: UIViewController {
         view.backgroundColor = UIColor(hex: 0xF8F7F4)
         
         header.do {
-            $0.configureTitle(title: "모임 수정하기")
-            $0.configureBackButton(viewController: self)
+            $0.applyStyle(.edit)
         }
         
         titleMessage.do {
@@ -143,9 +143,10 @@ class ExclItemPriceEditVC: UIViewController {
         output.showExclItemTargetView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
+                guard let index = viewModel.indexPath else { return }
                 self.nextButton.applyStyle(.primaryPearPressed)
-                let vc = ExclMemberEditVC(viewModel: ExclMemberEditVM(index: viewModel.indexPath))
-                self.navigationController?.pushViewController(vc, animated: false)
+                let vc = ExclMemberEditVC(viewModel: ExclMemberEditVM(index: index))
+                self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
         
