@@ -24,7 +24,7 @@ class CSMemberEditVC: UIViewController {
     let searchListTableView = UITableView()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     
-    let nextButton = UIButton()
+    let nextButton = SPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,11 +45,13 @@ class CSMemberEditVC: UIViewController {
         view.backgroundColor = UIColor(hex: 0xF8F7F4)
         
         header.do {
+            $0.configureTitle(title: "모임 수정하기")
             $0.configureBackButton(viewController: self)
         }
         
         titleMessage.do {
             $0.text = "누구와 함께했나요?"
+            $0.font = .KoreanBody
         }
         
         searchBar.do {
@@ -72,8 +74,7 @@ class CSMemberEditVC: UIViewController {
         
         nextButton.do {
             $0.setTitle("저장하기", for: .normal)
-            $0.layer.cornerRadius = 24
-            $0.backgroundColor = UIColor(hex: 0x19191B)
+            $0.applyStyle(.primaryPear)
         }
 
         setSearchTableView()
@@ -260,6 +261,15 @@ class CSMemberEditVC: UIViewController {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.navigationController?.popViewController(animated: false)
+                self.nextButton.applyStyle(.primaryPearPressed)
+            })
+            .disposed(by: disposeBag)
+        
+        output.showCSMemberConfirmView
+            .delay(.milliseconds(500))
+           .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+               self.nextButton.applyStyle(.primaryPear)
             })
             .disposed(by: disposeBag)
         
