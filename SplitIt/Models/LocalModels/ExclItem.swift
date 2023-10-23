@@ -22,7 +22,7 @@ struct ExclItem {
     }
 }
 
-extension ExclItem {
+extension ExclItem: Equatable {
     init(withRealmExclItem realmExclItem: RealmExclItem) {
         self.exclItemIdx = realmExclItem.exclItemIdx.stringValue
         self.name = realmExclItem.name
