@@ -45,14 +45,15 @@ class AddSplitHeader: UICollectionReusableView, Reusable {
         self.do {
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 16
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
-            $0.backgroundColor = UIColor(hex: 0xEEEDE8)
+            $0.backgroundColor = UIColor.SurfaceSelected
         }
         
         addLabel.do {
             $0.text = "+ 스플릿 항목 추가하기"
-            $0.font = .systemFont(ofSize: 12, weight: .bold)
+            $0.font = .KoreanSmallButtonText
+            $0.textColor = .TextPrimary
         }
     }
 

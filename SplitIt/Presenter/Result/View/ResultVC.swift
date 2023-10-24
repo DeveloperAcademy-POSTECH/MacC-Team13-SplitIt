@@ -26,11 +26,11 @@ class ResultVC: UIViewController {
     
     var dataSource: RxCollectionViewSectionedReloadDataSource<ResultSection>!
     
-    let header = NavigationHeader()
+    let header = NaviHeader()
     let splitTitle = UILabel()
     let splitDate = UILabel()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-    let nextButton = UIButton()
+    let nextButton = SPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,23 +44,27 @@ class ResultVC: UIViewController {
         view.backgroundColor = UIColor(hex: 0xF8F7F4)
         
         header.do {
-            $0.configureBackButton(viewController: self)
+            $0.applyStyle(.result)
+            $0.setExitButton(viewController: self)
         }
         
         splitTitle.do {
             $0.text = "Split Title"
-            $0.font = .systemFont(ofSize: 24)
+            $0.font = .KoreanTitle3
+            $0.textColor = .TextPrimary
         }
         
         splitDate.do {
             $0.text = "2023년 10월 3일"
-            $0.font = .systemFont(ofSize: 12)
+            $0.font = .KoreanCaption2
+            $0.textColor = .TextSecondary
         }
         
         nextButton.do {
+            $0.applyStyle(.primaryWatermelon)
             $0.setTitle("내가 만든 영수증 발급하기", for: .normal)
-            $0.layer.cornerRadius = 24
-            $0.backgroundColor = UIColor(hex: 0x19191B)
+            $0.setTitleColor(UIColor.TextPrimary, for: .normal)
+            $0.titleLabel?.font = .KoreanButtonText
         }
     }
     
@@ -229,10 +233,16 @@ class ResultVC: UIViewController {
         output.presentResultView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                
-                print("다음 ㄱㄱ")
-                //                let vc = ExclItemPriceInputVC()
-                //                self.navigationController?.pushViewController(vc, animated: true)
+                self.nextButton.applyStyle(.primaryWatermelonPressed)
+                // 제롬뷰로 이동
+            })
+            .disposed(by: disposeBag)
+        
+        output.presentResultView
+            .delay(.milliseconds(500))
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.nextButton.applyStyle(.primaryWatermelon)
             })
             .disposed(by: disposeBag)
         

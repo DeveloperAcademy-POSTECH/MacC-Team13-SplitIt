@@ -29,15 +29,15 @@ class ResultExclItemCell: UICollectionViewCell, Reusable {
     
     func setAttribute() {
         contentView.do {
-            contentView.backgroundColor = UIColor(hex: 0x343434)
+            contentView.backgroundColor = UIColor.SurfaceSecondary
             $0.layer.cornerRadius = 10
             $0.clipsToBounds = true
         }
         
         exclItemName.do {
             $0.text = "- 제외항목"
-            $0.textColor = UIColor(hex: 0xF1F1F1)
-            $0.font = .systemFont(ofSize: 12, weight: .light)
+            $0.textColor = UIColor.TextInvert
+            $0.font = .KoreanCaption2
         }
     }
     
