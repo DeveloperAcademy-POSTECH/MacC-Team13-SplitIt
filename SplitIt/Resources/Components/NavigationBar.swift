@@ -33,6 +33,8 @@ extension NaviHeader {
         case myInfo
         /// 친구 검색 기록 View
         case friendSearch
+        /// 스플릿 결과 View
+        case result
     }
 }
 
@@ -44,6 +46,7 @@ final class NaviHeader: UIView {
     let priceImageView = UIImageView()
     let memberImageView = UIImageView()
     let exclImageView = UIImageView()
+    let exitButton = UIButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -80,6 +83,10 @@ final class NaviHeader: UIView {
             naviTitleLabel.text = "나의 정보"
         case .friendSearch:
             naviTitleLabel.text = "친구 검색 내역"
+        case .result:
+            setExitButton()
+            naviTitleLabel.text = "스플릿 결과"
+            backButton.removeFromSuperview()
         }
     }
     
@@ -95,6 +102,23 @@ final class NaviHeader: UIView {
         backButton.do {
             $0.setImage(UIImage(named: "BackIcon"), for: .normal)
             $0.sizeToFit()
+        }
+    }
+    
+    func setExitButton() {
+        exitButton.do {
+            $0.setImage(UIImage(systemName: "xmark"), for: .normal)
+            $0.imageView?.tintColor = UIColor.TextPrimary
+            $0.sizeToFit()
+        }
+        
+        addSubview(exitButton)
+        
+        exitButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(30)
+            $0.height.equalToSuperview()
+            $0.width.equalTo(30)
         }
     }
     
@@ -191,5 +215,14 @@ final class NaviHeader: UIView {
         backButton.removeAllActions()
         
         backButton.addAction(action, for: .touchUpInside)
+    }
+    
+    func setExitButton(viewController: UIViewController) {
+        exitButton.removeAllActions()
+        
+        let exitAction = UIAction { action in
+            viewController.navigationController?.popToRootViewController(animated: true)
+        }
+        exitButton.addAction(exitAction, for: .touchUpInside)
     }
 }

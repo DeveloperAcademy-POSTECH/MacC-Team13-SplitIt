@@ -28,10 +28,11 @@ class ResultSectionFooter: UICollectionReusableView, Reusable {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: Button Font
     func setAttribute() {
         button.do {
             $0.setTitle("수정하기", for: .normal)
-            $0.setTitleColor(UIColor(hex: 0x202020), for: .normal)
+            $0.setTitleColor(UIColor.TextPrimary, for: .normal)
         }
     }
     

@@ -36,6 +36,8 @@ class ResultSectionHeader: UICollectionReusableView, Reusable {
     let totalAmountInfo = UILabel()
     let memberlabel = UILabel()
     let totalAmountLabel = UILabel()
+    let memberSuffixLabel = UILabel()
+    let totalAmountSuffixLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -77,65 +79,77 @@ class ResultSectionHeader: UICollectionReusableView, Reusable {
         
         titleView.do {
             $0.layer.cornerRadius = 8
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
         }
         
         orderView.do {
             $0.layer.cornerRadius = 8
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
         }
         
         orderInfo.do {
-            $0.textColor = UIColor(hex: 0x202020)
-            $0.font = .systemFont(ofSize: 12, weight: .light)
+            $0.textColor = UIColor.TextPrimary
+            $0.font = .KoreanCaption2
         }
         
         titleInfo.do {
             $0.textColor = UIColor(hex: 0x202020)
-            $0.font = .systemFont(ofSize: 12, weight: .light)
+            $0.font = .KoreanCaption2
         }
         
         toggleButton.do {
-            $0.setImage(UIImage(named: "XMark"), for: .normal)
+            $0.setImage(UIImage(named: "ArrowTriangleIconDown"), for: .normal)
         }
         
         leftLine.do {
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
         }
         
         rightLine.do {
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
         }
         
         csTitleInfo.do {
-            $0.textColor = UIColor(hex: 0x202020)
-            $0.font = .systemFont(ofSize: 24, weight: .regular)
+            $0.textColor = UIColor.TextPrimary
+            $0.font = .KoreanTitle3
         }
         
         totalAmountLabel.do {
-            $0.textColor = UIColor(hex: 0x7C7C7C)
-            $0.font = .systemFont(ofSize: 12, weight: .light)
+            $0.textColor = UIColor.TextSecondary
+            $0.font = .KoreanCaption2
             $0.text = "총액"
         }
         
         totalAmountInfo.do {
-            $0.textColor = UIColor(hex: 0x202020)
-            $0.font = .systemFont(ofSize: 18, weight: .regular)
+            $0.textColor = UIColor.TextPrimary
+            $0.font = .KoreanBody
         }
         
         memberlabel.do {
-            $0.textColor = UIColor(hex: 0x7C7C7C)
-            $0.font = .systemFont(ofSize: 12, weight: .light)
+            $0.textColor = UIColor.TextSecondary
+            $0.font = .KoreanCaption2
             $0.text = "인원"
         }
         
         memberInfo.do {
-            $0.textColor = UIColor(hex: 0x202020)
-            $0.font = .systemFont(ofSize: 18, weight: .regular)
+            $0.textColor = UIColor.TextPrimary
+            $0.font = .KoreanBody
+        }
+        
+        memberSuffixLabel.do {
+            $0.text = "명"
+            $0.font = .KoreanCaption2
+            $0.textColor = .TextPrimary
+        }
+        
+        totalAmountSuffixLabel.do {
+            $0.text = "KRW"
+            $0.textColor = .TextPrimary
+            $0.font = .KoreanCaption2
         }
     }
     
@@ -149,7 +163,7 @@ class ResultSectionHeader: UICollectionReusableView, Reusable {
         titleView.addSubview(titleInfo)
         titleView.addSubview(toggleButton)
         
-        [csTitleInfo, memberInfo, totalAmountInfo, memberlabel, totalAmountLabel].forEach {
+        [csTitleInfo, memberInfo, totalAmountInfo, memberlabel, totalAmountLabel, totalAmountSuffixLabel, memberSuffixLabel].forEach {
             unfoldView.addSubview($0)
         }
         
@@ -226,6 +240,15 @@ class ResultSectionHeader: UICollectionReusableView, Reusable {
             $0.centerY.equalTo(memberInfo.snp.centerY)
             $0.leading.equalTo(totalAmountLabel)
         }
+        
+        memberSuffixLabel.snp.makeConstraints {
+            $0.leading.equalTo(memberInfo.snp.trailing).offset(2)
+            $0.centerY.equalTo(memberInfo)
+        }
+        totalAmountSuffixLabel.snp.makeConstraints {
+            $0.leading.equalTo(totalAmountInfo.snp.trailing).offset(2)
+            $0.centerY.equalTo(totalAmountInfo)
+        }
     }
 
     func configureAddSplit() {
@@ -240,7 +263,6 @@ class ResultSectionHeader: UICollectionReusableView, Reusable {
     
     // TODO: 접힐때의 Layout 및 값 설정
     func configureFold(item: CSInfo, sectionIndex: Int) {
-        print("fold: \(sectionIndex)")
         let numberFormatter = NumberFormatterHelper()
 
         orderView.backgroundColor = backgroundColor(forSectionIndex: sectionIndex)
@@ -256,7 +278,6 @@ class ResultSectionHeader: UICollectionReusableView, Reusable {
     
     // TODO: 펼칠때의 Layout 및 값 설정
     func configureUnfold(item: CSInfo, sectionIndex: Int) {
-        print("unfold: \(sectionIndex)")
         let numberFormatter = NumberFormatterHelper()
         
         orderView.backgroundColor = backgroundColor(forSectionIndex: sectionIndex)
@@ -271,7 +292,7 @@ class ResultSectionHeader: UICollectionReusableView, Reusable {
     }
     
     func backgroundColor(forSectionIndex sectionIndex: Int) -> UIColor {
-        return sectionIndex % 2 == 1 ? UIColor(hex: 0xD3D3D3) : UIColor(hex: 0xF1F1F1)
+        return [UIColor.AppColorBrandCherry, UIColor.AppColorBrandPear, UIColor.AppColorBrandRadish, UIColor.AppColorBrandMushroom][sectionIndex % 4]
     }
     
     func maskedCornersInFold() {

@@ -20,6 +20,8 @@ class ResultCell: UICollectionViewCell, Reusable {
     
     let name = UILabel()
     let payment = UILabel()
+    let paymentPrefix = UILabel()
+    let paymentSuffix = UILabel()
     let collectionView = UICollectionView(frame: .zero,
                                           collectionViewLayout: UICollectionViewLayout())
     
@@ -39,18 +41,32 @@ class ResultCell: UICollectionViewCell, Reusable {
         
         disposeBag = DisposeBag()
         
+        paymentPrefix.text = ""
+        
         collectionView.snp.removeConstraints()
         payment.snp.removeConstraints()
+        paymentPrefix.snp.removeConstraints()
+        paymentSuffix.snp.removeConstraints()
         
         collectionView.snp.makeConstraints {
             $0.top.equalTo(name.snp.bottom).offset(4)
             $0.leading.trailing.equalToSuperview().inset(12)
         }
         
-        payment.snp.makeConstraints {
+        paymentSuffix.snp.makeConstraints {
             $0.top.equalTo(collectionView.snp.bottom).offset(4)
             $0.trailing.equalToSuperview().inset(12)
             $0.bottom.equalToSuperview().inset(8)
+        }
+        
+        payment.snp.makeConstraints {
+            $0.trailing.equalTo(paymentSuffix.snp.leading).offset(-2)
+            $0.centerY.equalTo(paymentSuffix)
+        }
+        
+        paymentPrefix.snp.makeConstraints {
+            $0.trailing.equalTo(payment.snp.leading).offset(-4)
+            $0.centerY.equalTo(paymentSuffix)
         }
     }
     
@@ -61,20 +77,29 @@ class ResultCell: UICollectionViewCell, Reusable {
             contentView.backgroundColor = UIColor.clear
             $0.layer.cornerRadius = 4
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor(hex: 0xCCCCCC).cgColor
+            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
             $0.clipsToBounds = true
         }
         
         name.do {
-//            $0.text = "이름"
-            $0.textColor = UIColor(hex: 0x202020)
-            $0.font = .systemFont(ofSize: 12, weight: .light)
+            $0.textColor = UIColor.TextPrimary
+            $0.font = .KoreanCaption2
         }
         
         payment.do {
-//            $0.text = "금액"
-            $0.textColor = UIColor(hex: 0x202020)
-            $0.font = .systemFont(ofSize: 15, weight: .regular)
+            $0.textColor = UIColor.TextPrimary
+            $0.font = .KoreanCaption1
+        }
+        
+        paymentPrefix.do {
+            $0.textColor = .TextPrimary
+            $0.font = .KoreanCaption2
+        }
+        
+        paymentSuffix.do {
+            $0.text = "KRW"
+            $0.textColor = .TextPrimary
+            $0.font = .KoreanCaption2
         }
         
         setCollectionView()
@@ -84,12 +109,12 @@ class ResultCell: UICollectionViewCell, Reusable {
         collectionView.do {
             $0.collectionViewLayout = DisplayLayoutFactory.createResultCellLayout()
             $0.register(cellType: ResultExclItemCell.self)
-            $0.backgroundColor = UIColor(hex: 0xF8F7F4)
+            $0.backgroundColor = UIColor.SurfaceBrandCalmshell
         }    
     }
     
     func setLayout() {
-        [name, payment, collectionView].forEach {
+        [name, payment, collectionView, paymentPrefix, paymentSuffix].forEach {
             contentView.addSubview($0)
         }
         
@@ -104,10 +129,20 @@ class ResultCell: UICollectionViewCell, Reusable {
 //            $0.height.equalTo(0)
         }
         
-        payment.snp.makeConstraints {
+        paymentSuffix.snp.makeConstraints {
             $0.top.equalTo(collectionView.snp.bottom).offset(4)
             $0.trailing.equalToSuperview().inset(12)
             $0.bottom.equalToSuperview().inset(8)
+        }
+        
+        payment.snp.makeConstraints {
+            $0.trailing.equalTo(paymentSuffix.snp.leading).offset(-2)
+            $0.centerY.equalTo(paymentSuffix)
+        }
+        
+        paymentPrefix.snp.makeConstraints {
+            $0.trailing.equalTo(payment.snp.leading).offset(-4)
+            $0.centerY.equalTo(paymentSuffix)
         }
     }
     
@@ -125,8 +160,12 @@ class ResultCell: UICollectionViewCell, Reusable {
     }
 
     func configure(item: Result) {
+        let numberFormatter = NumberFormatterHelper()
         name.text = item.name.joined(separator: ", ")
-        payment.text = "각 \(item.payment) KRW"
+        if item.name.count > 1 {
+            paymentPrefix.text = "각"
+        }
+        payment.text = numberFormatter.formattedString(from: item.payment)
         
         print("명단: \(name.text!)")
         print("제외항목: \(item.exclItems)")
