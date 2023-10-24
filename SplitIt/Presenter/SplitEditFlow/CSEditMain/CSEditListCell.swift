@@ -9,7 +9,7 @@ import SnapKit
 import Reusable
 import RxSwift
 
-class CSEditListCell: UITableViewCell, Reusable {
+final class CSEditListCell: UITableViewCell, Reusable {
     
     var disposeBag = DisposeBag()
     
@@ -17,14 +17,15 @@ class CSEditListCell: UITableViewCell, Reusable {
         let label = UILabel()
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.textColor = .TextPrimary
         return label
     }()
     
     var editBtn: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("수정하기", for: .normal)
-        btn.setTitleColor(.lightGray, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 12)
+        btn.setTitleColor(.TextSecondary, for: .normal)
+        btn.titleLabel?.font = .KoreanCaption2
         btn.isEnabled = false
         return btn
     }()

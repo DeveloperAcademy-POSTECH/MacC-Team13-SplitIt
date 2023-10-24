@@ -87,8 +87,9 @@ class HomeVC: UIViewController {
         output.showHistoryView
             .drive(onNext: {
                 // MARK: 제리가 연결할 뷰로 수정
-                print("제리뷰 이동 & 히스토리뷰 이동") // 수정 후 삭제
-//                let vc = HomeVC()
+//                print("제리뷰 이동 & 히스토리뷰 이동") // 수정 후 삭제
+
+//                let vc = CSEditListVC()
 //                self.navigationController?.pushViewController(vc, animated: true)
                 self.historyButton.backgroundColor = UIColor.lightGray
             })
@@ -227,15 +228,17 @@ class HomeVC: UIViewController {
             $0.center.equalToSuperview()
             
         }
+        
         logoImage.snp.makeConstraints {
             $0.width.equalTo(130)
             $0.height.equalTo(92)
             $0.top.equalToSuperview().offset(20)
             $0.left.equalToSuperview().offset(20)
         }
+        
         mainTextView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(437)
-            $0.center.equalToSuperview()
+            $0.centerX.equalToSuperview()
             $0.width.equalTo(280)
             $0.height.equalTo(200)
         }

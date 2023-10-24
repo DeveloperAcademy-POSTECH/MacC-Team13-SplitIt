@@ -1,21 +1,28 @@
 //
-//  CSMemberPageController.swift
+//  File.swift
 //  SplitIt
 //
-//  Created by Zerom on 2023/10/22.
+//  Created by 주환 on 2023/10/23.
 //
 
 import UIKit
 import Then
 import SnapKit
 
-class ExclPageController: UIViewController, ExclItemNamePageChangeDelegate, ExclItemPricePageChangeDelegate {
+class ExclEditPageController: UIViewController, ExclItemNamePageChangeDelegate, ExclItemPricePageChangeDelegate {
     let header = NaviHeader()
-    let exclItemNameInputVC = ExclItemNameInputVC()
-    let exclItemPriceInputVC = ExclItemPriceInputVC()
-    let exclMemberVC = ExclMemberVC()
-    let exclMemberSectionHeaderVC = ExclMemberSectionHeader()
     
+    var exclItemNameInputVC: ExclItemNameEditVC {
+        return ExclItemNameEditVC(viewModel: ExclItemNameEditVM())
+    }
+    var exclItemPriceInputVC: ExclItemPriceEditVC {
+        return ExclItemPriceEditVC(viewModel: ExclItemPriceEditVM())
+    }
+    var exclMemberVC: ExclMemberEditVC {
+        return ExclMemberEditVC(viewModel: ExclMemberEditVM())
+    }
+    
+    let indexPath: IndexPath = []
     var controllCheck = 0
     
     lazy var vcArr: [UIViewController] = [exclItemNameInputVC, exclItemPriceInputVC, exclMemberVC]
@@ -33,13 +40,7 @@ class ExclPageController: UIViewController, ExclItemNamePageChangeDelegate, Excl
     private func setAttribute() {
         view.backgroundColor = .SurfacePrimary
         exclItemNameInputVC.nameTextFiled.becomeFirstResponder()
-        
-        header.do {
-            $0.applyStyle(.csExcl)
-            $0.setBackButton(viewController: self)
-        }
     }
-    
     
     private func setPageControll() {
         exclItemNameInputVC.pageChangeDelegate = self
@@ -65,14 +66,14 @@ class ExclPageController: UIViewController, ExclItemNamePageChangeDelegate, Excl
         controllCheck = 2
         self.pageViewController.setViewControllers([self.vcArr[2]], direction: .forward, animated: true, completion: nil)
         let action = UIAction { _ in self.changePageToSecondViewReverse() }
-        header.setBackButton(action: action)
+//        header.setBackButton(action: action)
     }
     
     func changePageToSecondViewReverse() {
         controllCheck = 1
         self.pageViewController.setViewControllers([self.vcArr[1]], direction: .reverse, animated: true, completion: nil)
         let action = UIAction { _ in self.changePageToFirstView() }
-        header.setBackButton(action: action)
+//        header.setBackButton(action: action)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.exclItemPriceInputVC.priceTextField.becomeFirstResponder()
@@ -82,7 +83,7 @@ class ExclPageController: UIViewController, ExclItemNamePageChangeDelegate, Excl
     func changePageToSecondView() {
         self.pageViewController.setViewControllers([self.vcArr[1]], direction: .forward, animated: true, completion: nil)
         let action = UIAction { _ in self.changePageToFirstView() }
-        header.setBackButton(action: action)
+//        header.setBackButton(action: action)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.exclItemPriceInputVC.priceTextField.becomeFirstResponder()
@@ -91,7 +92,7 @@ class ExclPageController: UIViewController, ExclItemNamePageChangeDelegate, Excl
     
     func changePageToFirstView() {
         self.pageViewController.setViewControllers([self.vcArr[0]], direction: .reverse, animated: true, completion: nil)
-        header.setBackButton(viewController: self)
+//        header.setBackButton(viewController: self)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.exclItemNameInputVC.nameTextFiled.becomeFirstResponder()
@@ -100,6 +101,8 @@ class ExclPageController: UIViewController, ExclItemNamePageChangeDelegate, Excl
     
     private func setLayout() {
         addChild(pageViewController)
+        
+        header.isHidden = true
         
         [header,pageViewController.view].forEach {
             view.addSubview($0)
@@ -119,7 +122,7 @@ class ExclPageController: UIViewController, ExclItemNamePageChangeDelegate, Excl
     }
 }
 
-extension ExclPageController: UITextFieldDelegate {
+extension ExclEditPageController: UITextFieldDelegate {
     func setKeyboardNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)

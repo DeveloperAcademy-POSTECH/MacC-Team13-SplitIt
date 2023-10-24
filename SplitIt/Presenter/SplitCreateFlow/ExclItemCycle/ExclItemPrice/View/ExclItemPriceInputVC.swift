@@ -48,7 +48,7 @@ class ExclItemPriceInputVC: UIViewController {
         }
         
         textFiledNotice.do {
-            $0.text = "여기에 사용을 돕는 문구가 들어가요"
+            $0.text = "이 값은 전체 총액을 넘을 수는 없어요"
             $0.font = .KoreanCaption2
             $0.textColor = .TextSecondary
         }

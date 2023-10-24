@@ -14,13 +14,14 @@ class ExclItemPriceEditVC: UIViewController {
     var disposeBag = DisposeBag()
     
     let viewModel: ExclItemPriceEditVM
+    weak var pageChangeDelegate: ExclItemPricePageChangeDelegate?
     
-    let header = NavigationHeader()
+    let header = NaviHeader()
     let titleMessage = UILabel()
     let priceTextField = UITextField()
     let currencyLabel = UILabel()
     let textFiledNotice = UILabel()
-    let nextButton = UIButton()
+    let nextButton = SPButton()
     
     init(viewModel: ExclItemPriceEditVM) {
         self.disposeBag = DisposeBag()
@@ -51,14 +52,15 @@ class ExclItemPriceEditVC: UIViewController {
         view.backgroundColor = UIColor(hex: 0xF8F7F4)
         
         header.do {
-            $0.configureBackButton(viewController: self)
+            $0.applyStyle(.edit)
         }
         
         titleMessage.do {
-            $0.font = .systemFont(ofSize: 18)
+            $0.font = .KoreanBody
         }
         
         priceTextField.do {
+            $0.font = .KoreanTitle3
             $0.keyboardType = .numberPad
             $0.layer.cornerRadius = 8
             $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
@@ -69,7 +71,7 @@ class ExclItemPriceEditVC: UIViewController {
         
         currencyLabel.do {
             $0.text = "KRW"
-            $0.font = .systemFont(ofSize: 15)
+            $0.font = .KoreanCaption1
         }
         
         textFiledNotice.do {
@@ -78,9 +80,8 @@ class ExclItemPriceEditVC: UIViewController {
         }
         
         nextButton.do {
-            $0.setTitle("다음으로", for: .normal)
-            $0.layer.cornerRadius = 24
-            $0.backgroundColor = UIColor(hex: 0x19191B)
+            $0.setTitle("저장하기", for: .normal)
+            $0.applyStyle(.primaryPear)
         }
     }
     
@@ -142,8 +143,18 @@ class ExclItemPriceEditVC: UIViewController {
         output.showExclItemTargetView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let vc = ExclMemberEditVC(viewModel: ExclMemberEditVM(index: viewModel.indexPath))
-                self.navigationController?.pushViewController(vc, animated: false)
+                guard let index = viewModel.indexPath else { return }
+                self.nextButton.applyStyle(.primaryPearPressed)
+                let vc = ExclMemberEditVC(viewModel: ExclMemberEditVM(index: index))
+                self.navigationController?.pushViewController(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        output.showExclItemTargetView
+            .delay(.milliseconds(500))
+           .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+               self.nextButton.applyStyle(.primaryPear)
             })
             .disposed(by: disposeBag)
         

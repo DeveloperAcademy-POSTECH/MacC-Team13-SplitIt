@@ -16,7 +16,7 @@ class MyBankAccountVC: UIViewController {
     
     let clearButton = UIButton()
     
-    let header = NavigationHeader()
+    let header = NaviHeader()
     
     let viewModel = MyBankAccountVM()
     var disposeBag = DisposeBag()
@@ -57,9 +57,6 @@ class MyBankAccountVC: UIViewController {
     let naverPayView = UIView()
     
     let nameClearBtn = UIButton()
-    
-    //추후에 textField 전체 삭제 버튼 구현
-    // let accountClearBtn = UIButton()
     
     
     private let editDoneBtn = SPButton()
@@ -144,10 +141,10 @@ class MyBankAccountVC: UIViewController {
     func setLayout() {
         header.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             $0.leading.trailing.equalToSuperview()
         }
-        
+ 
         nameLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(112)
             make.left.equalToSuperview().offset(36)
@@ -329,9 +326,13 @@ class MyBankAccountVC: UIViewController {
         view.backgroundColor = .SurfaceBrandCalmshell
         
         
-        header.do {
-            $0.configureBackButton(viewController: self)
-        }
+       
+            header.do {
+                $0.applyStyle(.myInfo)
+                $0.setBackButton(viewController: self)
+            }
+            
+        
         
         nameLabel.do {
             $0.text = "이름"
@@ -350,7 +351,7 @@ class MyBankAccountVC: UIViewController {
             
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
-            $0.clearButtonMode = .whileEditing
+            //$0.clearButtonMode = .whileEditing
             
             //placeholder의 색깔
             if UserDefaults.standard.string(forKey: "userName") == nil {
@@ -454,12 +455,7 @@ class MyBankAccountVC: UIViewController {
         
         editDoneBtn.do {
             $0.setTitle("계좌정보 수정완료", for: .normal)
-//            $0.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-//            $0.titleLabel?.textColor = .white
-//            $0.clipsToBounds = true
-//            $0.layer.cornerRadius = 20
-//            $0.backgroundColor = .black
-//            $0.applyStyle(.primaryWatermelon)
+
         }
         
         leftBar.do {
@@ -551,14 +547,7 @@ class MyBankAccountVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        
-        
-        nameClearBtn.rx.tap
-            .bind { [weak self] in
-                self?.nameTextField.text = ""
-                print("눌림")
-            }
-            .disposed(by: disposeBag)
+       
         
         
     }

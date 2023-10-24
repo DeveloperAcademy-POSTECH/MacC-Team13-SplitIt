@@ -15,12 +15,12 @@ class CSTotalAmountEditVC: UIViewController {
     
     let viewModel = CSTotalAmountEditVM()
     
-    let header = NavigationHeader()
+    let header = NaviHeader()
     let titleMessage = UILabel()
     let totalAmountTextFiled = UITextField()
     let currencyLabel = UILabel()
     let textFiledNotice = UILabel()
-    let nextButton = UIButton()
+    let nextButton = SPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,14 +41,17 @@ class CSTotalAmountEditVC: UIViewController {
         view.backgroundColor = UIColor(hex: 0xF8F7F4)
         
         header.do {
-            $0.configureBackButton(viewController: self)
+            $0.applyStyle(.edit)
         }
         
         titleMessage.do {
             $0.text = "총 얼마를 사용하셨나요?"
+            $0.tintColor = .TextPrimary
+            $0.font = .KoreanBody
         }
         
         totalAmountTextFiled.do {
+            $0.font = .KoreanTitle3
             $0.keyboardType = .numberPad
             $0.layer.cornerRadius = 8
             $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
@@ -58,6 +61,7 @@ class CSTotalAmountEditVC: UIViewController {
         
         currencyLabel.do {
             $0.text = "KRW"
+            $0.font = .KoreanTitle3
         }
         
         textFiledNotice.do {
@@ -65,9 +69,8 @@ class CSTotalAmountEditVC: UIViewController {
         }
         
         nextButton.do {
-            $0.setTitle("다음으로", for: .normal)
-            $0.layer.cornerRadius = 24
-            $0.backgroundColor = UIColor(hex: 0x19191B)
+            $0.setTitle("저장하기", for: .normal)
+            $0.applyStyle(.primaryPear)
         }
     }
     
@@ -124,7 +127,16 @@ class CSTotalAmountEditVC: UIViewController {
         output.showCSMemberInputView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
+                self.nextButton.applyStyle(.primaryPearPressed)
                 self.navigationController?.popViewController(animated: false)
+            })
+            .disposed(by: disposeBag)
+        
+        output.showCSMemberInputView
+            .delay(.milliseconds(500))
+           .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+               self.nextButton.applyStyle(.primaryPear)
             })
             .disposed(by: disposeBag)
         

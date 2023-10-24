@@ -51,6 +51,8 @@ class CSMemberEditCell: UICollectionViewCell, Reusable {
         deleteButton.do {
             $0.setImage(UIImage(named: "XMark"), for: .normal)
         }
+        
+        memberName.font = .KoreanCaption1
     }
     
     func setLayout() {
