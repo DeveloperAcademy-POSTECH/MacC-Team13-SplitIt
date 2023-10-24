@@ -24,13 +24,6 @@
 		1A4DB22B2ADE68E400616243 /* SplitRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB22A2ADE68E400616243 /* SplitRepository.swift */; };
 		1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */; };
 		1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2522ADEB24F00616243 /* MemberLog.swift */; };
-		1A716C632AE5BF2C00D0E128 /* SplitShareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A716C622AE5BF2C00D0E128 /* SplitShareVC.swift */; };
-		1A716C652AE5BF3600D0E128 /* SplitShareVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A716C642AE5BF3600D0E128 /* SplitShareVM.swift */; };
-		1A716C682AE5C1A000D0E128 /* SplitShareTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A716C672AE5C1A000D0E128 /* SplitShareTableCell.swift */; };
-		1A716C6A2AE5C6FF00D0E128 /* SplitShareSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A716C692AE5C6FF00D0E128 /* SplitShareSectionHeader.swift */; };
-		1A716C6C2AE63D2400D0E128 /* SplitMemberResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A716C6B2AE63D2400D0E128 /* SplitMemberResult.swift */; };
-		1A716C702AE645E500D0E128 /* CSMemberResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A716C6F2AE645E500D0E128 /* CSMemberResult.swift */; };
-		1A716C722AE6BD7800D0E128 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A716C712AE6BD7800D0E128 /* UIView+.swift */; };
 		6009C8142AE29DF4008B9EC1 /* ResultVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6009C8132AE29DF4008B9EC1 /* ResultVC.swift */; };
 		6009C8162AE29DFB008B9EC1 /* ResultVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6009C8152AE29DFB008B9EC1 /* ResultVM.swift */; };
 		6009C8192AE29E5D008B9EC1 /* ResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6009C8182AE29E5D008B9EC1 /* ResultCell.swift */; };
@@ -162,13 +155,6 @@
 		1A4DB22A2ADE68E400616243 /* SplitRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitRepository.swift; sourceTree = "<group>"; };
 		1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMemberLog.swift; sourceTree = "<group>"; };
 		1A4DB2522ADEB24F00616243 /* MemberLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberLog.swift; sourceTree = "<group>"; };
-		1A716C622AE5BF2C00D0E128 /* SplitShareVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitShareVC.swift; sourceTree = "<group>"; };
-		1A716C642AE5BF3600D0E128 /* SplitShareVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitShareVM.swift; sourceTree = "<group>"; };
-		1A716C672AE5C1A000D0E128 /* SplitShareTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitShareTableCell.swift; sourceTree = "<group>"; };
-		1A716C692AE5C6FF00D0E128 /* SplitShareSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitShareSectionHeader.swift; sourceTree = "<group>"; };
-		1A716C6B2AE63D2400D0E128 /* SplitMemberResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMemberResult.swift; sourceTree = "<group>"; };
-		1A716C6F2AE645E500D0E128 /* CSMemberResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberResult.swift; sourceTree = "<group>"; };
-		1A716C712AE6BD7800D0E128 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		6009C8132AE29DF4008B9EC1 /* ResultVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultVC.swift; sourceTree = "<group>"; };
 		6009C8152AE29DFB008B9EC1 /* ResultVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultVM.swift; sourceTree = "<group>"; };
 		6009C8182AE29E5D008B9EC1 /* ResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCell.swift; sourceTree = "<group>"; };
@@ -338,39 +324,6 @@
 			path = Repository;
 			sourceTree = "<group>";
 		};
-		1A716C5F2AE5BEF100D0E128 /* SplitShare */ = {
-			isa = PBXGroup;
-			children = (
-				1A716C612AE5BF2100D0E128 /* View */,
-				1A716C602AE5BF1900D0E128 /* ViewModel */,
-				1A716C6B2AE63D2400D0E128 /* SplitMemberResult.swift */,
-				1A716C6F2AE645E500D0E128 /* CSMemberResult.swift */,
-			);
-			path = SplitShare;
-			sourceTree = "<group>";
-		};
-		1A716C602AE5BF1900D0E128 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				1A716C642AE5BF3600D0E128 /* SplitShareVM.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		1A716C612AE5BF2100D0E128 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				1A716C662AE5C19000D0E128 /* Cell */,
-				1A716C622AE5BF2C00D0E128 /* SplitShareVC.swift */,
-				1A716C692AE5C6FF00D0E128 /* SplitShareSectionHeader.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		1A716C662AE5C19000D0E128 /* Cell */ = {
-			isa = PBXGroup;
-			children = (
-				1A716C672AE5C1A000D0E128 /* SplitShareTableCell.swift */,
 		6009C8102AE29DC7008B9EC1 /* Result */ = {
 			isa = PBXGroup;
 			children = (
@@ -418,7 +371,6 @@
 		60115DF22ADBF0DD0050D32C /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
-				1A716C5F2AE5BEF100D0E128 /* SplitShare */,
 				6009C8102AE29DC7008B9EC1 /* Result */,
 				DE73D7142AE65C2700ABF3EF /* AlertView */,
 				869D1AC92AE5292A00D166B1 /* SplitEditFlow */,
@@ -461,7 +413,6 @@
 				60115E002ADC01150050D32C /* UITextField+.swift */,
 				C2A797902AE2748E0049E709 /* UIFont+.swift */,
 				1A07DF0A2AE569660081E543 /* UIButton+.swift */,
-				1A716C712AE6BD7800D0E128 /* UIView+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1117,7 +1068,6 @@
 				60115E222ADD2BC80050D32C /* CSMemberInputCell.swift in Sources */,
 				1A07DF062AE51F060081E543 /* CSMemberPageController.swift in Sources */,
 				DE1711C42AE0BAB30097850D /* MyInfoVC.swift in Sources */,
-				1A716C702AE645E500D0E128 /* CSMemberResult.swift in Sources */,
 				869D1AE12AE52BC600D166B1 /* CSTotalAmountEditVM.swift in Sources */,
 				60115E242ADD2BE20050D32C /* CSMemberInputSearchCell.swift in Sources */,
 				60115E122ADC19D40050D32C /* NavigationHeader.swift in Sources */,
@@ -1137,7 +1087,6 @@
 				869D1AD82AE52B6500D166B1 /* CSMemberEditVC.swift in Sources */,
 				869D1ADC2AE52B8800D166B1 /* CSMemberEditCell.swift in Sources */,
 				C2A797A42AE278190049E709 /* HistoryVC.swift in Sources */,
-				1A716C6A2AE5C6FF00D0E128 /* SplitShareSectionHeader.swift in Sources */,
 				60115E162ADCDB840050D32C /* CSTotalAmountInputVM.swift in Sources */,
 				C2A797912AE2748E0049E709 /* UIFont+.swift in Sources */,
 				60115E312ADE715E0050D32C /* CSMemberConfirmHeaderVM.swift in Sources */,
@@ -1167,7 +1116,6 @@
 				C2A797942AE274F10049E709 /* SPTextField.swift in Sources */,
 				1A3852F72ADE5AB200E9A20B /* CSInfo.swift in Sources */,
 				60115E1F2ADD2B660050D32C /* CSMemberInputVM.swift in Sources */,
-				1A716C682AE5C1A000D0E128 /* SplitShareTableCell.swift in Sources */,
 				6009C8142AE29DF4008B9EC1 /* ResultVC.swift in Sources */,
 				869D1AE62AE52C0F00D166B1 /* ExclItemNameEditVM.swift in Sources */,
 				869D1ADA2AE52B7600D166B1 /* CSMemberEditVM.swift in Sources */,
@@ -1181,7 +1129,6 @@
 				DE73D6EB2AE0D29000ABF3EF /* BankManager.swift in Sources */,
 				1A4DB2292ADE61E800616243 /* RealmManager.swift in Sources */,
 				1A3853032ADE5B4500E9A20B /* RealmCSMember.swift in Sources */,
-				1A716C722AE6BD7800D0E128 /* UIView+.swift in Sources */,
 				1A3853012ADE5B3100E9A20B /* RealmCSInfo.swift in Sources */,
 				60115E012ADC01150050D32C /* UITextField+.swift in Sources */,
 				60115E2B2ADE21CB0050D32C /* CSMemberConfirmVM.swift in Sources */,
@@ -1196,7 +1143,6 @@
 				60115E0E2ADC19250050D32C /* CSTitleInputVM.swift in Sources */,
 				1A3852FF2ADE5B1B00E9A20B /* RealmSplit.swift in Sources */,
 				60115E0C2ADC18F90050D32C /* CSTitleInputVC.swift in Sources */,
-				1A716C632AE5BF2C00D0E128 /* SplitShareVC.swift in Sources */,
 				1A3852F52ADE5A9F00E9A20B /* Split.swift in Sources */,
 				869D1AF22AE52C9B00D166B1 /* ExclMemberEditSectionModel.swift in Sources */,
 				DE73D7112AE5477400ABF3EF /* SplashVC.swift in Sources */,
@@ -1204,7 +1150,6 @@
 				DE1711C22AE0BA9B0097850D /* MyInfoVM.swift in Sources */,
 				1A3852FB2ADE5ADA00E9A20B /* ExclItem.swift in Sources */,
 				60115E262ADD2CB00050D32C /* CSMemberInputSearchFooter.swift in Sources */,
-				1A716C652AE5BF3600D0E128 /* SplitShareVM.swift in Sources */,
 				60AE3EB02AE6CE2A009D9D18 /* ResultSectionFooter.swift in Sources */,
 				6009C81D2AE2B684008B9EC1 /* AddSplitHeader.swift in Sources */,
 				DE1711C62AE0BACE0097850D /* User.swift in Sources */,
@@ -1226,7 +1171,6 @@
 				869D1AEB2AE52C4700D166B1 /* ExclItemPriceEditVM.swift in Sources */,
 				DE73D7132AE654D800ABF3EF /* CustomAlertVC.swift in Sources */,
 				DE73D6EF2AE0D2D500ABF3EF /* BankCell.swift in Sources */,
-				1A716C6C2AE63D2400D0E128 /* SplitMemberResult.swift in Sources */,
 				60AE3EA82AE55D2A009D9D18 /* ResultExclItemCell.swift in Sources */,
 				DE73D71B2AE6B00300ABF3EF /* SecondVC.swift in Sources */,
 				869D1AF42AE52CAC00D166B1 /* ExclMemberEditSectionHeader.swift in Sources */,
