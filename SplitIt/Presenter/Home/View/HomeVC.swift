@@ -87,10 +87,10 @@ class HomeVC: UIViewController {
         output.showHistoryView
             .drive(onNext: {
                 // MARK: 제리가 연결할 뷰로 수정
-                print("제리뷰 이동 & 히스토리뷰 이동") // 수정 후 삭제
+//                print("제리뷰 이동 & 히스토리뷰 이동") // 수정 후 삭제
 
-                let vc = CSEditListVC()
-                self.navigationController?.pushViewController(vc, animated: true)
+//                let vc = CSEditListVC()
+//                self.navigationController?.pushViewController(vc, animated: true)
                 self.historyButton.backgroundColor = UIColor.lightGray
             })
             .disposed(by: disposeBag)
