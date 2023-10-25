@@ -74,7 +74,7 @@ final class NaviHeader: UIView {
         case .edit:
             naviTitleLabel.text = "모임 수정하기"
         case .print:
-            naviTitleLabel.text = "스플릿 발급"
+            naviTitleLabel.text = "스플릿 영수증 발급"
         case .history:
             naviTitleLabel.text = "스플릿 내역"
         case .setting:
