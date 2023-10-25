@@ -46,19 +46,6 @@ class ResultVM {
         let split = SplitRepository.share.splitArr.map{$0.first!}.asDriver(onErrorJustReturn: Split())
         let currentSplitValue = SplitRepository.share.splitArr.value.first!
         let currentSplitIdx = currentSplitValue.splitIdx
-        let currentCSInfos = SplitRepository.share.csInfoArr.value.filter{$0.splitIdx == currentSplitIdx}
-        let tempSplitTitle = currentCSInfos.map{$0.title}.joined(separator: ", ")
-        
-        let splitTitle = split
-            .map{ $0.title }
-            .map{ text in
-                if text.isEmpty {
-                    return tempSplitTitle
-                } else {
-                    return text
-                }
-            }
-            .asDriver()
         
         let splitDateString = split
             .map{ $0.createDate }
@@ -69,8 +56,11 @@ class ResultVM {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 let splitIdx = SplitRepository.share.splitArr.value.first!.splitIdx
+                
                 SplitRepository.share.fetchSplitArrFromDBWithSplitIdx(splitIdx: splitIdx)
-
+                let tempSplitTitle = SplitRepository.share.csInfoArr.value.map{$0.title}.joined(separator: ", ")
+                SplitRepository.share.editSplitTitle(title: tempSplitTitle)
+                
                 var sectionsProvider: [ResultSection] = []
                 
                 self.csInfos.map { csInfos -> [ResultSection] in
@@ -207,6 +197,9 @@ class ResultVM {
             })
             .disposed(by: disposeBag)
         
+        let splitTitle = split
+            .map{ $0.title }
+            .asDriver()
         
 
         return Output(presentResultView: presentResultView,
