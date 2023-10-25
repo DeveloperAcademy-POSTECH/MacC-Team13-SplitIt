@@ -234,7 +234,8 @@ class ResultVC: UIViewController {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.nextButton.applyStyle(.primaryWatermelonPressed)
-                // 제롬뷰로 이동
+                let vc = SplitShareVC()
+                self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
         
