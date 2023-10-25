@@ -14,8 +14,10 @@ import RxDataSources
 
 class HistoryVC: UIViewController {
     let disposeBag = DisposeBag()
+    
     let viewModel = HistoryVM()
     
+    let header = NaviHeader()
     let emptyView = UIView()
     let emptyLabel = UILabel()
     
@@ -34,8 +36,12 @@ class HistoryVC: UIViewController {
     }
     
     func setAttribute() {
-        
         view.backgroundColor = UIColor(hex: 0xF8F7F4)
+        
+        header.do {
+            $0.applyStyle(.history)
+            $0.setBackButton(viewController: self)
+        }
         
         splitCollectionFlowLayout.do {
             $0.scrollDirection = .vertical
@@ -68,16 +74,23 @@ class HistoryVC: UIViewController {
     func setLayout() {
         view.addSubview(collectionView)
         view.addSubview(emptyView)
+        view.addSubview(header)
         emptyView.addSubview(emptyLabel)
         
+        header.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(30)
+        }
+        
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(58)
+            $0.top.equalTo(header.snp.bottom).offset(18)
             $0.horizontalEdges.equalToSuperview().inset(30)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-40)
         }
         
         emptyView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(58)
+            $0.top.equalTo(header.snp.bottom).offset(18)
             $0.horizontalEdges.equalToSuperview().inset(30)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-40)
         }
