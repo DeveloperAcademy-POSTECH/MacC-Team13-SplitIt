@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import Reusable
+import RxAppState
 
 class CSMemberConfirmVC: UIViewController {
     
@@ -147,7 +148,7 @@ class CSMemberConfirmVC: UIViewController {
     }
     
     func setBinding() {
-        let input = CSMemberConfirmVM.Input(viewDidLoad: Driver<Void>.just(()),
+        let input = CSMemberConfirmVM.Input(viewWillAppear: self.rx.viewWillAppear.asDriver(onErrorJustReturn: false),
                                             smartSplitTap: smartSplitButton.rx.tap.asDriver(),
                                             equalSplitTap: equalSplitButton.rx.tap.asDriver())
         let output = viewModel.transform(input: input)
@@ -202,6 +203,7 @@ class CSMemberConfirmVC: UIViewController {
 extension CSMemberConfirmVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let header = tableView.dequeueReusableHeaderFooterView(CSMemberConfirmHeader.self) else { return UIView() }
+        header.setHeader(viewModel: CSMemberConfirmHeaderVM())
         header.contentView.backgroundColor = UIColor(hex: 0xF8F7F4)
         return header
     }
