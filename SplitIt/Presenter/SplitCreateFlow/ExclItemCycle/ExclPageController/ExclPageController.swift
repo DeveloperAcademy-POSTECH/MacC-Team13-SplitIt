@@ -64,8 +64,8 @@ class ExclPageController: UIViewController, ExclItemNamePageChangeDelegate, Excl
     func changePageToThirdView() {
         controllCheck = 2
         self.pageViewController.setViewControllers([self.vcArr[2]], direction: .forward, animated: true, completion: nil)
-        let action = UIAction { _ in self.changePageToSecondViewReverse() }
-        header.setBackButton(action: action)
+        
+        setExclMemberHeader()
     }
     
     func changePageToSecondViewReverse() {
@@ -116,6 +116,26 @@ class ExclPageController: UIViewController, ExclItemNamePageChangeDelegate, Excl
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
+    }
+    
+    func setExclMemberHeader() {
+        // NaviHeader의 backButton을 없애고 naviImage를 중앙정렬하는 Animation
+        UIView.animate(withDuration: 0.3, animations: {
+            self.header.backButton.alpha = 0.0
+
+            self.header.backButton.snp.remakeConstraints {
+                $0.leading.equalToSuperview()
+            }
+            
+            let viewHalfWidth = self.view.bounds.width / 2.0
+            let headerHalfWidth = 264.0 / 2.0
+            self.header.naviImage.snp.remakeConstraints {
+                $0.trailing.equalToSuperview().inset(viewHalfWidth - headerHalfWidth)
+            }
+            self.header.layoutIfNeeded()
+        }, completion: { _ in
+            self.header.backButton.removeFromSuperview()
+        })
     }
 }
 

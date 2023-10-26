@@ -42,7 +42,7 @@ class CSTitleInputVC: UIViewController {
         
         header.do {
             $0.applyStyle(.csTitle)
-            $0.setBackButton(viewController: self)
+            $0.setBackButtonToRootView(viewController: self)
         }
         
         titleMessage.do {

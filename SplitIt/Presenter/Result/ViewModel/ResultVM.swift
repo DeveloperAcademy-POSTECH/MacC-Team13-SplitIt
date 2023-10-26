@@ -28,6 +28,7 @@ class ResultVM {
     let tappedSectionIndex = BehaviorRelay<Int>(value: -1) //TODO: 추후 ResultCellVM
     
     struct Input {
+        let viewWillAppear: Driver<Bool>
         let viewDidLoad: Driver<Void>
         let nextButtonTapSend: Driver<Void> // 다음 버튼
     }
@@ -51,6 +52,13 @@ class ResultVM {
             .map{ $0.createDate }
             .map(dateFormatter.dateToResult)
             .asDriver()
+        
+        input.viewWillAppear
+            .drive(onNext: { _ in
+            let splitIdx = SplitRepository.share.splitArr.value.first!.splitIdx
+            SplitRepository.share.fetchSplitArrFromDBWithSplitIdx(splitIdx: splitIdx)
+        })
+        .disposed(by: disposeBag)
         
         input.viewDidLoad
             .drive(onNext: { [weak self] _ in
