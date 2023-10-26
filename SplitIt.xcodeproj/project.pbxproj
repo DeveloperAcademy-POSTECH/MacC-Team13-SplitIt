@@ -40,7 +40,6 @@
 		60115E0C2ADC18F90050D32C /* CSTitleInputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E0B2ADC18F90050D32C /* CSTitleInputVC.swift */; };
 		60115E0E2ADC19250050D32C /* CSTitleInputVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E0D2ADC19250050D32C /* CSTitleInputVM.swift */; };
 		60115E102ADC195C0050D32C /* CreateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E0F2ADC195C0050D32C /* CreateStore.swift */; };
-		60115E122ADC19D40050D32C /* NavigationHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E112ADC19D40050D32C /* NavigationHeader.swift */; };
 		60115E142ADCDB570050D32C /* CSTotalAmountInputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E132ADCDB570050D32C /* CSTotalAmountInputVC.swift */; };
 		60115E162ADCDB840050D32C /* CSTotalAmountInputVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E152ADCDB840050D32C /* CSTotalAmountInputVM.swift */; };
 		60115E182ADD19CD0050D32C /* NumberFormatterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E172ADD19CD0050D32C /* NumberFormatterHelper.swift */; };
@@ -85,7 +84,7 @@
 		60AE3EB52AE773BF009D9D18 /* SplitShareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EB42AE773BF009D9D18 /* SplitShareVC.swift */; };
 		60AE3EB82AE773F5009D9D18 /* SplitShareVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EB72AE773F5009D9D18 /* SplitShareVM.swift */; };
 		60AE3EBA2AE77417009D9D18 /* SplitShareTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EB92AE77417009D9D18 /* SplitShareTableCell.swift */; };
-		60AE3EBC2AE7743E009D9D18 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EBB2AE7743E009D9D18 /* UIView+.swift */; };
+		60AE3EBC2AE7743E009D9D18 /* UITableView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EBB2AE7743E009D9D18 /* UITableView+.swift */; };
 		60AE3EBE2AE77467009D9D18 /* SplitShareSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EBD2AE77467009D9D18 /* SplitShareSectionHeader.swift */; };
 		60AE3EC12AE77488009D9D18 /* CSMemberResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EC02AE77488009D9D18 /* CSMemberResult.swift */; };
 		60AE3EC32AE77491009D9D18 /* SplitResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EC22AE77491009D9D18 /* SplitResult.swift */; };
@@ -177,7 +176,6 @@
 		60115E0B2ADC18F90050D32C /* CSTitleInputVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSTitleInputVC.swift; sourceTree = "<group>"; };
 		60115E0D2ADC19250050D32C /* CSTitleInputVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSTitleInputVM.swift; sourceTree = "<group>"; };
 		60115E0F2ADC195C0050D32C /* CreateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateStore.swift; sourceTree = "<group>"; };
-		60115E112ADC19D40050D32C /* NavigationHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationHeader.swift; sourceTree = "<group>"; };
 		60115E132ADCDB570050D32C /* CSTotalAmountInputVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSTotalAmountInputVC.swift; sourceTree = "<group>"; };
 		60115E152ADCDB840050D32C /* CSTotalAmountInputVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSTotalAmountInputVM.swift; sourceTree = "<group>"; };
 		60115E172ADD19CD0050D32C /* NumberFormatterHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatterHelper.swift; sourceTree = "<group>"; };
@@ -217,7 +215,7 @@
 		60AE3EB42AE773BF009D9D18 /* SplitShareVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitShareVC.swift; sourceTree = "<group>"; };
 		60AE3EB72AE773F5009D9D18 /* SplitShareVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitShareVM.swift; sourceTree = "<group>"; };
 		60AE3EB92AE77417009D9D18 /* SplitShareTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitShareTableCell.swift; sourceTree = "<group>"; };
-		60AE3EBB2AE7743E009D9D18 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
+		60AE3EBB2AE7743E009D9D18 /* UITableView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+.swift"; sourceTree = "<group>"; };
 		60AE3EBD2AE77467009D9D18 /* SplitShareSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitShareSectionHeader.swift; sourceTree = "<group>"; };
 		60AE3EC02AE77488009D9D18 /* CSMemberResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberResult.swift; sourceTree = "<group>"; };
 		60AE3EC22AE77491009D9D18 /* SplitResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitResult.swift; sourceTree = "<group>"; };
@@ -394,7 +392,6 @@
 				DE1711BE2AE0BA750097850D /* MyInfo */,
 				60115E042ADC18110050D32C /* SplitCreateFlow */,
 				60115DF32ADBF10B0050D32C /* Home */,
-				60115E112ADC19D40050D32C /* NavigationHeader.swift */,
 				DE73D7102AE5477400ABF3EF /* SplashVC.swift */,
 			);
 			path = Presenter;
@@ -428,7 +425,7 @@
 				60115E002ADC01150050D32C /* UITextField+.swift */,
 				C2A797902AE2748E0049E709 /* UIFont+.swift */,
 				1A07DF0A2AE569660081E543 /* UIButton+.swift */,
-				60AE3EBB2AE7743E009D9D18 /* UIView+.swift */,
+				60AE3EBB2AE7743E009D9D18 /* UITableView+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1123,9 +1120,8 @@
 				DE1711C42AE0BAB30097850D /* MyInfoVC.swift in Sources */,
 				869D1AE12AE52BC600D166B1 /* CSTotalAmountEditVM.swift in Sources */,
 				60115E242ADD2BE20050D32C /* CSMemberInputSearchCell.swift in Sources */,
-				60AE3EBC2AE7743E009D9D18 /* UIView+.swift in Sources */,
+				60AE3EBC2AE7743E009D9D18 /* UITableView+.swift in Sources */,
 				60AE3EB52AE773BF009D9D18 /* SplitShareVC.swift in Sources */,
-				60115E122ADC19D40050D32C /* NavigationHeader.swift in Sources */,
 				869D1AE92AE52C3300D166B1 /* ExclItemPriceEditVC.swift in Sources */,
 				869D1AD32AE52AD900D166B1 /* CSTitleEditVC.swift in Sources */,
 				869D1ADF2AE52BB300D166B1 /* CSTotalAmountEditVC.swift in Sources */,
@@ -1375,7 +1371,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3NP4Z3WZ94;
+				DEVELOPMENT_TEAM = B9U954AWHU;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SplitIt/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1405,7 +1401,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3NP4Z3WZ94;
+				DEVELOPMENT_TEAM = B9U954AWHU;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SplitIt/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
