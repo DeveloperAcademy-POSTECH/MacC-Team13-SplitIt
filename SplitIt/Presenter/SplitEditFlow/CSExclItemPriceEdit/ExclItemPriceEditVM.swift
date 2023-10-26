@@ -79,10 +79,12 @@ class ExclItemPriceEditVM {
                           exclPrice: exclName)
         } else {
             input.price
-                .drive { st in
-                    let pri = Int(st)!
-                    SplitRepository.share.inputExclItemPrice(price: pri)
+                .map { Int($0) }
+                .compactMap { $0 }
+                .drive {
+                    SplitRepository.share.inputExclItemPrice(price: $0)
                 }
+                .disposed(by: disposeBag)
             
             return Output(showExclItemTargetView: showExclItemTargetView,
                           totalAmount: totalAmountString,

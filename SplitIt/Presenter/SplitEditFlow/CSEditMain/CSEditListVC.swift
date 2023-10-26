@@ -253,10 +253,10 @@ final class CSEditListVC: UIViewController {
             .disposed(by: disposeBag)
         
         output.pushExclItemAddVC
-            .subscribe { [weak self] _ in
+            .subscribe { [weak self] index in
                 guard let self = self else { return }
 //                SplitRepository.share.currentCSInfo
-                let vc = ExclEditPageController()
+                let vc = ExclItemNameEditVC(viewModel: ExclItemNameEditVM())
                 self.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)

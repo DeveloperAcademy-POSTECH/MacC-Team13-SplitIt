@@ -94,7 +94,8 @@ class HomeVC: UIViewController {
        
         output.showHistoryView
             .drive(onNext: {
-                let vc = HistoryVC()
+//                let vc = HistoryVC()
+                let vc = CSEditListVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)

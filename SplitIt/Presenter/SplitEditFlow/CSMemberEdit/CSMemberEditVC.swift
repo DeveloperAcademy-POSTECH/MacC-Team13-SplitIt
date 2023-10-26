@@ -46,6 +46,7 @@ class CSMemberEditVC: UIViewController {
         
         header.do {
             $0.applyStyle(.edit)
+            $0.setBackButton(viewController: self)
         }
         
         titleMessage.do {
