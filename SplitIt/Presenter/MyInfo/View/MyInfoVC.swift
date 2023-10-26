@@ -86,13 +86,13 @@ class MyInfoVC: UIViewController {
     let friendImage = UIImageView()
     let friendChevron = UIImageView()
     
-    let friendBar = UIView()
+   // let friendBar = UIView()
     
-    let exclItemListView = UIView()
-    let exclItemLabel = UILabel()
-    let exclItemImage = UIImageView()
-    let exclItemChevron = UIImageView()
-    
+//    let exclItemListView = UIView()
+//    let exclItemLabel = UILabel()
+//    let exclItemImage = UIImageView()
+//    let exclItemChevron = UIImageView()
+//
     let privacyBtn = UIButton()
     
     let tossValue = UserDefaults.standard.bool(forKey: "tossPay")
@@ -302,13 +302,13 @@ class MyInfoVC: UIViewController {
     func setBinding() {
         
         let friendListTap = addTapGesture(to: friendListView)
-        let exclItemTap = addTapGesture(to: exclItemListView)
+       // let exclItemTap = addTapGesture(to: exclItemListView)
         let editBtnTap = addTapGesture(to: accountEditView)
         let startBtnTap = addTapGesture(to: emptyAccountEditView)
         
         let input = MyInfoVM.Input(privacyBtnTapped: privacyBtn.rx.tap.asDriver(),
                                    friendListViewTapped: friendListTap.rx.event.asObservable().map { _ in () },
-                                   exclItemViewTapped: exclItemTap.rx.event.asObservable().map { _ in () },
+                                  // exclItemViewTapped: exclItemTap.rx.event.asObservable().map { _ in () },
                                    editAccountViewTapped: editBtnTap.rx.event.asObservable().map{ _ in () }, emptyEditAccountViewTapped: startBtnTap.rx.event.asObservable().map{ _ in () }
         )
         
@@ -334,16 +334,16 @@ class MyInfoVC: UIViewController {
             .disposed(by: disposeBag)
         
         
-        output.moveToExclItemListView
-            .subscribe(onNext: {
-                print("먹지 않은 뷰 이동")
-                //MARK: UserDefaults 초기화 버튼으로 임시 활용
-                for key in UserDefaults.standard.dictionaryRepresentation().keys {
-                    UserDefaults.standard.removeObject(forKey: key.description)
-                }
-            })
-            .disposed(by: disposeBag)
-        
+//        output.moveToExclItemListView
+//            .subscribe(onNext: {
+//                print("먹지 않은 뷰 이동")
+//                //MARK: UserDefaults 초기화 버튼으로 임시 활용
+//                for key in UserDefaults.standard.dictionaryRepresentation().keys {
+//                    UserDefaults.standard.removeObject(forKey: key.description)
+//                }
+//            })
+//            .disposed(by: disposeBag)
+//
         
         output.moveToEditAccountView
             .subscribe(onNext: {
@@ -395,17 +395,20 @@ class MyInfoVC: UIViewController {
             accountEditView.addSubview($0)
         }
         
-        [friendBar,friendListView, exclItemListView].forEach {
-            friendView.addSubview($0)
-        }
         
+        friendView.addSubview(friendListView)
+        
+//        [friendBar,friendListView, exclItemListView].forEach {
+//            friendView.addSubview($0)
+//        }
+//
         [friendImage, friendChevron, friendListLabel].forEach {
             friendListView.addSubview($0)
         }
-        [exclItemImage, exclItemChevron, exclItemLabel].forEach {
-            exclItemListView.addSubview($0)
-        }
-        
+//        [exclItemImage, exclItemChevron, exclItemLabel].forEach {
+//            exclItemListView.addSubview($0)
+//        }
+//
         
         [mainLabel, subLabel, emptyAccountEditView].forEach{
             emptyView.addSubview($0)
@@ -549,10 +552,10 @@ class MyInfoVC: UIViewController {
             $0.backgroundColor = .clear
         }
         
-        friendBar.do {
-            $0.layer.borderColor = UIColor.BorderDeactivate.cgColor
-            $0.layer.borderWidth = 1
-        }
+//        friendBar.do {
+//            $0.layer.borderColor = UIColor.BorderDeactivate.cgColor
+//            $0.layer.borderWidth = 1
+//        }
         
         friendListView.backgroundColor = .clear
         
@@ -569,20 +572,20 @@ class MyInfoVC: UIViewController {
             $0.font = UIFont.KoreanCaption1
         }
         
-        exclItemListView.backgroundColor = .clear
-        
-        exclItemImage.do {
-            $0.image = UIImage(named: "SplitIconSmall")
-        }
-        exclItemChevron.do {
-            $0.image = UIImage(named: "ChevronRightIconDefault")
-        }
-        
-        exclItemLabel.do {
-            $0.text = "따로 계산한 것들" // 모아나: 일단 userDefault초기화댐 원래는 따로 먹은 것들
-            $0.font = UIFont.KoreanCaption1
-        }
-        
+//        exclItemListView.backgroundColor = .clear
+//
+//        exclItemImage.do {
+//            $0.image = UIImage(named: "SplitIconSmall")
+//        }
+//        exclItemChevron.do {
+//            $0.image = UIImage(named: "ChevronRightIconDefault")
+//        }
+//
+//        exclItemLabel.do {
+//            $0.text = "따로 계산한 것들" // 모아나: 일단 userDefault초기화댐 원래는 따로 먹은 것들
+//            $0.font = UIFont.KoreanCaption1
+//        }
+//
         
         privacyBtn.do {
             $0.titleLabel?.font = UIFont.KoreanCaption2
@@ -698,7 +701,6 @@ class MyInfoVC: UIViewController {
         }
         
         
-        
         accountBankLabel.snp.makeConstraints { make in
             make.top.equalTo(accountInfoLabel.snp.bottom).offset(2)
             make.left.equalTo(accountView.snp.left).offset(16)
@@ -777,7 +779,8 @@ class MyInfoVC: UIViewController {
         
         
         friendView.snp.makeConstraints { make in
-            make.height.equalTo(110)
+            //make.height.equalTo(110)
+            make.height.equalTo(52)
             make.width.equalTo(330)
             make.top.equalTo(splitLabel.snp.bottom).offset(4)
             make.centerX.equalToSuperview()
@@ -804,35 +807,35 @@ class MyInfoVC: UIViewController {
             make.right.equalToSuperview()
         }
         
-        friendBar.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.left.equalTo(friendImage.snp.left)
-            make.right.equalTo(friendChevron.snp.right)
-            make.centerY.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
+//        friendBar.snp.makeConstraints { make in
+//            make.height.equalTo(1)
+//            make.left.equalTo(friendImage.snp.left)
+//            make.right.equalTo(friendChevron.snp.right)
+//            make.centerY.equalToSuperview()
+//            make.centerX.equalToSuperview()
+//        }
         
-        exclItemListView.snp.makeConstraints { make in
-            make.width.equalTo(300)
-            make.height.equalTo(52)
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-10)
-        }
-        
-        exclItemImage.snp.makeConstraints { make in
-            make.centerX.equalTo(friendImage)
-            make.bottom.equalToSuperview().offset(-4)
-        }
-        
-        exclItemLabel.snp.makeConstraints { make in
-            make.left.equalTo(friendListLabel.snp.left)
-            make.centerY.equalTo(exclItemImage.snp.centerY)
-        }
-        
-        exclItemChevron.snp.makeConstraints { make in
-            make.centerY.equalTo(exclItemImage.snp.centerY)
-            make.right.equalToSuperview()
-        }
+//        exclItemListView.snp.makeConstraints { make in
+//            make.width.equalTo(300)
+//            make.height.equalTo(52)
+//            make.centerX.equalToSuperview()
+//            make.bottom.equalToSuperview().offset(-10)
+//        }
+//
+//        exclItemImage.snp.makeConstraints { make in
+//            make.centerX.equalTo(friendImage)
+//            make.bottom.equalToSuperview().offset(-4)
+//        }
+//
+//        exclItemLabel.snp.makeConstraints { make in
+//            make.left.equalTo(friendListLabel.snp.left)
+//            make.centerY.equalTo(exclItemImage.snp.centerY)
+//        }
+//
+//        exclItemChevron.snp.makeConstraints { make in
+//            make.centerY.equalTo(exclItemImage.snp.centerY)
+//            make.right.equalToSuperview()
+//        }
         
         privacyBtn.snp.makeConstraints { make in
             make.bottom.equalToSuperview().offset(-54)
@@ -885,12 +888,6 @@ class MyInfoVC: UIViewController {
     }
     
 
-//
-//    func showAccountInputAlert() {
-//        let vc = AccountAlertVC()
-//        vc.modalPresentationStyle = .overCurrentContext
-//        present(vc, animated: true, completion: nil)
-//    }
-//
+
 }
 
