@@ -14,7 +14,7 @@ class CSMemberConfirmVM {
     var disposeBag = DisposeBag()
     
     struct Input {
-        let viewDidLoad: Driver<Void>
+        let viewWillAppear: Driver<Bool>
         let smartSplitTap: Driver<Void>
         let equalSplitTap: Driver<Void>
     }
@@ -31,8 +31,8 @@ class CSMemberConfirmVM {
         let memberList = BehaviorSubject<[String]>(value: [])
         let currentMembers = SplitRepository.share.csMemberArr
         
-        input.viewDidLoad
-            .drive(onNext: {
+        input.viewWillAppear
+            .drive(onNext: { _ in
                 memberList.onNext(currentMembers.value.map{$0.name})
             })
             .disposed(by: disposeBag)

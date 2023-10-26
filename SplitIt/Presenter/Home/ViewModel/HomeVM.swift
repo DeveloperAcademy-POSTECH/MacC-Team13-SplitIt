@@ -29,6 +29,9 @@ class HomeVM {
         let showInfoView = input.myInfoButtonTapped.asDriver()
         let showHistoryView = input.recentSplitButtonTapped.asDriver()
         
+      
+        
+        
         showCreateSplit
             .drive(onNext: {
                 SplitRepository.share.createDatasForCreateFlow()

@@ -16,7 +16,7 @@ class CSMemberConfirmHeader: UITableViewHeaderFooterView, Reusable {
 
     let disposeBag = DisposeBag()
 
-    let viewModel = CSMemberConfirmHeaderVM()
+    var viewModel: CSMemberConfirmHeaderVM!
     
     let title = UILabel()
     let totalAmount = UILabel()
@@ -26,9 +26,9 @@ class CSMemberConfirmHeader: UITableViewHeaderFooterView, Reusable {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         
-        setAttribute()
-        setLayout()
-        setBinding()
+//        setAttribute()
+//        setLayout()
+//        setBinding()
     }
     
     required init?(coder: NSCoder) {
@@ -54,6 +54,7 @@ class CSMemberConfirmHeader: UITableViewHeaderFooterView, Reusable {
         }
         
         krwLabel.do {
+            $0.text = "원"
             $0.font = .KoreanCaption1
             $0.textColor = .TextPrimary
         }
@@ -74,7 +75,7 @@ class CSMemberConfirmHeader: UITableViewHeaderFooterView, Reusable {
         }
         
         krwLabel.snp.makeConstraints {
-            $0.leading.equalTo(totalAmount.snp.trailing)
+            $0.leading.equalTo(totalAmount.snp.trailing).offset(2)
             $0.bottom.equalTo(totalAmount.snp.bottom)
         }
         
@@ -116,5 +117,13 @@ class CSMemberConfirmHeader: UITableViewHeaderFooterView, Reusable {
         let attributedText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.font: UIFont.KoreanCaption1])
         attributedText.addAttributes([NSAttributedString.Key.font: UIFont.KoreanBody], range: largeTextRange)
         return attributedText
+    }
+    
+    func setHeader(viewModel: CSMemberConfirmHeaderVM) {
+        self.viewModel = viewModel
+     
+        setAttribute()
+        setLayout()
+        setBinding()
     }
 }

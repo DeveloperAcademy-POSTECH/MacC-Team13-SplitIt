@@ -202,6 +202,15 @@ final class NaviHeader: UIView {
         }
     }
     
+    func setBackButtonToRootView(viewController: UIViewController) {
+        backButton.removeAllActions()
+        
+        let backAction = UIAction { action in
+            viewController.navigationController?.popToRootViewController(animated: true)
+        }
+        backButton.addAction(backAction, for: .touchUpInside)
+    }
+    
     func setBackButton(viewController: UIViewController) {
         backButton.removeAllActions()
         

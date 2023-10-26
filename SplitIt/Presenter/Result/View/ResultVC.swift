@@ -9,12 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxDataSources
-
-// TODO: 마지막 섹션에는 스플릿항목추가하기버튼
-// TODO: compositionalLayout backgroundView 필요
-// TODO: ViewModel 정의 나머지
-// TODO: Cell안에 CompositionalLayout 해야함
-// TODO: Cell Layout 정의
+import RxAppState
 
 class ResultVC: UIViewController {
     
@@ -88,7 +83,6 @@ class ResultVC: UIViewController {
                         ofKind: UICollectionView.elementKindSectionHeader)
             $0.register(supplementaryViewType: ResultSectionFooter.self,
                         ofKind: UICollectionView.elementKindSectionFooter)
-//            $0.delegate = self
         }
         
         //TODO: 토글버튼 이벤트 VM에 주고 collectionview를 reload하기
@@ -211,7 +205,8 @@ class ResultVC: UIViewController {
     }
     
     func setBinding() {
-        let input = ResultVM.Input(viewDidLoad: Driver<Void>.just(()),
+        let input = ResultVM.Input(viewWillAppear: self.rx.viewWillAppear.asDriver(onErrorJustReturn: false),
+                                   viewDidLoad: Driver<Void>.just(()),
                                    nextButtonTapSend: nextButton.rx.tap.asDriver())
         let output = viewModel.transform(input: input)
         
@@ -262,42 +257,42 @@ class ResultVC: UIViewController {
     }
 }
 
-//MARK: 이걸로 수정할거임
-extension ResultVC: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
-        if elementKind == UICollectionView.elementKindSectionHeader {
-            let section = dataSource.sectionModels[indexPath.section]
-            let addSplitSection = dataSource.sectionModels.count - 1
-            if indexPath.section == addSplitSection {
-                let addSplitHeader: AddSplitHeader = collectionView.dequeueReusableSupplementaryView(ofKind: elementKind, for: indexPath)
-                
-                addSplitHeader.viewModel.addSplitTapped
-                    .take(1)
-                    .observe(on: MainScheduler.asyncInstance)
-                    .subscribe(onNext: { [weak self] _ in
-                        guard let self = self else { return }
-                        let vc = CSTitleInputVC()
-                        self.navigationController?.pushViewController(vc, animated: true)
-                    }, onCompleted: {
-                        SplitRepository.share.createNewCS()
-                    })
-                    .disposed(by: addSplitHeader.disposeBag)
-            } else {
-                let header: ResultSectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: elementKind, for: indexPath)
-                header.indexPath = indexPath
-                header.viewModel = self.viewModel
-                header.setBinding()
-                if section.isFold {
-                    print("접힘: \(indexPath)")
-                    header.configureFold(item: section.header, sectionIndex: indexPath.section)
-                } else {
-                    print("펼쳐짐: \(indexPath)")
-                    header.configureUnfold(item: section.header, sectionIndex: indexPath.section)
-                }
-
-            }
-        } else if elementKind == UICollectionView.elementKindSectionFooter {
-            
-        }
-    }
-}
+////MARK: 이걸로 수정할거임
+//extension ResultVC: UICollectionViewDelegateFlowLayout {
+//    func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
+//        if elementKind == UICollectionView.elementKindSectionHeader {
+//            let section = dataSource.sectionModels[indexPath.section]
+//            let addSplitSection = dataSource.sectionModels.count - 1
+//            if indexPath.section == addSplitSection {
+//                let addSplitHeader: AddSplitHeader = collectionView.dequeueReusableSupplementaryView(ofKind: elementKind, for: indexPath)
+//
+//                addSplitHeader.viewModel.addSplitTapped
+//                    .take(1)
+//                    .observe(on: MainScheduler.asyncInstance)
+//                    .subscribe(onNext: { [weak self] _ in
+//                        guard let self = self else { return }
+//                        let vc = CSTitleInputVC()
+//                        self.navigationController?.pushViewController(vc, animated: true)
+//                    }, onCompleted: {
+//                        SplitRepository.share.createNewCS()
+//                    })
+//                    .disposed(by: addSplitHeader.disposeBag)
+//            } else {
+//                let header: ResultSectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: elementKind, for: indexPath)
+//                header.indexPath = indexPath
+//                header.viewModel = self.viewModel
+//                header.setBinding()
+//                if section.isFold {
+//                    print("접힘: \(indexPath)")
+//                    header.configureFold(item: section.header, sectionIndex: indexPath.section)
+//                } else {
+//                    print("펼쳐짐: \(indexPath)")
+//                    header.configureUnfold(item: section.header, sectionIndex: indexPath.section)
+//                }
+//
+//            }
+//        } else if elementKind == UICollectionView.elementKindSectionFooter {
+//
+//        }
+//    }
+//}

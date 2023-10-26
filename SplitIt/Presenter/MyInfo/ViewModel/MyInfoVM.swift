@@ -20,7 +20,7 @@ class MyInfoVM: UIViewController {
     struct Input {
         let privacyBtnTapped: Driver<Void>
         let friendListViewTapped: Observable<Void>
-        let exclItemViewTapped: Observable<Void>
+       // let exclItemViewTapped: Observable<Void>
         let editAccountViewTapped: Observable<Void>
         let emptyEditAccountViewTapped: Observable<Void>
     }
@@ -28,7 +28,7 @@ class MyInfoVM: UIViewController {
     struct Output {
         let moveToPrivacyView: Driver<Void>
         let moveTofriendListView: Observable<Void>
-        let moveToExclItemListView: Observable<Void>
+       // let moveToExclItemListView: Observable<Void>
         let moveToEditAccountView: Observable<Void>
         let moveToInitAccountView: Observable<Void>
     }
@@ -36,7 +36,7 @@ class MyInfoVM: UIViewController {
     func transform(input: Input) -> Output {
         let privacyBtnTapped = input.privacyBtnTapped
         let friendListViewTapped = input.friendListViewTapped
-        let exclItemViewTapped = input.exclItemViewTapped
+       // let exclItemViewTapped = input.exclItemViewTapped
         let editAccountViewTap = input.editAccountViewTapped
         let emptyEditAccountViewTapped = input.emptyEditAccountViewTapped
         
@@ -54,7 +54,7 @@ class MyInfoVM: UIViewController {
         
         let output = Output(moveToPrivacyView: privacyBtnTapped,
                             moveTofriendListView: friendListViewTapped,
-                            moveToExclItemListView: exclItemViewTapped,
+                            //moveToExclItemListView: exclItemViewTapped,
                             moveToEditAccountView: editAccountViewTap,
                             moveToInitAccountView: emptyEditAccountViewTapped
         )

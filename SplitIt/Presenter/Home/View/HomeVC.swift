@@ -20,6 +20,7 @@ class HomeVC: UIViewController {
     
     let viewModel = HomeVM()
     
+    let buttonView: UIView = UIView()
     let myInfoButton: UIButton = UIButton()
     let myInfoButtonImage: UIImageView = UIImageView()
     
@@ -53,64 +54,73 @@ class HomeVC: UIViewController {
             .drive(onNext: {
                 let vc = CSTitleInputVC()
                 self.navigationController?.pushViewController(vc, animated: true)
-                self.splitItButton.applyStyle(.primaryWatermelonPressed)
+                //self.splitItButton.applyStyle(.primaryWatermelonPressed)
             })
+            .disposed(by: disposeBag)
+        
+        splitItButton.rx.controlEvent(.touchDown)
+            .bind { self.splitItButton.applyStyle(.primaryWatermelonPressed) }
+            .disposed(by: disposeBag)
+        
+        splitItButton.rx.controlEvent(.touchUpInside)
+            .bind { self.splitItButton.applyStyle(.primaryWatermelon) }
             .disposed(by: disposeBag)
         
         //버튼 원 상태로 돌아오게 만드는 버튼
-        output.showCreateSplit
-            .delay(.milliseconds(500))
-           .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-            self.splitItButton.applyStyle(.primaryWatermelon)
-            })
-            .disposed(by: disposeBag)
-        
+//        output.showCreateSplit
+//            .delay(.milliseconds(500))
+//           .drive(onNext: { [weak self] _ in
+//                guard let self = self else { return }
+//            self.splitItButton.applyStyle(.primaryWatermelon)
+//            })
+//            .disposed(by: disposeBag)
+//
         output.showInfoView
             .drive(onNext: {
                 // MARK: 모아나가 연결할 뷰로 수정
                 let vc = MyInfoVC()
                 self.navigationController?.pushViewController(vc, animated: true)
-                self.myInfoButton.backgroundColor = UIColor.lightGray
-                
             })
             .disposed(by: disposeBag)
-        
-        output.showInfoView
-            .delay(.milliseconds(500))
-           .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-               self.myInfoButton.backgroundColor = UIColor.white
-            })
+
+        myInfoButton.rx.controlEvent(.touchDown)
+            .bind { self.myInfoButton.backgroundColor = .SurfaceBrandCalmshellPressed }
             .disposed(by: disposeBag)
         
+        myInfoButton.rx.controlEvent(.touchUpInside)
+            .bind { self.myInfoButton.backgroundColor = .SurfaceBrandCalmshell }
+            .disposed(by: disposeBag)
+
+       
         output.showHistoryView
             .drive(onNext: {
-                // MARK: 제리가 연결할 뷰로 수정
-//                print("제리뷰 이동 & 히스토리뷰 이동") // 수정 후 삭제
-
                 let vc = HistoryVC()
                 self.navigationController?.pushViewController(vc, animated: true)
-                self.historyButton.backgroundColor = UIColor.lightGray
             })
             .disposed(by: disposeBag)
         
-        output.showHistoryView
-            .delay(.milliseconds(500))
-           .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-               self.historyButton.backgroundColor = UIColor.white
-            })
+        historyButton.rx.controlEvent(.touchDown)
+            .bind { self.historyButton.backgroundColor = .SurfaceBrandCalmshellPressed }
             .disposed(by: disposeBag)
+        
+        historyButton.rx.controlEvent(.touchUpInside)
+            .bind { self.historyButton.backgroundColor = .SurfaceBrandCalmshell }
+            .disposed(by: disposeBag)
+
     }
 
+    
     func setAttribute() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .SurfaceBrandCalmshell
+        
+        buttonView.backgroundColor = .SurfaceBrandCalmshell
         
         myInfoButton.do {
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.black.cgColor
+            $0.backgroundColor = .SurfaceBrandCalmshell
+
         }
         
         myInfoButtonImage.do {
@@ -122,6 +132,10 @@ class HomeVC: UIViewController {
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.black.cgColor
+            $0.backgroundColor = .SurfaceBrandCalmshell
+            //$0.setBackgroundImage(image(withColor: .SurfaceBrandCalmshellPressed), for: .highlighted)
+
+            
         }
         
         historyButtonImage.do {
@@ -176,27 +190,51 @@ class HomeVC: UIViewController {
             $0.setTitle("나의 영수증 만들기", for: .normal)
             $0.setTitleColor(UIColor.black, for: .normal)
             $0.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+
         }
         
        
     }
+    
+    func image(withColor color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let image = renderer.image { context in
+            color.setFill()
+            context.fill(CGRect(origin: .zero, size: size))
+        }
+        return image
+    }
+
 
     func setLayout() {
-        [myInfoButton, mainView, mainTextView, splitItButton,  historyButton].forEach {
+        [mainView, mainTextView, splitItButton, buttonView].forEach {
             view.addSubview($0)
         }
         [mainTextLabel, logoImage].forEach {
             mainTextView.addSubview($0)
         }
+        
+        [myInfoButton, historyButton].forEach {
+            buttonView.addSubview($0)
+        }
+        
         myInfoButton.addSubview(myInfoButtonImage)
         historyButton.addSubview(historyButtonImage)
         mainView.addSubview(mainImage)
         
         
-        myInfoButton.snp.makeConstraints {
+        
+        buttonView.snp.makeConstraints {
+            $0.height.equalTo(44)
+            $0.width.equalTo(280)
+            $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().offset(110)
+        }
+        
+        myInfoButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
             $0.width.height.equalTo(40)
-            $0.leading.equalToSuperview().inset(63)
+            $0.leading.equalToSuperview().offset(8)
         }
         
         myInfoButtonImage.snp.makeConstraints {
@@ -207,8 +245,8 @@ class HomeVC: UIViewController {
         }
         
         historyButton.snp.makeConstraints {
-            $0.left.equalTo(111)
-            $0.top.equalToSuperview().offset(110)
+            $0.left.equalTo(myInfoButton.snp.right).offset(8)
+            $0.centerY.equalToSuperview()
             $0.width.height.equalTo(40)
         }
         
