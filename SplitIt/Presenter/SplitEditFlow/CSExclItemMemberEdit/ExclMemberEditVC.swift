@@ -218,6 +218,7 @@ class ExclMemberEditVC: UIViewController {
                 guard let self = self else { return }
                 // 현재 뷰 컨트롤러에서 3개의 뷰를 건너뛰어 이전 뷰로 돌아가기
                 self.nextButton.applyStyle(.primaryPearPressed)
+                SplitRepository.share.updateDataToDB()
                 if let navigationController = self.navigationController {
                     if let previousViewController = navigationController.viewControllers[navigationController.viewControllers.count - 4] as? CSEditListVC {
                         // navigationController.viewControllers 배열에서 해당 뷰 컨트롤러를 가져옵니다.

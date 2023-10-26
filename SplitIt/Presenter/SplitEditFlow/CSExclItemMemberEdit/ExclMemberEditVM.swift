@@ -74,6 +74,23 @@ class ExclMemberEditVM {
                         .disposed(by: disposeBag)
                 })
                 .disposed(by: disposeBag)
+        } else {
+            exclItemListRepository
+                .map{ repo -> ExclMemberEditSectionModel in
+                    var exclMemberSectionModels: [ExclMemberEditSectionModel] = []
+                    repo.forEach { exclItem in
+                        let exclMemberList = allExclMemberListRepository.value.filter{ $0.exclItemIdx == exclItem.exclItemIdx }
+                        let exclMemberSectionModel = ExclMemberEditSectionModel(type: .data(ExclMemberEditSection(exclItem: exclItem, items: exclMemberList)))
+                        exclMemberSectionModels.append(exclMemberSectionModel)
+                    }
+                    if let model = exclMemberSectionModels.first {
+                        return model
+                    } else {
+                        return ExclMemberEditSectionModel(type: .data(.init(exclItem: .init(csInfoIdx: "", name: ""), items: [])))
+                    }
+                }
+                .bind(to: sections)
+                .disposed(by: disposeBag)
         }
         
         return Output(presentResultView: presentResultView)

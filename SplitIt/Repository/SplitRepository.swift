@@ -113,6 +113,7 @@ extension SplitRepository {
     func createExclItemWithName(name: String) {
         let newExclItem: ExclItem = ExclItem(csInfoIdx: currentCSInfo!.csInfoIdx, name: name)
         self.newExclItem = newExclItem
+        print("\(newExclItem)")
     }
     
     /// 현재 splitIdx를 기준으로 CSInfo부터 아래 데이터들만 새로 생성
