@@ -85,9 +85,12 @@ class MyBankAccountVM {
         inputAccountText
             .subscribe(onNext: { text in
                 print("계좌번호 \(text)")
+                
                 inputAccount = text
             })
             .disposed(by: disposeBag)
+        
+       
         
         
         editDoneBtnTapped
