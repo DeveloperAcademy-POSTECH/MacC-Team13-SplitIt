@@ -118,14 +118,21 @@ extension SplitRepository {
     /// 현재 splitIdx를 기준으로 CSInfo부터 아래 데이터들만 새로 생성
     func createNewCS() {
         let splitIdx = splitArr.value.first!.splitIdx
+        let preCSInfo = csInfoArr.value.last!.csInfoIdx
+        let preCSMember = csMemberArr.value.filter { $0.csInfoIdx == preCSInfo }
         let newCSInfo = CSInfo(splitIdx: splitIdx)
-        let name = UserDefaults.standard.string(forKey: "userName")
-        let newCSMember = CSMember(csInfoIdx: newCSInfo.csInfoIdx, name: name ?? "정산자")
+        var newCSMembers: [CSMember] = []
+        
+        preCSMember.forEach {
+            let newCSMember = CSMember(csInfoIdx: newCSInfo.csInfoIdx, name: $0.name)
+            newCSMembers.append(newCSMember)
+        }
         
         currentCSInfo = newCSInfo
-        
         csInfoArr.accept([newCSInfo])
-        csMemberArr.accept([newCSMember])
+        csMemberArr.accept(newCSMembers)
+        exclItemArr.accept([])
+        exclMemberArr.accept([])
     }
     
     /// name을 받아서 memberLogArr, realm에 새로 생성
@@ -246,6 +253,20 @@ extension SplitRepository {
 
 extension SplitRepository {
     
+    /// csMemberIdx를 기준으로 로컬에서 csMember를 삭제
+    func deleteCSMemberOnLocal(csMemberIdx: String) {
+        let csMembers: [CSMember] = csMemberArr.value
+        var newCSMembers: [CSMember] = []
+        
+        for member in csMembers {
+            if member.csMemberIdx != csMemberIdx {
+                newCSMembers.append(member)
+            }
+        }
+        
+        csMemberArr.accept(newCSMembers)
+    }
+    
     /// splitIdx를 기준으로 split 삭제 및 연관 데이터 전체 삭제
     func deleteSplitAndRelatedData(splitIdx: String) {
         let realmManager = RealmManager()
@@ -313,6 +334,7 @@ extension SplitRepository {
         }
         
         csMemberArr.accept(newCSMembers)
+        print("csMember: \(csMemberArr.value)")
         realmManager.deleteCSMember(csMemberIdxArr: [deleteCSMember!.csMemberIdx])
         
         // 만약 csMember가 하나도 없다면 해당 csInfo 아래 모든 데이터 삭제
