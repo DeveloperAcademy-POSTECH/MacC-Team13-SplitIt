@@ -106,7 +106,7 @@ class CSMemberInputCell: UICollectionViewCell, Reusable {
                 .drive(onNext: {
                     let memberList = viewModel.memberList.value
                     let deleteItem = memberList.filter{$0.csMemberIdx == item.csMemberIdx}.first!
-                    SplitRepository.share.deleteCSMemberAndRelatedData(csMemberIdx: deleteItem.csMemberIdx)
+                    SplitRepository.share.deleteCSMemberOnLocal(csMemberIdx: deleteItem.csMemberIdx)
                 })
                 .disposed(by: cellDisposeBag)
         }

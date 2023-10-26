@@ -17,13 +17,22 @@ class SplitShareTableCell: UITableViewCell, Reusable {
     let stackView = UIStackView()
     let line = UIView()
     
-    var isCheck: Bool = false
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         setAttribute()
         setLayout()
+        setLine()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        
+        stackView.arrangedSubviews.forEach {
+            stackView.removeArrangedSubview($0)
+            $0.removeFromSuperview()
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -120,7 +129,7 @@ class SplitShareTableCell: UITableViewCell, Reusable {
         addSubview(line)
         
         line.snp.makeConstraints {
-            $0.top.equalTo(stackView.snp.bottom).offset(12)
+            $0.bottom.equalToSuperview()
             $0.horizontalEdges.equalToSuperview().inset(18)
             $0.height.equalTo(1)
         }

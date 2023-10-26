@@ -5,7 +5,7 @@
 //  Created by Zerom on 2023/10/23.
 //
 
-import Foundation
+import UIKit
 import RxCocoa
 import RxSwift
 
@@ -14,15 +14,35 @@ class SplitShareVM {
     let repo = SplitRepository.share
     
     struct Input {
-        let viewWillAppear: Driver<Void>
+        let viewWillAppear: Observable<Bool>
+        let viewDidAppear: Observable<Bool>
+        let shareButtonTapped: ControlEvent<Void>
+        let currentTableViewScrollState: ControlProperty<CGPoint>
+        let tableView: UITableView
     }
     
     struct Output {
         let split: BehaviorRelay<[Split]>
         let splitResult: BehaviorRelay<[SplitMemberResult]>
+        let buttonState: BehaviorRelay<Bool>
+        let sendItems: BehaviorRelay<[Any]>
     }
     
     func transform(input: Input) -> Output {
+        let buttonState = BehaviorRelay(value: false)
+        
+        input.viewDidAppear
+            .asDriver(onErrorJustReturn: true)
+            .drive(onNext: { _ in
+                print(input.tableView.frame.height)
+                print(input.tableView.contentSize.height)
+                
+                if input.tableView.contentSize.height < input.tableView.frame.height * 1.6 {
+                    buttonState.accept(true)
+                }
+            })
+            .disposed(by: disposeBag)
+        
         // 멤버별 정리
         var splitResultArr: [SplitMemberResult] = []
         let csInfos = repo.csInfoArr.value
@@ -31,11 +51,6 @@ class SplitShareVM {
             // 현재 차수의 member, 제외 아이템
             let currentCSMembers = repo.csMemberArr.value.filter { $0.csInfoIdx == csInfo.csInfoIdx }
             let currentExclItems = repo.exclItemArr.value.filter { $0.csInfoIdx == csInfo.csInfoIdx }
-            
-            
-            // 현재 차수의 총금액 + 제외 아이템 금액
-            // \
-            let currentTotalAmount = currentExclItems.map { $0.price }.reduce(0, +) + csInfo.totalAmount
             
             // 제외 아이템을 빼지 않은 인당 금액\
             let personPrice: Int = (csInfo.totalAmount - currentExclItems.map { $0.price }.reduce(0, +)) / currentCSMembers.count
@@ -56,16 +71,17 @@ class SplitShareVM {
                 // 현재 제외 멤버 (먹은 사람, 안먹은 사람 둘 다 있음)
                 let currentExclMembers = repo.exclMemberArr.value.filter { $0.exclItemIdx == exclItem.exclItemIdx }
                 
-                // 안먹은 멤버의 이름만 모은 배열
+                // 먹은 멤버의 이름만 모은 배열
                 let exclMemberNames = currentExclMembers.filter { $0.isTarget == false }.map { $0.name }
                 
-                // 현재 제외 멤버 당 금액
+                // 현재 먹은 멤버 당 금액
                 let count = exclMemberNames.count == 0 ? 1 : exclMemberNames.count
                 let personExclPrice: Int = currentExclItemPrice / count
                 
                 for index in 0...currentMemberResultArr.count-1 {
                     if exclMemberNames.contains(currentMemberResultArr[index].name) {
                         currentMemberResultArr[index].price += personExclPrice
+                    } else {
                         currentMemberResultArr[index].exclItem.append(exclItem.name)
                     }
                 }
@@ -110,6 +126,38 @@ class SplitShareVM {
         let split: BehaviorRelay<[Split]> = repo.splitArr
         let splitResult: BehaviorRelay<[SplitMemberResult]> = BehaviorRelay(value: splitResultArr)
         
-        return Output(split: split, splitResult: splitResult)
+        input.currentTableViewScrollState
+            .asDriver()
+            .drive(onNext: { offset in
+                if input.tableView.contentSize.height / 3 < offset.y {
+                    buttonState.accept(true)
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        let sendItems = BehaviorRelay<[Any]>(value: [])
+        
+        input.shareButtonTapped
+            .asDriver()
+            .drive(onNext: {
+                guard let image = input.tableView.screenshot() else { return }
+                
+                var items: [Any] = []
+                
+                let acount = UserDefaults.standard.string(forKey: "userAccount") ?? ""
+                let bank = UserDefaults.standard.string(forKey: "userBank") ?? ""
+                
+                if acount == "" || bank == "" {
+                    items = [image]
+                } else {
+                    let userInfo = "\(String(describing: acount)) \(String(describing: bank))"
+                    items = [image, userInfo]
+                }
+                
+                sendItems.accept(items)
+            })
+            .disposed(by: disposeBag)
+        
+        return Output(split: split, splitResult: splitResult, buttonState: buttonState, sendItems: sendItems)
     }
 }

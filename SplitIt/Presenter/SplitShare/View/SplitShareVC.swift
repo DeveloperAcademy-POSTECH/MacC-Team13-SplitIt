@@ -8,6 +8,7 @@
 import UIKit
 import RxCocoa
 import RxSwift
+import RxAppState
 import Then
 import SnapKit
 import Reusable
@@ -24,7 +25,7 @@ class SplitShareVC: UIViewController {
     var splitDate: Date = .now
     
     var resultArr: [SplitMemberResult] = []
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -56,9 +57,8 @@ class SplitShareVC: UIViewController {
         }
         
         shareButton.do {
-            $0.setTitle("친구에게 영수증 공유하기", for: .normal)
-            $0.applyStyle(.primaryWatermelon)
-            $0.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
+            $0.setTitle("영수증 내용을 확인해주세요", for: .normal)
+            $0.applyStyle(.deactivate)
         }
     }
     
@@ -87,7 +87,12 @@ class SplitShareVC: UIViewController {
     }
     
     private func setBind() {
-        let input = SplitShareVM.Input(viewWillAppear: Driver<Void>.just(()))
+        let input = SplitShareVM.Input(viewWillAppear: self.rx.viewWillAppear,
+                                       viewDidAppear: self.rx.viewDidAppear,
+                                       shareButtonTapped: shareButton.rx.tap,
+                                       currentTableViewScrollState: tableView.rx.contentOffset,
+                                       tableView: tableView)
+        
         let output = viewModel.transform(input: input)
         
         resultArr = output.splitResult.value
@@ -100,17 +105,30 @@ class SplitShareVC: UIViewController {
                 self.splitDate = $0.map { $0.createDate }.first!
             })
             .disposed(by: disposeBag)
-    }
-    
-    @objc func shareButtonTapped() {
-        guard let image = tableView.screenshot() else { return }
-        let acount = UserDefaults.standard.string(forKey: "userAccount") ?? ""
-        let bank = UserDefaults.standard.string(forKey: "userBank") ?? ""
-        let userInfo = "\(String(describing: acount)) \(String(describing: bank))"
-        let items: [Any] = [image, userInfo]
-        let vc = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        vc.excludedActivityTypes = [.saveToCameraRoll]
-                present(vc, animated: true)
+        
+        output.buttonState
+            .distinctUntilChanged()
+            .asDriver(onErrorJustReturn: false)
+            .drive(onNext: { isEnable in
+                self.shareButton.isEnabled = isEnable
+                
+                if isEnable {
+                    self.shareButton.applyStyle(.primaryWatermelon)
+                    self.shareButton.setTitle("친구에게 영수증 공유하기", for: .normal)
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        output.sendItems
+            .asDriver()
+            .drive(onNext: { items in
+                if items.count != 0 {
+                    let vc = UIActivityViewController(activityItems: items, applicationActivities: nil)
+                    vc.excludedActivityTypes = [.saveToCameraRoll]
+                    self.present(vc, animated: true)
+                }
+            })
+            .disposed(by: disposeBag)
     }
 }
 
@@ -136,7 +154,7 @@ extension SplitShareVC: UITableViewDelegate {
             defaultHeight += 16
         }
         
-        let cellHeight = defaultHeight + CGFloat(count * 16)
+        let cellHeight = defaultHeight + CGFloat(count * 18)
         
         return cellHeight
     }
@@ -152,11 +170,7 @@ extension SplitShareVC: UITableViewDataSource, Reusable {
         cell.selectionStyle = .none
         cell.nameLabel.text = resultArr[indexPath.row].memberName
         cell.priceLabel.text = NumberFormatter.localizedString(from: resultArr[indexPath.row].memberPrice as NSNumber, number: .decimal)
-        if !cell.isCheck {
-            cell.setExclDatas(item: resultArr[indexPath.row].exclDatas)
-            cell.setLine()
-        }
-        cell.isCheck = true
+        cell.setExclDatas(item: resultArr[indexPath.row].exclDatas)
         
         return cell
     }
