@@ -142,6 +142,7 @@
 		DE73D7192AE6A2F100ABF3EF /* TestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D7182AE6A2F100ABF3EF /* TestVC.swift */; };
 		DE73D71B2AE6B00300ABF3EF /* SecondVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D71A2AE6B00300ABF3EF /* SecondVC.swift */; };
 		DE73D71D2AE6CCBC00ABF3EF /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D71C2AE6CCBC00ABF3EF /* AlertController.swift */; };
+		DEFE9D7F2AEA53D3009C693E /* CustomKeyBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFE9D7E2AEA53D3009C693E /* CustomKeyBoard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -274,6 +275,7 @@
 		DE73D7182AE6A2F100ABF3EF /* TestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestVC.swift; sourceTree = "<group>"; };
 		DE73D71A2AE6B00300ABF3EF /* SecondVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondVC.swift; sourceTree = "<group>"; };
 		DE73D71C2AE6CCBC00ABF3EF /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
+		DEFE9D7E2AEA53D3009C693E /* CustomKeyBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyBoard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -385,6 +387,7 @@
 		60115DF22ADBF0DD0050D32C /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
+				DEFE9D7D2AEA53C3009C693E /* CustomKeyBoard */,
 				60AE3EB12AE77395009D9D18 /* SplitShare */,
 				6009C8102AE29DC7008B9EC1 /* Result */,
 				DE73D7142AE65C2700ABF3EF /* AlertView */,
@@ -1022,6 +1025,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		DEFE9D7D2AEA53C3009C693E /* CustomKeyBoard */ = {
+			isa = PBXGroup;
+			children = (
+				DEFE9D7E2AEA53D3009C693E /* CustomKeyBoard.swift */,
+			);
+			path = CustomKeyBoard;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1128,6 +1139,7 @@
 				60115E122ADC19D40050D32C /* NavigationHeader.swift in Sources */,
 				869D1AE92AE52C3300D166B1 /* ExclItemPriceEditVC.swift in Sources */,
 				869D1AD32AE52AD900D166B1 /* CSTitleEditVC.swift in Sources */,
+				DEFE9D7F2AEA53D3009C693E /* CustomKeyBoard.swift in Sources */,
 				869D1ADF2AE52BB300D166B1 /* CSTotalAmountEditVC.swift in Sources */,
 				60AD20E42ADEC15700EFACCD /* ExclItemNameInputVM.swift in Sources */,
 				1A07DF0B2AE569660081E543 /* UIButton+.swift in Sources */,
