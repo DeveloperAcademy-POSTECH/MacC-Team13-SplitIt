@@ -14,9 +14,8 @@ import Then
 
 class MyBankAccountVC: UIViewController {
     
-    let clearButton = UIButton()
+    //let clearButton = UIButton()
     
-    let header = NaviHeader()
     
     let viewModel = MyBankAccountVM()
     var disposeBag = DisposeBag()
@@ -24,6 +23,11 @@ class MyBankAccountVC: UIViewController {
     let userDefault = UserDefaults.standard
     
     var isBankSelected: Bool = false
+    
+    let header = NaviHeader()
+    
+    let scrollView = UIScrollView()
+    let contentView = UIView()
     
     var nameLabel = UILabel()
     var nameTextField = UITextField() //사용자 이름 받는 곳
@@ -64,6 +68,9 @@ class MyBankAccountVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //scrollView.contentSize = CGSize(width: contentView.frame.width, height: contentView.frame.height)
+
+        
         checkUserInfo()
         setAddView()
         setLayout()
@@ -101,6 +108,16 @@ class MyBankAccountVC: UIViewController {
                 }
             })
             .disposed(by: disposeBag)
+        
+        accountTextField.rx.text.orEmpty
+            .subscribe(onNext: { text in
+                let filtered = text.filter { $0.isNumber }
+                if text != filtered {
+                    self.accountTextField.text = filtered
+                }
+            })
+            .disposed(by: disposeBag)
+
     }
     
     
@@ -112,12 +129,19 @@ class MyBankAccountVC: UIViewController {
     }
     
     func setAddView() {
-        [header, nameLabel, nameTextField,
+        
+        [header, scrollView, editDoneBtn].forEach {
+            view.addSubview($0)
+        }
+        
+        scrollView.addSubview(contentView)
+        
+        [nameLabel, nameTextField,
          bankLabel, bankView,
-         accountLabel,editDoneBtn,
+         accountLabel,
          accountTextField, payLabel,
          payView].forEach {
-            view.addSubview($0)
+            contentView.addSubview($0)
         }
         nameTextField.addSubview(nameCountLabel)
         
@@ -144,9 +168,24 @@ class MyBankAccountVC: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             $0.leading.trailing.equalToSuperview()
         }
- 
+
+        
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(header.snp.bottom).offset(10)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(editDoneBtn.snp.top)
+        }
+
+        contentView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.width.equalTo(scrollView)
+            make.height.equalTo(500)
+            make.bottom.equalToSuperview()
+        }
+      
+        
         nameLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(112)
+            make.top.equalToSuperview().offset(10)
             make.left.equalToSuperview().offset(36)
         }
         
@@ -325,6 +364,10 @@ class MyBankAccountVC: UIViewController {
         
         view.backgroundColor = .SurfaceBrandCalmshell
         
+        scrollView.backgroundColor = .SurfaceBrandCalmshell
+        contentView.backgroundColor = .SurfaceBrandCalmshell
+        
+        scrollView.isScrollEnabled = true
         
        
             header.do {

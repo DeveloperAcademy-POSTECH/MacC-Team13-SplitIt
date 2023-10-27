@@ -78,6 +78,7 @@ class HomeVC: UIViewController {
         output.showInfoView
             .drive(onNext: {
                 // MARK: 모아나가 연결할 뷰로 수정
+                //let vc = TestVC()
                 let vc = MyInfoVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })

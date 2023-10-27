@@ -9,45 +9,68 @@ import UIKit
 import SnapKit
 import RxSwift
 
-protocol TestDelegate {
-    func check()
-}
 
-class TestVC: UIViewController, TestDelegate {
-    func check() {
-        print("TestVC의 check 함수")
-    }
+
+class TestVC: UIViewController, CustomKeyboardDelegate {
+
+    let disposeBag = DisposeBag()
+    let customKeyboard = CustomKeyboard()
     
-
-    let btn = UIButton()
-
+    let textField1 = UITextField()
+    let textField2 = UITextField()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(btn)
+        view.addSubview(textField1)
+        view.addSubview(textField2)
         view.backgroundColor = .white
+ 
+        customKeyboard.delegate = self
 
-        btn.setTitle("눌러줘!", for: .normal)
-        btn.setTitleColor(.blue, for: .normal) // Use setTitleColor instead of tintColor
+        textField1.borderStyle = .roundedRect
+        textField1.placeholder = "Enter text here"
+        textField1.inputView = customKeyboard.inputView
+        
+        textField2.borderStyle = .roundedRect
+        textField2.placeholder = "Enter text here"
+        textField2.inputView = customKeyboard.inputView
 
-        // Add constraints for the button's width and height
-        btn.snp.makeConstraints { make in
-            make.width.equalTo(100) // Set width
-            make.height.equalTo(50) // Set height
-            make.center.equalToSuperview()
+
+        textField1.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(100)
+            make.leading.equalToSuperview().offset(20)
+            make.height.equalTo(40)
+        }
+        
+        textField2.snp.makeConstraints { make in
+            make.top.equalTo(textField1.snp.bottom).offset(20)
+            make.leading.equalToSuperview().offset(20)
+            make.height.equalTo(40)
         }
         
         
-        
-        btn.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        customKeyboard.setCurrentTextField(textField1)
+        customKeyboard.setCurrentTextField(textField2)
 
-    
+//
+//        customKeyboard.customKeyObservable
+//            .subscribe(onNext: { value in
+//                print(value)
+//                if value == "del" {
+//                    if var text = self.textField1.text, !text.isEmpty {
+//                        text.removeLast()
+//                        self.textField1.text = text
+//                    }
+//                } else {
+//                    self.textField1.text! += value
+//                }
+//
+//            })
+//            .disposed(by: disposeBag)
+
     }
     
-    @objc func buttonTapped() {
-        let vc = SecondVC()
-        vc.sendDelegate = self
-        self.present(vc, animated: true)
-    }
 }
 
 
