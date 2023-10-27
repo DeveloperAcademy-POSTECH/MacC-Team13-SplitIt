@@ -53,7 +53,7 @@ class SplitShareTableCell: UITableViewCell, Reusable {
         }
         
         krwLabel.do {
-            $0.text = "KRW"
+            $0.text = "원"
             $0.font = .KoreanCaption2
             $0.textColor = .TextPrimary
         }

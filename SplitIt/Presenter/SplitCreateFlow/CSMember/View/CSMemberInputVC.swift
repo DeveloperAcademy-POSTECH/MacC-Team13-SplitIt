@@ -164,7 +164,7 @@ class CSMemberInputVC: UIViewController {
         
         searchListTableView.snp.makeConstraints {
             $0.top.equalTo(textFiledNotice.snp.bottom).offset(6)
-            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.leading.trailing.equalToSuperview().inset(35)
             $0.height.equalTo(0)
         }
         
