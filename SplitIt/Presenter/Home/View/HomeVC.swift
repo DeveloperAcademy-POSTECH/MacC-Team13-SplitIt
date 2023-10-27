@@ -12,9 +12,8 @@ import RxCocoa
 import RxSwift
 
 // MARK: HomeVC는 모두 수정 예정
-///
-/// HomeVC의 각 Button의 observer 부분에 작업할 VC를 연결하여 사용해주세요
-///
+// HomeVC의 각 Button의 observer 부분에 작업할 VC를 연결하여 사용해주세요
+
 class HomeVC: UIViewController {
     var disposeBag = DisposeBag()
     
@@ -31,7 +30,8 @@ class HomeVC: UIViewController {
     let logoImage: UIImageView = UIImageView()
     let mainTextLabel: UILabel = UILabel()
     
-    let splitItButton: SPButton = SPButton()
+    //let splitItButton: SPButton = SPButton()
+    let splitItButton: NewSPButton = NewSPButton()
     let historyButton: UIButton = UIButton()
     let historyButtonImage: UIImageView = UIImageView()
 
@@ -57,15 +57,15 @@ class HomeVC: UIViewController {
                 //self.splitItButton.applyStyle(.primaryWatermelonPressed)
             })
             .disposed(by: disposeBag)
+//        
+//        splitItButton.rx.controlEvent(.touchDown)
+//            .bind { self.splitItButton.applyStyle(style: .primaryWatermelon, shape: .rounded) }
+//            .disposed(by: disposeBag)
         
-        splitItButton.rx.controlEvent(.touchDown)
-            .bind { self.splitItButton.applyStyle(.primaryWatermelonPressed) }
-            .disposed(by: disposeBag)
-        
-        splitItButton.rx.controlEvent(.touchUpInside)
-            .bind { self.splitItButton.applyStyle(.primaryWatermelon) }
-            .disposed(by: disposeBag)
-        
+//        splitItButton.rx.controlEvent(.touchUpInside)
+//            .bind { self.splitItButton.applyStyle(.primaryWatermelon) }
+//            .disposed(by: disposeBag)
+//
         //버튼 원 상태로 돌아오게 만드는 버튼
 //        output.showCreateSplit
 //            .delay(.milliseconds(500))
@@ -187,7 +187,7 @@ class HomeVC: UIViewController {
         }
         
         splitItButton.do {
-            $0.applyStyle(.primaryWatermelon)
+            $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
             $0.setTitle("나의 영수증 만들기", for: .normal)
             $0.setTitleColor(UIColor.black, for: .normal)
             $0.titleLabel?.font = UIFont.systemFont(ofSize: 16)

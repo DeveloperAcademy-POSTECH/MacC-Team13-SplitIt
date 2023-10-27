@@ -140,8 +140,13 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
                 cell.deleteBtn.rx.tap
                     .observe(on: MainScheduler.asyncInstance)
                     .subscribe(onNext: { [self] in
-                        self.showDeteleActionSheet(memIdx: member.memberLogIdx)
-                        print(member.memberLogIdx)
+                        
+                        repo.deleteMemberLog(memberLogIdx: member.memberLogIdx)
+                        self.viewModel.filteredMemberList.accept(self.repo.memberLogArr.value.sorted { $0.name < $1.name })
+                        
+                        
+//                        self.showDeteleActionSheet(memIdx: member.memberLogIdx)
+//                        print(member.memberLogIdx)
                     })
                     .disposed(by: cell.disposeBag)
                 
@@ -152,18 +157,18 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
         
     }
     
-    func showDeteleActionSheet(memIdx: String) {
-        
-        let actionSheet = UIAlertController(title: nil, message: "친구를 삭제하시겠습니까?", preferredStyle: .alert)
-        
-        actionSheet.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-        actionSheet.addAction(UIAlertAction(title: "삭제", style: .default, handler: { [weak self] _ in
-            guard let self = self else { return }
-            repo.deleteMemberLog(memberLogIdx: memIdx)
-            self.viewModel.filteredMemberList.accept(self.repo.memberLogArr.value.sorted { $0.name < $1.name })
-        }))
-        present(actionSheet, animated: true)
-    }
+//    func showDeteleActionSheet(memIdx: String) {
+//
+//        let actionSheet = UIAlertController(title: nil, message: "친구를 삭제하시겠습니까?", preferredStyle: .alert)
+//
+//        actionSheet.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+//        actionSheet.addAction(UIAlertAction(title: "삭제", style: .default, handler: { [weak self] _ in
+//            guard let self = self else { return }
+//            repo.deleteMemberLog(memberLogIdx: memIdx)
+//            self.viewModel.filteredMemberList.accept(self.repo.memberLogArr.value.sorted { $0.name < $1.name })
+//        }))
+//        present(actionSheet, animated: true)
+//    }
     
 }
 
