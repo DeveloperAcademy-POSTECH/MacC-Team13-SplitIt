@@ -14,7 +14,8 @@ class HistoryVM {
     let repo = SplitRepository.share
     
     struct Input {
-        let viewDidLoad: Driver<Void>
+        let viewWillAppear: Observable<Bool>
+        let viewWillDisappear: Observable<Bool>
     }
     
     struct Output {
@@ -26,37 +27,17 @@ class HistoryVM {
         let sectionRelay = BehaviorRelay(value: [CreateDateSection]())
         let isNotEmpty = BehaviorRelay(value: true)
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy. MM. dd"
-        
-        var currentDateString = ""
-        var sections: [CreateDateSection] = []
-        var newItems: [Split] = []
-        
-        input.viewDidLoad
-            .drive(onNext: {
+        input.viewWillAppear
+            .asDriver(onErrorJustReturn: true)
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
                 self.repo.fetchSplitArrFromDBForHistoryView()
             })
             .disposed(by: disposeBag)
         
         repo.splitArr.asDriver()
-            .map{ _ = $0.map {
-                if currentDateString == "" {
-                    currentDateString = dateFormatter.string(from: $0.createDate)
-                }
-                
-                if dateFormatter.string(from: $0.createDate) == currentDateString {
-                    newItems.append($0)
-                } else {
-                    sections.append(CreateDateSection(items: newItems))
-                    newItems = []
-                    newItems.append($0)
-                    currentDateString = dateFormatter.string(from: $0.createDate)
-                }
-            }}
-            .drive(onNext: {
-                sections.append(CreateDateSection(items: newItems))
-                sectionRelay.accept(sections)
+            .drive(onNext: { _ in
+                sectionRelay.accept(self.createSection())
             })
             .disposed(by: disposeBag)
         
@@ -66,5 +47,30 @@ class HistoryVM {
             .disposed(by: disposeBag)
         
         return Output(sectionRelay: sectionRelay, isNotEmpty: isNotEmpty)
+    }
+    
+    private func createSection() -> [CreateDateSection] {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy. MM. dd"
+        var section: [CreateDateSection] = []
+        
+        if let firstSplit = repo.splitArr.value.first {
+            var currentDate = dateFormatter.string(from: firstSplit.createDate)
+            var currentGroup: [Split] = []
+            
+            for split in repo.splitArr.value {
+                let splitCreateDate = dateFormatter.string(from: split.createDate)
+                
+                if currentDate == splitCreateDate {
+                    currentGroup.append(split)
+                } else {
+                    currentDate = splitCreateDate
+                    let newDateSection = CreateDateSection(items: currentGroup)
+                    section.append(newDateSection)
+                    currentGroup = [split]
+                }
+            }
+        }
+        return section
     }
 }

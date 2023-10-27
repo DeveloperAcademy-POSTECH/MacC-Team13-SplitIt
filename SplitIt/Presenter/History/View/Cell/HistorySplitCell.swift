@@ -18,9 +18,9 @@ class HistorySplitCell: UICollectionViewCell, Reusable {
     let splitTitleLabel = UILabel()
     let csTitleLabel = UILabel()
     let csMemberLabel = UILabel()
+    let amountStackView = UIStackView()
     let totalAmountLabel = UILabel()
     let krwLabel = UILabel()
-    let enterEditButton = UIButton()
     let enterEditLabel = UILabel()
     let enterEditImage = UIImageView()
     
@@ -39,112 +39,120 @@ class HistorySplitCell: UICollectionViewCell, Reusable {
         super.prepareForReuse()
     }
     
-    func setAtrribute() {
+    private func setAtrribute() {
         contentView.do {
-            $0.backgroundColor = UIColor(hex: 0xF8F7F4)
-            $0.layer.borderColor = UIColor(hex: 0x202020).cgColor
+            $0.backgroundColor = .SurfacePrimary
+            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 8
         }
         
         splitTitleLabel.do {
-            $0.text = "split title"
-            $0.textColor = UIColor.black
-            $0.font = UIFont.systemFont(ofSize: 18)
+            $0.textColor = .TextPrimary
+            $0.font = .KoreanBody
         }
         
         csTitleLabel.do {
-            $0.text = "csInfo title 조합"
-            $0.textColor = UIColor.black
-            $0.font = UIFont.systemFont(ofSize: 12)
+            $0.textColor = .TextPrimary
+            $0.font = .KoreanCaption2
             $0.numberOfLines = 1
         }
         
         csMemberLabel.do {
-            $0.text = "csMember name 조합"
-            $0.textColor = UIColor.black
-            $0.font = UIFont.systemFont(ofSize: 12)
+            $0.textColor = .TextPrimary
+            $0.font = .KoreanCaption2
             $0.numberOfLines = 1
         }
         
         totalAmountLabel.do {
-            $0.text = "총 액수"
-            $0.textColor = UIColor.black
-            $0.font = UIFont.systemFont(ofSize: 18)
+            $0.textColor = .TextPrimary
+            $0.font = .KoreanBody
         }
         
         krwLabel.do {
             $0.text = "KRW"
-            $0.textColor = UIColor.black
-            $0.font = UIFont.systemFont(ofSize: 12)
+            $0.textColor = .TextPrimary
+            $0.font = .KoreanCaption2
         }
         
         enterEditLabel.do {
             $0.text = "수정하기"
-            $0.textColor = UIColor.black
-            $0.font = UIFont.systemFont(ofSize: 12)
+            $0.textColor = .TextPrimary
+            $0.font = .KoreanCaption2
         }
         
         enterEditImage.do {
             $0.image = UIImage(systemName: "chevron.right")
-            $0.tintColor = UIColor.black
+            $0.tintColor = .SurfaceTertiary
         }
     }
     
-    func setLayout() {
-        [splitTitleLabel, csTitleLabel, csMemberLabel, totalAmountLabel, krwLabel, enterEditButton].forEach {
+    private func setLayout() {
+        [splitTitleLabel,csTitleLabel,csMemberLabel,amountStackView,enterEditLabel,enterEditImage].forEach {
             contentView.addSubview($0)
         }
         
-        enterEditButton.addSubview(enterEditLabel)
-        enterEditButton.addSubview(enterEditImage)
+        [totalAmountLabel,krwLabel].forEach {
+            amountStackView.addSubview($0)
+        }
+        
+        let width = (self.bounds.width - 32) / 2
         
         splitTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.leading.equalToSuperview().offset(16)
+            $0.width.lessThanOrEqualTo(width)
         }
         
         csTitleLabel.snp.makeConstraints {
             $0.top.equalTo(splitTitleLabel.snp.bottom).offset(4)
             $0.leading.equalTo(splitTitleLabel.snp.leading)
+            $0.width.lessThanOrEqualTo(width)
         }
         
         csMemberLabel.snp.makeConstraints {
-            $0.bottom.equalToSuperview().offset(-16)
+            $0.top.equalTo(csTitleLabel.snp.bottom).offset(8)
             $0.leading.equalTo(splitTitleLabel.snp.leading)
+            $0.width.lessThanOrEqualTo(width)
+        }
+        
+        amountStackView.snp.makeConstraints {
+            $0.bottom.equalTo(csMemberLabel.snp.bottom)
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.width.lessThanOrEqualTo(width)
         }
         
         krwLabel.snp.makeConstraints {
-            $0.bottom.trailing.equalToSuperview().offset(-16)
+            $0.bottom.trailing.equalToSuperview()
         }
         
         totalAmountLabel.snp.makeConstraints {
-            $0.bottom.equalTo(krwLabel.snp.bottom)
+            $0.bottom.equalToSuperview()
             $0.trailing.equalTo(krwLabel.snp.leading).offset(-4)
         }
         
-        enterEditButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(16)
-            $0.width.equalTo(60)
-            $0.height.equalTo(15)
-            $0.trailing.equalToSuperview().offset(-16)
-        }
-        
         enterEditImage.snp.makeConstraints {
-            $0.centerY.trailing.equalToSuperview()
-            $0.width.equalTo(10)
+            $0.top.equalTo(splitTitleLabel.snp.top)
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.width.equalTo(8)
             $0.height.equalTo(13.8)
         }
         
         enterEditLabel.snp.makeConstraints {
-            $0.centerY.leading.equalToSuperview()
+            $0.centerY.equalTo(enterEditImage.snp.centerY)
+            $0.trailing.equalTo(enterEditImage.snp.leading).offset(-5)
         }
     }
     
-    func configure(split: Split) {
+    func configure(split: Split, index: Int) {
         self.splitTitleLabel.text = split.title
         self.csTitleLabel.text = viewModel.getCSTitles(splitIdx: split.splitIdx)
         self.csMemberLabel.text = viewModel.getCSMembers()
         self.totalAmountLabel.text = viewModel.getTotalAmount()
+        self.csTitleLabel.backgroundColor = backgroundColor(forSectionIndex: index)
+    }
+    
+    private func backgroundColor(forSectionIndex sectionIndex: Int) -> UIColor {
+        return [UIColor.AppColorBrandCherry, UIColor.AppColorBrandPear, UIColor.AppColorBrandRadish, UIColor.AppColorBrandMushroom][sectionIndex % 4]
     }
 }
