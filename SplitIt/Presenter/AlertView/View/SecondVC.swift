@@ -10,14 +10,14 @@ import SnapKit
 
 class SecondVC: UIViewController {
 
-    var sendDelegate: TestDelegate?
+    //var sendDelegate: TestDelegate?
     
     let main = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        sendDelegate?.check()
+        //sendDelegate?.check()
         
         view.addSubview(main)
         view.backgroundColor = .white
