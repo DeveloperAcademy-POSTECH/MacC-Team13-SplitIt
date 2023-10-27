@@ -184,8 +184,10 @@ class CSMemberConfirmVC: UIViewController {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.equalSplitButton.applyStyle(.halfEqualSplitPressed)
-                
-                print(">>> 1/n 정산버튼 탭")
+
+                let vc = ResultVC()
+                self.navigationController?.pushViewController(vc, animated: true)
+                SplitRepository.share.updateDataToDB()
             })
             .disposed(by: disposeBag)
         
