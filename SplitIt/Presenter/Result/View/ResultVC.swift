@@ -176,13 +176,13 @@ class ResultVC: UIViewController {
         }
         
         header.snp.makeConstraints {
-            $0.height.equalTo(30)
+            $0.height.equalTo(24)
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
             $0.leading.trailing.equalToSuperview()
         }
         
         splitTitle.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(30)
+            $0.top.equalTo(header.snp.bottom).offset(24)
             $0.centerX.equalToSuperview()
         }
         
@@ -218,6 +218,13 @@ class ResultVC: UIViewController {
             .disposed(by: disposeBag)
         
         output.splitTitle
+            .map { [weak self] title in
+                guard let self = self else { return "" }
+                let splitTitleAttribute = NSMutableAttributedString(string: title)
+                splitTitleAttribute.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: splitTitleAttribute.length))
+                self.splitTitle.attributedText = splitTitleAttribute
+                return title
+            }
             .drive(splitTitle.rx.text)
             .disposed(by: disposeBag)
         
