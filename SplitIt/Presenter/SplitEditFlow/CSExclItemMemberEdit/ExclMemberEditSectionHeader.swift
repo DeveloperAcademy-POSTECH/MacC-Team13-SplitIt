@@ -83,7 +83,7 @@ class ExclMemberEditSectionHeader: UICollectionReusableView, Reusable {
         let name = item.exclItem.name
         let price = numberFormatter.formattedString(from: item.exclItem.price)
         
-        headerTitle.text = "[\(name) 값 / \(price) KRW]"
+        headerTitle.text = "[\(name) 값 / \(price) 원]"
         
         deleteButton.rx.tap
             .asDriver()

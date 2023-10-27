@@ -147,7 +147,7 @@ class ResultSectionHeader: UICollectionReusableView, Reusable {
         }
         
         totalAmountSuffixLabel.do {
-            $0.text = "KRW"
+            $0.text = "원"
             $0.textColor = .TextPrimary
             $0.font = .KoreanCaption2
         }
