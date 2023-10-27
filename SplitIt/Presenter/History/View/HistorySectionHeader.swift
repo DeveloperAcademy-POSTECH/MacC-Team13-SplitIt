@@ -23,14 +23,14 @@
          fatalError("init(coder:) has not been implemented")
      }
 
-     func setAttribute() {
+     private func setAttribute() {
          headerTitle.do {
-             $0.textColor = .black
-             $0.font = .systemFont(ofSize: 12)
+             $0.textColor = .TextPrimary
+             $0.font = .KoreanCaption2
          }
      }
 
-     func setLayout() {
+     private func setLayout() {
          addSubview(headerTitle)
 
          headerTitle.snp.makeConstraints {

@@ -9,12 +9,13 @@ import UIKit
 import SnapKit
 import RxCocoa
 import RxSwift
-import Reusable
+import RxAppState
 import RxDataSources
+import Reusable
 
 class HistoryVC: UIViewController {
-    let disposeBag = DisposeBag()
     
+    var disposeBag = DisposeBag()
     let viewModel = HistoryVM()
     
     let header = NaviHeader()
@@ -22,8 +23,8 @@ class HistoryVC: UIViewController {
     let emptyLabel = UILabel()
     
     let splitCollectionFlowLayout = UICollectionViewFlowLayout()
-    
-    lazy var collectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: splitCollectionFlowLayout)
+    lazy var collectionView: UICollectionView = UICollectionView(frame: .zero,
+                                                                 collectionViewLayout: splitCollectionFlowLayout)
     
     private var dataSource: RxCollectionViewSectionedReloadDataSource<CreateDateSection>!
     
@@ -35,8 +36,8 @@ class HistoryVC: UIViewController {
         setBinding()
     }
     
-    func setAttribute() {
-        view.backgroundColor = UIColor(hex: 0xF8F7F4)
+    private func setAttribute() {
+        view.backgroundColor = .SurfacePrimary
         
         header.do {
             $0.applyStyle(.history)
@@ -50,28 +51,37 @@ class HistoryVC: UIViewController {
         collectionView.do {
             $0.collectionViewLayout = setCollectionLayout()
             $0.register(cellType: HistorySplitCell.self)
-            $0.register(HistorySectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HistorySectionHeader")
-            $0.backgroundColor = UIColor(hex: 0xF8F7F4)
+            $0.register(HistorySectionHeader.self,
+                        forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                        withReuseIdentifier: "HistorySectionHeader")
+            $0.backgroundColor = .SurfacePrimary
             $0.showsVerticalScrollIndicator = false
         }
         
         emptyView.do {
-            $0.backgroundColor = UIColor(hex: 0xF8F7F4)
+            $0.backgroundColor = .SurfacePrimary
         }
         
         emptyLabel.do {
             $0.text = "여기에 스플리릿 내역을\n차곡차곡 쌓아보아요!"
             $0.numberOfLines = 0
             $0.sizeToFit()
-            $0.font = .systemFont(ofSize: 18)
+            $0.font = .KoreanBody
+            $0.textColor = .TextSecondary
+            
+            let attrString = NSMutableAttributedString(string: $0.text!)
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.lineSpacing = 6
+            attrString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attrString.length))
+            
+            $0.attributedText = attrString
             $0.textAlignment = .center
-            $0.textColor = .gray
         }
         
         configureCollectionViewDataSource()
     }
     
-    func setLayout() {
+    private func setLayout() {
         view.addSubview(collectionView)
         view.addSubview(emptyView)
         view.addSubview(header)
@@ -100,8 +110,9 @@ class HistoryVC: UIViewController {
         }
     }
     
-    func setBinding() {
-        let input = HistoryVM.Input(viewDidLoad: Driver.just(()))
+    private func setBinding() {
+        let input = HistoryVM.Input(viewWillAppear: self.rx.viewWillAppear,
+                                    viewWillDisappear: self.rx.viewWillDisappear)
         let output = viewModel.transform(input: input)
         
         output.sectionRelay
@@ -111,13 +122,23 @@ class HistoryVC: UIViewController {
         output.isNotEmpty
             .bind(to: emptyView.rx.isHidden)
             .disposed(by: disposeBag)
+        
+        collectionView.rx.itemSelected
+            .asDriver()
+            .drive(onNext: { indexPath in
+                let vc = SplitShareVC()
+                self.navigationController?.pushViewController(vc, animated: true)
+                let item = self.dataSource[indexPath]
+                SplitRepository.share.fetchSplitArrFromDBWithSplitIdx(splitIdx: item.splitIdx)
+            })
+            .disposed(by: disposeBag)
     }
     
-    func setCollectionLayout() -> UICollectionViewLayout {
+    private func setCollectionLayout() -> UICollectionViewLayout {
         
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(98))
+            heightDimension: .estimated(94))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
@@ -132,7 +153,7 @@ class HistoryVC: UIViewController {
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .absolute(23)),
+                heightDimension: .absolute(19)),
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .topLeading,
             absoluteOffset: CGPoint(x: 0, y: 0))
@@ -153,7 +174,7 @@ class HistoryVC: UIViewController {
         dataSource = RxCollectionViewSectionedReloadDataSource<CreateDateSection>(configureCell: { dataSource, collectionView, indexPath, item in
             let cell = collectionView.dequeueReusableCell(for: indexPath) as HistorySplitCell
             let splitItem = item
-            cell.configure(split: splitItem)
+            cell.configure(split: splitItem, index: indexPath.section)
             return cell
         }, configureSupplementaryView: { (dataSource, collectionView, kind, indexPath) -> UICollectionReusableView in
             switch kind {
