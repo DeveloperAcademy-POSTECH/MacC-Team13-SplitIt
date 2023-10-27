@@ -49,7 +49,7 @@ class CSMemberInputCell: UICollectionViewCell, Reusable {
         }
         
         deleteButton.do {
-            $0.setImage(UIImage(named: "XMark"), for: .normal)
+            $0.setImage(UIImage(named: "DeleteIconTypeB"), for: .normal)
         }
     }
     
