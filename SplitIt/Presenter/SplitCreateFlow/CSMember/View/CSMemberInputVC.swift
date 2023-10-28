@@ -28,10 +28,7 @@ class CSMemberInputVC: UIViewController {
     let searchBar = SPTextField()
     let searchListTableView = UITableView()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-    
-    lazy var buttonBottomMinY: CGFloat = 0
-    
-    let nextButton = SPButton()
+    let nextButton = NewSPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,6 +61,10 @@ class CSMemberInputVC: UIViewController {
         
         textFieldCounter.do {
             $0.font = .KoreanCaption2
+        }
+        
+        nextButton.do {
+            $0.applyStyle(style: .primaryCherry, shape: .rounded)
         }
 
         setSearchTableView()
@@ -175,12 +176,31 @@ class CSMemberInputVC: UIViewController {
         }
     }
     
+    func handleEnterKeyPress() {
+        if let text = searchBar.text, !text.isEmpty {
+            /// 현재 text를 Repository에 추가함.
+            /// searchList의 memberList와의 중복 및 text와의 매칭은 viewModel의 비즈니스 로직이 담당.
+            let searchText = self.searchBar.text!
+            SplitRepository.share.createCSMember(name: searchText)
+
+            /// 입력한 text가 현재 memberLog에 존재하지 않는다면 그 text를 Repository에 추가함.
+            let canAddMemberLog = viewModel.canAddMemberLogWithName(name: searchText)
+            if canAddMemberLog {
+                SplitRepository.share.createMemberLog(name: searchText)
+            }
+
+            hideSearchView()
+            scrollToItemInTableView()
+        }
+    }
+    
     func setBinding() {
         let input = CSMemberInputVM.Input(viewDidLoad: Driver.just(()),
                                             nextButtonTapSend: nextButton.rx.tap.asDriver(),
-                                          searchBarText: searchBar.rx.text.orEmpty.asDriver(onErrorJustReturn: ""))
+                                          searchBarText: searchBar.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
+                                          didEnterPress: searchBar.rx.controlEvent(.editingDidEndOnExit).asDriver())
         let output = viewModel.transform(input: input)
-
+        
         output.isOverlayingSearchView
             .distinctUntilChanged()
             .drive(onNext: { [weak self] isTrue in
@@ -208,9 +228,8 @@ class CSMemberInputVC: UIViewController {
                 self.nextButton.setTitle(membersCount == 1
                                          ? "혼자서 돈을 썼어요"
                                          : "\(membersCount)명이서 돈을 썼어요", for: .normal)
-                self.nextButton.applyStyle(membersCount == 1
-                                           ? .deactivate
-                                           : .primaryCherry)
+                let isEnable = membersCount > 1 ? true : false
+                self.nextButton.buttonState.accept(isEnable)
             })
             .disposed(by: disposeBag)
         
@@ -267,16 +286,14 @@ class CSMemberInputVC: UIViewController {
         output.showCSMemberConfirmView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.nextButton.applyStyle(.primaryCherryPressed)
                 pageChangeDelegate?.changePageToSecondView()
             })
             .disposed(by: disposeBag)
         
-        output.showCSMemberConfirmView
-            .delay(.milliseconds(500))
-            .drive(onNext: { [weak self] _ in
+        output.didEnterPress
+            .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                self.nextButton.applyStyle(.primaryCherry)
+                handleEnterKeyPress()
             })
             .disposed(by: disposeBag)
         
