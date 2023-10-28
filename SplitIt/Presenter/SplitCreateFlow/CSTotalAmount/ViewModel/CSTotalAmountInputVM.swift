@@ -21,12 +21,14 @@ class CSTotalAmountInputVM {
     struct Output {
         let showCSMemberInputView: Driver<Void>
         let totalAmount: Driver<String>
+        let textFieldIsEmpty: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
         let totalAmountResult = BehaviorRelay<Int>(value: 0)
         let numberFormatter = NumberFormatterHelper()
         let showCSMemberInputView = input.nextButtonTapped.asDriver()
+        let textFieldCountIsEmpty: Driver<Bool>
         let maxCurrency = 10000000
         
         let totalAmountString = input.totalAmount
@@ -46,7 +48,13 @@ class CSTotalAmountInputVM {
             })
             .disposed(by: disposeBag)
         
+        textFieldCountIsEmpty = input.totalAmount
+            .map { numberFormatter.number(from: $0) ?? 0 }
+            .map{ $0 != 0 }
+            .asDriver()
+        
         return Output(showCSMemberInputView: showCSMemberInputView,
-                      totalAmount: totalAmountString)
+                      totalAmount: totalAmountString,
+                      textFieldIsEmpty: textFieldCountIsEmpty)
     }
 }

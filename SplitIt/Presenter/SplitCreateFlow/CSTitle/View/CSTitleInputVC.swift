@@ -20,7 +20,7 @@ class CSTitleInputVC: UIViewController {
     let titleTextFiled = SPTextField()
     let textFiledCounter = UILabel()
     let textFiledNotice = UILabel()
-    let nextButton = SPButton()
+    let nextButton = NewSPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +70,7 @@ class CSTitleInputVC: UIViewController {
         
         nextButton.do {
             $0.setTitle("다음으로", for: .normal)
+            $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
         }
     }
     
@@ -120,30 +121,16 @@ class CSTitleInputVC: UIViewController {
         output.showCSTotalAmountView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.nextButton.applyStyle(.primaryWatermelonPressed)
                 let vc = CSTotalAmountInputVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
-        
-        output.showCSTotalAmountView
-            .delay(.milliseconds(500))
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.nextButton.applyStyle(.primaryWatermelon)
-            })
-            .disposed(by: disposeBag)
-        
         output.titleCount
             .drive(textFiledCounter.rx.text)
             .disposed(by: disposeBag)
         
-        output.titleCount
-            .distinctUntilChanged()
-            .drive(onNext: { [weak self] str in
-                guard let self = self, let count = str.first else { return }
-                self.nextButton.applyStyle(count == "0" ? .deactivate : .primaryWatermelon)
-            })
+        output.textFieldIsEmpty
+            .drive(nextButton.buttonState)
             .disposed(by: disposeBag)
         
         output.textFieldIsValid

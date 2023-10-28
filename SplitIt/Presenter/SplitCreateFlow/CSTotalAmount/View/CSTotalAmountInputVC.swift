@@ -19,7 +19,7 @@ class CSTotalAmountInputVC: UIViewController {
     let titleMessage = UILabel()
     let totalAmountTextFiled = SPTextField()
     let textFiledNotice = UILabel()
-    let nextButton = SPButton()
+    let nextButton = NewSPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,6 +63,7 @@ class CSTotalAmountInputVC: UIViewController {
         
         nextButton.do {
             $0.setTitle("다음으로", for: .normal)
+            $0.applyStyle(style: .primaryMushroom, shape: .rounded)
         }
     }
     
@@ -109,28 +110,15 @@ class CSTotalAmountInputVC: UIViewController {
             .drive(totalAmountTextFiled.rx.text)
             .disposed(by: disposeBag)
         
-        output.totalAmount
-            .distinctUntilChanged()
-            .drive(onNext: { [weak self] str in
-                guard let self = self else { return }
-                self.nextButton.applyStyle(str == "0" ? .deactivate : .primaryMushroom)
-            })
+        output.textFieldIsEmpty
+            .drive(nextButton.buttonState)
             .disposed(by: disposeBag)
         
         output.showCSMemberInputView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.nextButton.applyStyle(.primaryMushroomPressed)
                 let vc = CSMemberPageController()
                 self.navigationController?.pushViewController(vc, animated: true)
-            })
-            .disposed(by: disposeBag)
-        
-        output.showCSMemberInputView
-            .delay(.milliseconds(500))
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.nextButton.applyStyle(.primaryMushroom)
             })
             .disposed(by: disposeBag)
     }
