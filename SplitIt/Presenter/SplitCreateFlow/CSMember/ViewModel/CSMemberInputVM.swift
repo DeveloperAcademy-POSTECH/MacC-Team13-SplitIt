@@ -23,6 +23,7 @@ class CSMemberInputVM {
         let viewDidLoad: Driver<Void>
         let nextButtonTapSend: Driver<Void>
         let searchBarText: Driver<String>
+        let didEnterPress: Driver<Void>
     }
     
     struct Output {
@@ -32,6 +33,7 @@ class CSMemberInputVM {
         let isOverlayingSearchView: Driver<Bool>
         let textFieldCounter: Driver<String>
         let textFieldIsValid: Driver<Bool>
+        let didEnterPress: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -49,7 +51,8 @@ class CSMemberInputVM {
         let textFieldCounter = BehaviorRelay<String>(value: "")
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
         let showCSMemberConfirmView = input.nextButtonTapSend.asDriver()
-
+        let didEnterPress = input.didEnterPress.asDriver()
+        
         memberList
             .asDriver()
             .map { $0.map { $0.name } }
@@ -143,10 +146,11 @@ class CSMemberInputVM {
                       showCSMemberConfirmView: showCSMemberConfirmView,
                       isOverlayingSearchView: isOverayViewHidden.asDriver(onErrorJustReturn: false),
                       textFieldCounter: textFieldCounter.asDriver(),
-                      textFieldIsValid: textFieldIsValid.asDriver())
+                      textFieldIsValid: textFieldIsValid.asDriver(),
+                      didEnterPress: didEnterPress.asDriver())
     }
     
-    // 입력한 name이 memberLog에 존재하는지 확인하여 존재하지 않는지 여부를 Bool type으로 반환
+    // 입력한 name이 memberLog에 존재하는지 확인하여 존재하지 않는/지 여부를 Bool type으로 반환
     func canAddMemberLogWithName(name: String) -> Bool {
         return !SplitRepository.share.memberLogArr.value.map{$0.name}.contains(name)
     }

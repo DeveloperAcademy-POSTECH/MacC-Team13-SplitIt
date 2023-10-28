@@ -24,6 +24,7 @@ class CSTitleInputVM {
         let showCSTotalAmountView: Driver<Void>
         let titleCount: Driver<String>
         let textFieldIsValid: Driver<Bool>
+        let textFieldIsEmpty: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
@@ -31,6 +32,7 @@ class CSTitleInputVM {
         let showCSTotalAmountView = input.nextButtonTapped
         let textFieldCount = BehaviorRelay<String>(value: "")
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
+        let textFieldCountIsEmpty: Driver<Bool>
 
         showCSTotalAmountView
             .asDriver()
@@ -56,9 +58,14 @@ class CSTitleInputVM {
             .drive(textFieldIsValid)
             .disposed(by: disposeBag)
         
+        textFieldCountIsEmpty = input.title
+            .map{ $0.count > 0 }
+            .asDriver()
+        
         return Output(showCSTotalAmountView: showCSTotalAmountView.asDriver(),
                       titleCount: textFieldCount.asDriver(),
-                      textFieldIsValid: textFieldIsValid.asDriver())
+                      textFieldIsValid: textFieldIsValid.asDriver(),
+                      textFieldIsEmpty: textFieldCountIsEmpty)
     }
 
 }
