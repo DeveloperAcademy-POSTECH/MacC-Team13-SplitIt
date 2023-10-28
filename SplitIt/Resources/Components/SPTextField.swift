@@ -64,7 +64,7 @@ final class SPTextField: UITextField {
         self.backgroundColor = UIColor.SurfacePrimary
         self.layer.cornerRadius = 8
         self.layer.borderWidth = 1
-        self.textAlignment = .center
+        self.addPaddingLeft(16)
     }
 
     private func configureActiveProperties() {
