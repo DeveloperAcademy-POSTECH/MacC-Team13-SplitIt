@@ -53,6 +53,7 @@ class ExclItemNameEditVC: UIViewController {
         
         header.do {
             $0.applyStyle(.edit)
+            $0.setBackButton(viewController: self)
         }
         
         titleMessage.do {
@@ -140,10 +141,14 @@ class ExclItemNameEditVC: UIViewController {
         output.showExclItemPriceView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                guard let index = viewModel.indexPath else { return }
                 self.nextButton.applyStyle(.primaryPearPressed)
-                let vc = ExclItemPriceEditVC(viewModel: ExclItemPriceEditVM(indexPath: index))
-                self.navigationController?.pushViewController(vc, animated: false)
+                if let index = viewModel.indexPath {
+                    let vc = ExclItemPriceEditVC(viewModel: ExclItemPriceEditVM(indexPath: index))
+                    self.navigationController?.pushViewController(vc, animated: true)
+                } else {
+                    let vc = ExclItemPriceEditVC(viewModel: ExclItemPriceEditVM())
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
             })
             .disposed(by: disposeBag)
         
