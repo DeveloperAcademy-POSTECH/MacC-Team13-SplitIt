@@ -83,7 +83,7 @@ class ExclMemberEditVM {
                         let exclMemberSectionModel = ExclMemberEditSectionModel(type: .data(ExclMemberEditSection(exclItem: exclItem, items: exclMemberList)))
                         exclMemberSectionModels.append(exclMemberSectionModel)
                     }
-                    if let model = exclMemberSectionModels.first {
+                    if let model = exclMemberSectionModels.last {
                         return model
                     } else {
                         return ExclMemberEditSectionModel(type: .data(.init(exclItem: .init(csInfoIdx: "", name: ""), items: [])))

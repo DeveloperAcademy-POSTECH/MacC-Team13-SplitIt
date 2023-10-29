@@ -12,6 +12,8 @@ import Then
 import RxSwift
 import RxCocoa
 import RxDataSources
+import RxAppState
+import RealmSwift
 
 final class CSEditListVC: UIViewController {
     
@@ -59,6 +61,10 @@ final class CSEditListVC: UIViewController {
         setBinding()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        self.tableView.reloadData()
+    }
+    
     func setAttribute() {
         view.backgroundColor = UIColor(hex: 0xF8F7F4)
         
@@ -75,9 +81,7 @@ final class CSEditListVC: UIViewController {
         
         tableView.do { view in
             view.register(cellType: CSEditListCell.self)
-            view.rowHeight = UITableView.automaticDimension
-            view.estimatedRowHeight = 42
-            view.isScrollEnabled = false
+            view.rowHeight = 39
             view.backgroundColor = UIColor(hex: 0xF8F7F4)
             view.layer.cornerRadius = 8
             view.layer.borderWidth = 1
@@ -150,13 +154,7 @@ final class CSEditListVC: UIViewController {
         tableView.snp.makeConstraints { make in
             make.top.equalTo(tableHeaderLabel.snp.bottom).offset(16)
             make.leading.trailing.equalTo(titleStackView)
-            viewModel.itemsObservable
-                .map { $0.count * 43 }
-                .subscribe { int in
-                    make.height.equalTo(int)
-                }
-                .disposed(by: disposeBag)
-//            make.height.equalTo()
+            make.height.equalTo(0)
         }
         
         exclAddButton.snp.makeConstraints { make in
@@ -192,8 +190,16 @@ final class CSEditListVC: UIViewController {
             .disposed(by: disposeBag)
         
         viewModel.itemsObservable
-            .bind(to: tableView.rx.items(cellIdentifier: "CSEditListCell", cellType: CSEditListCell.self)) { _, item, cell in
-                cell.csTitleLabel.text = "\(item.name) 값"
+            .observe(on: MainScheduler.asyncInstance)
+            .map { [weak self] exclItems -> [ExclItem] in
+                guard let self = self else { return [] }
+                self.setTableViewHeightByItems(items: exclItems)
+                return exclItems
+            }
+            .bind(to: tableView.rx.items(cellIdentifier: "CSEditListCell", cellType: CSEditListCell.self)) { [weak self] idx, item, cell in
+                guard let self = self else { return }
+                
+                cell.configure(item: item, index: idx, items: viewModel.itemsObservable.value)
             }
             .disposed(by: disposeBag)
         
@@ -203,7 +209,8 @@ final class CSEditListVC: UIViewController {
                                        exclItemTap: tableView.rx.itemSelected.asControlEvent(),
                                        addExclItemTap: tapAddExclItem.rx.event,
                                     saveButtonTap: saveButton.rx.tap,
-                                       delCSInfoTap: tapDelBtn.rx.event)
+                                       delCSInfoTap: tapDelBtn.rx.event,
+                                       viewWillAppear: self.rx.viewDidAppear)
         
         let output = viewModel.transform(input: input)
         
@@ -213,16 +220,19 @@ final class CSEditListVC: UIViewController {
                 self.pushTitleEditViewController()
             })
             .disposed(by: disposeBag)
+        
         output.pushPriceEditVC
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.pushTotalPriceEditViewController()})
             .disposed(by: disposeBag)
+        
         output.pushMemberEditVC
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.pushMemberEditViewController()})
             .disposed(by: disposeBag)
+        
         output.pushExclItemEditVC
             .subscribe(onNext: { [weak self] index in
                 guard let self = self else { return }
@@ -247,7 +257,8 @@ final class CSEditListVC: UIViewController {
             .disposed(by: disposeBag)
         
         output.popDelCSInfo
-            .subscribe (onNext: {_ in
+            .subscribe (onNext: { [weak self] _ in
+                guard let self = self else { return }
 //                SplitRepository.share.deleteCSInfoAndRelatedData(csInfoIdx: "")
                 self.navigationController?.popViewController(animated: true)
             })
@@ -263,6 +274,18 @@ final class CSEditListVC: UIViewController {
             .disposed(by: disposeBag)
     }
 
+    
+    func setTableViewHeightByItems(items: [ExclItem]) {
+        let maxCount = 5
+        let itemCount = min(items.count, maxCount)
+        let cellHeight = 39
+        let tableViewHeight = itemCount * cellHeight
+
+        self.tableView.snp.updateConstraints {
+            $0.height.equalTo(tableViewHeight)
+        }
+        print(tableViewHeight)
+    }
 }
 
 

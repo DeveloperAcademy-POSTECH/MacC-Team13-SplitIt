@@ -13,11 +13,13 @@ import UIKit
 final class CSEditListVM {
     var disposeBag = DisposeBag()
     
+    var csinfoIdx = ""
+    
     let dataModel = SplitRepository.share
     private var data: Observable<CSInfo> {
         return dataModel.csInfoArr
             .asObservable()
-            .observe(on: MainScheduler.asyncInstance)
+            .observe(on: MainScheduler.instance)
             .take(1)
             .flatMap { csInfoArray in
                 print(csInfoArray)
@@ -27,11 +29,12 @@ final class CSEditListVM {
     
     init(csinfoIdx: String = "652fe13e384fd0feba2561bf") {
         dataModel.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: csinfoIdx)
+        self.csinfoIdx = csinfoIdx
     }
     
-    var itemsObservable: Observable<[ExclItem]> {
-        return dataModel.exclItemArr.asObservable()
-    }
+    var itemsObservable: BehaviorRelay<[ExclItem]> = {
+        return SplitRepository.share.exclItemArr
+    }()
     
     var titleObservable: Observable<String> {
         return data.map { $0.title }
@@ -43,7 +46,7 @@ final class CSEditListVM {
 
     var membersObservable: Observable<String> {
         return dataModel.csMemberArr
-            .observe(on: MainScheduler.asyncInstance)
+            .observe(on: MainScheduler.instance)
             .map {
                 if $0.count == 0 {
                     return ""
@@ -64,6 +67,7 @@ final class CSEditListVM {
         let addExclItemTap: ControlEvent<UITapGestureRecognizer>
         let saveButtonTap: ControlEvent<Void>
         let delCSInfoTap: ControlEvent<UITapGestureRecognizer>
+        let viewWillAppear: Observable<Bool>
     }
     
     struct Output {
@@ -85,6 +89,17 @@ final class CSEditListVM {
         let savebtn = input.saveButtonTap.asObservable()
         let delbtn = input.delCSInfoTap.asObservable()
         let addExcl = input.addExclItemTap.asObservable()
+        
+        input.viewWillAppear.asDriver(onErrorJustReturn: true)
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                SplitRepository.share.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: self.csinfoIdx)
+                self.itemsObservable
+                    .accept(SplitRepository.share.exclItemArr.value)
+                print("현재 excl아이템 갯수 = \(SplitRepository.share.exclItemArr.value.count)")
+                print("현재 뷰모델 excl 아이템 갯수\(itemsObservable.value.count)")
+            })
+            .disposed(by: disposeBag)
         
         return Output(pushTitleEditVC: title,
                       pushPriceEditVC: price,

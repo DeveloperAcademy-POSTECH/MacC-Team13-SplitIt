@@ -486,4 +486,13 @@ extension SplitRepository {
         let exclMemberArr = exclMemberArr.value
         realmManager.updateData(exclMemberArr: exclMemberArr)
     }
+    
+    func updateExclItem() {
+        var currentitem = exclItemArr.value
+        guard let newitem = self.newExclItem else { return }
+        currentitem.append(newitem)
+        
+        self.exclItemArr
+            .accept(currentitem)
+    }
 }
