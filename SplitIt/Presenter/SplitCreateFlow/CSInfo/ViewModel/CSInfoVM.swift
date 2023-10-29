@@ -18,13 +18,20 @@ class CSInfoVM {
     struct Input {
         let nextButtonTapped: ControlEvent<Void> // 다음 버튼
         let title: Driver<String> // TitleTextField의 text
+        let totalAmount: Driver<String>
+        let titleTextFieldControlEvent: Observable<UIControl.Event>
+        let totalAmountTextFieldControlEvent: Observable<UIControl.Event>
     }
     
     struct Output {
         let showCSTotalAmountView: Driver<Void>
         let titleCount: Driver<String>
+        let totalAmount: Driver<String>
         let textFieldIsValid: Driver<Bool>
-        let textFieldIsEmpty: Driver<Bool>
+        let titleTextFieldIsEnable: Driver<Bool>
+        let totalAmountTextFieldIsEnable: Driver<Bool>
+        let nextButtonIsEnable: Driver<Bool>
+        let titleTextFieldControlEvent: Driver<UIControl.Event>
     }
     
     func transform(input: Input) -> Output {
@@ -32,13 +39,42 @@ class CSInfoVM {
         let showCSTotalAmountView = input.nextButtonTapped
         let textFieldCount = BehaviorRelay<String>(value: "")
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
-        let textFieldCountIsEmpty: Driver<Bool>
+        
+        let totalAmountResult = BehaviorRelay<Int>(value: 0)
+        let numberFormatter = NumberFormatterHelper()
 
+        let maxCurrency = 10000000
+        
+        let nextButtonIsEnable: Driver<Bool>
+        
+        let titleTextFieldCountIsEmpty = input.title
+            .map{ $0.count > 0 }
+            .asDriver()
+        
+        let totalAmountTextFieldCountIsEmpty = input.totalAmount
+            .map { numberFormatter.number(from: $0) ?? 0 }
+            .map{ $0 != 0 }
+            .asDriver()
+        
+        let totalAmountString = input.totalAmount
+            .map { numberFormatter.number(from: $0) ?? 0 }
+            .map { min($0, maxCurrency) }
+            .map { number in
+                totalAmountResult.accept(number)
+                return number
+            }
+            .map { numberFormatter.formattedString(from: $0) }
+            .asDriver(onErrorJustReturn: "0")
+        
+        let csInfoDriver = Driver.combineLatest(input.title, input.totalAmount)
+        
         showCSTotalAmountView
             .asDriver()
-            .withLatestFrom(input.title)
-            .drive(onNext: {
-                SplitRepository.share.inputCSInfoWithTitle(title: $0)
+            .withLatestFrom(csInfoDriver)
+            .drive(onNext: { title, totalAmount in
+                let totalAmountInt = numberFormatter.number(from: totalAmount)
+                SplitRepository.share.inputCSInfoWithTitle(title: title)
+                SplitRepository.share.inputCSInfoWithTotalAmount(totalAmount: totalAmountInt ?? 0)
             })
             .disposed(by: disposeBag)
         
@@ -58,14 +94,31 @@ class CSInfoVM {
             .drive(textFieldIsValid)
             .disposed(by: disposeBag)
         
-        textFieldCountIsEmpty = input.title
-            .map{ $0.count > 0 }
+        nextButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(), totalAmountTextFieldCountIsEmpty.asDriver())
+            .map{ $0 && $1 }
             .asDriver()
+        
+        let titleTFControlEvent: Driver<UIControl.Event> = input.titleTextFieldControlEvent
+            .map { event -> UIControl.Event in
+                switch event {
+                case .editingDidBegin:
+                    return UIControl.Event.editingDidBegin
+                case .editingDidEnd:
+                    return UIControl.Event.editingDidEnd
+                default:
+                    return UIControl.Event()
+                }
+            }
+            .asDriver(onErrorJustReturn: UIControl.Event())
         
         return Output(showCSTotalAmountView: showCSTotalAmountView.asDriver(),
                       titleCount: textFieldCount.asDriver(),
+                      totalAmount: totalAmountString,
                       textFieldIsValid: textFieldIsValid.asDriver(),
-                      textFieldIsEmpty: textFieldCountIsEmpty)
+                      titleTextFieldIsEnable: titleTextFieldCountIsEmpty,
+                      totalAmountTextFieldIsEnable: totalAmountTextFieldCountIsEmpty,
+                      nextButtonIsEnable: nextButtonIsEnable,
+                      titleTextFieldControlEvent: titleTFControlEvent)
     }
 
 }
