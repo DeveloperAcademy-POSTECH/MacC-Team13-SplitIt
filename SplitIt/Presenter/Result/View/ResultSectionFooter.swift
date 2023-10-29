@@ -15,6 +15,7 @@ import RxCocoa
 class ResultSectionFooter: UICollectionReusableView, Reusable {
     
     let button = UIButton()
+    var indexPath = IndexPath()
     
     var disposeBag = DisposeBag()
     override init(frame: CGRect) {
