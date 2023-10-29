@@ -13,6 +13,10 @@ extension SPTextField {
         case elseValue
         case number
         case deactivate
+        case editingDidEndNormal
+        case editingDidBeginNormal
+        case editingDidEndNumber
+        case editingDidBeginNumber
     }
 }
 
@@ -41,13 +45,13 @@ final class SPTextField: UITextField {
             self.keyboardType = .default
             self.configureCommonProperties()
             self.configureActiveProperties()
-
+            
             // 따로 계산용 키보드
         case .elseValue:
             self.keyboardType = .default
             self.configureCommonProperties()
             self.configureActiveProperties()
-
+            
             // 숫자 키보드
         case .number:
             self.keyboardType = .numberPad
@@ -57,6 +61,32 @@ final class SPTextField: UITextField {
             // 비활성 키보드
         case .deactivate:
             self.configureDeactiveProperties()
+            
+            // 편집중이지 않은 키보드
+        case .editingDidEndNormal:
+            self.keyboardType = .default
+            self.configureCommonProperties()
+            self.configureDidEndProperties()
+            
+            // 편집중인 키보드
+        case .editingDidBeginNormal:
+            self.keyboardType = .default
+            self.configureCommonProperties()
+            self.configureDidBeginProperties()
+            
+            // 편집중이지 않은 키보드 (숫자)
+        case .editingDidEndNumber:
+            self.keyboardType = .numberPad
+            self.configureCommonProperties()
+            self.configureDidEndProperties()
+            self.addPaddingLeft(40)
+            
+            // 편집중인 키보드 (숫자)
+        case .editingDidBeginNumber:
+            self.keyboardType = .numberPad
+            self.configureCommonProperties()
+            self.configureDidBeginProperties()
+            self.addPaddingLeft(40)
         }
     }
 
@@ -65,6 +95,14 @@ final class SPTextField: UITextField {
         self.layer.cornerRadius = 8
         self.layer.borderWidth = 1
         self.addPaddingLeft(16)
+    }
+    
+    private func configureDidEndProperties() {
+        self.layer.borderColor = UIColor.BorderDeactivate.cgColor
+    }
+    
+    private func configureDidBeginProperties() {
+        self.layer.borderColor = UIColor.BorderPrimary.cgColor
     }
 
     private func configureActiveProperties() {
@@ -83,22 +121,36 @@ final class SPTextField: UITextField {
         
         currencyLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().inset(20)
+            $0.leading.equalToSuperview().inset(15)
         }
         
         switch style {
         case .normal:
             break
         case .elseValue:
-            currencyLabel.text = "값"
+//            currencyLabel.text = "값"
             self.configureCurrencyLabelFontProperties()
             
         case .number:
-            currencyLabel.text = "KRW"
+//            currencyLabel.text = "KRW"
             self.configureCurrencyLabelFontProperties()
             
         case .deactivate:
             break
+            
+        case .editingDidEndNormal:
+            self.configureCurrencyLabelFontProperties()
+            
+        case .editingDidBeginNormal:
+            self.configureCurrencyLabelFontProperties()
+            
+        case .editingDidEndNumber:
+            currencyLabel.text = "₩"
+            self.configureCurrencyLabelFontProperties()
+            
+        case .editingDidBeginNumber:
+            currencyLabel.text = "₩"
+            self.configureCurrencyLabelFontProperties()
         }
     }
     
