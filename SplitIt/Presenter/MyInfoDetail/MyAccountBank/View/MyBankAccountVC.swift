@@ -179,7 +179,7 @@ class MyBankAccountVC: UIViewController {
         
         nameLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
-            make.left.equalToSuperview().offset(36)
+            make.leading.equalToSuperview().offset(36)
         }
         
         nameTextField.snp.makeConstraints { make in
@@ -190,7 +190,7 @@ class MyBankAccountVC: UIViewController {
         }
         
         nameCountLabel.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-12)
+            make.trailing.equalToSuperview().offset(-12)
             make.centerY.equalToSuperview()
         }
         
@@ -198,7 +198,7 @@ class MyBankAccountVC: UIViewController {
         
         bankLabel.snp.makeConstraints { make in
             make.top.equalTo(nameTextField.snp.bottom).offset(16)
-            make.left.equalToSuperview().offset(36)
+            make.leading.equalToSuperview().offset(36)
         }
         
         bankView.snp.makeConstraints { make in
@@ -210,19 +210,19 @@ class MyBankAccountVC: UIViewController {
         }
         
         bankNameLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
+            make.leading.equalToSuperview().offset(16)
             make.centerY.equalToSuperview()
         }
         
         bankArrowImage.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-16)
+            make.trailing.equalToSuperview().offset(-16)
             make.centerY.equalToSuperview()
         }
         
         
         accountLabel.snp.makeConstraints { make in
             make.top.equalTo(bankView.snp.bottom).offset(16)
-            make.left.equalToSuperview().offset(36)
+            make.leading.equalToSuperview().offset(36)
         }
         
         accountTextField.snp.makeConstraints { make in
@@ -236,7 +236,7 @@ class MyBankAccountVC: UIViewController {
         
         payLabel.snp.makeConstraints { make in
             make.top.equalTo(accountTextField.snp.bottom).offset(16)
-            make.left.equalToSuperview().offset(36)
+            make.leading.equalToSuperview().offset(36)
         }
         
         payView.snp.makeConstraints { make in
@@ -250,21 +250,21 @@ class MyBankAccountVC: UIViewController {
             make.height.equalTo(60)
             make.width.equalTo(1)
             make.centerY.equalToSuperview()
-            make.left.equalToSuperview().offset(110)
+            make.leading.equalToSuperview().offset(110)
         }
         
         rightBar.snp.makeConstraints { make in
             make.height.equalTo(60)
             make.width.equalTo(1)
             make.centerY.equalToSuperview()
-            make.right.equalToSuperview().offset(-110)
+            make.trailing.equalToSuperview().offset(-110)
         }
         
         tossPayView.snp.makeConstraints { make in
             make.height.equalTo(80)
             make.width.equalTo(56)
             make.centerY.equalToSuperview()
-            make.left.equalToSuperview().offset(32)
+            make.leading.equalToSuperview().offset(32)
         }
         
         tossPayBtn.snp.makeConstraints { make in
@@ -304,7 +304,7 @@ class MyBankAccountVC: UIViewController {
             make.height.equalTo(80)
             make.width.equalTo(56)
             make.centerY.equalToSuperview()
-            make.right.equalToSuperview().offset(-32)
+            make.trailing.equalToSuperview().offset(-32)
         }
         
         naverPayBtn.snp.makeConstraints { make in

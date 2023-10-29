@@ -78,7 +78,7 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
         searchImage.snp.makeConstraints { make in
             make.height.equalTo(22)
             make.width.equalTo(22)
-            make.left.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(10)
             make.centerY.equalToSuperview()
         }
         

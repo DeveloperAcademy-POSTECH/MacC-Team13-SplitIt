@@ -154,14 +154,14 @@ class HomeVC: UIViewController {
        
     }
     
-    func image(withColor color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: size)
-        let image = renderer.image { context in
-            color.setFill()
-            context.fill(CGRect(origin: .zero, size: size))
-        }
-        return image
-    }
+//    func image(withColor color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
+//        let renderer = UIGraphicsImageRenderer(size: size)
+//        let image = renderer.image { context in
+//            color.setFill()
+//            context.fill(CGRect(origin: .zero, size: size))
+//        }
+//        return image
+//    }
 
 
     func setLayout() {
@@ -203,7 +203,7 @@ class HomeVC: UIViewController {
         }
         
         historyButton.snp.makeConstraints {
-            $0.left.equalTo(myInfoButton.snp.right).offset(8)
+            $0.leading.equalTo(myInfoButton.snp.right).offset(8)
             $0.centerY.equalToSuperview()
             $0.width.height.equalTo(40)
         }
@@ -229,7 +229,7 @@ class HomeVC: UIViewController {
             $0.width.equalTo(130)
             $0.height.equalTo(92)
             $0.top.equalToSuperview().offset(20)
-            $0.left.equalToSuperview().offset(20)
+            $0.leading.equalToSuperview().offset(20)
         }
         
         mainTextView.snp.makeConstraints {
