@@ -20,7 +20,7 @@ class CSTotalAmountEditVC: UIViewController {
     let totalAmountTextFiled = UITextField()
     let currencyLabel = UILabel()
     let textFiledNotice = UILabel()
-    let nextButton = SPButton()
+    let nextButton = NewSPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,7 +71,8 @@ class CSTotalAmountEditVC: UIViewController {
         
         nextButton.do {
             $0.setTitle("저장하기", for: .normal)
-            $0.applyStyle(.primaryPear)
+            $0.applyStyle(style: .primaryPear, shape: .rounded)
+            $0.buttonState.accept(true)
         }
     }
     
@@ -128,16 +129,8 @@ class CSTotalAmountEditVC: UIViewController {
         output.showCSMemberInputView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.nextButton.applyStyle(.primaryPearPressed)
+//                self.nextButton.applyStyle(.primaryPearPressed)
                 self.navigationController?.popViewController(animated: false)
-            })
-            .disposed(by: disposeBag)
-        
-        output.showCSMemberInputView
-            .delay(.milliseconds(500))
-           .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-               self.nextButton.applyStyle(.primaryPear)
             })
             .disposed(by: disposeBag)
         

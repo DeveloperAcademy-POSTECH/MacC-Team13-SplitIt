@@ -17,44 +17,30 @@ import RealmSwift
 
 final class CSEditListVC: UIViewController {
     
-    let csinfoIdx: String
-    weak var pageChangeDelegate: CSMemberPageChangeDelegate?
-    
     var disposeBag = DisposeBag()
+    
+    let csinfoIdx: String
     let viewModel: CSEditListVM
     
     let header = NaviHeader()
     let titleEditBtn = UIButton(type: .system)
     let titleLabel = UILabel()
-    lazy var titleStackView: UIStackView = {
-        return setStackView(titleBtn: titleEditBtn ,
-                            st: "이름",
-                            view: titleLabel)
-    }()
+    var titleStackView = UIStackView()
     let totalAmountEditBtn = UIButton(type: .system)
     let totalAmountLabel = UILabel()
-    lazy var totalAmountStack: UIStackView = {
-        return setStackView(titleBtn: totalAmountEditBtn ,
-                            st: "사용한 총액",
-                            view: totalAmountLabel)
-    }()
+    var totalAmountStack = UIStackView()
     let memberEditBtn = UIButton(type: .system)
     let memberLabel = UILabel()
-    lazy var memberStack: UIStackView = {
-        return setStackView(titleBtn: memberEditBtn ,
-                            st: "함께한 사람들",
-                            view: memberLabel)
-    }()
-    
+    var memberStack = UIStackView()
     let tableHeaderLabel = UILabel()
     let tableView = UITableView(frame: .zero, style: .plain)
     let exclAddButton = UILabel()
-    let saveButton = SPButton()
+    let saveButton = NewSPButton()
     let delButton = UILabel()
     let tapDelBtn = UITapGestureRecognizer()
     let tapAddExclItem = UITapGestureRecognizer()
     
-    init(csinfoIdx: String) {
+    init(csinfoIdx: String = "652fe13e384fd0feba2561bf") {
         self.disposeBag = DisposeBag()
         self.csinfoIdx = csinfoIdx
         self.viewModel = CSEditListVM(csinfoIdx: csinfoIdx)
@@ -74,6 +60,16 @@ final class CSEditListVC: UIViewController {
     
     func setAttribute() {
         view.backgroundColor = UIColor(hex: 0xF8F7F4)
+        
+         titleStackView = setStackView(titleBtn: titleEditBtn ,
+                            st: "이름",
+                            view: titleLabel)
+        totalAmountStack = setStackView(titleBtn: totalAmountEditBtn ,
+                            st: "사용한 총액",
+                            view: totalAmountLabel)
+        memberStack = setStackView(titleBtn: memberEditBtn ,
+                                   st: "함께한 사람들",
+                                   view: memberLabel)
         
         header.do {
             $0.applyStyle(.edit)
@@ -109,7 +105,8 @@ final class CSEditListVC: UIViewController {
         
         saveButton.do { btn in
             btn.setTitle("수정하기", for: .normal)
-            btn.applyStyle(.primaryPear)
+            btn.applyStyle(style: .primaryPear, shape: .rounded)
+            btn.buttonState.accept(true)
         }
         
         let atrString2 = NSMutableAttributedString(string: "삭제하기")
@@ -251,16 +248,8 @@ final class CSEditListVC: UIViewController {
             .subscribe { [weak self] _ in
                 guard let self = self else { return }
                 self.navigationController?.popViewController(animated: true)
-                self.saveButton.applyStyle(.primaryPearPressed)
+//                self.saveButton.applyStyle(.primaryPearPressed)
             }
-            .disposed(by: disposeBag)
-        
-        output.popVCinSaveBtn
-            .delay(.milliseconds(500), scheduler: MainScheduler.asyncInstance)
-           .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-               self.saveButton.applyStyle(.primaryPear)
-            })
             .disposed(by: disposeBag)
         
         output.popDelCSInfo

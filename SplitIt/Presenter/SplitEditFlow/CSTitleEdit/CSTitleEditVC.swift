@@ -20,7 +20,7 @@ class CSTitleEditVC: UIViewController {
     let titleTextFiled = UITextField()
     let textFiledCounter = UILabel()
     let textFiledNotice = UILabel()
-    let nextButton = SPButton()
+    let nextButton = NewSPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,7 +65,8 @@ class CSTitleEditVC: UIViewController {
         
         nextButton.do {
             $0.setTitle("저장하기", for: .normal)
-            $0.applyStyle(.primaryPear)
+            $0.applyStyle(style: .primaryPear, shape: .rounded)
+            $0.buttonState.accept(true)
         }
     }
     
@@ -117,15 +118,6 @@ class CSTitleEditVC: UIViewController {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.navigationController?.popViewController(animated: false)
-                self.nextButton.applyStyle(.primaryPearPressed)
-            })
-            .disposed(by: disposeBag)
-        
-        output.showCSTotalAmountView
-            .delay(.milliseconds(500))
-           .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-               self.nextButton.applyStyle(.primaryPear)
             })
             .disposed(by: disposeBag)
         

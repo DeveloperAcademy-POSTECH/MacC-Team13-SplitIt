@@ -21,7 +21,7 @@ class ExclItemPriceEditVC: UIViewController {
     let priceTextField = UITextField()
     let currencyLabel = UILabel()
     let textFiledNotice = UILabel()
-    let nextButton = SPButton()
+    let nextButton = NewSPButton()
     
     init(viewModel: ExclItemPriceEditVM) {
         self.disposeBag = DisposeBag()
@@ -82,7 +82,8 @@ class ExclItemPriceEditVC: UIViewController {
         
         nextButton.do {
             $0.setTitle("저장하기", for: .normal)
-            $0.applyStyle(.primaryPear)
+            $0.applyStyle(style: .primaryPear, shape: .rounded)
+            $0.buttonState.accept(true)
         }
     }
     
@@ -144,7 +145,7 @@ class ExclItemPriceEditVC: UIViewController {
         output.showExclItemTargetView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.nextButton.applyStyle(.primaryPearPressed)
+//                self.nextButton.applyStyle(.primaryPearPressed)
                 if let index = viewModel.indexPath {
                     let vc = ExclMemberEditVC(viewModel: ExclMemberEditVM(index: index))
                     self.navigationController?.pushViewController(vc, animated: true)
@@ -152,14 +153,6 @@ class ExclItemPriceEditVC: UIViewController {
                     let vc = ExclMemberEditVC(viewModel: ExclMemberEditVM())
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
-            })
-            .disposed(by: disposeBag)
-        
-        output.showExclItemTargetView
-            .delay(.milliseconds(500))
-           .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-               self.nextButton.applyStyle(.primaryPear)
             })
             .disposed(by: disposeBag)
         
