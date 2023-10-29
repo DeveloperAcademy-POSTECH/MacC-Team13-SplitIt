@@ -22,6 +22,7 @@ class CSTotalAmountEditVM {
         let showCSMemberInputView: Driver<Void>
         let totalAmount: Driver<String>
         let totalAmountString: Observable<String>
+        let textFieldEmpty: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
@@ -49,9 +50,15 @@ class CSTotalAmountEditVM {
             })
             .disposed(by: disposeBag)
         
+        let textFieldCountIsEmpty = input.totalAmount
+            .map{ $0.count > 0 }
+            .asDriver()
+        
         
         return Output(showCSMemberInputView: showCSMemberInputView,
-                      totalAmount: totalAmountString, totalAmountString: tfString)
+                      totalAmount: totalAmountString,
+                      totalAmountString: tfString,
+                      textFieldEmpty: textFieldCountIsEmpty)
     }
 }
 

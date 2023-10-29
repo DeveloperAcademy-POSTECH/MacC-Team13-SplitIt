@@ -11,11 +11,12 @@ import RxCocoa
 import UIKit
 
 final class CSEditListVM {
+    
     var disposeBag = DisposeBag()
     
     var csinfoIdx = ""
-    
     let dataModel = SplitRepository.share
+    
     private var data: Observable<CSInfo> {
         return dataModel.csInfoArr
             .asObservable()
@@ -26,37 +27,15 @@ final class CSEditListVM {
             }
     }
     
+    var itemsObservable: BehaviorRelay<[ExclItem]> {
+        return SplitRepository.share.exclItemArr
+    }
+    
     init(csinfoIdx: String = "652fe13e384fd0feba2561bf") {
         dataModel.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: csinfoIdx)
         self.csinfoIdx = csinfoIdx
     }
     
-    var itemsObservable: BehaviorRelay<[ExclItem]> = {
-        return SplitRepository.share.exclItemArr
-    }()
-    
-    var titleObservable: Observable<String> {
-        return data.map { $0.title }
-    }
-    
-    var totalObservable: Observable<String> {
-        return data.map { "\($0.totalAmount) rkw" }
-    }
-
-    var membersObservable: Observable<String> {
-        return dataModel.csMemberArr
-            .observe(on: MainScheduler.instance)
-            .map {
-                if $0.count == 0 {
-                    return ""
-                }
-                if $0.count > 2 {
-                    return "\($0[0].name), \( $0[1].name) 외 \($0.count - 2)인"
-                }
-                return "\($0[0].name), \($0[1].name)"
-            }
-            .asObservable()
-    }
     
     struct Input {
         let titleBtnTap: ControlEvent<Void>
@@ -70,24 +49,26 @@ final class CSEditListVM {
     }
     
     struct Output {
-        let pushTitleEditVC: Observable<Void>
-        let pushPriceEditVC: Observable<Void>
-        let pushMemberEditVC: Observable<Void>
-        let popVCinSaveBtn: Observable<Void>
-        let pushExclItemEditVC: Observable<IndexPath>
-        let pushExclItemAddVC: Observable<UITapGestureRecognizer>
-        let popDelCSInfo: Observable<UITapGestureRecognizer>
-//        let pushExclItemEditVC: Observable<Void>
+        let titleOB: Driver<String>
+        let totalAmOb: Driver<String>
+        let membersOb: Driver<String>
+        let pushTitleEditVC: Driver<Void>
+        let pushPriceEditVC: Driver<Void>
+        let pushMemberEditVC: Driver<Void>
+        let popVCinSaveBtn: Driver<Void>
+        let pushExclItemEditVC: Driver<IndexPath>
+        let pushExclItemAddVC: Driver<UITapGestureRecognizer>
+        let popDelCSInfo: Driver<UITapGestureRecognizer>
     }
     
     func transform(input: Input) -> Output {
-        let title = input.titleBtnTap.asObservable()
-        let price = input.totalPriceTap.asObservable()
-        let member = input.memberTap.asObservable()
-        let exclcell = input.exclItemTap.asObservable()
-        let savebtn = input.saveButtonTap.asObservable()
-        let delbtn = input.delCSInfoTap.asObservable()
-        let addExcl = input.addExclItemTap.asObservable()
+        let title = input.titleBtnTap.asDriver()
+        let price = input.totalPriceTap.asDriver()
+        let member = input.memberTap.asDriver()
+        let exclcell = input.exclItemTap.asDriver()
+        let savebtn = input.saveButtonTap.asDriver()
+        let delbtn = input.delCSInfoTap.asDriver()
+        let addExcl = input.addExclItemTap.asDriver()
         
         input.viewWillAppear.asDriver(onErrorJustReturn: true)
             .drive(onNext: { [weak self] _ in
@@ -98,7 +79,23 @@ final class CSEditListVM {
             })
             .disposed(by: disposeBag)
         
-        return Output(pushTitleEditVC: title,
+        let titleob = data.map { $0.title }.asDriver(onErrorJustReturn: "")
+        let totalAmob = data.map { "\($0.totalAmount) rkw" }.asDriver(onErrorJustReturn: "")
+        let membersob = dataModel.csMemberArr
+            .map {
+                if $0.count == 0 {
+                    return ""
+                }
+                if $0.count > 2 {
+                    return "\($0[0].name), \( $0[1].name) 외 \($0.count - 2)인"
+                }
+                return "\($0[0].name), \($0[1].name)"
+            }.asDriver(onErrorJustReturn: "")
+        
+        return Output(titleOB: titleob,
+                      totalAmOb: totalAmob,
+                      membersOb: membersob,
+                      pushTitleEditVC: title,
                       pushPriceEditVC: price,
                       pushMemberEditVC: member,
                       popVCinSaveBtn: savebtn,

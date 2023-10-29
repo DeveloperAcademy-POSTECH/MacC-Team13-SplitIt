@@ -12,9 +12,7 @@ import RxCocoa
 class ExclItemPriceEditVC: UIViewController {
     
     var disposeBag = DisposeBag()
-    
     let viewModel: ExclItemPriceEditVM
-    weak var pageChangeDelegate: ExclItemPricePageChangeDelegate?
     
     let header = NaviHeader()
     let titleMessage = UILabel()
@@ -23,9 +21,15 @@ class ExclItemPriceEditVC: UIViewController {
     let textFiledNotice = UILabel()
     let nextButton = NewSPButton()
     
-    init(viewModel: ExclItemPriceEditVM) {
+    init(index: IndexPath) {
         self.disposeBag = DisposeBag()
-        self.viewModel = viewModel
+        self.viewModel = ExclItemPriceEditVM(indexPath: index)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    init() {
+        self.disposeBag = DisposeBag()
+        self.viewModel = ExclItemPriceEditVM()
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -147,10 +151,10 @@ class ExclItemPriceEditVC: UIViewController {
                 guard let self = self else { return }
 //                self.nextButton.applyStyle(.primaryPearPressed)
                 if let index = viewModel.indexPath {
-                    let vc = ExclMemberEditVC(viewModel: ExclMemberEditVM(index: index))
+                    let vc = ExclMemberEditVC(index: index)
                     self.navigationController?.pushViewController(vc, animated: true)
                 } else {
-                    let vc = ExclMemberEditVC(viewModel: ExclMemberEditVM())
+                    let vc = ExclMemberEditVC()
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
             })
@@ -158,6 +162,10 @@ class ExclItemPriceEditVC: UIViewController {
         
         output.exclPrice
             .bind(to: priceTextField.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.textFieldEmpty
+            .drive(nextButton.buttonState)
             .disposed(by: disposeBag)
     }
 }

@@ -137,6 +137,10 @@ class CSTotalAmountEditVC: UIViewController {
         output.totalAmountString
             .bind(to: totalAmountTextFiled.rx.text)
             .disposed(by: disposeBag)
+        
+        output.textFieldEmpty
+            .drive(nextButton.buttonState)
+            .disposed(by: disposeBag)
     }
 }
 

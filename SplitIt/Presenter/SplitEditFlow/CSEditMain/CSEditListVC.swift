@@ -59,7 +59,13 @@ final class CSEditListVC: UIViewController {
     }
     
     func setAttribute() {
-        view.backgroundColor = UIColor(hex: 0xF8F7F4)
+        view.backgroundColor = .SurfaceBrandCalmshell
+        
+        let atrString = NSMutableAttributedString(string: "따로 계산할 것 추가하기")
+        atrString.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: atrString.length))
+        
+        let atrString2 = NSMutableAttributedString(string: "삭제하기")
+        atrString2.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: atrString2.length))
         
          titleStackView = setStackView(titleBtn: titleEditBtn ,
                             st: "이름",
@@ -76,49 +82,43 @@ final class CSEditListVC: UIViewController {
             $0.setBackButton(viewController: self)
         }
         
-        tableHeaderLabel.do { label in
-            label.text = "따로 계산할 것"
-            label.textColor = .TextSecondary
-            label.font = .KoreanCaption2
+        tableHeaderLabel.do {
+            $0.text = "따로 계산할 것"
+            $0.textColor = .TextSecondary
+            $0.font = .KoreanCaption2
         }
         
-        tableView.do { view in
-            view.register(cellType: CSEditListCell.self)
-            view.rowHeight = 39
-            view.backgroundColor = UIColor(hex: 0xF8F7F4)
-            view.layer.cornerRadius = 8
-            view.layer.borderWidth = 1
-            view.layer.borderColor = UIColor(red: 0.486, green: 0.486, blue: 0.486, alpha: 1).cgColor
+        tableView.do {
+            $0.register(cellType: CSEditListCell.self)
+            $0.rowHeight = 39
+            $0.backgroundColor = UIColor(hex: 0xF8F7F4)
+            $0.layer.cornerRadius = 8
+            $0.layer.borderWidth = 1
+            $0.layer.borderColor = UIColor(red: 0.486, green: 0.486, blue: 0.486, alpha: 1).cgColor
         }
         
-        let atrString = NSMutableAttributedString(string: "따로 계산할 것 추가하기")
-        atrString.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: atrString.length))
-        
-        exclAddButton.do { btn in
-            btn.attributedText = atrString
-            btn.textAlignment = .center
-            btn.font = .KoreanCaption2
-            btn.tintColor = .TextSecondary
-            btn.isUserInteractionEnabled = true
-            btn.addGestureRecognizer(self.tapAddExclItem)
+        exclAddButton.do {
+            $0.attributedText = atrString
+            $0.textAlignment = .center
+            $0.font = .KoreanCaption2
+            $0.tintColor = .TextSecondary
+            $0.isUserInteractionEnabled = true
+            $0.addGestureRecognizer(self.tapAddExclItem)
         }
         
-        saveButton.do { btn in
-            btn.setTitle("수정하기", for: .normal)
-            btn.applyStyle(style: .primaryPear, shape: .rounded)
-            btn.buttonState.accept(true)
+        saveButton.do {
+            $0.setTitle("수정하기", for: .normal)
+            $0.applyStyle(style: .primaryPear, shape: .rounded)
+            $0.buttonState.accept(true)
         }
         
-        let atrString2 = NSMutableAttributedString(string: "삭제하기")
-        atrString2.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: atrString2.length))
-        
-        delButton.do { btn in
-            btn.attributedText = atrString2
-            btn.textAlignment = .center
-            btn.font = .KoreanButtonText
-            btn.textColor = .TextSecondary
-            btn.isUserInteractionEnabled = true
-            btn.addGestureRecognizer(self.tapDelBtn)
+        delButton.do {
+            $0.attributedText = atrString2
+            $0.textAlignment = .center
+            $0.font = .KoreanButtonText
+            $0.textColor = .TextSecondary
+            $0.isUserInteractionEnabled = true
+            $0.addGestureRecognizer(self.tapDelBtn)
         }
         
     }
@@ -129,70 +129,57 @@ final class CSEditListVC: UIViewController {
             view.addSubview($0)
         }
         
-        header.snp.makeConstraints { make in
-            make.height.equalTo(30)
-            make.top.equalTo(view.safeAreaLayoutGuide)
-            make.leading.trailing.equalToSuperview()
+        header.snp.makeConstraints {
+            $0.height.equalTo(30)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.trailing.equalToSuperview()
         }
         
-        titleStackView.snp.makeConstraints { make in
-            make.top.equalTo(header.snp.bottom).offset(25)
-            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(30)
+        titleStackView.snp.makeConstraints {
+            $0.top.equalTo(header.snp.bottom).offset(25)
+            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(30)
         }
         
-        totalAmountStack.snp.makeConstraints { make in
-            make.top.equalTo(titleStackView.snp.bottom).offset(16)
-            make.leading.trailing.equalTo(titleStackView)
+        totalAmountStack.snp.makeConstraints {
+            $0.top.equalTo(titleStackView.snp.bottom).offset(16)
+            $0.leading.trailing.equalTo(titleStackView)
         }
         
-        memberStack.snp.makeConstraints { make in
-            make.top.equalTo(totalAmountStack.snp.bottom).offset(16)
-            make.leading.trailing.equalTo(titleStackView)
+        memberStack.snp.makeConstraints {
+            $0.top.equalTo(totalAmountStack.snp.bottom).offset(16)
+            $0.leading.trailing.equalTo(titleStackView)
         }
         
-        tableHeaderLabel.snp.makeConstraints { make in
-            make.top.equalTo(memberStack.snp.bottom).offset(16)
-            make.leading.trailing.equalTo(titleStackView)
+        tableHeaderLabel.snp.makeConstraints {
+            $0.top.equalTo(memberStack.snp.bottom).offset(16)
+            $0.leading.trailing.equalTo(titleStackView)
         }
         
-        tableView.snp.makeConstraints { make in
-            make.top.equalTo(tableHeaderLabel.snp.bottom).offset(16)
-            make.leading.trailing.equalTo(titleStackView)
-            make.height.equalTo(0)
+        tableView.snp.makeConstraints {
+            $0.top.equalTo(tableHeaderLabel.snp.bottom).offset(16)
+            $0.leading.trailing.equalTo(titleStackView)
+            $0.height.equalTo(0)
         }
         
-        exclAddButton.snp.makeConstraints { make in
-            make.top.equalTo(tableView.snp.bottom).offset(8)
-            make.leading.trailing.equalTo(titleStackView)
+        exclAddButton.snp.makeConstraints {
+            $0.top.equalTo(tableView.snp.bottom).offset(8)
+            $0.leading.trailing.equalTo(titleStackView)
         }
         
-        saveButton.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(titleStackView)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(93)
-            make.height.equalTo(48)
+        saveButton.snp.makeConstraints {
+            $0.leading.trailing.equalTo(titleStackView)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(93)
+            $0.height.equalTo(48)
         }
         
-        delButton.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(titleStackView)
-            make.top.equalTo(saveButton.snp.bottom).offset(29)
+        delButton.snp.makeConstraints {
+            $0.leading.trailing.equalTo(titleStackView)
+            $0.top.equalTo(saveButton.snp.bottom).offset(29)
         }
         
     }
     
     func setBinding() {
-        
-        viewModel.titleObservable
-            .bind(to: titleLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        viewModel.totalObservable
-            .bind(to: totalAmountLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        viewModel.membersObservable
-            .bind(to: memberLabel.rx.text)
-            .disposed(by: disposeBag)
-        
         viewModel.itemsObservable
             .observe(on: MainScheduler.asyncInstance)
             .map { [weak self] exclItems -> [ExclItem] in
@@ -214,64 +201,74 @@ final class CSEditListVC: UIViewController {
                                        addExclItemTap: tapAddExclItem.rx.event,
                                     saveButtonTap: saveButton.rx.tap,
                                        delCSInfoTap: tapDelBtn.rx.event,
-                                       viewWillAppear: self.rx.viewDidAppear)
+                                       viewWillAppear: self.rx.viewWillAppear)
         
         let output = viewModel.transform(input: input)
         
+        output.titleOB
+            .drive(titleLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.totalAmOb
+            .drive(totalAmountLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.membersOb
+            .drive(memberLabel.rx.text)
+            .disposed(by: disposeBag)
+        
         output.pushTitleEditVC
-            .subscribe(onNext: { [weak self] _ in
+            .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.pushTitleEditViewController()
             })
             .disposed(by: disposeBag)
         
         output.pushPriceEditVC
-            .subscribe(onNext: { [weak self] _ in
+            .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.pushTotalPriceEditViewController()})
             .disposed(by: disposeBag)
         
         output.pushMemberEditVC
-            .subscribe(onNext: { [weak self] _ in
+            .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.pushMemberEditViewController()})
             .disposed(by: disposeBag)
         
         output.pushExclItemEditVC
-            .subscribe(onNext: { [weak self] index in
+            .drive(onNext: { [weak self] index in
                 guard let self = self else { return }
                 self.pushExclItemEditViewController(index: index)
             })
             .disposed(by: disposeBag)
         
         output.popVCinSaveBtn
-            .subscribe { [weak self] _ in
+            .drive { [weak self] _ in
                 guard let self = self else { return }
                 self.navigationController?.popViewController(animated: true)
-//                self.saveButton.applyStyle(.primaryPearPressed)
             }
             .disposed(by: disposeBag)
         
         output.popDelCSInfo
-            .subscribe (onNext: { [weak self] _ in
+            .drive (onNext: { [weak self] _ in
                 guard let self = self else { return }
-//                SplitRepository.share.deleteCSInfoAndRelatedData(csInfoIdx: "")
+                SplitRepository.share.deleteCSInfoAndRelatedData(csInfoIdx: csinfoIdx)
                 self.navigationController?.popViewController(animated: true)
             })
             .disposed(by: disposeBag)
         
         output.pushExclItemAddVC
-            .subscribe { [weak self] index in
+            .drive { [weak self] _ in
                 guard let self = self else { return }
-//                SplitRepository.share.currentCSInfo
-                let vc = ExclItemNameEditVC(viewModel: ExclItemNameEditVM())
+                let vc = ExclItemNameEditVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
     }
 
     
-    func setTableViewHeightByItems(items: [ExclItem]) {
+    private func setTableViewHeightByItems(items: [ExclItem]) {
         let maxCount = 5
         let itemCount = min(items.count, maxCount)
         let cellHeight = 39
@@ -302,7 +299,7 @@ extension CSEditListVC {
     }
     
     private func pushExclItemEditViewController(index: IndexPath) {
-        let vc = ExclItemNameEditVC(viewModel: ExclItemNameEditVM(indexPath: index))
+        let vc = ExclItemNameEditVC(index: index)
         navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -310,51 +307,51 @@ extension CSEditListVC {
 
 func setStackView(titleBtn: UIButton, st: String, view: UILabel) -> UIStackView {
     let titleLB = UILabel()
-    titleLB.do { label in
-        label.text = st
-        label.textColor = .TextSecondary
-        label.font = .KoreanCaption2
+    titleLB.do {
+        $0.text = st
+        $0.textColor = .TextSecondary
+        $0.font = .KoreanCaption2
     }
     
-    titleBtn.do { button in
-        button.setTitle("수정하기", for: .normal)
-        button.tintColor = .TextSecondary
-        button.titleLabel?.font = .KoreanCaption2
-        button.titleLabel?.textAlignment = .left
+    titleBtn.do {
+        $0.setTitle("수정하기", for: .normal)
+        $0.tintColor = .TextSecondary
+        $0.titleLabel?.font = .KoreanCaption2
+        $0.titleLabel?.textAlignment = .left
     }
     
     let roundView = UIView(frame: .zero)
-    roundView.do { view in
-        view.layer.cornerRadius = 8
-        view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor(red: 0.486, green: 0.486, blue: 0.486, alpha: 1).cgColor
+    roundView.do {
+        $0.layer.cornerRadius = 8
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor(red: 0.486, green: 0.486, blue: 0.486, alpha: 1).cgColor
     }
     
     view.font = .KoreanCaption1
     view.textColor = .TextPrimary
     
-    [view, titleBtn].forEach { view in
-        roundView.addSubview(view)
+    [view, titleBtn].forEach {
+        roundView.addSubview($0)
     }
     
-    view.snp.makeConstraints { make in
-        make.leading.equalToSuperview().inset(16)
-        make.centerY.equalToSuperview()
+    view.snp.makeConstraints {
+        $0.leading.equalToSuperview().inset(16)
+        $0.centerY.equalToSuperview()
     }
     
-    titleBtn.snp.makeConstraints { make in
-        make.trailing.equalToSuperview().inset(16)
-        make.centerY.equalToSuperview()
+    titleBtn.snp.makeConstraints {
+        $0.trailing.equalToSuperview().inset(16)
+        $0.centerY.equalToSuperview()
     }
     
-    roundView.snp.makeConstraints { make in
-        make.height.equalTo(43)
+    roundView.snp.makeConstraints {
+        $0.height.equalTo(43)
     }
     
     let titleStackView = UIStackView(arrangedSubviews: [titleLB,roundView])
-    titleStackView.do { stack in
-        stack.axis = .vertical
-        stack.spacing = 4
+    titleStackView.do {
+        $0.axis = .vertical
+        $0.spacing = 4
     }
     
     return titleStackView

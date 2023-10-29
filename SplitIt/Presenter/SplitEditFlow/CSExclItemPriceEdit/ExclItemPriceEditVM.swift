@@ -32,6 +32,7 @@ class ExclItemPriceEditVM {
         let totalAmount: Driver<String>
         let title: Driver<String>
         let exclPrice: Observable<String>
+        let textFieldEmpty: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
@@ -52,6 +53,10 @@ class ExclItemPriceEditVM {
             }
             .map { numberFormatter.formattedString(from: $0) }
             .asDriver(onErrorJustReturn: "0")
+        
+        let textFieldCountIsEmpty = input.price
+            .map{ $0.count > 0 }
+            .asDriver()
         
         if let indexPath = indexPath {
             let data = SplitRepository.share.exclItemArr.map { $0[indexPath.row] }
@@ -76,7 +81,8 @@ class ExclItemPriceEditVM {
             return Output(showExclItemTargetView: showExclItemTargetView,
                           totalAmount: totalAmountString,
                           title: title.asDriver(),
-                          exclPrice: exclName)
+                          exclPrice: exclName,
+                          textFieldEmpty: textFieldCountIsEmpty)
         } else {
 //            input.price
 //                .map { Int($0) }
@@ -96,7 +102,8 @@ class ExclItemPriceEditVM {
             return Output(showExclItemTargetView: showExclItemTargetView,
                           totalAmount: totalAmountString,
                           title: title.asDriver(),
-                          exclPrice: Observable.just(""))
+                          exclPrice: Observable.just(""),
+                          textFieldEmpty: textFieldCountIsEmpty)
         }
         
     }

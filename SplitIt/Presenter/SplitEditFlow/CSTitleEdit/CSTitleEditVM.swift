@@ -25,6 +25,7 @@ class CSTitleEditVM {
         let titleCount: Driver<String>
         let textFieldIsValid: Driver<Bool>
         let textFieldString: Observable<String>
+        let textfieldEmpty: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
@@ -61,10 +62,16 @@ class CSTitleEditVM {
         
         let tfString = data.map { $0.title }.asObservable()
         
+        let textFieldCountIsEmpty = input.title
+            .map{ $0.count > 0 }
+            .asDriver()
+        
         return Output(showCSTotalAmountView: showCSTotalAmountView.asDriver(),
                       titleCount: textFieldCount.asDriver(),
                       textFieldIsValid: textFieldIsValid.asDriver(),
-                      textFieldString: tfString)
+                      textFieldString: tfString,
+                      textfieldEmpty: textFieldCountIsEmpty
+        )
     }
 
 }

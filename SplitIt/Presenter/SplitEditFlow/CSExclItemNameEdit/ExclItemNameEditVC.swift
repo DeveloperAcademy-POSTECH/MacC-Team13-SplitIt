@@ -13,7 +13,6 @@ class ExclItemNameEditVC: UIViewController {
     
     var disposeBag = DisposeBag()
     let viewModel: ExclItemNameEditVM
-    weak var pageChangeDelegate: ExclItemNamePageChangeDelegate?
     
     let header = NaviHeader()
     let titleMessage = UILabel()
@@ -23,9 +22,15 @@ class ExclItemNameEditVC: UIViewController {
     let textFiledNotice = UILabel()
     let nextButton = NewSPButton()
     
-    init(viewModel: ExclItemNameEditVM) {
+    init(index: IndexPath) {
         self.disposeBag = DisposeBag()
-        self.viewModel = viewModel
+        self.viewModel = ExclItemNameEditVM(indexPath: index)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    init() {
+        self.disposeBag = DisposeBag()
+        self.viewModel = ExclItemNameEditVM()
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -144,10 +149,10 @@ class ExclItemNameEditVC: UIViewController {
                 guard let self = self else { return }
 //                self.nextButton.applyStyle(.primaryPearPressed)
                 if let index = viewModel.indexPath {
-                    let vc = ExclItemPriceEditVC(viewModel: ExclItemPriceEditVM(indexPath: index))
+                    let vc = ExclItemPriceEditVC(index: index)
                     self.navigationController?.pushViewController(vc, animated: true)
                 } else {
-                    let vc = ExclItemPriceEditVC(viewModel: ExclItemPriceEditVM())
+                    let vc = ExclItemPriceEditVC()
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
             })
@@ -181,6 +186,10 @@ class ExclItemNameEditVC: UIViewController {
         
         output.exclTitle
             .bind(to: nameTextFiled.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.textfieldEmpty
+            .drive(nextButton.buttonState)
             .disposed(by: disposeBag)
     }
 }

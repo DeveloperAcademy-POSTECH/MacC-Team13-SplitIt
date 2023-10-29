@@ -13,22 +13,8 @@ final class CSEditListCell: UITableViewCell, Reusable {
     
     var disposeBag = DisposeBag()
     
-    var csTitleLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.textColor = .TextPrimary
-        return label
-    }()
-    
-    var editBtn: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.setTitle("수정하기", for: .normal)
-        btn.setTitleColor(.TextSecondary, for: .normal)
-        btn.titleLabel?.font = .KoreanCaption2
-        btn.isEnabled = false
-        return btn
-    }()
+    var csTitleLabel = UILabel()
+    var editBtn = UIButton(type: .system)
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -41,6 +27,20 @@ final class CSEditListCell: UITableViewCell, Reusable {
     
     func setAttribute() {
         contentView.backgroundColor = UIColor(hex: 0xF8F7F4)
+        
+        editBtn.do {
+            $0.setTitle("수정하기", for: .normal)
+            $0.setTitleColor(.TextSecondary, for: .normal)
+            $0.titleLabel?.font = .KoreanCaption2
+            $0.isEnabled = false
+        }
+        
+        csTitleLabel.do {
+            $0.textAlignment = .center
+            $0.numberOfLines = 0
+            $0.textColor = .TextPrimary
+            $0.font = .KoreanCaption1
+        }
     }
     
     func setupLayout(type: CSEditListCellType) {

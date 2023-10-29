@@ -14,7 +14,6 @@ class ExclMemberEditVC: UIViewController {
     var disposeBag = DisposeBag()
     
     var viewModel: ExclMemberEditVM
-    
     var dataSource: RxCollectionViewSectionedReloadDataSource<ExclMemberEditSectionModel>!
     
     let header = NaviHeader()
@@ -22,9 +21,15 @@ class ExclMemberEditVC: UIViewController {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     let nextButton = NewSPButton()
     
-    init(viewModel: ExclMemberEditVM) {
+    init(index: IndexPath) {
         self.disposeBag = DisposeBag()
-        self.viewModel = viewModel
+        self.viewModel = ExclMemberEditVM(index: index)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    init() {
+        self.disposeBag = DisposeBag()
+        self.viewModel = ExclMemberEditVM()
         super.init(nibName: nil, bundle: nil)
     }
     

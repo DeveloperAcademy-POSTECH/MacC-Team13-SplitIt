@@ -150,6 +150,10 @@ class CSTitleEditVC: UIViewController {
         output.textFieldString
             .bind(to: titleTextFiled.rx.text)
             .disposed(by: disposeBag)
+        
+        output.textfieldEmpty
+            .drive(nextButton.buttonState)
+            .disposed(by: disposeBag)
     }
 }
 
