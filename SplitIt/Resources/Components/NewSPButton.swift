@@ -157,19 +157,26 @@ final class NewSPButton: UIButton {
             self.configureCommonPropertiesForRounded()
 
             buttonState
+                .distinctUntilChanged()
                 .asDriver(onErrorJustReturn: false)
                 .drive(onNext: { [weak self] isEnable in
                 guard let self = self else { return }
                 self.isEnabled = isEnable
                 configureCommonProperties()
                 if isEnable {
-                    self.backgroundColor = colorArray[style]
-                    self.configureActiveProperties()
-                    self.configureUnpressedProperties()
+                    UIView.animate(withDuration: 0.22) {
+                        self.configureUnpressedProperties()
+                        self.frame = CGRect(origin: CGPoint(x: self.frame.minX, y: self.frame.minY - 4.0), size: self.frame.size)
+                    }
+                    UIView.transition(with: self, duration: 0.22, options: .transitionCrossDissolve) {
+                        self.backgroundColor = self.colorArray[style]
+                        self.configureActiveProperties()
+                    }
                 } else {
                     self.backgroundColor = .AppColorBrandCalmshell
                     self.configureDeactiveProperties()
                     self.configurePressedProperties()
+                    self.frame = CGRect(origin: CGPoint(x: self.frame.minX, y: self.frame.minY + 4.0), size: self.frame.size)
                 }
             })
                 .disposed(by: disposeBag)
