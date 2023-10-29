@@ -39,7 +39,6 @@ class CSTitleEditVM {
             .asDriver()
             .withLatestFrom(input.title)
             .drive(onNext: {
-                print($0)
                 SplitRepository.share.editCSInfoTitle(title: $0)
             })
             .disposed(by: disposeBag)
