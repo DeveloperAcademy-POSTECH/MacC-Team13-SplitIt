@@ -64,7 +64,6 @@ class ExclMemberEditVM {
                     SplitRepository.share.exclMemberArr.value.forEach { exMember in
                         if exMember.exclItemIdx == idx {
                             list.append(exMember)
-                            print(exMember.name)
                         }
                     }
                     let ob = BehaviorRelay(value: ExclMemberEditSectionModel(type: ExclMemberEditSectionType.data(ExclMemberEditSection.init(exclItem: exclItem, items: list))))

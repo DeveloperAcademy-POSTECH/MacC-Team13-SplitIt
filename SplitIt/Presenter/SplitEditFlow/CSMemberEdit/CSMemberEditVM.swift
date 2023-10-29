@@ -142,7 +142,6 @@ class CSMemberEditVM {
         
         csmemberUpdate
             .subscribe { _ in
-                print("왜실행됌????????/")
                 SplitRepository.share.updateDataToDB()
             }
             .disposed(by: disposeBag)

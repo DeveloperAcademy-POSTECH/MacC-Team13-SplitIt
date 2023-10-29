@@ -13,7 +13,6 @@ class ExclItemNameEditVC: UIViewController {
     
     var disposeBag = DisposeBag()
     let viewModel: ExclItemNameEditVM
-    weak var pageChangeDelegate: ExclItemNamePageChangeDelegate?
     
     let header = NaviHeader()
     let titleMessage = UILabel()
@@ -21,11 +20,17 @@ class ExclItemNameEditVC: UIViewController {
     let nameTextSuffix = UILabel()
     let textFiledCounter = UILabel()
     let textFiledNotice = UILabel()
-    let nextButton = SPButton()
+    let nextButton = NewSPButton()
     
-    init(viewModel: ExclItemNameEditVM) {
+    init(index: IndexPath) {
         self.disposeBag = DisposeBag()
-        self.viewModel = viewModel
+        self.viewModel = ExclItemNameEditVM(indexPath: index)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    init() {
+        self.disposeBag = DisposeBag()
+        self.viewModel = ExclItemNameEditVM()
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -83,7 +88,8 @@ class ExclItemNameEditVC: UIViewController {
         
         nextButton.do {
             $0.setTitle("저장하기", for: .normal)
-            $0.applyStyle(.primaryPear)
+            $0.applyStyle(style: .primaryPear, shape: .rounded)
+            $0.buttonState.accept(true)
         }
     }
     
@@ -141,22 +147,14 @@ class ExclItemNameEditVC: UIViewController {
         output.showExclItemPriceView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.nextButton.applyStyle(.primaryPearPressed)
+//                self.nextButton.applyStyle(.primaryPearPressed)
                 if let index = viewModel.indexPath {
-                    let vc = ExclItemPriceEditVC(viewModel: ExclItemPriceEditVM(indexPath: index))
+                    let vc = ExclItemPriceEditVC(index: index)
                     self.navigationController?.pushViewController(vc, animated: true)
                 } else {
-                    let vc = ExclItemPriceEditVC(viewModel: ExclItemPriceEditVM())
+                    let vc = ExclItemPriceEditVC()
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
-            })
-            .disposed(by: disposeBag)
-        
-        output.showExclItemPriceView
-            .delay(.milliseconds(500))
-           .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-               self.nextButton.applyStyle(.primaryPear)
             })
             .disposed(by: disposeBag)
         
@@ -187,7 +185,11 @@ class ExclItemNameEditVC: UIViewController {
             .disposed(by: disposeBag)
         
         output.exclTitle
-            .bind(to: nameTextFiled.rx.text)
+            .drive(nameTextFiled.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.textfieldEmpty
+            .drive(nextButton.buttonState)
             .disposed(by: disposeBag)
     }
 }
