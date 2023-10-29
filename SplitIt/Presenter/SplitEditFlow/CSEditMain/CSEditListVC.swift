@@ -17,10 +17,11 @@ import RealmSwift
 
 final class CSEditListVC: UIViewController {
     
+    let csinfoIdx: String
     weak var pageChangeDelegate: CSMemberPageChangeDelegate?
     
     var disposeBag = DisposeBag()
-    let viewModel = CSEditListVM()
+    let viewModel: CSEditListVM
     
     let header = NaviHeader()
     let titleEditBtn = UIButton(type: .system)
@@ -53,16 +54,22 @@ final class CSEditListVC: UIViewController {
     let tapDelBtn = UITapGestureRecognizer()
     let tapAddExclItem = UITapGestureRecognizer()
     
-
+    init(csinfoIdx: String) {
+        self.disposeBag = DisposeBag()
+        self.csinfoIdx = csinfoIdx
+        self.viewModel = CSEditListVM(csinfoIdx: csinfoIdx)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setAttribute()
         setLayout()
         setBinding()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        self.tableView.reloadData()
     }
     
     func setAttribute() {
@@ -284,7 +291,6 @@ final class CSEditListVC: UIViewController {
         self.tableView.snp.updateConstraints {
             $0.height.equalTo(tableViewHeight)
         }
-        print(tableViewHeight)
     }
 }
 

@@ -22,7 +22,6 @@ final class CSEditListVM {
             .observe(on: MainScheduler.instance)
             .take(1)
             .flatMap { csInfoArray in
-                print(csInfoArray)
                 return csInfoArray.first.map(Observable.just) ?? Observable.empty()
             }
     }
@@ -96,8 +95,6 @@ final class CSEditListVM {
                 SplitRepository.share.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: self.csinfoIdx)
                 self.itemsObservable
                     .accept(SplitRepository.share.exclItemArr.value)
-                print("현재 excl아이템 갯수 = \(SplitRepository.share.exclItemArr.value.count)")
-                print("현재 뷰모델 excl 아이템 갯수\(itemsObservable.value.count)")
             })
             .disposed(by: disposeBag)
         
