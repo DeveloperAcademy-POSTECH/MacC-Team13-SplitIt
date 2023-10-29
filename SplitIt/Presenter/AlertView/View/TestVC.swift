@@ -11,32 +11,62 @@ import RxSwift
 
 
 
-class TestVC: UIViewController, CustomKeyboardDelegate {
+class TestVC: UIViewController, CustomKeyboardDelegate, UITextFieldDelegate{
 
     let disposeBag = DisposeBag()
-    let customKeyboard = CustomKeyboard()
     
     let textField1 = UITextField()
     let textField2 = UITextField()
     
+    let customKeyboard1 = CustomKeyboard()
+    let customKeyboard2 = CustomKeyboard()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setAttribute()
+        
         view.addSubview(textField1)
         view.addSubview(textField2)
         view.backgroundColor = .white
  
-        customKeyboard.delegate = self
 
+        
+        textField1.inputView = customKeyboard1.inputView       
+        textField2.inputView = customKeyboard2.inputView
+        
+        customKeyboard1.delegate = self
+        customKeyboard2.delegate = self
+
+        
+
+        customKeyboard1.setCurrentTextField(textField1)
+        customKeyboard2.setCurrentTextField(textField2)
+        
+        customKeyboard1.customKeyObservable
+                   .subscribe(onNext: { [weak self] value in
+                       self?.customKeyboard1.handleInputValue(value)
+                   })
+                   .disposed(by: disposeBag)
+
+               customKeyboard2.customKeyObservable
+                   .subscribe(onNext: { [weak self] value in
+                       self?.customKeyboard2.handleInputValue(value)
+                   })
+                   .disposed(by: disposeBag)
+
+
+
+
+    }
+    
+    func setAttribute(){
         textField1.borderStyle = .roundedRect
         textField1.placeholder = "Enter text here"
-        textField1.inputView = customKeyboard.inputView
         
         textField2.borderStyle = .roundedRect
         textField2.placeholder = "Enter text here"
-        textField2.inputView = customKeyboard.inputView
-
-
+        
         textField1.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(100)
             make.leading.equalToSuperview().offset(20)
@@ -48,29 +78,7 @@ class TestVC: UIViewController, CustomKeyboardDelegate {
             make.leading.equalToSuperview().offset(20)
             make.height.equalTo(40)
         }
-        
-        
-        customKeyboard.setCurrentTextField(textField1)
-        customKeyboard.setCurrentTextField(textField2)
-
-//
-//        customKeyboard.customKeyObservable
-//            .subscribe(onNext: { value in
-//                print(value)
-//                if value == "del" {
-//                    if var text = self.textField1.text, !text.isEmpty {
-//                        text.removeLast()
-//                        self.textField1.text = text
-//                    }
-//                } else {
-//                    self.textField1.text! += value
-//                }
-//
-//            })
-//            .disposed(by: disposeBag)
-
     }
-    
 }
 
 

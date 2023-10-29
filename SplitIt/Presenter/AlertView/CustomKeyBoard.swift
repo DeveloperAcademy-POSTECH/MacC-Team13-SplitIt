@@ -18,12 +18,13 @@ protocol CustomKeyboardDelegate: AnyObject {
 }
 
 class CustomKeyboard: UIInputViewController {
-
+    
     weak var delegate: CustomKeyboardDelegate?
-
+    var currentTextField: UITextField?
+    
     private let disposeBag = DisposeBag()
     private let customKeySubject = PublishSubject<String>()
-
+    
     var customKeyObservable: Observable<String> {
         return customKeySubject.asObservable()
     }
@@ -42,9 +43,8 @@ class CustomKeyboard: UIInputViewController {
     let btn0 = KeyboardButton(title: "0번")
     let btn00 = KeyboardButton(title: "00번")
     let deleteButton = KeyboardButton(title: "del")
-
-    private var currentTextField: UITextField?
-
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -52,18 +52,17 @@ class CustomKeyboard: UIInputViewController {
         setAddView()
         setKeyLayout()
         setBinding()
-    
-
         
     }
     
+ 
     func setCurrentTextField(_ textField: UITextField) {
             currentTextField = textField
-            textField.inputView = self.inputView
-
         }
 
+    
     func handleInputValue(_ value: String) {
+        
         guard let textField = currentTextField else { return }
         if value == "del" {
             if var text = textField.text, !text.isEmpty {
@@ -77,14 +76,14 @@ class CustomKeyboard: UIInputViewController {
             }
         }
     }
-
+    
     
     func setAttribute() {
-       
+        
         let inputView = UIInputView(frame: CGRect(x: 0, y: 0, width: 390, height: 288), inputViewStyle: .keyboard)
         inputView.backgroundColor = .lightGray
         self.inputView = inputView
-
+        
         keyboardView.backgroundColor = UIColor(hex: 0x3C3C43)
         inputView.addSubview(keyboardView)
         
@@ -92,15 +91,14 @@ class CustomKeyboard: UIInputViewController {
     }
     
     func setAddView() {
-               
+        
         [btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btn00, deleteButton].forEach {
             keyboardView.addSubview($0)
         }
     }
     
-    
     func setBinding() {
-
+        
         bindButtonAction(btn1, value: "1")
         bindButtonAction(btn2, value: "2")
         bindButtonAction(btn3, value: "3")
@@ -114,6 +112,7 @@ class CustomKeyboard: UIInputViewController {
         bindButtonAction(btn0, value: "0")
         bindButtonAction(deleteButton, value: "del")
     }
+        
     
     func setKeyLayout() {
         btn1.snp.makeConstraints { make in
@@ -185,4 +184,6 @@ class CustomKeyboard: UIInputViewController {
             .bind(to: customKeySubject)
             .disposed(by: disposeBag)
     }
+    
+
 }

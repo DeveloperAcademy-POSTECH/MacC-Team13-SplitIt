@@ -143,6 +143,7 @@
 		DE73D71D2AE6CCBC00ABF3EF /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D71C2AE6CCBC00ABF3EF /* AlertController.swift */; };
 		DEFE9D812AEAAD91009C693E /* CustomKeyBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFE9D802AEAAD91009C693E /* CustomKeyBoard.swift */; };
 		DEFE9D832AEAB80A009C693E /* KeyboardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFE9D822AEAB80A009C693E /* KeyboardButton.swift */; };
+		DEFE9D852AEE909A009C693E /* CustomTextFieldInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFE9D842AEE909A009C693E /* CustomTextFieldInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -276,6 +277,7 @@
 		DE73D71C2AE6CCBC00ABF3EF /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
 		DEFE9D802AEAAD91009C693E /* CustomKeyBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyBoard.swift; sourceTree = "<group>"; };
 		DEFE9D822AEAB80A009C693E /* KeyboardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardButton.swift; sourceTree = "<group>"; };
+		DEFE9D842AEE909A009C693E /* CustomTextFieldInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1021,6 +1023,7 @@
 				DE73D71A2AE6B00300ABF3EF /* SecondVC.swift */,
 				DE73D7182AE6A2F100ABF3EF /* TestVC.swift */,
 				DEFE9D822AEAB80A009C693E /* KeyboardButton.swift */,
+				DEFE9D842AEE909A009C693E /* CustomTextFieldInfo.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1185,6 +1188,7 @@
 				60AD20E92ADEC8AD00EFACCD /* ExclItemPriceInputVC.swift in Sources */,
 				DE73D6E32AE0D12300ABF3EF /* MyBankAccountVC.swift in Sources */,
 				60AE3EC12AE77488009D9D18 /* CSMemberResult.swift in Sources */,
+				DEFE9D852AEE909A009C693E /* CustomTextFieldInfo.swift in Sources */,
 				6009C8212AE2BC13008B9EC1 /* SectionFactory.swift in Sources */,
 				60AE3EAE2AE6AA97009D9D18 /* ResultSectionHeaderVM.swift in Sources */,
 				60AE3EBA2AE77417009D9D18 /* SplitShareTableCell.swift in Sources */,

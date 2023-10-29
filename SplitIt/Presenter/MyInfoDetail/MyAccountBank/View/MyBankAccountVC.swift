@@ -12,7 +12,7 @@ import SnapKit
 import Then
 
 
-class MyBankAccountVC: UIViewController {
+class MyBankAccountVC: UIViewController, CustomKeyboardDelegate{
 
     
     let viewModel = MyBankAccountVM()
@@ -39,6 +39,7 @@ class MyBankAccountVC: UIViewController {
     
     let accountLabel = UILabel()
     let accountTextField = UITextField()
+    let accountCustomKeyboard = CustomKeyboard()
     
     var nameLabel = UILabel()
     var nameTextField = UITextField() //예금주
@@ -69,13 +70,25 @@ class MyBankAccountVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         checkUserInfo()
         setAddView()
         setLayout()
         setAttribute()
         setBinding()
         asapRxData()
+        accountTextFieldCustomKeyboard()
+    }
+    
+    func accountTextFieldCustomKeyboard() {
+        accountTextField.inputView = accountCustomKeyboard.inputView
+        accountCustomKeyboard.delegate = self
+        accountCustomKeyboard.setCurrentTextField(accountTextField)
+        
+        accountCustomKeyboard.customKeyObservable
+            .subscribe(onNext: { [weak self] value in
+                self?.accountCustomKeyboard.handleInputValue(value)
+            })
+            .disposed(by: disposeBag)
     }
     
     //수정버튼 활성화 비활성화 선택해주는 함수
@@ -124,7 +137,7 @@ class MyBankAccountVC: UIViewController {
         super.viewWillAppear(animated)
         
         setKeyboardNotification()
-        self.nickNameTextField.becomeFirstResponder()
+        //self.nickNameTextField.becomeFirstResponder()
     }
     
     func setAddView() {
@@ -436,9 +449,6 @@ class MyBankAccountVC: UIViewController {
                 $0.attributedPlaceholder = NSAttributedString(string: "닉네임을 입력해주세요",
                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextDeactivate])
             } else {
-                //MARK: 토마토, 수정뷰로 넘어왔을 때, 검은색 글자면은 이미 입력되어있는 것처럼 보여서 회색으로 처리해두었어요
-                //                $0.attributedPlaceholder = NSAttributedString(string: UserDefaults.standard.string(forKey: "userName")!,
-                //                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
                 
                 $0.placeholder = userDefault.string(forKey: "userNickName")
             }
@@ -551,9 +561,6 @@ class MyBankAccountVC: UIViewController {
                 $0.attributedPlaceholder = NSAttributedString(string: "성함을 입력해주세요",
                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextDeactivate])
             } else {
-                //MARK: 토마토, 수정뷰로 넘어왔을 때, 검은색 글자면은 이미 입력되어있는 것처럼 보여서 회색으로 처리해두었어요
-                //                $0.attributedPlaceholder = NSAttributedString(string: UserDefaults.standard.string(forKey: "userName")!,
-                //                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
                 
                 $0.placeholder = userDefault.string(forKey: "userName")
             }
