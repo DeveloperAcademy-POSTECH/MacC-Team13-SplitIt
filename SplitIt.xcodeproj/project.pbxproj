@@ -55,6 +55,8 @@
 		60115E312ADE715E0050D32C /* CSMemberConfirmHeaderVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E302ADE715E0050D32C /* CSMemberConfirmHeaderVM.swift */; };
 		6032DCE42AECE4B3004A6BFA /* CSInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCE32AECE4B3004A6BFA /* CSInfoVC.swift */; };
 		6032DCE62AECE4BC004A6BFA /* CSInfoVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCE52AECE4BC004A6BFA /* CSInfoVM.swift */; };
+		6032DCEF2AEE5452004A6BFA /* ExclItemInputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCEE2AEE5452004A6BFA /* ExclItemInputVC.swift */; };
+		6032DCF12AEE6FFC004A6BFA /* ExclItemInputVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCF02AEE6FFC004A6BFA /* ExclItemInputVM.swift */; };
 		6078ACCC2ADA74AC00995811 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCB2ADA74AC00995811 /* AppDelegate.swift */; };
 		6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCD2ADA74AC00995811 /* SceneDelegate.swift */; };
 		6078ACD02ADA74AC00995811 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCF2ADA74AC00995811 /* HomeVC.swift */; };
@@ -196,6 +198,8 @@
 		60115E302ADE715E0050D32C /* CSMemberConfirmHeaderVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberConfirmHeaderVM.swift; sourceTree = "<group>"; };
 		6032DCE32AECE4B3004A6BFA /* CSInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSInfoVC.swift; sourceTree = "<group>"; };
 		6032DCE52AECE4BC004A6BFA /* CSInfoVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSInfoVM.swift; sourceTree = "<group>"; };
+		6032DCEE2AEE5452004A6BFA /* ExclItemInputVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInputVC.swift; sourceTree = "<group>"; };
+		6032DCF02AEE6FFC004A6BFA /* ExclItemInputVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInputVM.swift; sourceTree = "<group>"; };
 		6078ACC82ADA74AC00995811 /* SplitIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SplitIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6078ACCB2ADA74AC00995811 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6078ACCD2ADA74AC00995811 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -468,6 +472,7 @@
 		60115E042ADC18110050D32C /* SplitCreateFlow */ = {
 			isa = PBXGroup;
 			children = (
+				6032DCE72AEE538C004A6BFA /* ExclItem */,
 				60AD20DD2ADEC0BC00EFACCD /* ExclItemCycle */,
 				60115E192ADD2B330050D32C /* CSMember */,
 				60115E082ADC18C40050D32C /* CSTotalAmount */,
@@ -591,6 +596,47 @@
 			isa = PBXGroup;
 			children = (
 				6032DCE52AECE4BC004A6BFA /* CSInfoVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		6032DCE72AEE538C004A6BFA /* ExclItem */ = {
+			isa = PBXGroup;
+			children = (
+				6032DCEB2AEE542C004A6BFA /* ExclItemModal */,
+				6032DCEA2AEE5423004A6BFA /* ExclItemInput */,
+			);
+			path = ExclItem;
+			sourceTree = "<group>";
+		};
+		6032DCEA2AEE5423004A6BFA /* ExclItemInput */ = {
+			isa = PBXGroup;
+			children = (
+				6032DCED2AEE5445004A6BFA /* ViewModel */,
+				6032DCEC2AEE543C004A6BFA /* View */,
+			);
+			path = ExclItemInput;
+			sourceTree = "<group>";
+		};
+		6032DCEB2AEE542C004A6BFA /* ExclItemModal */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ExclItemModal;
+			sourceTree = "<group>";
+		};
+		6032DCEC2AEE543C004A6BFA /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6032DCEE2AEE5452004A6BFA /* ExclItemInputVC.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6032DCED2AEE5445004A6BFA /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				6032DCF02AEE6FFC004A6BFA /* ExclItemInputVM.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1212,7 +1258,9 @@
 				60115E1F2ADD2B660050D32C /* CSMemberInputVM.swift in Sources */,
 				6009C8142AE29DF4008B9EC1 /* ResultVC.swift in Sources */,
 				869D1AE62AE52C0F00D166B1 /* ExclItemNameEditVM.swift in Sources */,
+				6032DCF12AEE6FFC004A6BFA /* ExclItemInputVM.swift in Sources */,
 				869D1ADA2AE52B7600D166B1 /* CSMemberEditVM.swift in Sources */,
+				6032DCEF2AEE5452004A6BFA /* ExclItemInputVC.swift in Sources */,
 				C2A7979E2AE2776B0049E709 /* HistorySplitCellVM.swift in Sources */,
 				60AE3EBE2AE77467009D9D18 /* SplitShareSectionHeader.swift in Sources */,
 				DE73D6E92AE0D27500ABF3EF /* Bank.swift in Sources */,
