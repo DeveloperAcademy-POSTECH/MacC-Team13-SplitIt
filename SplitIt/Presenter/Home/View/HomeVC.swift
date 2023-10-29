@@ -52,7 +52,8 @@ class HomeVC: UIViewController {
         
         output.showCreateSplit
             .drive(onNext: {
-                let vc = CSTitleInputVC()
+//                let vc = CSTitleInputVC()
+                let vc = CSInfoVC()
                 self.navigationController?.pushViewController(vc, animated: true)
                 //self.splitItButton.applyStyle(.primaryWatermelonPressed)
             })
