@@ -46,6 +46,7 @@ class MyInfoVC: UIViewController {
     
     let accountBankLabel = UILabel() //userDefaults에서 받아온 은행 이름
     let accountLabel = UILabel() //userDefault에서 받아온 사용자 계좌
+    let accountNameLabel = UILabel()
     
     let socialPayLabel = UILabel()
     
@@ -123,7 +124,7 @@ class MyInfoVC: UIViewController {
         let kakaoValue = userDefault.bool(forKey: "kakaoPay")
         let naverValue = userDefault.bool(forKey: "naverPay")
         
-        if let tmpuserName = UserDefaults.standard.string(forKey: "userName"), !tmpuserName.isEmpty { //userDefaults에 값이 있을 떄
+        if let tmpuserName = UserDefaults.standard.string(forKey: "userNickName"), !tmpuserName.isEmpty { //userDefaults에 값이 있을 떄
             accountView.isHidden = false
             emptyView.isHidden = true
             backViewHeight = 235
@@ -164,9 +165,10 @@ class MyInfoVC: UIViewController {
         }
         
         
-        self.userName.text = userDefault.string(forKey: "userName")
+        self.userName.text = userDefault.string(forKey: "userNickName")
         self.accountBankLabel.text = userDefault.string(forKey: "userBank")
         self.accountLabel.text = userDefault.string(forKey: "userAccount")
+        self.accountNameLabel.text = userDefault.string(forKey: "userName")
         
         
         if let tmpuserName = UserDefaults.standard.string(forKey: "userName"), !tmpuserName.isEmpty { //accountView가 있을 때
@@ -239,19 +241,7 @@ class MyInfoVC: UIViewController {
                 kakaoView.snp.removeConstraints()
                 naverView.snp.removeConstraints()
                 
-//                
-//                            emptyView.snp.makeConstraints { make in
-//                                make.height.equalTo(104)
-//                                make.width.equalTo(330)
-//                                make.center.equalTo(backView)
-//                            }
-//                
-//                
-//                            splitLabel.snp.makeConstraints { make in
-//                                make.top.equalTo(backView.snp.bottom).offset(16)
-//                                make.leading.equalToSuperview().offset(40)
-//                            }
-                
+
                 
                 backView.snp.makeConstraints { make in
                     make.height.equalTo(backViewHeight)
@@ -317,12 +307,12 @@ class MyInfoVC: UIViewController {
         output.moveToPrivacyView
             .drive(onNext:{
                 print("개인정보 처리방침 이동dd")
-                let url = NSURL(string: "https://kori-collab.notion.site/e3407a6ca4724b078775fd13749741b1?pvs=4")
-                let privacyWebView: SFSafariViewController = SFSafariViewController(url: url! as URL)
-                self.present(privacyWebView, animated: true, completion: nil)
-//                for key in UserDefaults.standard.dictionaryRepresentation().keys {
-//                                    UserDefaults.standard.removeObject(forKey: key.description)
-//                                }
+//                let url = NSURL(string: "https://kori-collab.notion.site/e3407a6ca4724b078775fd13749741b1?pvs=4")
+//                let privacyWebView: SFSafariViewController = SFSafariViewController(url: url! as URL)
+//                self.present(privacyWebView, animated: true, completion: nil)
+                for key in UserDefaults.standard.dictionaryRepresentation().keys {
+                                    UserDefaults.standard.removeObject(forKey: key.description)
+                                }
             })
             .disposed(by: disposeBag)
         
@@ -377,7 +367,7 @@ class MyInfoVC: UIViewController {
         backView.addSubview(emptyView)
         backView.addSubview(accountView)
         
-        [userNameLabel, userName, userBar, accountInfoLabel, accountBankLabel, accountLabel, socialPayLabel, tossView, kakaoView, naverView, notUsedPay, accountEditView].forEach {
+        [userNameLabel, userName, userBar, accountInfoLabel, accountBankLabel, accountLabel,accountNameLabel, socialPayLabel, tossView, kakaoView, naverView, notUsedPay, accountEditView].forEach {
             accountView.addSubview($0)
         }
         
@@ -478,6 +468,9 @@ class MyInfoVC: UIViewController {
             $0.font = UIFont.systemFont(ofSize: 15)
         }
         
+        accountNameLabel.do {
+            $0.font = UIFont.systemFont(ofSize: 15)
+        }
         
         accountEditView.do {
             $0.backgroundColor = .clear
@@ -713,6 +706,10 @@ class MyInfoVC: UIViewController {
             make.leading.equalTo(accountBankLabel.snp.trailing).offset(4)
         }
         
+        accountNameLabel.snp.makeConstraints { make in
+            make.top.equalTo(accountInfoLabel.snp.bottom).offset(2)
+            make.leading.equalTo(accountLabel.snp.trailing).offset(4)
+        }
         socialPayLabel.snp.makeConstraints { make in
             make.top.equalTo(accountBankLabel.snp.bottom).offset(12)
             make.leading.equalTo(accountView.snp.leading).offset(16)
@@ -836,7 +833,7 @@ class MyInfoVC: UIViewController {
 //
 //        exclItemChevron.snp.makeConstraints { make in
 //            make.centerY.equalTo(exclItemImage.snp.centerY)
-//            make.right.equalToSuperview()
+//            make.trailing.equalToSuperview()
 //        }
         
         privacyBtn.snp.makeConstraints { make in

@@ -17,6 +17,7 @@ class MyBankAccountVM {
     
     struct Input {
         let inputNameText: ControlEvent<String>
+        let inputRealNameText: ControlEvent<String>
         let editDoneBtnTapped: Driver<Void>
         let selectBackTapped: Observable<Void>
         let inputAccountText: Observable<String>
@@ -40,6 +41,7 @@ class MyBankAccountVM {
     func transform(input: Input) -> Output {
         
         let inputNameText = input.inputNameText
+        let inputRealNameText = input.inputRealNameText
         let editDoneBtnTapped = input.editDoneBtnTapped
         let selectBackTapped = input.selectBackTapped
         let inputAccountText = input.inputAccountText
@@ -50,11 +52,20 @@ class MyBankAccountVM {
 
         var inputAccount: String = ""
         var inputName: String = ""
+        var inputRealName: String = ""
 
         inputNameText
             .bind(onNext: { text in
                 if text != "" {
                     inputName = text
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        inputRealNameText
+            .bind(onNext: { text in
+                if text != "" {
+                    inputRealName = text
                 }
             })
             .disposed(by: disposeBag)
@@ -102,9 +113,13 @@ class MyBankAccountVM {
                 }
                 
                 if inputName != "" {
-                    UserDefaults.standard.set(inputName, forKey: "userName")
+                    UserDefaults.standard.set(inputName, forKey: "userNickName")
                 }
                 
+            
+                if inputRealName != "" {
+                    UserDefaults.standard.set(inputRealName, forKey: "userName")
+                }
                
                 
             })

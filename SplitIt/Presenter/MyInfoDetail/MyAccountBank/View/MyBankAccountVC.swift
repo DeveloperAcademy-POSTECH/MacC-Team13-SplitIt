@@ -27,9 +27,9 @@ class MyBankAccountVC: UIViewController {
     let scrollView = UIScrollView()
     let contentView = UIView()
     
-    var nameLabel = UILabel()
-    var nameTextField = UITextField() //사용자 이름 받는 곳
-    var nameCountLabel = UILabel()
+    var nickNameLabel = UILabel()
+    var nickNameTextField = UITextField() //사용자 이름 받는 곳
+    var nickNameCountLabel = UILabel()
     
     let bankView = UIView()
     var bankNameLabel = UILabel()
@@ -39,6 +39,10 @@ class MyBankAccountVC: UIViewController {
     
     let accountLabel = UILabel()
     let accountTextField = UITextField()
+    
+    var nameLabel = UILabel()
+    var nameTextField = UITextField() //예금주
+    var nameCountLabel = UILabel()
     
     let payLabel = UILabel()
     
@@ -76,20 +80,22 @@ class MyBankAccountVC: UIViewController {
     
     //수정버튼 활성화 비활성화 선택해주는 함수
     func checkUserInfo() {
-        let nameTextCheck = nameTextField.rx.text.orEmpty
+        let nickNameTextCheck = nickNameTextField.rx.text.orEmpty
         let accountTextCheck = accountTextField.rx.text.orEmpty
+        let nameTextCheck = nameTextField.rx.text.orEmpty
         
-        Observable.combineLatest(nameTextCheck, accountTextCheck)
-            .subscribe(onNext: { text1, text2 in
+        Observable.combineLatest(nameTextCheck, accountTextCheck, nickNameTextCheck)
+            .subscribe(onNext: { text1, text2, text3 in
                 
                 if self.userDefault.string(forKey: "userName") != nil && // 이미 값이 설정되었던 상태
                     self.userDefault.string(forKey: "userBank") != nil &&
-                    self.userDefault.string(forKey: "userAccount") != nil {
+                    self.userDefault.string(forKey: "userAccount") != nil &&
+                    self.userDefault.string(forKey: "userNickName") != nil {
 
                     self.editDoneBtn.buttonState.accept(true)
                     
                 } else { //값이 없는 상태
-                    if !text1.isEmpty && !text2.isEmpty && self.isBankSelected {
+                    if !text1.isEmpty && !text2.isEmpty && !text3.isEmpty && self.isBankSelected {
                         self.editDoneBtn.buttonState.accept(true)
                         
                     } else {
@@ -118,7 +124,7 @@ class MyBankAccountVC: UIViewController {
         super.viewWillAppear(animated)
         
         setKeyboardNotification()
-        self.nameTextField.becomeFirstResponder()
+        self.nickNameTextField.becomeFirstResponder()
     }
     
     func setAddView() {
@@ -129,15 +135,15 @@ class MyBankAccountVC: UIViewController {
         
         scrollView.addSubview(contentView)
         
-        [nameLabel, nameTextField,
+        [nickNameLabel, nickNameTextField,
          bankLabel, bankView,
          accountLabel,
-         accountTextField, payLabel,
+         accountTextField, nameLabel, nameTextField,payLabel,
          payView].forEach {
             contentView.addSubview($0)
         }
+        nickNameTextField.addSubview(nickNameCountLabel)
         nameTextField.addSubview(nameCountLabel)
-        
         [bankNameLabel, bankArrowImage].forEach {
             bankView.addSubview($0)
         }
@@ -177,19 +183,19 @@ class MyBankAccountVC: UIViewController {
         }
       
         
-        nameLabel.snp.makeConstraints { make in
+        nickNameLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
             make.leading.equalToSuperview().offset(36)
         }
         
-        nameTextField.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom).offset(4)
+        nickNameTextField.snp.makeConstraints { make in
+            make.top.equalTo(nickNameLabel.snp.bottom).offset(4)
             make.centerX.equalToSuperview()
             make.height.equalTo(40)
             make.width.equalTo(330)
         }
         
-        nameCountLabel.snp.makeConstraints { make in
+        nickNameCountLabel.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-12)
             make.centerY.equalToSuperview()
         }
@@ -197,7 +203,7 @@ class MyBankAccountVC: UIViewController {
         
         
         bankLabel.snp.makeConstraints { make in
-            make.top.equalTo(nameTextField.snp.bottom).offset(16)
+            make.top.equalTo(nickNameTextField.snp.bottom).offset(16)
             make.leading.equalToSuperview().offset(36)
         }
         
@@ -232,10 +238,27 @@ class MyBankAccountVC: UIViewController {
             make.width.equalTo(330)
         }
         
+        
+        nameLabel.snp.makeConstraints { make in
+            make.top.equalTo(accountTextField.snp.bottom).offset(16)
+            make.leading.equalToSuperview().offset(36)
+        }
+        
+        nameTextField.snp.makeConstraints { make in
+            make.top.equalTo(nameLabel.snp.bottom).offset(4)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(40)
+            make.width.equalTo(330)
+        }
+        
+        nameCountLabel.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().offset(-12)
+            make.centerY.equalToSuperview()
+        }
 
         
         payLabel.snp.makeConstraints { make in
-            make.top.equalTo(accountTextField.snp.bottom).offset(16)
+            make.top.equalTo(nameTextField.snp.bottom).offset(16)
             make.leading.equalToSuperview().offset(36)
         }
         
@@ -335,6 +358,25 @@ class MyBankAccountVC: UIViewController {
     
     func setAttribute() {
         //이름 글자수 카운트
+        nickNameTextField.rx.text.orEmpty
+            .map { text -> String in
+                let cnt = min(text.count, 8)
+                return "(\(cnt)/8)"
+            }
+            .bind(to: nickNameCountLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        //이름 글자수 제한
+        nickNameTextField.rx.controlEvent(.editingChanged)
+            .subscribe(onNext: { [weak self] _ in
+                guard let text = self?.nickNameTextField.text else { return }
+                if text.count > self?.maxCharacterCount ?? 0 {
+                    let endIndex = text.index(text.startIndex, offsetBy: self?.maxCharacterCount ?? 0)
+                    self?.nickNameTextField.text = String(text[..<endIndex])
+                }
+            })
+            .disposed(by: disposeBag)
+        
         nameTextField.rx.text.orEmpty
             .map { text -> String in
                 let cnt = min(text.count, 8)
@@ -362,24 +404,24 @@ class MyBankAccountVC: UIViewController {
         
         scrollView.isScrollEnabled = true
         
-       
-            header.do {
-                $0.applyStyle(.myInfo)
-                $0.setBackButton(viewController: self)
-            }
-            
+        
+        header.do {
+            $0.applyStyle(.myInfo)
+            $0.setBackButton(viewController: self)
+        }
         
         
-        nameLabel.do {
-            $0.text = "이름"
+        
+        nickNameLabel.do {
+            $0.text = "정산자 닉네임"
             $0.font = UIFont.KoreanCaption2
             $0.textColor = UIColor.TextPrimary
         }
-        nameCountLabel.do {
+        nickNameCountLabel.do {
             $0.textColor = .TextSecondary
             $0.font = UIFont.KoreanCaption2
         }
-        nameTextField.do {
+        nickNameTextField.do {
             $0.layer.cornerRadius = 8
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 1
@@ -390,15 +432,15 @@ class MyBankAccountVC: UIViewController {
             //$0.clearButtonMode = .whileEditing
             
             //placeholder의 색깔
-            if UserDefaults.standard.string(forKey: "userName") == nil {
-                $0.attributedPlaceholder = NSAttributedString(string: "이름을 입력해주세요",
+            if UserDefaults.standard.string(forKey: "userNickName") == nil {
+                $0.attributedPlaceholder = NSAttributedString(string: "닉네임을 입력해주세요",
                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextDeactivate])
             } else {
                 //MARK: 토마토, 수정뷰로 넘어왔을 때, 검은색 글자면은 이미 입력되어있는 것처럼 보여서 회색으로 처리해두었어요
                 //                $0.attributedPlaceholder = NSAttributedString(string: UserDefaults.standard.string(forKey: "userName")!,
                 //                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
                 
-                $0.placeholder = userDefault.string(forKey: "userName")
+                $0.placeholder = userDefault.string(forKey: "userNickName")
             }
             $0.font = UIFont.systemFont(ofSize: 15)
             
@@ -482,6 +524,49 @@ class MyBankAccountVC: UIViewController {
             
         }
         
+        nameLabel.do {
+            $0.text = "예금주 성함"
+            $0.font = UIFont.KoreanCaption2
+            $0.textColor = UIColor.TextPrimary
+        }
+        
+        nameCountLabel.do {
+            $0.textColor = .TextSecondary
+            $0.font = UIFont.KoreanCaption2
+        }
+        
+        
+        nameTextField.do {
+            $0.layer.cornerRadius = 8
+            $0.backgroundColor = .clear
+            $0.layer.borderWidth = 1
+            $0.layer.borderColor = UIColor.gray.cgColor
+            
+            $0.autocorrectionType = .no
+            $0.spellCheckingType = .no
+            //$0.clearButtonMode = .whileEditing
+            
+            //placeholder의 색깔
+            if UserDefaults.standard.string(forKey: "userName") == nil {
+                $0.attributedPlaceholder = NSAttributedString(string: "성함을 입력해주세요",
+                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextDeactivate])
+            } else {
+                //MARK: 토마토, 수정뷰로 넘어왔을 때, 검은색 글자면은 이미 입력되어있는 것처럼 보여서 회색으로 처리해두었어요
+                //                $0.attributedPlaceholder = NSAttributedString(string: UserDefaults.standard.string(forKey: "userName")!,
+                //                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+                
+                $0.placeholder = userDefault.string(forKey: "userName")
+            }
+            $0.font = UIFont.systemFont(ofSize: 15)
+            
+            $0.clipsToBounds = true
+            
+            //textField의 앞부분의 빈공간 구현
+            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
+            $0.leftViewMode = .always
+            
+        }
+        
         payLabel.do {
             $0.text = "간편페이 사용여부"
             $0.font = UIFont.KoreanCaption2
@@ -552,7 +637,8 @@ class MyBankAccountVC: UIViewController {
         let naverTap = addTapGesture(to: naverPayView)
         
         
-        let input = MyBankAccountVM.Input(inputNameText: nameTextField.rx.text.orEmpty.changed,
+        let input = MyBankAccountVM.Input(inputNameText: nickNameTextField.rx.text.orEmpty.changed,
+                                          inputRealNameText: nameTextField.rx.text.orEmpty.changed,
                                           editDoneBtnTapped: editDoneBtn.rx.tap.asDriver(),
                                           selectBackTapped: selectedBankTap.rx.event.asObservable().map{ _ in () },
                                           inputAccountText: accountTextField.rx.text.orEmpty.asObservable(),

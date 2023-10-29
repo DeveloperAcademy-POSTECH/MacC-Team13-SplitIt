@@ -203,7 +203,7 @@ class HomeVC: UIViewController {
         }
         
         historyButton.snp.makeConstraints {
-            $0.leading.equalTo(myInfoButton.snp.right).offset(8)
+            $0.leading.equalTo(myInfoButton.snp.trailing).offset(8)
             $0.centerY.equalToSuperview()
             $0.width.height.equalTo(40)
         }
@@ -241,7 +241,7 @@ class HomeVC: UIViewController {
         
         
         mainTextLabel.snp.makeConstraints {
-            $0.right.equalToSuperview().offset(-20)
+            $0.trailing.equalToSuperview().offset(-20)
             $0.bottom.equalToSuperview().offset(-20)
         }
 
