@@ -21,7 +21,6 @@ final class CSEditListVM {
         return dataModel.csInfoArr
             .asObservable()
             .observe(on: MainScheduler.instance)
-            .take(1)
             .flatMap { csInfoArray in
                 return csInfoArray.first.map(Observable.just) ?? Observable.empty()
             }
@@ -69,16 +68,6 @@ final class CSEditListVM {
         let savebtn = input.saveButtonTap.asDriver()
         let delbtn = input.delCSInfoTap.asDriver()
         let addExcl = input.addExclItemTap.asDriver()
-        
-        input.viewWillAppear.asDriver(onErrorJustReturn: true)
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                SplitRepository.share.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: self.csinfoIdx)
-                self.itemsObservable
-                    .accept(SplitRepository.share.exclItemArr.value)
-            })
-            .disposed(by: disposeBag)
-        
         let titleob = data.map { $0.title }.asDriver(onErrorJustReturn: "")
         let totalAmob = data.map { "\($0.totalAmount) rkw" }.asDriver(onErrorJustReturn: "")
         let membersob = dataModel.csMemberArr
