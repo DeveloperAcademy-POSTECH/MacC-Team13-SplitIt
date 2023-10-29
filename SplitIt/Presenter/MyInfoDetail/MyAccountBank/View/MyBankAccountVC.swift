@@ -13,9 +13,7 @@ import Then
 
 
 class MyBankAccountVC: UIViewController {
-    
-    //let clearButton = UIButton()
-    
+
     
     let viewModel = MyBankAccountVM()
     var disposeBag = DisposeBag()
@@ -62,14 +60,11 @@ class MyBankAccountVC: UIViewController {
     
     let nameClearBtn = UIButton()
     
-    
-    private let editDoneBtn = SPButton()
+    let editDoneBtn = NewSPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //scrollView.contentSize = CGSize(width: contentView.frame.width, height: contentView.frame.height)
-
         
         checkUserInfo()
         setAddView()
@@ -80,7 +75,6 @@ class MyBankAccountVC: UIViewController {
     }
     
     //수정버튼 활성화 비활성화 선택해주는 함수
-    //MARK: 토마토! 버튼의 background 설정해두었어요 나중에 컨포넌트 바꿀 때 여기 색상 지우시면 될거에요
     func checkUserInfo() {
         let nameTextCheck = nameTextField.rx.text.orEmpty
         let accountTextCheck = accountTextField.rx.text.orEmpty
@@ -88,26 +82,25 @@ class MyBankAccountVC: UIViewController {
         Observable.combineLatest(nameTextCheck, accountTextCheck)
             .subscribe(onNext: { text1, text2 in
                 
-                if self.userDefault.string(forKey: "userName") != nil && // 값이 있다면!
+                if self.userDefault.string(forKey: "userName") != nil && // 이미 값이 설정되었던 상태
                     self.userDefault.string(forKey: "userBank") != nil &&
                     self.userDefault.string(forKey: "userAccount") != nil {
+
+                    self.editDoneBtn.buttonState.accept(true)
                     
-                    self.editDoneBtn.isEnabled = true
-                    self.editDoneBtn.applyStyle(.primaryWatermelon)
-                    
-                } else {
-                    
+                } else { //값이 없는 상태
                     if !text1.isEmpty && !text2.isEmpty && self.isBankSelected {
-                        self.editDoneBtn.isEnabled = true
-                        self.editDoneBtn.applyStyle(.primaryWatermelon)
+                        self.editDoneBtn.buttonState.accept(true)
+                        
                     } else {
-                        self.editDoneBtn.isEnabled = false
-                        self.editDoneBtn.applyStyle(.deactivate)
+                        self.editDoneBtn.buttonState.accept(false)
                         
                     }
                 }
             })
             .disposed(by: disposeBag)
+        
+        
         
         accountTextField.rx.text.orEmpty
             .subscribe(onNext: { text in
@@ -329,7 +322,7 @@ class MyBankAccountVC: UIViewController {
         }
         
         
-        
+
         editDoneBtn.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             make.centerX.equalToSuperview()
@@ -497,9 +490,11 @@ class MyBankAccountVC: UIViewController {
         
         
         editDoneBtn.do {
-            $0.setTitle("계좌정보 수정완료", for: .normal)
-
+            $0.setTitle("저장하기", for: .normal)
+            $0.setTitle("저장하기", for: .disabled)
+            $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
         }
+
         
         leftBar.do {
             $0.backgroundColor = .gray
@@ -573,7 +568,7 @@ class MyBankAccountVC: UIViewController {
                 self.navigationController?.popViewController(animated: true)
             })
             .disposed(by: disposeBag)
-        
+
         
         output.showBankModel
             .subscribe(onNext: { [weak self] in
@@ -590,12 +585,11 @@ class MyBankAccountVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
-       
-        
+
         
     }
     
-    //변경되는 값에 따라 바로 UI 변경되도록 하는 함수
+    //UserDefaluts 변경되는 값에 따라 바로 UI 변경되도록 하는 함수
     func asapRxData() {
         userDefault.rx
             .observe(Bool.self, "tossPay")

@@ -20,7 +20,7 @@ class HomeVC: UIViewController {
     let viewModel = HomeVM()
     
     let buttonView: UIView = UIView()
-    let myInfoButton: UIButton = UIButton()
+    let myInfoButton: NewSPButton = NewSPButton()
     let myInfoButtonImage: UIImageView = UIImageView()
     
     let mainView: UIView = UIView()
@@ -30,9 +30,8 @@ class HomeVC: UIViewController {
     let logoImage: UIImageView = UIImageView()
     let mainTextLabel: UILabel = UILabel()
     
-    //let splitItButton: SPButton = SPButton()
     let splitItButton: NewSPButton = NewSPButton()
-    let historyButton: UIButton = UIButton()
+    let historyButton: NewSPButton = NewSPButton()
     let historyButtonImage: UIImageView = UIImageView()
 
     
@@ -54,27 +53,9 @@ class HomeVC: UIViewController {
             .drive(onNext: {
                 let vc = CSTitleInputVC()
                 self.navigationController?.pushViewController(vc, animated: true)
-                //self.splitItButton.applyStyle(.primaryWatermelonPressed)
             })
             .disposed(by: disposeBag)
-//        
-//        splitItButton.rx.controlEvent(.touchDown)
-//            .bind { self.splitItButton.applyStyle(style: .primaryWatermelon, shape: .rounded) }
-//            .disposed(by: disposeBag)
-        
-//        splitItButton.rx.controlEvent(.touchUpInside)
-//            .bind { self.splitItButton.applyStyle(.primaryWatermelon) }
-//            .disposed(by: disposeBag)
-//
-        //버튼 원 상태로 돌아오게 만드는 버튼
-//        output.showCreateSplit
-//            .delay(.milliseconds(500))
-//           .drive(onNext: { [weak self] _ in
-//                guard let self = self else { return }
-//            self.splitItButton.applyStyle(.primaryWatermelon)
-//            })
-//            .disposed(by: disposeBag)
-//
+
         output.showInfoView
             .drive(onNext: {
                 // MARK: 모아나가 연결할 뷰로 수정
@@ -84,14 +65,6 @@ class HomeVC: UIViewController {
             })
             .disposed(by: disposeBag)
 
-        myInfoButton.rx.controlEvent(.touchDown)
-            .bind { self.myInfoButton.backgroundColor = .SurfaceBrandCalmshellPressed }
-            .disposed(by: disposeBag)
-        
-        myInfoButton.rx.controlEvent(.touchUpInside)
-            .bind { self.myInfoButton.backgroundColor = .SurfaceBrandCalmshell }
-            .disposed(by: disposeBag)
-
        
         output.showHistoryView
             .drive(onNext: {
@@ -99,29 +72,19 @@ class HomeVC: UIViewController {
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
-        
-        historyButton.rx.controlEvent(.touchDown)
-            .bind { self.historyButton.backgroundColor = .SurfaceBrandCalmshellPressed }
-            .disposed(by: disposeBag)
-        
-        historyButton.rx.controlEvent(.touchUpInside)
-            .bind { self.historyButton.backgroundColor = .SurfaceBrandCalmshell }
-            .disposed(by: disposeBag)
+
 
     }
 
     
     func setAttribute() {
         view.backgroundColor = .SurfaceBrandCalmshell
-        
         buttonView.backgroundColor = .SurfaceBrandCalmshell
-        
-        myInfoButton.do {
-            $0.layer.cornerRadius = 8
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.black.cgColor
-            $0.backgroundColor = .SurfaceBrandCalmshell
 
+        myInfoButton.do {
+    
+            $0.applyStyle(style: .primaryCalmshell, shape: .square)
+            $0.buttonState.accept(true)
         }
         
         myInfoButtonImage.do {
@@ -130,15 +93,11 @@ class HomeVC: UIViewController {
         }
         
         historyButton.do {
-            $0.layer.cornerRadius = 8
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.black.cgColor
-            $0.backgroundColor = .SurfaceBrandCalmshell
-            //$0.setBackgroundImage(image(withColor: .SurfaceBrandCalmshellPressed), for: .highlighted)
+            $0.applyStyle(style: .primaryCalmshell, shape: .square)
+            $0.buttonState.accept(true)
 
-            
         }
-        
+    
         historyButtonImage.do {
             $0.image = UIImage(systemName: "book.fill")
             $0.tintColor = UIColor.black
@@ -185,13 +144,11 @@ class HomeVC: UIViewController {
             $0.numberOfLines = 0
             $0.textAlignment = .right
         }
-        
-        splitItButton.do {
-            $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
-            $0.setTitle("나의 영수증 만들기", for: .normal)
-            $0.setTitleColor(UIColor.black, for: .normal)
-            $0.titleLabel?.font = UIFont.systemFont(ofSize: 16)
 
+        splitItButton.do {
+            $0.setTitle("정산 시작하기", for: .normal)
+            $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
+            $0.buttonState.accept(true)
         }
         
        
