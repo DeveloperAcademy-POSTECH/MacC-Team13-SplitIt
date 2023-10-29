@@ -15,6 +15,8 @@ class CSInfoVC: UIViewController {
     
     let viewModel = CSInfoVM()
     
+    //MARK: Notice 삭제할듯
+    
     let header = NaviHeader()
     let scrollView = UIScrollView(frame: .zero)
     let contentView = UIView()
@@ -22,7 +24,6 @@ class CSInfoVC: UIViewController {
     let titleTextFiled = SPTextField()
     let textFiledCounter = UILabel()
     let textFiledNotice = UILabel()
-    
     let totalAmountTitleMessage = UILabel()
     let totalAmountTextFiled = SPTextField()
     let totalAmountTextFiledNotice = UILabel()
@@ -35,7 +36,12 @@ class CSInfoVC: UIViewController {
         setLayout()
         setAttribute()
         setBinding()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         setKeyboardNotification()
+        titleTextFiled.becomeFirstResponder()
     }
     
     func setAttribute() {
@@ -54,62 +60,51 @@ class CSInfoVC: UIViewController {
         titleMessage.do {
             $0.text = "어디에 돈을 쓰셨나요?"
             $0.font = .KoreanBody
-            $0.textColor = .TextPrimary
+//            $0.textColor = .TextPrimary
+            $0.textColor = .TextDeactivate
         }
         
         titleTextFiled.do {
-            $0.applyStyle(.normal)
-            $0.font = .KoreanTitle3
+//            $0.font = .KoreanTitle
+            $0.font = .KoreanCaption1
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
-            
-            $0.rx.controlEvent(.editingDidBegin)
-                .subscribe(onNext: { [weak self] in
-                    guard let self = self else { return }
-                    self.titleTextFiled.becomeFirstResponder()
-                })
-                .disposed(by: disposeBag)
-            
-            $0.rx.controlEvent(.editingDidEndOnExit)
-                .subscribe(onNext: { [weak self] in
-                    guard let self = self else { return }
-                    self.totalAmountTextFiled.becomeFirstResponder()
-                })
-                .disposed(by: disposeBag)
+            $0.returnKeyType = .next
+            self.titleTextFiled.applyStyle(.editingDidEndNormal)
+            $0.placeholder = "ex) 광란의 곱창팟, 집들이 장보기, 노래방"
         }
         
         textFiledNotice.do {
-            $0.text = "ex) 광란의 곱창팟, 집들이 장보기, 노래방"
+//            $0.text = "ex) 광란의 곱창팟, 집들이 장보기, 노래방"
             $0.font = .KoreanCaption1
-            $0.textColor = .TextSecondary
+//            $0.textColor = .TextSecondary
+            $0.textColor = .TextDeactivate
         }
         
         textFiledCounter.do {
             $0.font = .KoreanCaption1
+            $0.textColor = .TextDeactivate
         }
         
         totalAmountTitleMessage.do {
             $0.text = "총 얼마를 사용하셨나요?"
             $0.font = .KoreanBody
-            $0.textColor = .TextPrimary
+//            $0.textColor = .TextPrimary
+            $0.textColor = .TextDeactivate
         }
         
         totalAmountTextFiled.do {
-            $0.applyStyle(.number)
-            $0.font = .KoreanTitle3
-            
-            $0.rx.controlEvent(.editingDidBegin)
-                .subscribe(onNext: { [weak self] in
-                    guard let self = self else { return }
-                    self.totalAmountTextFiled.becomeFirstResponder()
-                })
-                .disposed(by: disposeBag)
+            $0.applyStyle(.editingDidEndNumber)
+            $0.font = .KoreanSubtitle
+//            $0.font = .KoreanCaption1
+            $0.textColor = .TextDeactivate
         }
         
         totalAmountTextFiledNotice.do {
-            $0.text = "설마, 천만원 이상을 쓰시진 않으셨죠?"
+//            $0.text = "설마, 천만원 이상을 쓰시진 않으셨죠?"
             $0.font = .KoreanCaption1
-            $0.textColor = .TextSecondary
+//            $0.textColor = .TextSecondary
+            $0.textColor = .TextDeactivate
         }
         
         nextButton.do {
@@ -154,7 +149,7 @@ class CSInfoVC: UIViewController {
         titleTextFiled.snp.makeConstraints {
             $0.top.equalTo(titleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(60)
+            $0.height.equalTo(48) // 원래 60
         }
         
         textFiledCounter.snp.makeConstraints {
@@ -175,7 +170,7 @@ class CSInfoVC: UIViewController {
         totalAmountTextFiled.snp.makeConstraints {
             $0.top.equalTo(totalAmountTitleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(60)
+            $0.height.equalTo(48) // 원래 60
         }
         
         totalAmountTextFiledNotice.snp.makeConstraints {
@@ -191,23 +186,33 @@ class CSInfoVC: UIViewController {
     }
     
     func setBinding() {
+        let titleTFEvent = Observable.merge(
+            titleTextFiled.rx.controlEvent(.editingDidBegin).map { UIControl.Event.editingDidBegin},
+            titleTextFiled.rx.controlEvent(.editingDidEnd).map { UIControl.Event.editingDidEnd },
+            titleTextFiled.rx.controlEvent(.editingDidEndOnExit).map { UIControl.Event.editingDidEndOnExit })
+        
+        let totalAmountTFEvent = Observable.merge(
+            totalAmountTextFiled.rx.controlEvent(.editingDidBegin).map { UIControl.Event.editingDidBegin},
+            totalAmountTextFiled.rx.controlEvent(.editingDidEnd).map { UIControl.Event.editingDidEnd })
+        
         let input = CSInfoVM.Input(nextButtonTapped: nextButton.rx.tap,
-                                         title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""))
+                                   title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
+                                   totalAmount: totalAmountTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
+                                   titleTextFieldControlEvent: titleTFEvent,
+                                   totalAmountTextFieldControlEvent: totalAmountTFEvent
+        )
         let output = viewModel.transform(input: input)
         
         output.showCSTotalAmountView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let vc = CSTotalAmountInputVC()
+                let vc = CSMemberPageController()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
+        
         output.titleCount
             .drive(textFiledCounter.rx.text)
-            .disposed(by: disposeBag)
-        
-        output.textFieldIsEmpty
-            .drive(nextButton.buttonState)
             .disposed(by: disposeBag)
         
         output.textFieldIsValid
@@ -231,6 +236,86 @@ class CSInfoVC: UIViewController {
             }
             .drive(titleTextFiled.rx.text)
             .disposed(by: disposeBag)
+        
+        output.totalAmount
+            .drive(totalAmountTextFiled.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.nextButtonIsEnable
+            .drive(nextButton.buttonState)
+            .disposed(by: disposeBag)
+        
+        output.titleTextFieldControlEvent
+            .drive(onNext: { [weak self] event in
+                guard let self = self else { return }
+                switch event {
+                case .editingDidBegin:
+                    focusTitleTF()
+                    unfocusTotalAmountTF()
+                case .editingDidEnd:
+                    focusTotalAmountTF()
+                    unfocusTitleTF()
+                default:
+                    break
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+}
+
+// TODO: Notice 삭제할 듯
+// MARK: TextField (활성화/비활성화)에 따른 UI 로직
+extension CSInfoVC {
+    func focusTitleTF() {
+        self.titleTextFiled.becomeFirstResponder()
+        
+        UIView.animate(withDuration: 0.33) {
+            self.titleTextFiled.applyStyle(.editingDidBeginNormal)
+        }
+        
+        UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) {
+            self.titleMessage.textColor = .TextPrimary
+            self.titleTextFiled.textColor = .TextPrimary
+            self.textFiledNotice.textColor = .TextSecondary
+            self.textFiledCounter.textColor = .TextSecondary
+        }
+        
+        view.layoutIfNeeded()
+    }
+    
+    func unfocusTitleTF() {
+        self.titleTextFiled.applyStyle(.editingDidEndNormal)
+        
+        self.titleMessage.textColor = .TextDeactivate
+        self.titleTextFiled.textColor = .TextDeactivate
+        self.textFiledNotice.textColor = .TextDeactivate
+        self.textFiledCounter.textColor = .TextDeactivate
+    }
+    
+    func focusTotalAmountTF() {
+        self.totalAmountTextFiled.becomeFirstResponder()
+        
+        UIView.animate(withDuration: 0.33) {
+            self.totalAmountTextFiled.applyStyle(.editingDidBeginNumber)
+        }
+        
+        UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) {
+            self.totalAmountTitleMessage.textColor = .TextPrimary
+            self.totalAmountTextFiledNotice.textColor = .TextSecondary
+            self.totalAmountTextFiled.textColor = .TextPrimary
+            self.totalAmountTextFiled.currencyLabel.textColor = .TextPrimary
+        }
+        
+        view.layoutIfNeeded()
+    }
+    
+    func unfocusTotalAmountTF() {
+        self.totalAmountTextFiled.applyStyle(.editingDidEndNumber)
+        
+        self.totalAmountTitleMessage.textColor = .TextDeactivate
+        self.totalAmountTextFiledNotice.textColor = .TextDeactivate
+        self.totalAmountTextFiled.textColor = .TextDeactivate
+        self.totalAmountTextFiled.currencyLabel.textColor = .TextDeactivate
     }
 }
 
