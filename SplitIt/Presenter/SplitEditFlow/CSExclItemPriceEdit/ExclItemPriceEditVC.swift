@@ -161,7 +161,7 @@ class ExclItemPriceEditVC: UIViewController {
             .disposed(by: disposeBag)
         
         output.exclPrice
-            .bind(to: priceTextField.rx.text)
+            .drive(priceTextField.rx.text)
             .disposed(by: disposeBag)
         
         output.textFieldEmpty

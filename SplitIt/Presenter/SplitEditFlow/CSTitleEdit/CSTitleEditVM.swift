@@ -24,7 +24,7 @@ class CSTitleEditVM {
         let showCSTotalAmountView: Driver<Void>
         let titleCount: Driver<String>
         let textFieldIsValid: Driver<Bool>
-        let textFieldString: Observable<String>
+        let textFieldString: Driver<String>
         let textfieldEmpty: Driver<Bool>
     }
     
@@ -60,7 +60,7 @@ class CSTitleEditVM {
             .drive(textFieldIsValid)
             .disposed(by: disposeBag)
         
-        let tfString = data.map { $0.title }.asObservable()
+        let tfString = data.map { $0.title }.asDriver(onErrorJustReturn: "")
         
         let textFieldCountIsEmpty = input.title
             .map{ $0.count > 0 }

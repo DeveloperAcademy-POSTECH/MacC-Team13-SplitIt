@@ -185,7 +185,7 @@ class ExclItemNameEditVC: UIViewController {
             .disposed(by: disposeBag)
         
         output.exclTitle
-            .bind(to: nameTextFiled.rx.text)
+            .drive(nameTextFiled.rx.text)
             .disposed(by: disposeBag)
         
         output.textfieldEmpty
