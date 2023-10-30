@@ -19,9 +19,10 @@ class SplitShareVC: UIViewController {
     
     let header = NaviHeader()
     let tableView = UITableView(frame: .zero, style: .grouped)
-    let shareButton = SPButton()
+    let csAddButton = NewSPButton()
+    let editButton = NewSPButton()
+    let shareButton = NewSPButton()
     
-    var splitTitle: String = ""
     var splitDate: Date = .now
     
     var resultArr: [SplitMemberResult] = []
@@ -45,25 +46,35 @@ class SplitShareVC: UIViewController {
         tableView.do {
             $0.separatorStyle = .none
             $0.delegate = self
-            $0.dataSource = self
-            $0.backgroundColor = .SurfacePrimary
+            $0.backgroundColor = UIColor(red: 0.9915664792, green: 0.9719635844, blue: 0.9203471541, alpha: 1)
             $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
-            $0.layer.cornerRadius = 4
-            $0.clipsToBounds = true
             $0.register(cellType: SplitShareTableCell.self)
             $0.rowHeight = UITableView.automaticDimension
             $0.estimatedRowHeight = 100
         }
         
+        csAddButton.do {
+            $0.applyStyle(style: .smallButton, shape: .square)
+            $0.setTitle("+ 2차 추가", for: .normal)
+            $0.buttonState.accept(true)
+        }
+        
+        editButton.do {
+            $0.applyStyle(style: .smallButton, shape: .square)
+            $0.setTitle("✎ 정산 수정", for: .normal)
+            $0.buttonState.accept(true)
+        }
+        
         shareButton.do {
-            $0.setTitle("영수증 내용을 확인해주세요", for: .normal)
-            $0.applyStyle(.deactivate)
+            $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
+            $0.setTitle("정산자의 확인을 기다리고 있어요", for: .disabled)
+            $0.setTitle("친구에게 영수증 공유하기", for: .normal)
         }
     }
     
     private func setLayout() {
-        [header,tableView,shareButton].forEach {
+        [header,tableView,csAddButton,editButton,shareButton].forEach {
             view.addSubview($0)
         }
         
@@ -76,7 +87,21 @@ class SplitShareVC: UIViewController {
         tableView.snp.makeConstraints {
             $0.top.equalTo(header.snp.bottom).offset(24)
             $0.horizontalEdges.equalToSuperview().inset(30)
-            $0.bottom.equalTo(shareButton.snp.top).offset(-82)
+            $0.bottom.equalTo(csAddButton.snp.top).offset(-24)
+        }
+        
+        csAddButton.snp.makeConstraints {
+            $0.bottom.equalTo(shareButton.snp.top).offset(-40)
+            $0.leading.equalToSuperview().offset((UIScreen.main.bounds.width - 276) / 2)
+            $0.width.equalTo(130)
+            $0.height.equalTo(48)
+        }
+        
+        editButton.snp.makeConstraints {
+            $0.bottom.equalTo(csAddButton.snp.bottom)
+            $0.leading.equalTo(csAddButton.snp.trailing).offset(16)
+            $0.width.equalTo(130)
+            $0.height.equalTo(48)
         }
         
         shareButton.snp.makeConstraints {
@@ -91,32 +116,33 @@ class SplitShareVC: UIViewController {
                                        viewDidAppear: self.rx.viewDidAppear,
                                        shareButtonTapped: shareButton.rx.tap,
                                        currentTableViewScrollState: tableView.rx.contentOffset,
-                                       tableView: tableView)
+                                       tableView: tableView,
+                                       csAddButtonTapped: csAddButton.rx.tap,
+                                       editButtonTapped: editButton.rx.tap)
         
         let output = viewModel.transform(input: input)
         
         resultArr = output.splitResult.value
         
+        output.splitResult
+            .bind(to: tableView.rx.items(cellIdentifier: "SplitShareTableCell")) { _, item, cell in
+                if let cell = cell as? SplitShareTableCell {
+                    cell.configure(item: item)
+                }
+            }
+            .disposed(by: disposeBag)
+        
         output.split
             .asDriver()
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                self.splitTitle = $0.map { $0.title }.first!
                 self.splitDate = $0.map { $0.createDate }.first!
             })
             .disposed(by: disposeBag)
         
         output.buttonState
-            .distinctUntilChanged()
-            .asDriver(onErrorJustReturn: false)
-            .drive(onNext: { isEnable in
-                self.shareButton.isEnabled = isEnable
-                
-                if isEnable {
-                    self.shareButton.applyStyle(.primaryWatermelon)
-                    self.shareButton.setTitle("친구에게 영수증 공유하기", for: .normal)
-                }
-            })
+            .asDriver()
+            .drive(shareButton.buttonState)
             .disposed(by: disposeBag)
         
         output.sendItems
@@ -129,49 +155,40 @@ class SplitShareVC: UIViewController {
                 }
             })
             .disposed(by: disposeBag)
+        
+        output.showNewCSCreateFlow
+            .asDriver()
+            .drive(onNext: {
+                let vc = CSInfoVC()
+                self.navigationController?.pushViewController(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        output.showCSEditView
+            .asDriver()
+            .drive(onNext: {
+                // EditView로 이동하기
+            })
+            .disposed(by: disposeBag)
     }
 }
 
 extension SplitShareVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = SplitShareSectionHeader()
-        headerView.titleLabel.text = splitTitle
-        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy년 MM월 dd일"
-        
-        headerView.dateLabel.text = dateFormatter.string(from: splitDate)
-        
+        headerView.dateLabel.text = "정산 날짜: \(dateFormatter.string(from: splitDate))"
         return headerView
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let count = resultArr[indexPath.row].exclDatas.count
-        
         var defaultHeight: CGFloat = 44
         
-        if count > 0 {
-            defaultHeight += 16
-        }
+        if count > 0 { defaultHeight += 16 }
         
         let cellHeight = defaultHeight + CGFloat(count * 18)
-        
         return cellHeight
-    }
-}
-
-extension SplitShareVC: UITableViewDataSource, Reusable {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.resultArr.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(for: indexPath) as SplitShareTableCell
-        cell.selectionStyle = .none
-        cell.nameLabel.text = resultArr[indexPath.row].memberName
-        cell.priceLabel.text = NumberFormatter.localizedString(from: resultArr[indexPath.row].memberPrice as NSNumber, number: .decimal)
-        cell.setExclDatas(item: resultArr[indexPath.row].exclDatas)
-        
-        return cell
     }
 }
