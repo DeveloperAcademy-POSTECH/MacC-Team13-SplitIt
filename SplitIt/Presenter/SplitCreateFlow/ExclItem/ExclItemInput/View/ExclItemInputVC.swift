@@ -19,7 +19,6 @@ class ExclItemInputVC: UIViewController {
     let exclListLabel = UILabel()
     let exclItemCountLabel = UILabel()
     
-    let scrollView = UIScrollView(frame: .zero)
     let contentView = UIView()
     let tableView = UITableView(frame: .zero)
     
@@ -36,42 +35,52 @@ class ExclItemInputVC: UIViewController {
     func setAttribute() {
         view.backgroundColor = .SurfacePrimary
         
-        scrollView.do {
-            $0.showsVerticalScrollIndicator = false
-            
-        }
-        
         header.do {
             $0.applyStyle(.csExcl)
             $0.setBackButtonToRootView(viewController: self)
+        }
+        
+        exclListLabel.do {
+            $0.text = "따로 정산 목록"
+            $0.font = .KoreanBody
+            $0.textColor = .TextPrimary
+        }
+        
+        exclItemCountLabel.do {
+            $0.text = "1"
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextInvert
+            $0.textAlignment = .center
+            $0.backgroundColor = .AppColorBrandWatermelon
+            $0.layer.cornerRadius = 10
+            $0.clipsToBounds = true
         }
         
         nextButton.do {
             $0.setTitle("정산 결과 확인하기", for: .normal)
             $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
         }
+        
+        setTableView()
+    }
+    
+    func setTableView() {
+        let rowHeight = 114.0 + 8.0
+        tableView.do {
+            $0.register(cellType: ExclItemCell.self)
+            $0.backgroundColor = .SurfacePrimary
+            //$0.alwaysBounceVertical = false
+//            $0.isScrollEnabled = false
+//            $0.bounces = false
+            $0.showsVerticalScrollIndicator = false
+            $0.rowHeight = rowHeight
+            $0.separatorStyle = .none
+        }
     }
     
     func setLayout() {
-        [header, exclListLabel, exclItemCountLabel, scrollView].forEach {
+        [header, exclListLabel, exclItemCountLabel, tableView, nextButton].forEach {
             view.addSubview($0)
-        }
-
-        scrollView.addSubview(contentView)
-        
-        [tableView, nextButton].forEach {
-            contentView.addSubview($0)
-        }
-        
-        scrollView.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom)
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
-        }
-        
-        contentView.snp.makeConstraints {
-            $0.width.height.equalToSuperview()
-            $0.edges.equalToSuperview()
         }
         
         header.snp.makeConstraints {
@@ -80,9 +89,26 @@ class ExclItemInputVC: UIViewController {
             $0.leading.trailing.equalToSuperview()
         }
         
+        exclListLabel.snp.makeConstraints {
+            $0.top.equalTo(header.snp.bottom).offset(27)
+            $0.leading.equalToSuperview().inset(34)
+        }
+        
+        exclItemCountLabel.snp.makeConstraints {
+            $0.centerY.equalTo(exclListLabel.snp.centerY)
+            $0.leading.equalTo(exclListLabel.snp.trailing).offset(8)
+            $0.width.height.equalTo(20)
+        }
+        
+        tableView.snp.makeConstraints {
+            $0.top.equalTo(exclListLabel.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview().inset(30)
+        }
+        
         nextButton.snp.makeConstraints {
+            $0.top.equalTo(tableView.snp.bottom)
             $0.bottom.equalToSuperview().inset(40)
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(48)
         }
     }
@@ -91,6 +117,15 @@ class ExclItemInputVC: UIViewController {
         let input = ExclItemInputVM.Input(nextButtonTapped: nextButton.rx.tap)
         let output = viewModel.transform(input: input)
         
+        output.exclItems
+            .asDriver()
+            .drive(tableView.rx.items(cellIdentifier: "ExclItemCell", cellType: ExclItemCell.self)) { (idx, item, cell) in
+                cell.configure(item: item)
+            }
+            .disposed(by: disposeBag)
         
+        output.nextButtonIsEnable
+            .drive(nextButton.buttonState)
+            .disposed(by: disposeBag)
     }
 }

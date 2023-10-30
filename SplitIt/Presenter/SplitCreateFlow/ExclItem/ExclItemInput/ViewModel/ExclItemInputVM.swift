@@ -18,22 +18,24 @@ class ExclItemInputVM {
     }
     
     struct Output {
-        let showCSTotalAmountView: Driver<Void>
-//        let nextButtonIsEnable: Driver<Bool>
+        let showResultView: Driver<Void>
+        let exclItems: BehaviorRelay<[String]>
+        let nextButtonIsEnable: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
-        
-        let showCSTotalAmountView = input.nextButtonTapped
-        
+        let showResultView = input.nextButtonTapped
         let nextButtonIsEnable: Driver<Bool>
         
-//        nextButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(), totalAmountTextFieldCountIsEmpty.asDriver())
-//            .map{ $0 && $1 }
-//            .asDriver()
+        let exclItems = BehaviorRelay<[String]>(value: ["1","d","4"])
+        nextButtonIsEnable = exclItems
+            .map{ $0.count > 0 }
+            .asDriver(onErrorJustReturn: false)
   
         
-        return Output(showCSTotalAmountView: showCSTotalAmountView.asDriver())
+        return Output(showResultView: showResultView.asDriver(),
+                      exclItems: exclItems,
+                      nextButtonIsEnable: nextButtonIsEnable)
     }
 
 }
