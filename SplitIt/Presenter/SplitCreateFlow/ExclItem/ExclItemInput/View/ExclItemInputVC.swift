@@ -128,7 +128,8 @@ class ExclItemInputVC: UIViewController {
     }
     
     func setBinding() {
-        let input = ExclItemInputVM.Input(nextButtonTapped: nextButton.rx.tap)
+        let input = ExclItemInputVM.Input(nextButtonTapped: nextButton.rx.tap,
+                                          exclItemAddButtonTapped: exclItemAddButton.rx.tap)
         let output = viewModel.transform(input: input)
         
         output.exclItems
@@ -140,6 +141,16 @@ class ExclItemInputVC: UIViewController {
         
         output.nextButtonIsEnable
             .drive(nextButton.buttonState)
+            .disposed(by: disposeBag)
+        
+        output.showExclItemInfoModal
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                let vc = ExclItemInfoModalVC()
+                vc.modalPresentationStyle = .formSheet
+                vc.modalTransitionStyle = .coverVertical
+                self.present(vc, animated: true)
+            })
             .disposed(by: disposeBag)
     }
 }

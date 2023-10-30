@@ -167,7 +167,8 @@ class CSMemberConfirmVC: UIViewController {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.smartSplitButton.applyStyle(.halfSmartSplitPressed)
-                let vc = ExclPageController()
+//                let vc = ExclPageController()
+                let vc = ExclItemInputVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
