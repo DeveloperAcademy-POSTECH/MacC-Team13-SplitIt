@@ -232,6 +232,7 @@ final class NewSPButton: UIButton {
                 self.isEnabled = true
                 self.configureActiveProperties()
                 self.configureUnpressedPropertiesForSquare()
+                self.backgroundColor = colorArray[style]
                 self.frame = CGRect(origin: CGPoint(x: self.frame.minX, y: self.frame.minY - 4.0), size: self.frame.size)
             })
             .disposed(by: disposeBag)
@@ -275,6 +276,7 @@ final class NewSPButton: UIButton {
                 self.isEnabled = true
                 self.configureActiveProperties()
                 self.configureUnpressedProperties()
+                self.backgroundColor = colorArray[style]
                 self.frame = CGRect(origin: CGPoint(x: self.frame.minX, y: self.frame.minY - 4.0), size: self.frame.size)
             })
             .disposed(by: disposeBag)
