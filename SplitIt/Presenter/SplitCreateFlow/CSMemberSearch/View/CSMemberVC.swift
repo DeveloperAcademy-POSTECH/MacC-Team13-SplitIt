@@ -88,6 +88,7 @@ class CSMemberVC: UIViewController, Reusable {
         
         nextButton.do {
             $0.applyStyle(style: .primaryPear, shape: .rounded)
+            self.nextButton.setTitle("2명부터 정산할 수 있어요", for: .normal)
         }
     }
     
@@ -166,8 +167,9 @@ class CSMemberVC: UIViewController, Reusable {
                 let buttonState = datas.count >= 2
                 self.nextButton.buttonState.accept(buttonState)
                 
-                buttonState ? self.nextButton.setTitle("\(datas.count)명이서 돈을 썼어요", for: .normal)
-                            : self.nextButton.setTitle("2명부터 정산할 수 있어요", for: .disabled)
+                buttonState
+                ? self.nextButton.setTitle("\(datas.count)명이서 돈을 썼어요", for: .normal)
+                : self.nextButton.setTitle("2명부터 정산할 수 있어요", for: .normal)
             })
             .disposed(by: disposeBag)
         
