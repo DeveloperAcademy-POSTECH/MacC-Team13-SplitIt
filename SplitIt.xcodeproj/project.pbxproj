@@ -109,6 +109,9 @@
 		869D1AF02AE52C8A00D166B1 /* ExclMemberEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869D1AEF2AE52C8A00D166B1 /* ExclMemberEditVM.swift */; };
 		869D1AF22AE52C9B00D166B1 /* ExclMemberEditSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869D1AF12AE52C9B00D166B1 /* ExclMemberEditSectionModel.swift */; };
 		869D1AF42AE52CAC00D166B1 /* ExclMemberEditSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869D1AF32AE52CAC00D166B1 /* ExclMemberEditSectionHeader.swift */; };
+		86C65FF22AEF970F00A7942A /* JSDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF12AEF970F00A7942A /* JSDetailVC.swift */; };
+		86C65FF42AEF985A00A7942A /* JSDetailVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF32AEF985A00A7942A /* JSDetailVM.swift */; };
+		86C65FF62AEF9ADF00A7942A /* JSDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF52AEF9ADF00A7942A /* JSDetailCell.swift */; };
 		86D1E0C52AE6B4C100FBF610 /* ExclEditPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D1E0C42AE6B4C100FBF610 /* ExclEditPageController.swift */; };
 		C229F51A2AEA442E00F9E28D /* NewSPButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C229F5192AEA442E00F9E28D /* NewSPButton.swift */; };
 		C2A7978D2AE2740D0049E709 /* ONEMobileBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2A7978A2AE2740D0049E709 /* ONEMobileBold.ttf */; };
@@ -245,6 +248,9 @@
 		869D1AEF2AE52C8A00D166B1 /* ExclMemberEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclMemberEditVM.swift; sourceTree = "<group>"; };
 		869D1AF12AE52C9B00D166B1 /* ExclMemberEditSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclMemberEditSectionModel.swift; sourceTree = "<group>"; };
 		869D1AF32AE52CAC00D166B1 /* ExclMemberEditSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclMemberEditSectionHeader.swift; sourceTree = "<group>"; };
+		86C65FF12AEF970F00A7942A /* JSDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSDetailVC.swift; sourceTree = "<group>"; };
+		86C65FF32AEF985A00A7942A /* JSDetailVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSDetailVM.swift; sourceTree = "<group>"; };
+		86C65FF52AEF9ADF00A7942A /* JSDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSDetailCell.swift; sourceTree = "<group>"; };
 		86D1E0C42AE6B4C100FBF610 /* ExclEditPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclEditPageController.swift; sourceTree = "<group>"; };
 		C229F5192AEA442E00F9E28D /* NewSPButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSPButton.swift; sourceTree = "<group>"; };
 		C2A7978A2AE2740D0049E709 /* ONEMobileBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileBold.ttf; sourceTree = "<group>"; };
@@ -766,6 +772,7 @@
 		869D1AC92AE5292A00D166B1 /* SplitEditFlow */ = {
 			isa = PBXGroup;
 			children = (
+				86C65FF02AEF96E700A7942A /* JSDetailView */,
 				86D1E0C32AE6B4AF00FBF610 /* ExclEditPageController */,
 				869D1AEC2AE52C5000D166B1 /* CSExclItemMemberEdit */,
 				869D1AE72AE52C1A00D166B1 /* CSExclItemPriceEdit */,
@@ -843,6 +850,16 @@
 				869D1AF32AE52CAC00D166B1 /* ExclMemberEditSectionHeader.swift */,
 			);
 			path = CSExclItemMemberEdit;
+			sourceTree = "<group>";
+		};
+		86C65FF02AEF96E700A7942A /* JSDetailView */ = {
+			isa = PBXGroup;
+			children = (
+				86C65FF12AEF970F00A7942A /* JSDetailVC.swift */,
+				86C65FF32AEF985A00A7942A /* JSDetailVM.swift */,
+				86C65FF52AEF9ADF00A7942A /* JSDetailCell.swift */,
+			);
+			path = JSDetailView;
 			sourceTree = "<group>";
 		};
 		86D1E0C32AE6B4AF00FBF610 /* ExclEditPageController */ = {
@@ -1206,6 +1223,7 @@
 				60115DF72ADBF2980050D32C /* UIColor+.swift in Sources */,
 				1A3852F92ADE5AC200E9A20B /* CSMember.swift in Sources */,
 				60115E102ADC195C0050D32C /* CreateStore.swift in Sources */,
+				86C65FF22AEF970F00A7942A /* JSDetailVC.swift in Sources */,
 				DE73D70B2AE3C1FC00ABF3EF /* MyInfoEmptyVC.swift in Sources */,
 				C2A797942AE274F10049E709 /* SPTextField.swift in Sources */,
 				1A3852F72ADE5AB200E9A20B /* CSInfo.swift in Sources */,
@@ -1269,12 +1287,14 @@
 				DE73D7132AE654D800ABF3EF /* CustomAlertVC.swift in Sources */,
 				DE73D6EF2AE0D2D500ABF3EF /* BankCell.swift in Sources */,
 				60AE3EA82AE55D2A009D9D18 /* ResultExclItemCell.swift in Sources */,
+				86C65FF62AEF9ADF00A7942A /* JSDetailCell.swift in Sources */,
 				DE73D71B2AE6B00300ABF3EF /* SecondVC.swift in Sources */,
 				6032DCE62AECE4BC004A6BFA /* CSInfoVM.swift in Sources */,
 				869D1AF42AE52CAC00D166B1 /* ExclMemberEditSectionHeader.swift in Sources */,
 				60AE3EB82AE773F5009D9D18 /* SplitShareVM.swift in Sources */,
 				60AD20F72ADF838300EFACCD /* ExclMemberCell.swift in Sources */,
 				C2A797A22AE277F90049E709 /* HistorySectionHeader.swift in Sources */,
+				86C65FF42AEF985A00A7942A /* JSDetailVM.swift in Sources */,
 				60AD20FD2ADF846600EFACCD /* ExclMemberSectionBackground.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
