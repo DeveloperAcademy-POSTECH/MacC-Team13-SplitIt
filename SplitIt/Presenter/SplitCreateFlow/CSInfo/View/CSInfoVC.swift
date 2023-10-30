@@ -49,7 +49,7 @@ class CSInfoVC: UIViewController {
         
         scrollView.do {
             $0.showsVerticalScrollIndicator = false
-            
+            $0.delaysContentTouches = false
         }
         
         header.do {

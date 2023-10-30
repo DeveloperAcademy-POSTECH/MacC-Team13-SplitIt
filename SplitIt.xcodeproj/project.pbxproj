@@ -57,9 +57,10 @@
 		6032DCE62AECE4BC004A6BFA /* CSInfoVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCE52AECE4BC004A6BFA /* CSInfoVM.swift */; };
 		6032DCEF2AEE5452004A6BFA /* ExclItemInputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCEE2AEE5452004A6BFA /* ExclItemInputVC.swift */; };
 		6032DCF12AEE6FFC004A6BFA /* ExclItemInputVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCF02AEE6FFC004A6BFA /* ExclItemInputVM.swift */; };
-		6032DCF32AEE7FA1004A6BFA /* ExclItemInputBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCF22AEE7FA1004A6BFA /* ExclItemInputBackground.swift */; };
 		6032DCF62AEE8126004A6BFA /* ExclItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCF52AEE8126004A6BFA /* ExclItemCell.swift */; };
 		6032DCF82AEF4B5B004A6BFA /* ExclItemAddCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCF72AEF4B5B004A6BFA /* ExclItemAddCell.swift */; };
+		6032DCFA2AEF5F68004A6BFA /* ExclItemInfoModalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCF92AEF5F68004A6BFA /* ExclItemInfoModalVC.swift */; };
+		6032DCFC2AEF5FBE004A6BFA /* ExclItemInfoModalVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCFB2AEF5FBE004A6BFA /* ExclItemInfoModalVM.swift */; };
 		6078ACCC2ADA74AC00995811 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCB2ADA74AC00995811 /* AppDelegate.swift */; };
 		6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCD2ADA74AC00995811 /* SceneDelegate.swift */; };
 		6078ACD02ADA74AC00995811 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCF2ADA74AC00995811 /* HomeVC.swift */; };
@@ -203,9 +204,10 @@
 		6032DCE52AECE4BC004A6BFA /* CSInfoVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSInfoVM.swift; sourceTree = "<group>"; };
 		6032DCEE2AEE5452004A6BFA /* ExclItemInputVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInputVC.swift; sourceTree = "<group>"; };
 		6032DCF02AEE6FFC004A6BFA /* ExclItemInputVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInputVM.swift; sourceTree = "<group>"; };
-		6032DCF22AEE7FA1004A6BFA /* ExclItemInputBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInputBackground.swift; sourceTree = "<group>"; };
 		6032DCF52AEE8126004A6BFA /* ExclItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemCell.swift; sourceTree = "<group>"; };
 		6032DCF72AEF4B5B004A6BFA /* ExclItemAddCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemAddCell.swift; sourceTree = "<group>"; };
+		6032DCF92AEF5F68004A6BFA /* ExclItemInfoModalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInfoModalVC.swift; sourceTree = "<group>"; };
+		6032DCFB2AEF5FBE004A6BFA /* ExclItemInfoModalVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInfoModalVM.swift; sourceTree = "<group>"; };
 		6078ACC82ADA74AC00995811 /* SplitIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SplitIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6078ACCB2ADA74AC00995811 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6078ACCD2ADA74AC00995811 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -636,7 +638,7 @@
 			children = (
 				6032DCF42AEE8120004A6BFA /* Cell */,
 				6032DCEE2AEE5452004A6BFA /* ExclItemInputVC.swift */,
-				6032DCF22AEE7FA1004A6BFA /* ExclItemInputBackground.swift */,
+				6032DCF92AEF5F68004A6BFA /* ExclItemInfoModalVC.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -645,6 +647,7 @@
 			isa = PBXGroup;
 			children = (
 				6032DCF02AEE6FFC004A6BFA /* ExclItemInputVM.swift */,
+				6032DCFB2AEF5FBE004A6BFA /* ExclItemInfoModalVM.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1270,7 +1273,6 @@
 				60115DF72ADBF2980050D32C /* UIColor+.swift in Sources */,
 				1A3852F92ADE5AC200E9A20B /* CSMember.swift in Sources */,
 				60115E102ADC195C0050D32C /* CreateStore.swift in Sources */,
-				6032DCF32AEE7FA1004A6BFA /* ExclItemInputBackground.swift in Sources */,
 				DE73D70B2AE3C1FC00ABF3EF /* MyInfoEmptyVC.swift in Sources */,
 				C2A797942AE274F10049E709 /* SPTextField.swift in Sources */,
 				1A3852F72ADE5AB200E9A20B /* CSInfo.swift in Sources */,
@@ -1313,6 +1315,7 @@
 				DE73D7112AE5477400ABF3EF /* SplashVC.swift in Sources */,
 				DE73D7172AE65D1800ABF3EF /* AccountAlertVC.swift in Sources */,
 				DE1711C22AE0BA9B0097850D /* MyInfoVM.swift in Sources */,
+				6032DCFC2AEF5FBE004A6BFA /* ExclItemInfoModalVM.swift in Sources */,
 				1A3852FB2ADE5ADA00E9A20B /* ExclItem.swift in Sources */,
 				60115E262ADD2CB00050D32C /* CSMemberInputSearchFooter.swift in Sources */,
 				60AE3EB02AE6CE2A009D9D18 /* ResultSectionFooter.swift in Sources */,
@@ -1335,6 +1338,7 @@
 				DE73D7192AE6A2F100ABF3EF /* TestVC.swift in Sources */,
 				869D1AEB2AE52C4700D166B1 /* ExclItemPriceEditVM.swift in Sources */,
 				DE73D7132AE654D800ABF3EF /* CustomAlertVC.swift in Sources */,
+				6032DCFA2AEF5F68004A6BFA /* ExclItemInfoModalVC.swift in Sources */,
 				DE73D6EF2AE0D2D500ABF3EF /* BankCell.swift in Sources */,
 				60AE3EA82AE55D2A009D9D18 /* ResultExclItemCell.swift in Sources */,
 				DE73D71B2AE6B00300ABF3EF /* SecondVC.swift in Sources */,
