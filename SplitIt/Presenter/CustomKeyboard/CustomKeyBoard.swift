@@ -18,52 +18,74 @@ protocol CustomKeyboardDelegate: AnyObject {
 }
 
 class CustomKeyboard: UIInputViewController {
-
+    
     weak var delegate: CustomKeyboardDelegate?
-
+    var currentTextField: UITextField?
+    
+    let inputRelay = BehaviorRelay<String?>(value: nil)
+    
     private let disposeBag = DisposeBag()
     private let customKeySubject = PublishSubject<String>()
-
+    
     var customKeyObservable: Observable<String> {
         return customKeySubject.asObservable()
     }
     
     let keyboardView = UIView(frame: CGRect(x: 0, y: 0, width: 390, height: 291))
     
-    let btn1 = KeyboardButton(title: "1번")
-    let btn2 = KeyboardButton(title: "2번")
-    let btn3 = KeyboardButton(title: "3번")
-    let btn4 = KeyboardButton(title: "4번")
-    let btn5 = KeyboardButton(title: "5번")
-    let btn6 = KeyboardButton(title: "6번")
-    let btn7 = KeyboardButton(title: "7번")
-    let btn8 = KeyboardButton(title: "8번")
-    let btn9 = KeyboardButton(title: "9번")
-    let btn0 = KeyboardButton(title: "0번")
-    let btn00 = KeyboardButton(title: "00번")
-    let deleteButton = KeyboardButton(title: "del")
-
-    private var currentTextField: UITextField?
-
+    let btn1 = KeyboardButton(title: "1")
+    let btn2 = KeyboardButton(title: "2")
+    let btn3 = KeyboardButton(title: "3")
+    let btn4 = KeyboardButton(title: "4")
+    let btn5 = KeyboardButton(title: "5")
+    let btn6 = KeyboardButton(title: "6")
+    let btn7 = KeyboardButton(title: "7")
+    let btn8 = KeyboardButton(title: "8")
+    let btn9 = KeyboardButton(title: "9")
+    let btn0 = KeyboardButton(title: "0")
+    let btn00 = KeyboardButton(title: "00")
+    let deleteButton = KeyboardButton(title: " ")
+    let deleteImage = UIImageView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = UIColor(hex: 0xCED0D5)
         
         setAttribute()
         setAddView()
         setKeyLayout()
         setBinding()
-    
-
         
     }
     
+    func setAttribute() {
+        
+        let inputView = UIInputView(frame: CGRect(x: 0, y: 0, width: 390, height: 288), inputViewStyle: .keyboard)
+        inputView.backgroundColor = UIColor(hex: 0xFCFCFE)
+        self.inputView = inputView
+        
+        keyboardView.backgroundColor = UIColor(hex: 0xCED0D5)
+        inputView.addSubview(keyboardView)
+        
+        deleteButton.do {
+            $0.backgroundColor = .clear
+            $0.layer.borderWidth = 0
+            
+        }
+        deleteImage.do {
+            $0.image = UIImage(systemName: "delete.left")
+            $0.tintColor = UIColor.black
+        }
+    }
+ 
     func setCurrentTextField(_ textField: UITextField) {
             currentTextField = textField
-            textField.inputView = self.inputView
-
         }
 
+    
     func handleInputValue(_ value: String) {
+        
         guard let textField = currentTextField else { return }
         if value == "del" {
             if var text = textField.text, !text.isEmpty {
@@ -77,30 +99,20 @@ class CustomKeyboard: UIInputViewController {
             }
         }
     }
-
     
-    func setAttribute() {
-       
-        let inputView = UIInputView(frame: CGRect(x: 0, y: 0, width: 390, height: 288), inputViewStyle: .keyboard)
-        inputView.backgroundColor = .lightGray
-        self.inputView = inputView
-
-        keyboardView.backgroundColor = UIColor(hex: 0x3C3C43)
-        inputView.addSubview(keyboardView)
-        
-        
-    }
+    
+    
     
     func setAddView() {
-               
+        
         [btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btn00, deleteButton].forEach {
             keyboardView.addSubview($0)
         }
+        deleteButton.addSubview(deleteImage)
     }
     
-    
     func setBinding() {
-
+        
         bindButtonAction(btn1, value: "1")
         bindButtonAction(btn2, value: "2")
         bindButtonAction(btn3, value: "3")
@@ -114,6 +126,7 @@ class CustomKeyboard: UIInputViewController {
         bindButtonAction(btn0, value: "0")
         bindButtonAction(deleteButton, value: "del")
     }
+        
     
     func setKeyLayout() {
         btn1.snp.makeConstraints { make in
@@ -176,6 +189,10 @@ class CustomKeyboard: UIInputViewController {
             make.left.equalTo(btn0.snp.right).offset(4)
             make.top.equalTo(btn7.snp.bottom).offset(6)
         }
+        
+        deleteImage.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
 
     }
     
@@ -185,4 +202,6 @@ class CustomKeyboard: UIInputViewController {
             .bind(to: customKeySubject)
             .disposed(by: disposeBag)
     }
+    
+
 }

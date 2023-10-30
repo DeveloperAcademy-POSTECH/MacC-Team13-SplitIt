@@ -33,7 +33,7 @@ class BankCell: UICollectionViewCell {
         nameLabel.snp.makeConstraints { make in
             make.height.equalTo(24)
             make.centerY.equalToSuperview()
-            make.left.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(10)
         }
         
         bar.snp.makeConstraints { make in

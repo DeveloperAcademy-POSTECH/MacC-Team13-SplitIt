@@ -12,16 +12,15 @@ import RxCocoa
 import RxSwift
 
 // MARK: HomeVC는 모두 수정 예정
-///
-/// HomeVC의 각 Button의 observer 부분에 작업할 VC를 연결하여 사용해주세요
-///
+// HomeVC의 각 Button의 observer 부분에 작업할 VC를 연결하여 사용해주세요
+
 class HomeVC: UIViewController {
     var disposeBag = DisposeBag()
     
     let viewModel = HomeVM()
     
     let buttonView: UIView = UIView()
-    let myInfoButton: UIButton = UIButton()
+    let myInfoButton: NewSPButton = NewSPButton()
     let myInfoButtonImage: UIImageView = UIImageView()
     
     let mainView: UIView = UIView()
@@ -31,8 +30,8 @@ class HomeVC: UIViewController {
     let logoImage: UIImageView = UIImageView()
     let mainTextLabel: UILabel = UILabel()
     
-    let splitItButton: SPButton = SPButton()
-    let historyButton: UIButton = UIButton()
+    let splitItButton: NewSPButton = NewSPButton()
+    let historyButton: NewSPButton = NewSPButton()
     let historyButtonImage: UIImageView = UIImageView()
 
     
@@ -55,27 +54,9 @@ class HomeVC: UIViewController {
 //                let vc = CSTitleInputVC()
                 let vc = CSInfoVC()
                 self.navigationController?.pushViewController(vc, animated: true)
-                //self.splitItButton.applyStyle(.primaryWatermelonPressed)
             })
             .disposed(by: disposeBag)
-        
-        splitItButton.rx.controlEvent(.touchDown)
-            .bind { self.splitItButton.applyStyle(.primaryWatermelonPressed) }
-            .disposed(by: disposeBag)
-        
-        splitItButton.rx.controlEvent(.touchUpInside)
-            .bind { self.splitItButton.applyStyle(.primaryWatermelon) }
-            .disposed(by: disposeBag)
-        
-        //버튼 원 상태로 돌아오게 만드는 버튼
-//        output.showCreateSplit
-//            .delay(.milliseconds(500))
-//           .drive(onNext: { [weak self] _ in
-//                guard let self = self else { return }
-//            self.splitItButton.applyStyle(.primaryWatermelon)
-//            })
-//            .disposed(by: disposeBag)
-//
+
         output.showInfoView
             .drive(onNext: {
                 // MARK: 모아나가 연결할 뷰로 수정
@@ -85,14 +66,6 @@ class HomeVC: UIViewController {
             })
             .disposed(by: disposeBag)
 
-        myInfoButton.rx.controlEvent(.touchDown)
-            .bind { self.myInfoButton.backgroundColor = .SurfaceBrandCalmshellPressed }
-            .disposed(by: disposeBag)
-        
-        myInfoButton.rx.controlEvent(.touchUpInside)
-            .bind { self.myInfoButton.backgroundColor = .SurfaceBrandCalmshell }
-            .disposed(by: disposeBag)
-
        
         output.showHistoryView
             .drive(onNext: {
@@ -100,29 +73,19 @@ class HomeVC: UIViewController {
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
-        
-        historyButton.rx.controlEvent(.touchDown)
-            .bind { self.historyButton.backgroundColor = .SurfaceBrandCalmshellPressed }
-            .disposed(by: disposeBag)
-        
-        historyButton.rx.controlEvent(.touchUpInside)
-            .bind { self.historyButton.backgroundColor = .SurfaceBrandCalmshell }
-            .disposed(by: disposeBag)
+
 
     }
 
     
     func setAttribute() {
         view.backgroundColor = .SurfaceBrandCalmshell
-        
         buttonView.backgroundColor = .SurfaceBrandCalmshell
-        
-        myInfoButton.do {
-            $0.layer.cornerRadius = 8
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.black.cgColor
-            $0.backgroundColor = .SurfaceBrandCalmshell
 
+        myInfoButton.do {
+    
+            $0.applyStyle(style: .primaryCalmshell, shape: .square)
+            $0.buttonState.accept(true)
         }
         
         myInfoButtonImage.do {
@@ -131,15 +94,11 @@ class HomeVC: UIViewController {
         }
         
         historyButton.do {
-            $0.layer.cornerRadius = 8
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.black.cgColor
-            $0.backgroundColor = .SurfaceBrandCalmshell
-            //$0.setBackgroundImage(image(withColor: .SurfaceBrandCalmshellPressed), for: .highlighted)
+            $0.applyStyle(style: .primaryCalmshell, shape: .square)
+            $0.buttonState.accept(true)
 
-            
         }
-        
+    
         historyButtonImage.do {
             $0.image = UIImage(systemName: "book.fill")
             $0.tintColor = UIColor.black
@@ -186,26 +145,24 @@ class HomeVC: UIViewController {
             $0.numberOfLines = 0
             $0.textAlignment = .right
         }
-        
-        splitItButton.do {
-            $0.applyStyle(.primaryWatermelon)
-            $0.setTitle("나의 영수증 만들기", for: .normal)
-            $0.setTitleColor(UIColor.black, for: .normal)
-            $0.titleLabel?.font = UIFont.systemFont(ofSize: 16)
 
+        splitItButton.do {
+            $0.setTitle("정산 시작하기", for: .normal)
+            $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
+            $0.buttonState.accept(true)
         }
         
        
     }
     
-    func image(withColor color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: size)
-        let image = renderer.image { context in
-            color.setFill()
-            context.fill(CGRect(origin: .zero, size: size))
-        }
-        return image
-    }
+//    func image(withColor color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
+//        let renderer = UIGraphicsImageRenderer(size: size)
+//        let image = renderer.image { context in
+//            color.setFill()
+//            context.fill(CGRect(origin: .zero, size: size))
+//        }
+//        return image
+//    }
 
 
     func setLayout() {
@@ -247,7 +204,7 @@ class HomeVC: UIViewController {
         }
         
         historyButton.snp.makeConstraints {
-            $0.left.equalTo(myInfoButton.snp.right).offset(8)
+            $0.leading.equalTo(myInfoButton.snp.trailing).offset(8)
             $0.centerY.equalToSuperview()
             $0.width.height.equalTo(40)
         }
@@ -273,7 +230,7 @@ class HomeVC: UIViewController {
             $0.width.equalTo(130)
             $0.height.equalTo(92)
             $0.top.equalToSuperview().offset(20)
-            $0.left.equalToSuperview().offset(20)
+            $0.leading.equalToSuperview().offset(20)
         }
         
         mainTextView.snp.makeConstraints {
@@ -285,7 +242,7 @@ class HomeVC: UIViewController {
         
         
         mainTextLabel.snp.makeConstraints {
-            $0.right.equalToSuperview().offset(-20)
+            $0.trailing.equalToSuperview().offset(-20)
             $0.bottom.equalToSuperview().offset(-20)
         }
 

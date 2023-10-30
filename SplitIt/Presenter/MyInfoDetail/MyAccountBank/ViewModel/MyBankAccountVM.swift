@@ -13,13 +13,14 @@ class MyBankAccountVM {
     
     var disposeBag = DisposeBag()
     let userDefault = UserDefaults.standard
-    
+    var inputAccountRelay = BehaviorRelay<String?>(value: nil)
     
     struct Input {
         let inputNameText: ControlEvent<String>
+        let inputRealNameText: ControlEvent<String>
         let editDoneBtnTapped: Driver<Void>
         let selectBackTapped: Observable<Void>
-        let inputAccountText: Observable<String>
+        let inputAccountText: ControlEvent<String>
         let tossTapped: Observable<Void>
         let kakaoTapeed: Observable<Void>
         let naverTapped: Observable<Void>
@@ -40,6 +41,7 @@ class MyBankAccountVM {
     func transform(input: Input) -> Output {
         
         let inputNameText = input.inputNameText
+        let inputRealNameText = input.inputRealNameText
         let editDoneBtnTapped = input.editDoneBtnTapped
         let selectBackTapped = input.selectBackTapped
         let inputAccountText = input.inputAccountText
@@ -48,17 +50,55 @@ class MyBankAccountVM {
         let naverTapped = input.naverTapped
 
 
-        var inputAccount: String = ""
+        //var inputAccount: String = ""
         var inputName: String = ""
+        var inputRealName: String = ""
+
 
         inputNameText
             .bind(onNext: { text in
                 if text != "" {
                     inputName = text
+                    //self.inputNameRelay.accept(text)
+                }
+            })
+            .disposed(by: disposeBag)
+
+        inputRealNameText
+            .bind(onNext: { text in
+                if text != "" {
+                    inputRealName = text
+                }
+            })
+            .disposed(by: disposeBag)
+//
+//        inputAccountText
+//            .bind(onNext: { text in
+//                if text != "" {
+//                    print("계좌번호 \(text)")
+//                    inputAccount = text
+//                    UserDefaults.standard.set(text, forKey: "userAccount")
+//                }
+//
+//
+//            })
+//            .disposed(by: disposeBag)
+        
+        inputAccountText
+            .bind(to: inputAccountRelay)
+            .disposed(by: disposeBag)
+
+        
+        inputAccountRelay
+            .subscribe(onNext: { newValue in
+                if let value = newValue {
+                    UserDefaults.standard.set(value, forKey: "userAccount")
+                    print(UserDefaults.standard.string(forKey: "userAccount"))
                 }
             })
             .disposed(by: disposeBag)
         
+      
         tossTapped
             .subscribe(onNext: {
                 let isToggled = !self.userDefault.bool(forKey: "tossPay")
@@ -81,35 +121,31 @@ class MyBankAccountVM {
             })
             .disposed(by: disposeBag)
         
-        
-        inputAccountText
-            .subscribe(onNext: { text in
-                print("계좌번호 \(text)")
-                
-                inputAccount = text
-            })
-            .disposed(by: disposeBag)
-        
        
-        
-        
         editDoneBtnTapped
             .drive(onNext: {
+                
+                let accountValue = self.inputAccountRelay.value ?? ""
                 print("수정버튼 눌림")
                 
-                if inputAccount != "" {
-                    UserDefaults.standard.set(inputAccount, forKey: "userAccount")
-                }
-                
+                if !accountValue.isEmpty {
+                            UserDefaults.standard.set(accountValue, forKey: "userAccount")
+                        }
+
+
                 if inputName != "" {
-                    UserDefaults.standard.set(inputName, forKey: "userName")
+                    UserDefaults.standard.set(inputName, forKey: "userNickName")
                 }
-                
-               
-                
+
+
+                if inputRealName != "" {
+                    UserDefaults.standard.set(inputRealName, forKey: "userName")
+                }
+
+
             })
             .disposed(by: disposeBag)
-        
+
      
         
         let output = Output(popToMyInfoView: editDoneBtnTapped,
