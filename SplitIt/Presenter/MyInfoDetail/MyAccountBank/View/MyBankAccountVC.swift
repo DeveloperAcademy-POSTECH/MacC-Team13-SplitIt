@@ -41,6 +41,7 @@ class MyBankAccountVC: UIViewController, CustomKeyboardDelegate {
     let accountLabel = UILabel()
     let accountTextField = UITextField()
     let accountCustomKeyboard = CustomKeyboard()
+
     
     var nameLabel = UILabel()
     var nameTextField = UITextField() //예금주
@@ -82,6 +83,7 @@ class MyBankAccountVC: UIViewController, CustomKeyboardDelegate {
     
     
     func accountTextFieldCustomKeyboard() {
+        
         accountTextField.inputView = accountCustomKeyboard.inputView
         accountCustomKeyboard.delegate = self
         accountCustomKeyboard.setCurrentTextField(accountTextField)
@@ -126,13 +128,14 @@ class MyBankAccountVC: UIViewController, CustomKeyboardDelegate {
         
 
         accountTextField.rx.text.orEmpty
-            .subscribe(onNext: { text in
-                // let filtered = text.filter { $0.isNumber }
-                //if text != filtered {
-                self.accountTextField.text = text
-                // }
+            .subscribe(onNext: { [weak self] text in
+                let filtered = text.filter { $0.isNumber || $0 == "-" }
+                if text != filtered {
+                    self?.accountTextField.text = filtered
+                }
             })
             .disposed(by: disposeBag)
+
         
     }
     
@@ -168,6 +171,7 @@ class MyBankAccountVC: UIViewController, CustomKeyboardDelegate {
         output.popToMyInfoView
             .drive(onNext:{ [self] in
                 self.navigationController?.popViewController(animated: true)
+                userDefault.set(accountTextField.text, forKey: "userAccount")
             })
             .disposed(by: disposeBag)
         

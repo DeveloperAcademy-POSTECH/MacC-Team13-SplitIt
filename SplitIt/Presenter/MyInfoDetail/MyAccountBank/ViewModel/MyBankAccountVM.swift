@@ -49,8 +49,6 @@ class MyBankAccountVM {
         let kakaoTapped = input.kakaoTapeed
         let naverTapped = input.naverTapped
 
-
-        //var inputAccount: String = ""
         var inputName: String = ""
         var inputRealName: String = ""
 
@@ -59,7 +57,6 @@ class MyBankAccountVM {
             .bind(onNext: { text in
                 if text != "" {
                     inputName = text
-                    //self.inputNameRelay.accept(text)
                 }
             })
             .disposed(by: disposeBag)
@@ -71,33 +68,11 @@ class MyBankAccountVM {
                 }
             })
             .disposed(by: disposeBag)
-//
-//        inputAccountText
-//            .bind(onNext: { text in
-//                if text != "" {
-//                    print("계좌번호 \(text)")
-//                    inputAccount = text
-//                    UserDefaults.standard.set(text, forKey: "userAccount")
-//                }
-//
-//
-//            })
-//            .disposed(by: disposeBag)
         
         inputAccountText
             .bind(to: inputAccountRelay)
             .disposed(by: disposeBag)
 
-        
-        inputAccountRelay
-            .subscribe(onNext: { newValue in
-                if let value = newValue {
-                    UserDefaults.standard.set(value, forKey: "userAccount")
-                    print(UserDefaults.standard.string(forKey: "userAccount"))
-                }
-            })
-            .disposed(by: disposeBag)
-        
       
         tossTapped
             .subscribe(onNext: {
@@ -128,11 +103,6 @@ class MyBankAccountVM {
                 let accountValue = self.inputAccountRelay.value ?? ""
                 print("수정버튼 눌림")
                 
-                if !accountValue.isEmpty {
-                            UserDefaults.standard.set(accountValue, forKey: "userAccount")
-                        }
-
-
                 if inputName != "" {
                     UserDefaults.standard.set(inputName, forKey: "userNickName")
                 }
