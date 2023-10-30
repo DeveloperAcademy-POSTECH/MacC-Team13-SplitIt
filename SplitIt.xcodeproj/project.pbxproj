@@ -24,6 +24,14 @@
 		1A4DB22B2ADE68E400616243 /* SplitRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB22A2ADE68E400616243 /* SplitRepository.swift */; };
 		1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */; };
 		1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2522ADEB24F00616243 /* MemberLog.swift */; };
+		1AB8418D2AEBFEAC006613A0 /* CSMemberSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8418C2AEBFEAC006613A0 /* CSMemberSearchVC.swift */; };
+		1AB8418F2AEC0D37006613A0 /* CSMemberSearchVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8418E2AEC0D37006613A0 /* CSMemberSearchVM.swift */; };
+		1AB841912AEC1270006613A0 /* MemberCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB841902AEC1270006613A0 /* MemberCheck.swift */; };
+		1AB841962AEC226F006613A0 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB841952AEC226F006613A0 /* SearchCell.swift */; };
+		1AB841982AECFCC5006613A0 /* SelectedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB841972AECFCC5006613A0 /* SelectedCell.swift */; };
+		1AF5F2B32AEE6D5F00DFB71A /* CSMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF5F2B22AEE6D5F00DFB71A /* CSMemberVC.swift */; };
+		1AF5F2B52AEE6D6C00DFB71A /* CSMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF5F2B42AEE6D6C00DFB71A /* CSMemberVM.swift */; };
+		1AF5F2B72AEE7D5000DFB71A /* CSMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF5F2B62AEE7D5000DFB71A /* CSMemberCell.swift */; };
 		1AF9F0972AE2A10D000F580B /* NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF9F0962AE2A10D000F580B /* NavigationBar.swift */; };
 		6009C8142AE29DF4008B9EC1 /* ResultVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6009C8132AE29DF4008B9EC1 /* ResultVC.swift */; };
 		6009C8162AE29DFB008B9EC1 /* ResultVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6009C8152AE29DFB008B9EC1 /* ResultVM.swift */; };
@@ -164,6 +172,14 @@
 		1A4DB22A2ADE68E400616243 /* SplitRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitRepository.swift; sourceTree = "<group>"; };
 		1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMemberLog.swift; sourceTree = "<group>"; };
 		1A4DB2522ADEB24F00616243 /* MemberLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberLog.swift; sourceTree = "<group>"; };
+		1AB8418C2AEBFEAC006613A0 /* CSMemberSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberSearchVC.swift; sourceTree = "<group>"; };
+		1AB8418E2AEC0D37006613A0 /* CSMemberSearchVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberSearchVM.swift; sourceTree = "<group>"; };
+		1AB841902AEC1270006613A0 /* MemberCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCheck.swift; sourceTree = "<group>"; };
+		1AB841952AEC226F006613A0 /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
+		1AB841972AECFCC5006613A0 /* SelectedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedCell.swift; sourceTree = "<group>"; };
+		1AF5F2B22AEE6D5F00DFB71A /* CSMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberVC.swift; sourceTree = "<group>"; };
+		1AF5F2B42AEE6D6C00DFB71A /* CSMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberVM.swift; sourceTree = "<group>"; };
+		1AF5F2B62AEE7D5000DFB71A /* CSMemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberCell.swift; sourceTree = "<group>"; };
 		1AF9F0962AE2A10D000F580B /* NavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBar.swift; sourceTree = "<group>"; };
 		6009C8132AE29DF4008B9EC1 /* ResultVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultVC.swift; sourceTree = "<group>"; };
 		6009C8152AE29DFB008B9EC1 /* ResultVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultVM.swift; sourceTree = "<group>"; };
@@ -342,6 +358,45 @@
 			path = Repository;
 			sourceTree = "<group>";
 		};
+		1AB841872AEBF7A2006613A0 /* CSMemberSearch */ = {
+			isa = PBXGroup;
+			children = (
+				1AB841892AEBF7CB006613A0 /* ViewModel */,
+				1AB841882AEBF7BD006613A0 /* View */,
+				1AB841902AEC1270006613A0 /* MemberCheck.swift */,
+			);
+			path = CSMemberSearch;
+			sourceTree = "<group>";
+		};
+		1AB841882AEBF7BD006613A0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1AB841942AEC2253006613A0 /* Cell */,
+				1AB8418C2AEBFEAC006613A0 /* CSMemberSearchVC.swift */,
+				1AF5F2B22AEE6D5F00DFB71A /* CSMemberVC.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		1AB841892AEBF7CB006613A0 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				1AB8418E2AEC0D37006613A0 /* CSMemberSearchVM.swift */,
+				1AF5F2B42AEE6D6C00DFB71A /* CSMemberVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		1AB841942AEC2253006613A0 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				1AB841952AEC226F006613A0 /* SearchCell.swift */,
+				1AB841972AECFCC5006613A0 /* SelectedCell.swift */,
+				1AF5F2B62AEE7D5000DFB71A /* CSMemberCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		6009C8102AE29DC7008B9EC1 /* Result */ = {
 			isa = PBXGroup;
 			children = (
@@ -464,6 +519,7 @@
 		60115E042ADC18110050D32C /* SplitCreateFlow */ = {
 			isa = PBXGroup;
 			children = (
+				1AB841872AEBF7A2006613A0 /* CSMemberSearch */,
 				60AD20DD2ADEC0BC00EFACCD /* ExclItemCycle */,
 				60115E192ADD2B330050D32C /* CSMember */,
 				60115E082ADC18C40050D32C /* CSTotalAmount */,
@@ -1131,6 +1187,7 @@
 				60115E242ADD2BE20050D32C /* CSMemberInputSearchCell.swift in Sources */,
 				60AE3EBC2AE7743E009D9D18 /* UITableView+.swift in Sources */,
 				60AE3EB52AE773BF009D9D18 /* SplitShareVC.swift in Sources */,
+				1AF5F2B72AEE7D5000DFB71A /* CSMemberCell.swift in Sources */,
 				869D1AE92AE52C3300D166B1 /* ExclItemPriceEditVC.swift in Sources */,
 				869D1AD32AE52AD900D166B1 /* CSTitleEditVC.swift in Sources */,
 				869D1ADF2AE52BB300D166B1 /* CSTotalAmountEditVC.swift in Sources */,
@@ -1142,6 +1199,7 @@
 				60AE3EC32AE77491009D9D18 /* SplitResult.swift in Sources */,
 				60115E2D2ADE221D0050D32C /* CSMemberConfirmCell.swift in Sources */,
 				1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */,
+				1AF5F2B52AEE6D6C00DFB71A /* CSMemberVM.swift in Sources */,
 				6009C81F2AE2B813008B9EC1 /* ResultSectionHeader.swift in Sources */,
 				DE73D6F92AE1983A00ABF3EF /* MemberLogVM.swift in Sources */,
 				C2A797A62AE2784B0049E709 /* HistoryVM.swift in Sources */,
@@ -1205,6 +1263,7 @@
 				DE1711C82AE0BADD0097850D /* SocialPay.swift in Sources */,
 				60AE3EAC2AE6699E009D9D18 /* AddSplitHeaderVM.swift in Sources */,
 				60AD20FB2ADF842C00EFACCD /* ExclMemberSectionHeader.swift in Sources */,
+				1AB8418D2AEBFEAC006613A0 /* CSMemberSearchVC.swift in Sources */,
 				60115DF92ADBF2E10050D32C /* HomeVM.swift in Sources */,
 				60AD20F92ADF83DE00EFACCD /* ExclAddCell.swift in Sources */,
 				60115E0E2ADC19250050D32C /* CSTitleInputVM.swift in Sources */,
@@ -1220,6 +1279,7 @@
 				60AE3EB02AE6CE2A009D9D18 /* ResultSectionFooter.swift in Sources */,
 				6009C81D2AE2B684008B9EC1 /* AddSplitHeader.swift in Sources */,
 				869D1ACC2AE5297400D166B1 /* CSEditListVC.swift in Sources */,
+				1AB841912AEC1270006613A0 /* MemberCheck.swift in Sources */,
 				C2A797A02AE277AF0049E709 /* CreateDateSection.swift in Sources */,
 				6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */,
 				60AD20F02ADF811A00EFACCD /* ExclMemberVC.swift in Sources */,
@@ -1233,14 +1293,18 @@
 				1A3852FD2ADE5B0100E9A20B /* ExclMember.swift in Sources */,
 				DE73D6FC2AE1993F00ABF3EF /* MemberCell.swift in Sources */,
 				60AD20EB2ADEC8BA00EFACCD /* ExclItemPriceInputVM.swift in Sources */,
+				1AB8418F2AEC0D37006613A0 /* CSMemberSearchVM.swift in Sources */,
 				DE73D7192AE6A2F100ABF3EF /* TestVC.swift in Sources */,
+				1AB841962AEC226F006613A0 /* SearchCell.swift in Sources */,
 				869D1AEB2AE52C4700D166B1 /* ExclItemPriceEditVM.swift in Sources */,
 				DE73D7132AE654D800ABF3EF /* CustomAlertVC.swift in Sources */,
 				DE73D6EF2AE0D2D500ABF3EF /* BankCell.swift in Sources */,
+				1AB841982AECFCC5006613A0 /* SelectedCell.swift in Sources */,
 				60AE3EA82AE55D2A009D9D18 /* ResultExclItemCell.swift in Sources */,
 				DE73D71B2AE6B00300ABF3EF /* SecondVC.swift in Sources */,
 				869D1AF42AE52CAC00D166B1 /* ExclMemberEditSectionHeader.swift in Sources */,
 				60AE3EB82AE773F5009D9D18 /* SplitShareVM.swift in Sources */,
+				1AF5F2B32AEE6D5F00DFB71A /* CSMemberVC.swift in Sources */,
 				60AD20F72ADF838300EFACCD /* ExclMemberCell.swift in Sources */,
 				C2A797A22AE277F90049E709 /* HistorySectionHeader.swift in Sources */,
 				60AD20FD2ADF846600EFACCD /* ExclMemberSectionBackground.swift in Sources */,
@@ -1383,7 +1447,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = X32GZ3NKQ8;
+				DEVELOPMENT_TEAM = B9U954AWHU;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SplitIt/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1413,7 +1477,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = X32GZ3NKQ8;
+				DEVELOPMENT_TEAM = B9U954AWHU;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SplitIt/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

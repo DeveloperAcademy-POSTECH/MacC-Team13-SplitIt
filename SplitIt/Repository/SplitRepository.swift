@@ -101,12 +101,18 @@ extension SplitRepository {
         exclMemberArr.accept([])
     }
     
-    /// 현재 csInfoIdx를 기준으로 원하는 값을 이름으로 가지는 csMember 생성 - 기존 친구 목록에 없는 경우 동작
+    // TODO: - 쓰는 곳이 없다면 삭제할 것 => 현재 csInfoIdx를 기준으로 원하는 값을 이름으로 가지는 csMember 생성
     func createCSMember(name: String) {
         var csMembers: [CSMember] = csMemberArr.value
         let newCSMember: CSMember = CSMember(csInfoIdx: currentCSInfo!.csInfoIdx, name: name)
         csMembers.append(newCSMember)
         csMemberArr.accept(csMembers)
+    }
+    
+    /// 이름 배열을 받아와서 csMember 생성
+    func createCSMemberArr(nameArr: [String]) {
+        let newCSMembers = nameArr.map { CSMember(csInfoIdx: currentCSInfo!.csInfoIdx, name: $0)}
+        csMemberArr.accept(newCSMembers)
     }
     
     /// CSInfoIdx, name으로 ExclItem 생성
@@ -138,7 +144,6 @@ extension SplitRepository {
     /// name을 받아서 memberLogArr, realm에 새로 생성
     func createMemberLog(name: String) {
         RealmManager().updateData(memberLog: MemberLog(name: name))
-        fetchMemberLog()
     }
     
     /// ExclItem 및 CSMember에 따라 ExclMember 생성
@@ -334,7 +339,6 @@ extension SplitRepository {
         }
         
         csMemberArr.accept(newCSMembers)
-        print("csMember: \(csMemberArr.value)")
         realmManager.deleteCSMember(csMemberIdxArr: [deleteCSMember!.csMemberIdx])
         
         // 만약 csMember가 하나도 없다면 해당 csInfo 아래 모든 데이터 삭제
