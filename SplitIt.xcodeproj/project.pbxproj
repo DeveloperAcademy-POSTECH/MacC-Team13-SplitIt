@@ -154,6 +154,7 @@
 		DEFE9D812AEAAD91009C693E /* CustomKeyBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFE9D802AEAAD91009C693E /* CustomKeyBoard.swift */; };
 		DEFE9D832AEAB80A009C693E /* KeyboardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFE9D822AEAB80A009C693E /* KeyboardButton.swift */; };
 		DEFE9D852AEE909A009C693E /* CustomTextFieldInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFE9D842AEE909A009C693E /* CustomTextFieldInfo.swift */; };
+		DEFE9D982AEFC33B009C693E /* AccountCustomkeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFE9D972AEFC33B009C693E /* AccountCustomkeyboard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -298,6 +299,7 @@
 		DEFE9D802AEAAD91009C693E /* CustomKeyBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyBoard.swift; sourceTree = "<group>"; };
 		DEFE9D822AEAB80A009C693E /* KeyboardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardButton.swift; sourceTree = "<group>"; };
 		DEFE9D842AEE909A009C693E /* CustomTextFieldInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldInfo.swift; sourceTree = "<group>"; };
+		DEFE9D972AEFC33B009C693E /* AccountCustomkeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCustomkeyboard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1118,6 +1120,7 @@
 				DEFE9D822AEAB80A009C693E /* KeyboardButton.swift */,
 				DE73D7182AE6A2F100ABF3EF /* TestVC.swift */,
 				DE73D71A2AE6B00300ABF3EF /* SecondVC.swift */,
+				DEFE9D972AEFC33B009C693E /* AccountCustomkeyboard.swift */,
 			);
 			path = CustomKeyboard;
 			sourceTree = "<group>";
@@ -1289,6 +1292,7 @@
 				60AE3EAE2AE6AA97009D9D18 /* ResultSectionHeaderVM.swift in Sources */,
 				60AE3EBA2AE77417009D9D18 /* SplitShareTableCell.swift in Sources */,
 				6078ACCC2ADA74AC00995811 /* AppDelegate.swift in Sources */,
+				DEFE9D982AEFC33B009C693E /* AccountCustomkeyboard.swift in Sources */,
 				DE73D6EB2AE0D29000ABF3EF /* BankManager.swift in Sources */,
 				1A4DB2292ADE61E800616243 /* RealmManager.swift in Sources */,
 				1A3853032ADE5B4500E9A20B /* RealmCSMember.swift in Sources */,

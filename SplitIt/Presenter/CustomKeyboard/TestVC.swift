@@ -24,14 +24,13 @@ class TestVC: UIViewController, CustomKeyboardDelegate, UITextFieldDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setAttribute()
+        
         
         view.addSubview(textField1)
         view.addSubview(textField2)
+        
         view.backgroundColor = .white
  
-
-        
         textField1.inputView = customKeyboard1.inputView       
         textField2.inputView = customKeyboard2.inputView
         
@@ -44,23 +43,25 @@ class TestVC: UIViewController, CustomKeyboardDelegate, UITextFieldDelegate{
         customKeyboard2.setCurrentTextField(textField2)
         
         customKeyboard1.customKeyObservable
-                   .subscribe(onNext: { [weak self] value in
-                       self?.customKeyboard1.handleInputValue(value)
-                   })
-                   .disposed(by: disposeBag)
-
-               customKeyboard2.customKeyObservable
-                   .subscribe(onNext: { [weak self] value in
-                       self?.customKeyboard2.handleInputValue(value)
-                   })
-                   .disposed(by: disposeBag)
-
-
+            .subscribe(onNext: { [weak self] value in
+                self?.customKeyboard1.handleInputValue(value)
+            })
+            .disposed(by: disposeBag)
+        
+        customKeyboard2.customKeyObservable
+            .subscribe(onNext: { [weak self] value in
+                self?.customKeyboard2.handleInputValue(value)
+                print(self?.textField2.text)
+            })
+            .disposed(by: disposeBag)
+        
+        setAttribute()
 
 
     }
     
     func setAttribute(){
+        
         textField1.borderStyle = .roundedRect
         textField1.placeholder = "Enter text here"
         
