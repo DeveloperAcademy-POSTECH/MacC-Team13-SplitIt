@@ -1,10 +1,9 @@
 //
-//  CustomKeyBoard.swift
+//  AccountCustomkeyboard.swift
 //  SplitIt
 //
-//  Created by cho on 2023/10/26.
+//  Created by cho on 2023/10/30.
 //
-
 
 import UIKit
 import RxSwift
@@ -13,18 +12,18 @@ import SnapKit
 import Then
 
 
-protocol CustomKeyboardDelegate: AnyObject {
+protocol AccountCustomKeyboardDelegate: AnyObject {
     
 }
 
 
-class CustomKeyboard: UIInputViewController {
+
+class AccountCustomKeyboard: UIInputViewController {
     
-    weak var delegate: CustomKeyboardDelegate?
+    weak var delegate: AccountCustomKeyboardDelegate?
     var currentTextField: UITextField?
-    
-    
-    let inputRelay = BehaviorRelay<Int?>(value: nil)
+        
+    let inputRelay = BehaviorRelay<String?>(value: nil)
     
     private let disposeBag = DisposeBag()
     private let customKeySubject = PublishSubject<String>()
@@ -45,7 +44,7 @@ class CustomKeyboard: UIInputViewController {
     let btn8 = KeyboardButton(title: "8")
     let btn9 = KeyboardButton(title: "9")
     let btn0 = KeyboardButton(title: "0")
-    var optionBtn = KeyboardButton(title: "00")
+    var optionBtn = KeyboardButton(title: "-")
     let deleteButton = KeyboardButton(title: " ")
     let deleteImage = UIImageView()
     
@@ -53,6 +52,8 @@ class CustomKeyboard: UIInputViewController {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor(hex: 0xCED0D5)
+        
+        
         
         setAttribute()
         setAddView()
@@ -125,7 +126,7 @@ class CustomKeyboard: UIInputViewController {
             bindButtonAction(btn7, value: "7")
             bindButtonAction(btn8, value: "8")
             bindButtonAction(btn9, value: "9")
-            bindButtonAction(optionBtn, value: "00")
+            bindButtonAction(optionBtn, value: "-")
             bindButtonAction(btn0, value: "0")
             bindButtonAction(deleteButton, value: "del")
             
@@ -237,6 +238,5 @@ class CustomKeyboard: UIInputViewController {
             
         }
     }
-
 
 }

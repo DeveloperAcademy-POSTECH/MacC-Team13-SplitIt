@@ -13,6 +13,7 @@ class MyBankAccountVM {
     
     var disposeBag = DisposeBag()
     let userDefault = UserDefaults.standard
+    
     var inputAccountRelay = BehaviorRelay<String?>(value: nil)
     
     struct Input {
@@ -53,6 +54,29 @@ class MyBankAccountVM {
         var inputRealName: String = ""
 
 
+        editDoneBtnTapped
+            .drive(onNext: {
+                let accountValue = self.inputAccountRelay.value ?? ""
+                print("수정버튼 눌림")
+                
+                if !accountValue.isEmpty {
+                    UserDefaults.standard.set(accountValue, forKey: "userAccount")
+                }
+                if inputName != "" {
+                    UserDefaults.standard.set(inputName, forKey: "userNickName")
+                }
+
+
+                if inputRealName != "" {
+                    UserDefaults.standard.set(inputRealName, forKey: "userName")
+                }
+
+
+            })
+            .disposed(by: disposeBag)
+
+        
+        
         inputNameText
             .bind(onNext: { text in
                 if text != "" {
@@ -97,25 +121,7 @@ class MyBankAccountVM {
             .disposed(by: disposeBag)
         
        
-        editDoneBtnTapped
-            .drive(onNext: {
-                
-                let accountValue = self.inputAccountRelay.value ?? ""
-                print("수정버튼 눌림")
-                
-                if inputName != "" {
-                    UserDefaults.standard.set(inputName, forKey: "userNickName")
-                }
-
-
-                if inputRealName != "" {
-                    UserDefaults.standard.set(inputRealName, forKey: "userName")
-                }
-
-
-            })
-            .disposed(by: disposeBag)
-
+       
      
         
         let output = Output(popToMyInfoView: editDoneBtnTapped,

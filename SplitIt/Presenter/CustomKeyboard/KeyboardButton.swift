@@ -35,11 +35,10 @@ class KeyboardButton: UIButton {
         let attributedString = NSAttributedString(string: btnTitle, attributes: attributes)
         setAttributedTitle(attributedString, for: .normal)
         
-        
         setTitle(btnTitle, for: .normal)
         backgroundColor = UIColor(hex: 0xFCFCFE)
+  
         setTitleColor(.black, for: .normal)
-
       
         layer.cornerRadius = 8
         layer.borderWidth = 1

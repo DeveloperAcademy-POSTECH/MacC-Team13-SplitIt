@@ -12,14 +12,16 @@ import SnapKit
 import Then
 
 
-class MyBankAccountVC: UIViewController, CustomKeyboardDelegate {
+class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
     
+    let accountTextRelay = BehaviorRelay<String?>(value: "")
+    let accountCustomKeyboard = AccountCustomKeyboard()
     
     let viewModel = MyBankAccountVM()
     var disposeBag = DisposeBag()
     let maxCharacterCount = 8
     let userDefault = UserDefaults.standard
-    let accountTextRelay = BehaviorRelay<String?>(value: "")
+    
     
     var isBankSelected: Bool = false
     
@@ -40,9 +42,8 @@ class MyBankAccountVC: UIViewController, CustomKeyboardDelegate {
     
     let accountLabel = UILabel()
     let accountTextField = UITextField()
-    let accountCustomKeyboard = CustomKeyboard()
-
     
+
     var nameLabel = UILabel()
     var nameTextField = UITextField() //예금주
     var nameCountLabel = UILabel()
@@ -171,7 +172,7 @@ class MyBankAccountVC: UIViewController, CustomKeyboardDelegate {
         output.popToMyInfoView
             .drive(onNext:{ [self] in
                 self.navigationController?.popViewController(animated: true)
-                userDefault.set(accountTextField.text, forKey: "userAccount")
+               // userDefault.set(accountTextField.text, forKey: "userAccount")
             })
             .disposed(by: disposeBag)
         
@@ -234,29 +235,15 @@ class MyBankAccountVC: UIViewController, CustomKeyboardDelegate {
                 
             })
             .disposed(by: disposeBag)
-        
-        userDefault.rx
-            .observe(String.self, "userAccount")
-            .subscribe(onNext: { value in
-                guard let value = value else { return }
-                print(value)
-                self.userDefault.set(value, forKey: "userAccount")
 
-            })
-            .disposed(by: disposeBag)
-        
         
     }
-    
-    
     
     func addTapGesture(to view: UIView) -> UITapGestureRecognizer {
         let tapGesture = UITapGestureRecognizer()
         view.addGestureRecognizer(tapGesture)
         return tapGesture
     }
-    
-    
     
     func setAttribute() {
         //이름 글자수 카운트

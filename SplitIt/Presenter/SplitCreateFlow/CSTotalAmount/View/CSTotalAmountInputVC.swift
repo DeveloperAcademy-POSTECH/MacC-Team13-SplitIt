@@ -9,10 +9,12 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class CSTotalAmountInputVC: UIViewController {
+class CSTotalAmountInputVC: UIViewController, CustomKeyboardDelegate {
+    
+    let inputTextRelay = BehaviorRelay<Int?>(value: 0)
+    let customKeyboard = CustomKeyboard()
     
     var disposeBag = DisposeBag()
-    
     let viewModel = CSTotalAmountInputVM()
     
     let header = NaviHeader()
@@ -27,6 +29,7 @@ class CSTotalAmountInputVC: UIViewController {
         setLayout()
         setAttribute()
         setBinding()
+        textFieldCustomKeyboard()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -35,6 +38,23 @@ class CSTotalAmountInputVC: UIViewController {
         setKeyboardNotification()
         self.totalAmountTextFiled.becomeFirstResponder()
     }
+    
+    func textFieldCustomKeyboard() {
+        
+        totalAmountTextFiled.inputView = customKeyboard.inputView
+        customKeyboard.delegate = self
+        customKeyboard.setCurrentTextField(totalAmountTextFiled)
+        
+        customKeyboard.customKeyObservable
+            .subscribe(onNext: { [weak self] value in
+                self?.customKeyboard.handleInputValue(value)
+                self?.inputTextRelay.accept(Int(self?.totalAmountTextFiled.text ?? ""))
+            })
+            .disposed(by: disposeBag)
+
+        
+    }
+    
     
     func setAttribute() {
         view.backgroundColor = .SurfacePrimary
