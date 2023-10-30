@@ -18,6 +18,7 @@ class ExclItemInputVC: UIViewController {
     let header = NaviHeader()
     let exclListLabel = UILabel()
     let exclItemCountLabel = UILabel()
+    let exclItemAddButton = NewSPButton()
     
     let contentView = UIView()
     let tableView = UITableView(frame: .zero)
@@ -56,6 +57,12 @@ class ExclItemInputVC: UIViewController {
             $0.clipsToBounds = true
         }
         
+        exclItemAddButton.do {
+            $0.setTitle("추가하기", for: .normal)
+            $0.buttonState.accept(true)
+            $0.applyStyle(style: .primaryWatermelon, shape: .square)
+        }
+        
         nextButton.do {
             $0.setTitle("정산 결과 확인하기", for: .normal)
             $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
@@ -79,7 +86,7 @@ class ExclItemInputVC: UIViewController {
     }
     
     func setLayout() {
-        [header, exclListLabel, exclItemCountLabel, tableView, nextButton].forEach {
+        [header, exclListLabel, exclItemCountLabel, exclItemAddButton, tableView, nextButton].forEach {
             view.addSubview($0)
         }
         
@@ -98,6 +105,13 @@ class ExclItemInputVC: UIViewController {
             $0.centerY.equalTo(exclListLabel.snp.centerY)
             $0.leading.equalTo(exclListLabel.snp.trailing).offset(8)
             $0.width.height.equalTo(20)
+        }
+        
+        exclItemAddButton.snp.makeConstraints {
+            $0.centerY.equalTo(exclListLabel.snp.centerY)
+            $0.trailing.equalToSuperview().inset(38)
+            $0.width.equalTo(112)
+            $0.height.equalTo(24)
         }
         
         tableView.snp.makeConstraints {
