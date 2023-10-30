@@ -17,10 +17,20 @@ protocol CustomKeyboardDelegate: AnyObject {
     
 }
 
+enum KeyboardType {
+    case withMinus
+    case withDoubleZero
+}
+
+
+
+
 class CustomKeyboard: UIInputViewController {
     
     weak var delegate: CustomKeyboardDelegate?
     var currentTextField: UITextField?
+    
+    var keyboardType: KeyboardType = .withMinus
     
     let inputRelay = BehaviorRelay<String?>(value: nil)
     
@@ -43,7 +53,7 @@ class CustomKeyboard: UIInputViewController {
     let btn8 = KeyboardButton(title: "8")
     let btn9 = KeyboardButton(title: "9")
     let btn0 = KeyboardButton(title: "0")
-    let btn00 = KeyboardButton(title: "00")
+    var optionBtn = KeyboardButton(title: "-")
     let deleteButton = KeyboardButton(title: " ")
     let deleteImage = UIImageView()
     
@@ -51,6 +61,8 @@ class CustomKeyboard: UIInputViewController {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor(hex: 0xCED0D5)
+        
+        
         
         setAttribute()
         setAddView()
@@ -101,32 +113,38 @@ class CustomKeyboard: UIInputViewController {
     }
     
     
-    
-    
     func setAddView() {
         
-        [btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btn00, deleteButton].forEach {
+        [btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, optionBtn, deleteButton].forEach {
             keyboardView.addSubview($0)
         }
         deleteButton.addSubview(deleteImage)
     }
     
+    
     func setBinding() {
-        
-        bindButtonAction(btn1, value: "1")
-        bindButtonAction(btn2, value: "2")
-        bindButtonAction(btn3, value: "3")
-        bindButtonAction(btn4, value: "4")
-        bindButtonAction(btn5, value: "5")
-        bindButtonAction(btn6, value: "6")
-        bindButtonAction(btn7, value: "7")
-        bindButtonAction(btn8, value: "8")
-        bindButtonAction(btn9, value: "9")
-        bindButtonAction(btn00, value: "00")
-        bindButtonAction(btn0, value: "0")
-        bindButtonAction(deleteButton, value: "del")
+       
+            bindButtonAction(btn1, value: "1")
+            bindButtonAction(btn2, value: "2")
+            bindButtonAction(btn3, value: "3")
+            bindButtonAction(btn4, value: "4")
+            bindButtonAction(btn5, value: "5")
+            bindButtonAction(btn6, value: "6")
+            bindButtonAction(btn7, value: "7")
+            bindButtonAction(btn8, value: "8")
+            bindButtonAction(btn9, value: "9")
+            bindButtonAction(optionBtn, value: "-")
+            bindButtonAction(btn0, value: "0")
+            bindButtonAction(deleteButton, value: "del")
+            
+            
+            
+       
+                    
     }
-        
+
+    
+
     
     func setKeyLayout() {
         btn1.snp.makeConstraints { make in
@@ -175,13 +193,13 @@ class CustomKeyboard: UIInputViewController {
             make.top.equalTo(btn4.snp.bottom).offset(6)
         }
         
-        btn00.snp.makeConstraints { make in
+        optionBtn.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(4)
             make.top.equalTo(btn7.snp.bottom).offset(6)
         }
         
         btn0.snp.makeConstraints { make in
-            make.left.equalTo(btn00.snp.right).offset(4)
+            make.left.equalTo(optionBtn.snp.right).offset(4)
             make.top.equalTo(btn7.snp.bottom).offset(6)
         }
         
