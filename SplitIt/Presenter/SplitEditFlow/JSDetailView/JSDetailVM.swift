@@ -15,8 +15,35 @@ final class JSDetailVM {
     
     let dataModel = SplitRepository.share
     let maxTextCount = 8
+    let splitIdx: String
+    
+    var split: Driver<Split> {
+        dataModel.splitArr
+            .asDriver()
+            .flatMap { splitList -> Driver<Split> in
+                if let firstSplit = splitList.first {
+                    return Driver.just(firstSplit)
+                } else {
+                    return Driver.empty()
+                }
+            }
+    }
+    
+    var csinfoList: Driver<[CSInfo]> {
+        dataModel.csInfoArr.asDriver()
+    }
+    
+    var exclList: Driver<[ExclItem]> {
+        dataModel.exclItemArr.asDriver()
+    }
+    
+    init(splitIdx: String = "653e1192001cb7e6e7996ad3") {
+        dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: splitIdx)
+        self.splitIdx = splitIdx
+    }
     
     struct Input {
+        let viewDidLoad: Observable<Void>
         let nextButtonTapped: ControlEvent<Void>
         let title: Driver<String>
         let csEditTapped: ControlEvent<IndexPath>
@@ -27,6 +54,7 @@ final class JSDetailVM {
         let titleCount: Driver<String>
         let textFieldIsValid: Driver<Bool>
         let textFieldIsEmpty: Driver<Bool>
+        let splitTitle: Driver<String>
     }
     
     func transform(input: Input) -> Output {
@@ -35,6 +63,15 @@ final class JSDetailVM {
         let textFieldCount = BehaviorRelay<String>(value: "")
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
         let textFieldCountIsEmpty: Driver<Bool>
+        let splitTitle = split.map { $0.title }
+        
+        input.viewDidLoad
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: "653e1192001cb7e6e7996ad3")
+                print("패치 됌 = \(SplitRepository.share.csInfoArr.value.count)")
+            })
+            .disposed(by: disposeBag)
 
         showNextView
             .asDriver()
@@ -68,7 +105,8 @@ final class JSDetailVM {
         return Output(pushNextView: showNextView.asDriver(),
                       titleCount: textFieldCount.asDriver(),
                       textFieldIsValid: textFieldIsValid.asDriver(),
-                      textFieldIsEmpty: textFieldCountIsEmpty)
+                      textFieldIsEmpty: textFieldCountIsEmpty,
+                      splitTitle: splitTitle)
     }
 
 }

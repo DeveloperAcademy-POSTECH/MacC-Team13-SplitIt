@@ -57,58 +57,16 @@ final class JSDetailCell: UICollectionViewCell, Reusable {
         }
         
         memberCountLabel.do {
-            let numberAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.KoreanCaption1
-            ]
-
-            let textAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.KoreanCaption2
-            ]
-            let numberString = NSAttributedString(string: "6", attributes: numberAttributes)
-            let textString = NSAttributedString(string: " 명", attributes: textAttributes)
-
-            let finalString = NSMutableAttributedString()
-            finalString.append(numberString)
-            finalString.append(textString)
-            $0.attributedText = finalString
 //            $0.text = "6 명"
             $0.textAlignment = .right
         }
         
         totalAmountLabel.do {
-            let numberAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.KoreanCaption2
-            ]
-
-            let textAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.KoreanCaption1
-            ]
-            let numberString = NSAttributedString(string: "₩", attributes: numberAttributes)
-            let textString = NSAttributedString(string: " 60,500", attributes: textAttributes)
-
-            let finalString = NSMutableAttributedString()
-            finalString.append(numberString)
-            finalString.append(textString)
-            $0.attributedText = finalString
             $0.textAlignment = .right
             $0.textColor = .TextPrimary
         }
         
         exclItemCountLabel.do {
-            let numberAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.KoreanCaption1
-            ]
-
-            let textAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.KoreanCaption2
-            ]
-            let numberString = NSAttributedString(string: "2", attributes: numberAttributes)
-            let textString = NSAttributedString(string: " 건", attributes: textAttributes)
-
-            let finalString = NSMutableAttributedString()
-            finalString.append(numberString)
-            finalString.append(textString)
-            $0.attributedText = finalString
             $0.textAlignment = .right
         }
         
@@ -116,13 +74,13 @@ final class JSDetailCell: UICollectionViewCell, Reusable {
     
     func setLayout() {
         let nameLabel = UILabel().then {
-            $0.text = "이름"
+            $0.text = "인원"
             $0.textColor = .TextSecondary
             $0.font = .KoreanCaption1
         }
         
         let priceLabel = UILabel().then {
-            $0.text = "주문"
+            $0.text = "총액"
             $0.textColor = .TextSecondary
             $0.font = .KoreanCaption1
         }
@@ -202,11 +160,50 @@ final class JSDetailCell: UICollectionViewCell, Reusable {
         view.layer.addSublayer(borderLayer)
     }
     
+    func attributeStringSet(st1: String, st2: String) -> NSMutableAttributedString {
+        let numberAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.KoreanCaption1
+        ]
+
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.KoreanCaption2
+        ]
+        let numberString = NSAttributedString(string: st1, attributes: numberAttributes)
+        let textString = NSAttributedString(string: " \(st2)", attributes: textAttributes)
+
+        let finalString = NSMutableAttributedString()
+        finalString.append(numberString)
+        finalString.append(textString)
+        
+        return finalString
+    }
+    
+    func attributeStringSet2(st1: String, st2: String) -> NSMutableAttributedString {
+        let numberAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.KoreanCaption2
+        ]
+
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.KoreanCaption1
+        ]
+        let numberString = NSAttributedString(string: st1, attributes: numberAttributes)
+        let textString = NSAttributedString(string: " \(st2)", attributes: textAttributes)
+
+        let finalString = NSMutableAttributedString()
+        finalString.append(numberString)
+        finalString.append(textString)
+        
+        return finalString
+    }
+    
     func configure(csinfo: CSInfo, csMemberCount: Int, exclItemCount: Int) {
         csTitleLabel.text = csinfo.title
-        totalAmountLabel.text = "\(csinfo.totalAmount)"
-        memberCountLabel.text = "\(csMemberCount)"
-        exclItemCountLabel.text = "\(exclItemCount)"
+        let member = attributeStringSet(st1: "\(csMemberCount)", st2: "명")
+        let price = attributeStringSet2(st1: "₩", st2: "\(csinfo.totalAmount)")
+        let excl = attributeStringSet(st1: "\(exclItemCount)", st2: "건")
+        totalAmountLabel.attributedText = price
+        memberCountLabel.attributedText = member
+        exclItemCountLabel.attributedText = excl
         
     }
 

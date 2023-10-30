@@ -11,6 +11,7 @@ import Then
 import SnapKit
 import RxSwift
 import RxCocoa
+import RxAppState
 
 final class JSDetailVC: UIViewController {
     
@@ -68,7 +69,8 @@ final class JSDetailVC: UIViewController {
             $0.backgroundColor = .SurfaceBrandCalmshell
             $0.register(cellType: JSDetailCell.self)
             let layout = UICollectionViewFlowLayout()
-            layout.estimatedItemSize = .init(width: 330, height: 208)
+//            layout.estimatedItemSize = .init(width: 330, height: 208)
+            layout.itemSize = .init(width: 330, height: 208)
             $0.collectionViewLayout = layout
         }
         
@@ -136,17 +138,22 @@ final class JSDetailVC: UIViewController {
     }
     
     func setBinding() {
-        Observable.just(["2", "3","3"])
-            .bind(to: collectionView.rx.items(cellIdentifier: "JSDetailCell", cellType: JSDetailCell.self)) { idx, item, cell in
-//                cell.configure(csinfo: <#T##CSInfo#>, csMemberCount: <#T##Int#>, exclItemCount: <#T##Int#>)
+        viewModel.csinfoList
+            .drive(collectionView.rx.items(cellIdentifier: "JSDetailCell", cellType: JSDetailCell.self)) { idx, item, cell in
+                cell.configure(csinfo: item, csMemberCount: 5, exclItemCount: 5)
             }
             .disposed(by: disposeBag)
         
-        let input = JSDetailVM.Input(nextButtonTapped: nextButton.rx.tap,
+        let input = JSDetailVM.Input(viewDidLoad: self.rx.viewDidLoad,
+                                     nextButtonTapped: nextButton.rx.tap,
                                      title: splitTitleTF.rx.text.orEmpty.asDriver(),
                                      csEditTapped: collectionView.rx.itemSelected)
         
         let output = viewModel.transform(input: input)
+        
+        output.splitTitle
+            .drive(splitTitleTF.rx.text)
+            .disposed(by: disposeBag)
         
         output.titleCount
             .drive(textFiledCounter.rx.text)
