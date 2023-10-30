@@ -10,6 +10,7 @@ import SnapKit
 
 
 class KeyboardButton: UIButton {
+    var btnTitle: String = ""
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupButton()
@@ -22,20 +23,30 @@ class KeyboardButton: UIButton {
     
     convenience init(title: String) {
         self.init(type: .system)
-        setTitle(title, for: .normal)
+        btnTitle = title
+        
         setupButton()
     }
     
     private func setupButton() {
-        // 버튼에 대한 설정을 여기에 추가해주세요.
+        
+        let customFont = UIFont(name: "ONEMobileRegular", size: 30) ?? UIFont.systemFont(ofSize: 20)
+        let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: customFont]
+        let attributedString = NSAttributedString(string: btnTitle, attributes: attributes)
+        setAttributedTitle(attributedString, for: .normal)
+        
+        
+        setTitle(btnTitle, for: .normal)
+        backgroundColor = UIColor(hex: 0xFCFCFE)
         setTitleColor(.black, for: .normal)
-        backgroundColor = .systemYellow
-        layer.cornerRadius = 5.0
+
+      
+        layer.cornerRadius = 8
         layer.borderWidth = 1
         layer.borderColor = UIColor.black.cgColor
-        
+     
         snp.makeConstraints { make in
-            make.height.equalTo(47)
+            make.height.equalTo(54)
             make.width.equalTo(123)
         }
  

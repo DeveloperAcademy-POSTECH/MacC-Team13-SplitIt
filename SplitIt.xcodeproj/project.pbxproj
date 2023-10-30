@@ -389,6 +389,7 @@
 		60115DF22ADBF0DD0050D32C /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
+				DEFE9D862AEF5C11009C693E /* CustomKeyboard */,
 				60AE3EB12AE77395009D9D18 /* SplitShare */,
 				6009C8102AE29DC7008B9EC1 /* Result */,
 				DE73D7142AE65C2700ABF3EF /* AlertView */,
@@ -1010,7 +1011,6 @@
 			children = (
 				DE73D7152AE65C3C00ABF3EF /* View */,
 				DE73D71C2AE6CCBC00ABF3EF /* AlertController.swift */,
-				DEFE9D802AEAAD91009C693E /* CustomKeyBoard.swift */,
 			);
 			path = AlertView;
 			sourceTree = "<group>";
@@ -1020,12 +1020,20 @@
 			children = (
 				DE73D7122AE654D800ABF3EF /* CustomAlertVC.swift */,
 				DE73D7162AE65D1800ABF3EF /* AccountAlertVC.swift */,
-				DE73D71A2AE6B00300ABF3EF /* SecondVC.swift */,
-				DE73D7182AE6A2F100ABF3EF /* TestVC.swift */,
-				DEFE9D822AEAB80A009C693E /* KeyboardButton.swift */,
 				DEFE9D842AEE909A009C693E /* CustomTextFieldInfo.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		DEFE9D862AEF5C11009C693E /* CustomKeyboard */ = {
+			isa = PBXGroup;
+			children = (
+				DEFE9D802AEAAD91009C693E /* CustomKeyBoard.swift */,
+				DEFE9D822AEAB80A009C693E /* KeyboardButton.swift */,
+				DE73D7182AE6A2F100ABF3EF /* TestVC.swift */,
+				DE73D71A2AE6B00300ABF3EF /* SecondVC.swift */,
+			);
+			path = CustomKeyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

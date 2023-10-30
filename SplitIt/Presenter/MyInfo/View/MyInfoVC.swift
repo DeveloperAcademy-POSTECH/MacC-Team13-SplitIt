@@ -115,8 +115,8 @@ class MyInfoVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         userNewInfo()
-        //asapRxData()
     }
+
     
     func userNewInfo() {
         
@@ -174,7 +174,7 @@ class MyInfoVC: UIViewController {
         if let tmpuserName = UserDefaults.standard.string(forKey: "userName"), !tmpuserName.isEmpty { //accountView가 있을 때
             if !tossValue && !kakaoValue && !naverValue  {
                 //간편페이류 없을 떄
-                print(tossValue, kakaoValue, naverValue)
+                //print(tossValue, kakaoValue, naverValue)
                 notUsedPay.isHidden = false
                 tossView.isHidden = true
                 kakaoView.isHidden = true
