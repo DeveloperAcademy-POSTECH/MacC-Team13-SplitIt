@@ -139,12 +139,15 @@ final class JSDetailVC: UIViewController {
     
     func setBinding() {
         viewModel.csinfoList
-            .drive(collectionView.rx.items(cellIdentifier: "JSDetailCell", cellType: JSDetailCell.self)) { idx, item, cell in
-                cell.configure(csinfo: item, csMemberCount: 5, exclItemCount: 5)
+            .drive(collectionView.rx.items(cellIdentifier: "JSDetailCell", cellType: JSDetailCell.self)) { [weak self] idx, item, cell in
+                guard let self = self else { return }
+                let memberCount = self.viewModel.memberCount()
+                let exclCount = self.viewModel.exclItemCount()
+                cell.configure(csinfo: item, csMemberCount: memberCount[idx], exclItemCount: exclCount[idx])
             }
             .disposed(by: disposeBag)
         
-        let input = JSDetailVM.Input(viewDidLoad: self.rx.viewDidLoad,
+        let input = JSDetailVM.Input(viewDidLoad: self.rx.viewWillAppear,
                                      nextButtonTapped: nextButton.rx.tap,
                                      title: splitTitleTF.rx.text.orEmpty.asDriver(),
                                      csEditTapped: collectionView.rx.itemSelected)
@@ -152,6 +155,15 @@ final class JSDetailVC: UIViewController {
         let output = viewModel.transform(input: input)
         
         output.splitTitle
+            .map { [weak self] title in
+                guard let self = self else { return title }
+                if title == "" {
+                    self.textFiledNotice.isHidden = false
+                } else {
+                    self.textFiledNotice.isHidden = true
+                }
+                return title
+            }
             .drive(splitTitleTF.rx.text)
             .disposed(by: disposeBag)
         
@@ -188,6 +200,14 @@ final class JSDetailVC: UIViewController {
                 }
             }
             .drive(splitTitleTF.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.pushCSEditView
+            .drive(onNext: { [weak self] csinfoIdx in
+                guard let self = self else { return }
+                let vc = CSEditListVC(csinfoIdx: csinfoIdx)
+                self.navigationController?.pushViewController(vc, animated: true)
+            })
             .disposed(by: disposeBag)
     }
     

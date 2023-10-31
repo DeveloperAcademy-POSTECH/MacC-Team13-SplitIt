@@ -37,13 +37,17 @@ final class JSDetailVM {
         dataModel.exclItemArr.asDriver()
     }
     
+    var csMemberList: Driver<[CSMember]> {
+        dataModel.csMemberArr.asDriver()
+    }
+    
     init(splitIdx: String = "653e1192001cb7e6e7996ad3") {
         dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: splitIdx)
         self.splitIdx = splitIdx
     }
     
     struct Input {
-        let viewDidLoad: Observable<Void>
+        let viewDidLoad: Observable<Bool>
         let nextButtonTapped: ControlEvent<Void>
         let title: Driver<String>
         let csEditTapped: ControlEvent<IndexPath>
@@ -55,6 +59,7 @@ final class JSDetailVM {
         let textFieldIsValid: Driver<Bool>
         let textFieldIsEmpty: Driver<Bool>
         let splitTitle: Driver<String>
+        let pushCSEditView: Driver<String>
     }
     
     func transform(input: Input) -> Output {
@@ -64,20 +69,20 @@ final class JSDetailVM {
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
         let textFieldCountIsEmpty: Driver<Bool>
         let splitTitle = split.map { $0.title }
+        let csinfoIndex = input.csEditTapped.asDriver()
         
         input.viewDidLoad
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: "653e1192001cb7e6e7996ad3")
-                print("패치 됌 = \(SplitRepository.share.csInfoArr.value.count)")
             })
             .disposed(by: disposeBag)
-
+        
         showNextView
             .asDriver()
             .withLatestFrom(input.title)
             .drive(onNext: {
-//                SplitRepository.share.inputCSInfoWithTitle(title: $0)
+                //                SplitRepository.share.inputCSInfoWithTitle(title: $0)
                 print("\($0)")
             })
             .disposed(by: disposeBag)
@@ -102,12 +107,58 @@ final class JSDetailVM {
             .map{ $0.count > 0 }
             .asDriver()
         
+        let pushEditView: Driver<String> = csinfoIndex
+            .withLatestFrom(self.csinfoList) { indexPath, data in
+                return data[indexPath.row].csInfoIdx
+        }
+        
         return Output(pushNextView: showNextView.asDriver(),
                       titleCount: textFieldCount.asDriver(),
                       textFieldIsValid: textFieldIsValid.asDriver(),
                       textFieldIsEmpty: textFieldCountIsEmpty,
-                      splitTitle: splitTitle)
+                      splitTitle: splitTitle,
+                      pushCSEditView: pushEditView)
+    }
+    
+    func memberCount() -> [Int] {
+        let countsDriver: Driver<[Int]> = csinfoList.flatMapLatest { [weak self] infoList in
+            guard let self = self else { return Driver.empty() }
+            return self.csMemberList.map { members in
+                infoList.map { info in
+                    members.filter { member in
+                        member.csInfoIdx == info.csInfoIdx
+                    }.count
+                }
+            }
+        }
+        
+        var count: [Int] = []
+        countsDriver.drive {
+            count = $0
+        }
+        .disposed(by: disposeBag)
+        
+        return count
+    }
+    
+    func exclItemCount() -> [Int] {
+        let countsDriver: Driver<[Int]> = csinfoList.flatMapLatest { [weak self] infoList in
+            guard let self = self else { return Driver.empty() }
+            return exclList.map { members in
+                infoList.map { info in
+                    members.filter { member in
+                        member.csInfoIdx == info.csInfoIdx
+                    }.count
+                }
+            }
+        }
+        var count: [Int] = []
+        countsDriver.drive {
+            count = $0
+        }
+        .disposed(by: disposeBag)
+        
+        return count
     }
 
 }
-

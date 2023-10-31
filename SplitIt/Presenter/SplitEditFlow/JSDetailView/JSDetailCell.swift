@@ -46,10 +46,14 @@ final class JSDetailCell: UICollectionViewCell, Reusable {
         }
         
         editBtnLabel.do {
+            let atrString = NSMutableAttributedString(string: "수정하기")
+            atrString.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: atrString.length))
+            
             let image = UIImage(systemName: "chevron.right")!
                 .withRenderingMode(.alwaysTemplate)
+            
             $0.tintColor = .AppColorGrayscale1000
-            $0.setTitle("수정하기", for: .normal)
+            $0.setAttributedTitle(atrString, for: .normal)
             $0.setImage(image, for: .normal)
             $0.titleLabel?.font = .KoreanCaption2
             $0.semanticContentAttribute = .forceRightToLeft
@@ -118,12 +122,36 @@ final class JSDetailCell: UICollectionViewCell, Reusable {
         }
         
         let divView1 = UIView().then {
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.TextSecondary.cgColor
+            let lineDashPattern: [NSNumber]? = [6, 6]
+
+            let shapeLayer = CAShapeLayer()
+            shapeLayer.strokeColor = UIColor.white.cgColor
+            shapeLayer.lineWidth = 1
+            shapeLayer.lineDashPattern = lineDashPattern
+            shapeLayer.strokeColor = UIColor.BorderSecondary.cgColor
+
+            let path = CGMutablePath()
+            path.addLines(between: [CGPoint(x: 0, y: 0),
+                                    CGPoint(x: UIScreen.main.bounds.width - 96, y: 0)])
+            
+            shapeLayer.path = path
+            $0.layer.addSublayer(shapeLayer)
         }
         let divView2 = UIView().then {
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.TextSecondary.cgColor
+            let lineDashPattern: [NSNumber]? = [6, 6]
+
+            let shapeLayer = CAShapeLayer()
+            shapeLayer.strokeColor = UIColor.white.cgColor
+            shapeLayer.lineWidth = 1
+            shapeLayer.lineDashPattern = lineDashPattern
+            shapeLayer.strokeColor = UIColor.BorderSecondary.cgColor
+
+            let path = CGMutablePath()
+            path.addLines(between: [CGPoint(x: 0, y: 0),
+                                    CGPoint(x: UIScreen.main.bounds.width - 96, y: 0)])
+            
+            shapeLayer.path = path
+            $0.layer.addSublayer(shapeLayer)
         }
         
         divView1.snp.makeConstraints {
@@ -206,6 +234,7 @@ final class JSDetailCell: UICollectionViewCell, Reusable {
         exclItemCountLabel.attributedText = excl
         
     }
-
+ 
     
 }
+
