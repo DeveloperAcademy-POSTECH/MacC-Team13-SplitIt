@@ -14,10 +14,10 @@ struct ExclItem {
     var price: Int
     var csInfoIdx: String
     
-    init(csInfoIdx: String, name: String) {
+    init(csInfoIdx: String, name: String, price: Int) {
         self.exclItemIdx = ObjectId.generate().stringValue
         self.name = name
-        self.price = 0
+        self.price = price
         self.csInfoIdx = csInfoIdx
     }
 }

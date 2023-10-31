@@ -10,7 +10,7 @@ import RxDataSources
 struct ExclMemberSectionModel {
     var type: ExclMemberSectionType
     
-    static let addExclItemButton = ExclMemberSectionModel(type: ExclMemberSectionType.button(ExclMemberSection(exclItem: ExclItem(csInfoIdx: "", name: ""), items: [ExclMember(exclItemIdx: "", name: "")])))
+    static let addExclItemButton = ExclMemberSectionModel(type: ExclMemberSectionType.button(ExclMemberSection(exclItem: ExclItem(csInfoIdx: "", name: "", price: 0), items: [ExclMember(exclItemIdx: "", name: "", isTarget: false)])))
 }
 
 enum ExclMemberSectionType {

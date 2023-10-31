@@ -111,8 +111,27 @@ extension SplitRepository {
     
     /// CSInfoIdx, name으로 ExclItem 생성
     func createExclItemWithName(name: String) {
-        let newExclItem: ExclItem = ExclItem(csInfoIdx: currentCSInfo!.csInfoIdx, name: name)
+        let newExclItem: ExclItem = ExclItem(csInfoIdx: currentCSInfo!.csInfoIdx, name: name, price: 0)
         self.newExclItem = newExclItem
+    }
+    
+    /// CSInfoIdx, name으로 ExclItem 생성
+    func createExclItem(name: String, price: Int, exclMember: [ExclItemTable]) {
+        // ExclItem Create
+        let newExclItem: ExclItem = ExclItem(csInfoIdx: currentCSInfo!.csInfoIdx, name: name, price: price)
+        var preExclItemArr: [ExclItem] = exclItemArr.value
+        preExclItemArr.append(newExclItem)
+        exclItemArr.accept(preExclItemArr)
+        
+        var currentExclMemberArr = exclMemberArr.value
+        // ExclMember Create
+        for item in exclMember {
+            let newExclMember = ExclMember(exclItemIdx: newExclItem.exclItemIdx, name: item.name, isTarget: item.isTarget)
+            
+            currentExclMemberArr.append(newExclMember)
+        }
+        
+        exclMemberArr.accept(currentExclMemberArr)
     }
     
     /// 현재 splitIdx를 기준으로 CSInfo부터 아래 데이터들만 새로 생성
@@ -147,7 +166,7 @@ extension SplitRepository {
         var exclMembers: [ExclMember] = exclMemberArr.value
         
         for name in csMemberNames {
-            let newExclMember: ExclMember = ExclMember(exclItemIdx: exclItemIdx, name: name)
+            let newExclMember: ExclMember = ExclMember(exclItemIdx: exclItemIdx, name: name, isTarget: false)
             exclMembers.append(newExclMember)
         }
         
