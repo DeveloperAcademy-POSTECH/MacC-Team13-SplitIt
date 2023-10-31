@@ -643,6 +643,8 @@
 		6032DCEB2AEE542C004A6BFA /* ExclItemModal */ = {
 			isa = PBXGroup;
 			children = (
+				604CDC812AF161B500416454 /* ViewModel */,
+				604CDC802AF161B000416454 /* View */,
 			);
 			path = ExclItemModal;
 			sourceTree = "<group>";
@@ -653,9 +655,6 @@
 				6032DCF42AEE8120004A6BFA /* Cell */,
 				6032DCEE2AEE5452004A6BFA /* ExclItemInputVC.swift */,
 				604CDC7A2AF14A8100416454 /* ExclItemInputEmptyView.swift */,
-				6032DCF92AEF5F68004A6BFA /* ExclItemInfoAddModalVC.swift */,
-				604CDC7C2AF1522C00416454 /* ExclItemInfoEditModalVC.swift */,
-				60104CE82AEFF73800489AAD /* ExclItemInfoModalSection.swift */,
 				607ED87D2AF0D06F00A82349 /* ExclItemInfo.swift */,
 			);
 			path = View;
@@ -665,8 +664,6 @@
 			isa = PBXGroup;
 			children = (
 				6032DCF02AEE6FFC004A6BFA /* ExclItemInputVM.swift */,
-				6032DCFB2AEF5FBE004A6BFA /* ExclItemInfoAddModalVM.swift */,
-				604CDC7E2AF1527500416454 /* ExclItemInfoEditModalVM.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -676,6 +673,33 @@
 			children = (
 				6032DCF52AEE8126004A6BFA /* ExclItemCell.swift */,
 				6032DCF72AEF4B5B004A6BFA /* ExclItemAddCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		604CDC802AF161B000416454 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				604CDC822AF161CB00416454 /* Cell */,
+				6032DCF92AEF5F68004A6BFA /* ExclItemInfoAddModalVC.swift */,
+				604CDC7C2AF1522C00416454 /* ExclItemInfoEditModalVC.swift */,
+				60104CE82AEFF73800489AAD /* ExclItemInfoModalSection.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		604CDC812AF161B500416454 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				6032DCFB2AEF5FBE004A6BFA /* ExclItemInfoAddModalVM.swift */,
+				604CDC7E2AF1527500416454 /* ExclItemInfoEditModalVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		604CDC822AF161CB00416454 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
 				60104CE42AEFF6F700489AAD /* ExclItemInfoModalCell.swift */,
 				60104CE62AEFF70D00489AAD /* ExclItemInfoDeactiveModalCell.swift */,
 			);
