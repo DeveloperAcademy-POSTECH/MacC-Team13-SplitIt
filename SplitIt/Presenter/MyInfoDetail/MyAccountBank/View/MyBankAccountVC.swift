@@ -95,8 +95,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
                 self?.accountTextRelay.accept(self?.accountTextField.text)
             })
             .disposed(by: disposeBag)
-
-        print(accountTextRelay)
     }
     
     //수정버튼 활성화 비활성화 선택해주는 함수
