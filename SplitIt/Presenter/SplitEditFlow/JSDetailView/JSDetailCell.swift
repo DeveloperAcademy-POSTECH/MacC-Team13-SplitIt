@@ -195,7 +195,7 @@ final class JSDetailCell: UICollectionViewCell, Reusable {
         return finalString
     }
     
-    func attributeStringSet2(st1: String, st2: String) -> NSMutableAttributedString {
+    func attributeStringSet2(st1: String, st2: Int) -> NSMutableAttributedString {
         let numberAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.KoreanCaption2
         ]
@@ -203,8 +203,13 @@ final class JSDetailCell: UICollectionViewCell, Reusable {
         let textAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.KoreanCaption1
         ]
+        
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        let formattedPrice = formatter.string(from: NSNumber(value: st2)) ?? "\(st2)"
+        
         let numberString = NSAttributedString(string: st1, attributes: numberAttributes)
-        let textString = NSAttributedString(string: " \(st2)", attributes: textAttributes)
+        let textString = NSAttributedString(string: " \(formattedPrice)", attributes: textAttributes)
 
         let finalString = NSMutableAttributedString()
         finalString.append(numberString)
@@ -216,7 +221,7 @@ final class JSDetailCell: UICollectionViewCell, Reusable {
     func configure(csinfo: CSInfo, csMemberCount: Int, exclItemCount: Int) {
         csTitleLabel.text = csinfo.title
         let member = attributeStringSet(st1: "\(csMemberCount)", st2: "명")
-        let price = attributeStringSet2(st1: "₩", st2: "\(csinfo.totalAmount)")
+        let price = attributeStringSet2(st1: "₩", st2: csinfo.totalAmount)
         let excl = attributeStringSet(st1: "\(exclItemCount)", st2: "건")
         totalAmountLabel.attributedText = price
         memberCountLabel.attributedText = member
