@@ -669,9 +669,6 @@ class MyInfoVC: UIViewController {
             make.leading.equalTo(accountView.snp.leading).offset(16)
         }
         
-       
-   
-        
         splitLabel.snp.makeConstraints { make in
             make.top.equalTo(backView.snp.bottom).offset(16)
             make.leading.equalToSuperview().offset(36)
@@ -681,7 +678,7 @@ class MyInfoVC: UIViewController {
         friendView.snp.makeConstraints { make in
             make.height.equalTo(52)
             make.width.equalTo(330)
-            make.top.equalTo(splitLabel.snp.bottom).offset(4)
+            make.top.equalTo(splitLabel.snp.bottom).offset(8)
             make.centerX.equalToSuperview()
         }
         
