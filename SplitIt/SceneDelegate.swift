@@ -15,7 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        let rootVC = EditCSListView()
+        let rootVC = EditCSListVC(csinfoIdx: "653e1192001cb7e6e7996ad4")
         let navigationController = UINavigationController(rootViewController: rootVC)
         rootVC.navigationController?.isNavigationBarHidden = true
         window?.rootViewController = navigationController

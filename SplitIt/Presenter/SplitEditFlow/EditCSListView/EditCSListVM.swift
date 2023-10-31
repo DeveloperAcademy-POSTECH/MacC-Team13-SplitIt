@@ -15,22 +15,18 @@ final class EditCSListVM {
     
     let dataModel = SplitRepository.share
     let maxTextCount = 8
-    let splitIdx: String
+    let csInfoIdx: String
     
-    var split: Driver<Split> {
-        dataModel.splitArr
+    var csinfo: Driver<CSInfo> {
+        dataModel.csInfoArr
             .asDriver()
-            .flatMap { splitList -> Driver<Split> in
-                if let firstSplit = splitList.first {
-                    return Driver.just(firstSplit)
+            .flatMap { csinfoList -> Driver<CSInfo> in
+                if let firstcsinfo = csinfoList.first {
+                    return Driver.just(firstcsinfo)
                 } else {
                     return Driver.empty()
                 }
             }
-    }
-    
-    var csinfoList: Driver<[CSInfo]> {
-        dataModel.csInfoArr.asDriver()
     }
     
     var exclList: Driver<[ExclItem]> {
@@ -41,67 +37,151 @@ final class EditCSListVM {
         dataModel.csMemberArr.asDriver()
     }
     
-    init(splitIdx: String = "653e1192001cb7e6e7996ad3") {
-        dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: splitIdx)
-        self.splitIdx = splitIdx
+    init(csinfoIdx: String) {
+        dataModel.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: csinfoIdx)
+        self.csInfoIdx = csinfoIdx
     }
     
     struct Input {
         let viewDidLoad: Observable<Bool>
-        let nextButtonTapped: ControlEvent<Void>
-        let csEditTapped: ControlEvent<IndexPath>
+        let titlePriceEditTapped: ControlEvent<Void>
+        let memberEditTapped: ControlEvent<Void>
+        let exclItemEditTapped: ControlEvent<Void>
     }
     
     struct Output {
-        let pushNextView: Driver<Void>
         let csTitle: Driver<String>
-        let pushCSEditView: Driver<String>
+        let csTotalAmount: Driver<NSMutableAttributedString>
+        let csMember: Driver<NSMutableAttributedString>
+        let csExclItemString: Driver<NSMutableAttributedString>
+        let pushCSEditTitlePriceView: Driver<Void>
+        let pushCSMemberEditView: Driver<Void>
+        let pushCSExclItemEditView: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
+        let title = csinfo.map { $0.title }
+        let totalAmount: Driver<NSMutableAttributedString> = csinfo.map { [weak self] csinfo in
+            guard let self = self else { return NSMutableAttributedString(string: "") }
+            return self.totalAmountAttributeString(price: csinfo.totalAmount)
+        }
         
-        return Output()
+        let member: Driver<NSMutableAttributedString> = csMemberList.map { [weak self] members in
+            guard let self = self else { return NSMutableAttributedString(string: "") }
+            return self.memberAttributeString(member: members)
+        }
+        
+        let exclString: Driver<NSMutableAttributedString> = exclList.map { [weak self] items in
+            guard let self = self else { return NSMutableAttributedString(string: "") }
+            return self.exclItemAttributeString(items: items)
+        }
+        
+        
+        let titlePriceEditView = input.titlePriceEditTapped.asDriver()
+        let memberEditView = input.memberEditTapped.asDriver()
+        let exclEditView = input.exclItemEditTapped.asDriver()
+        
+        
+        return Output(csTitle: title,
+                      csTotalAmount: totalAmount,
+                      csMember: member,
+                      csExclItemString: exclString,
+                      pushCSEditTitlePriceView: titlePriceEditView,
+                      pushCSMemberEditView: memberEditView,
+                      pushCSExclItemEditView: exclEditView)
     }
     
-    func memberCount() -> [Int] {
-        let countsDriver: Driver<[Int]> = csinfoList.flatMapLatest { [weak self] infoList in
-            guard let self = self else { return Driver.empty() }
-            return self.csMemberList.map { members in
-                infoList.map { info in
-                    members.filter { member in
-                        member.csInfoIdx == info.csInfoIdx
-                    }.count
-                }
-            }
+    func memberAttributeString(member: [CSMember]) -> NSMutableAttributedString {
+        let numberAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.KoreanBody
+        ]
+
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.KoreanCaption2
+        ]
+        
+        var name = ""
+        var count = ""
+        
+        switch member.count {
+        case 0:
+            name = ""
+            count = ""
+        case 1:
+            name = member[0].name
+            count = ""
+        default:
+            name = member[1].name
+            count = "\(member.count - 1)"
         }
         
-        var count: [Int] = []
-        countsDriver.drive {
-            count = $0
-        }
-        .disposed(by: disposeBag)
+        let numberString = NSAttributedString(string: name, attributes: numberAttributes)
+        let textString = NSAttributedString(string: " 외 \(count)인", attributes: textAttributes)
+
+        let finalString = NSMutableAttributedString()
+        finalString.append(numberString)
+        finalString.append(textString)
         
-        return count
+        return finalString
     }
     
-    func exclItemCount() -> [Int] {
-        let countsDriver: Driver<[Int]> = csinfoList.flatMapLatest { [weak self] infoList in
-            guard let self = self else { return Driver.empty() }
-            return exclList.map { members in
-                infoList.map { info in
-                    members.filter { member in
-                        member.csInfoIdx == info.csInfoIdx
-                    }.count
-                }
-            }
-        }
-        var count: [Int] = []
-        countsDriver.drive {
-            count = $0
-        }
-        .disposed(by: disposeBag)
+    func exclItemAttributeString(items: [ExclItem]) -> NSMutableAttributedString {
+        let numberAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.KoreanBody
+        ]
+
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.KoreanCaption2
+        ]
+        var name = ""
+        var count = ""
         
-        return count
+        switch items.count {
+        case 0:
+            let numberString = NSAttributedString(string: "따로 정산할 것이 없어요!", attributes: numberAttributes)
+            let finalString = NSMutableAttributedString()
+            finalString.append(numberString)
+            return finalString
+        case 1:
+            name = items[0].name
+            count = ""
+        default:
+            name = items[1].name
+            count = "\(items.count - 1)"
+        }
+        
+        let numberString = NSAttributedString(string: name, attributes: numberAttributes)
+        let textString = NSAttributedString(string: " 외 \(count)건", attributes: textAttributes)
+
+        let finalString = NSMutableAttributedString()
+        finalString.append(numberString)
+        finalString.append(textString)
+        
+        return finalString
     }
+    
+    func totalAmountAttributeString(price: Int) -> NSMutableAttributedString {
+        let numberAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.KoreanCaption2
+        ]
+
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.KoreanBody
+        ]
+
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        let formattedPrice = formatter.string(from: NSNumber(value: price)) ?? "\(price)"
+
+        let numberString = NSAttributedString(string: "₩", attributes: numberAttributes)
+        let textString = NSAttributedString(string: " \(formattedPrice)", attributes: textAttributes)
+
+        let finalString = NSMutableAttributedString()
+        finalString.append(numberString)
+        finalString.append(textString)
+        
+        return finalString
+    }
+
 
 }

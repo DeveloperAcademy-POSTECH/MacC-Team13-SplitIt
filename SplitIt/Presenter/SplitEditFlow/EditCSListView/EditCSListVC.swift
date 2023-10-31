@@ -12,9 +12,11 @@ import RxSwift
 import RxCocoa
 import Reusable
 
-class EditCSListView: UIViewController {
+class EditCSListVC: UIViewController {
     
     var disposeBag = DisposeBag()
+    
+    let viewModel: EditCSListVM
     
     let headerView = NaviHeader()
     let titleLabel = UILabel()
@@ -24,7 +26,17 @@ class EditCSListView: UIViewController {
     let memberEditBtn = DefaultEditButton()
     let exclLabel = UILabel()
     let exclEditBtn = DefaultEditButton()
-
+    
+    init(csinfoIdx: String) {
+        self.disposeBag = DisposeBag()
+        self.viewModel = EditCSListVM(csinfoIdx: csinfoIdx)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setAttribute()
@@ -41,21 +53,8 @@ class EditCSListView: UIViewController {
         }
         
         titleLabel.do {
-            $0.text = "완마카세 장보기"
             $0.textColor = .TextPrimary
             $0.font = .KoreanTitle3
-        }
-        
-        totalAmountLabel.do {
-            $0.attributedText = attributeStringSet2(st1: "₩", st2: "30,000")
-        }
-        
-        memberLabel.do {
-            $0.attributedText = attributeStringSet1(st1: "반갑코리", st2: "외 5인")
-        }
-        
-        exclLabel.do {
-            $0.attributedText = attributeStringSet1(st1: "소주 안먹음", st2: "외 1건")
         }
     }
     
@@ -164,13 +163,43 @@ class EditCSListView: UIViewController {
     }
     
     func setBinding() {
+        let input = EditCSListVM.Input(viewDidLoad: self.rx.viewWillAppear,
+                                       titlePriceEditTapped: titlePriceEditBtn.rx.tap,
+                                       memberEditTapped: memberEditBtn.rx.tap,
+                                       exclItemEditTapped: exclEditBtn.rx.tap)
         
+        let output = viewModel.transform(input: input)
+        
+        output.csTitle
+            .drive(titleLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.csTotalAmount
+            .drive(onNext: { [weak self] attriString in
+                guard let self = self else { return }
+                self.totalAmountLabel.attributedText = attriString
+            })
+            .disposed(by: disposeBag)
+        
+        output.csMember
+            .drive(onNext: { [weak self] attriString in
+                guard let self = self else { return }
+                self.memberLabel.attributedText = attriString
+            })
+            .disposed(by: disposeBag)
+        
+        output.csExclItemString
+            .drive(onNext: { [weak self] attriString in
+                guard let self = self else { return }
+                self.exclLabel.attributedText = attriString
+            })
+            .disposed(by: disposeBag)
     }
 
 }
 
 // MARK: View Draw Function
-extension EditCSListView {
+extension EditCSListVC {
     private func setTitleView() -> UIView {
         let totalPriceStack = UIView().then {
             $0.addSubview(titleLabel)
@@ -203,41 +232,5 @@ extension EditCSListView {
             $0.layer.borderColor = UIColor.BorderSecondary.cgColor
         }
         return view
-    }
-    
-    func attributeStringSet1(st1: String, st2: String) -> NSMutableAttributedString {
-        let numberAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanBody
-        ]
-
-        let textAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanCaption2
-        ]
-        let numberString = NSAttributedString(string: st1, attributes: numberAttributes)
-        let textString = NSAttributedString(string: " \(st2)", attributes: textAttributes)
-
-        let finalString = NSMutableAttributedString()
-        finalString.append(numberString)
-        finalString.append(textString)
-        
-        return finalString
-    }
-    
-    func attributeStringSet2(st1: String, st2: String) -> NSMutableAttributedString {
-        let numberAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanCaption2
-        ]
-
-        let textAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanBody
-        ]
-        let numberString = NSAttributedString(string: st1, attributes: numberAttributes)
-        let textString = NSAttributedString(string: " \(st2)", attributes: textAttributes)
-
-        let finalString = NSMutableAttributedString()
-        finalString.append(numberString)
-        finalString.append(textString)
-        
-        return finalString
     }
 }

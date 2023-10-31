@@ -112,7 +112,7 @@
 		86C65FF22AEF970F00A7942A /* JSDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF12AEF970F00A7942A /* JSDetailVC.swift */; };
 		86C65FF42AEF985A00A7942A /* JSDetailVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF32AEF985A00A7942A /* JSDetailVM.swift */; };
 		86C65FF62AEF9ADF00A7942A /* JSDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF52AEF9ADF00A7942A /* JSDetailCell.swift */; };
-		86C65FFC2AF0F4D000A7942A /* EditCSListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FFB2AF0F4D000A7942A /* EditCSListView.swift */; };
+		86C65FFC2AF0F4D000A7942A /* EditCSListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FFB2AF0F4D000A7942A /* EditCSListVC.swift */; };
 		86C65FFE2AF0F6FB00A7942A /* DefaultEditButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FFD2AF0F6FB00A7942A /* DefaultEditButton.swift */; };
 		86C660002AF126DE00A7942A /* EditCSListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FFF2AF126DE00A7942A /* EditCSListVM.swift */; };
 		86D1E0C52AE6B4C100FBF610 /* ExclEditPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D1E0C42AE6B4C100FBF610 /* ExclEditPageController.swift */; };
@@ -254,7 +254,7 @@
 		86C65FF12AEF970F00A7942A /* JSDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSDetailVC.swift; sourceTree = "<group>"; };
 		86C65FF32AEF985A00A7942A /* JSDetailVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSDetailVM.swift; sourceTree = "<group>"; };
 		86C65FF52AEF9ADF00A7942A /* JSDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSDetailCell.swift; sourceTree = "<group>"; };
-		86C65FFB2AF0F4D000A7942A /* EditCSListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListView.swift; sourceTree = "<group>"; };
+		86C65FFB2AF0F4D000A7942A /* EditCSListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVC.swift; sourceTree = "<group>"; };
 		86C65FFD2AF0F6FB00A7942A /* DefaultEditButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultEditButton.swift; sourceTree = "<group>"; };
 		86C65FFF2AF126DE00A7942A /* EditCSListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVM.swift; sourceTree = "<group>"; };
 		86D1E0C42AE6B4C100FBF610 /* ExclEditPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclEditPageController.swift; sourceTree = "<group>"; };
@@ -872,7 +872,7 @@
 		86C65FFA2AF0F4B300A7942A /* EditCSListView */ = {
 			isa = PBXGroup;
 			children = (
-				86C65FFB2AF0F4D000A7942A /* EditCSListView.swift */,
+				86C65FFB2AF0F4D000A7942A /* EditCSListVC.swift */,
 				86C65FFF2AF126DE00A7942A /* EditCSListVM.swift */,
 			);
 			path = EditCSListView;
@@ -1314,7 +1314,7 @@
 				60AD20F72ADF838300EFACCD /* ExclMemberCell.swift in Sources */,
 				C2A797A22AE277F90049E709 /* HistorySectionHeader.swift in Sources */,
 				86C65FF42AEF985A00A7942A /* JSDetailVM.swift in Sources */,
-				86C65FFC2AF0F4D000A7942A /* EditCSListView.swift in Sources */,
+				86C65FFC2AF0F4D000A7942A /* EditCSListVC.swift in Sources */,
 				60AD20FD2ADF846600EFACCD /* ExclMemberSectionBackground.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
