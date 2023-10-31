@@ -72,7 +72,7 @@ class ExclItemInputVC: UIViewController {
     }
     
     func setTableView() {
-        let rowHeight = 114.0 + 8.0
+        let rowHeight = 129.0 + 8.0
         tableView.do {
             $0.register(cellType: ExclItemCell.self)
             $0.backgroundColor = .SurfacePrimary
