@@ -21,6 +21,7 @@ class ExclItemInputVC: UIViewController {
     let exclItemAddButton = NewSPButton()
     
     let contentView = UIView()
+    let emptyView = ExclItemInputEmptyView()
     let tableView = UITableView(frame: .zero)
     
     let nextButton = NewSPButton()
@@ -79,7 +80,7 @@ class ExclItemInputVC: UIViewController {
     }
     
     func setLayout() {
-        [header, exclListLabel, exclItemCountLabel, exclItemAddButton, tableView, nextButton].forEach {
+        [header, exclListLabel, exclItemCountLabel, exclItemAddButton, tableView, emptyView, nextButton].forEach {
             view.addSubview($0)
         }
         
@@ -109,6 +110,12 @@ class ExclItemInputVC: UIViewController {
         tableView.snp.makeConstraints {
             $0.top.equalTo(exclListLabel.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview().inset(30)
+        }
+        
+        emptyView.snp.makeConstraints {
+            $0.top.equalTo(tableView.snp.top)
+            $0.leading.trailing.equalTo(tableView)
+            $0.height.equalTo(emptyView.snp.width).dividedBy(3)
         }
         
         nextButton.snp.makeConstraints {
@@ -148,6 +155,14 @@ class ExclItemInputVC: UIViewController {
                 vc.modalPresentationStyle = .formSheet
                 vc.modalTransitionStyle = .coverVertical
                 self.present(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        output.showEmptyView
+            .drive(onNext: { [weak self] tableViewisEmpty in
+                guard let self = self else { return }
+                emptyView.isHidden = !tableViewisEmpty
+                tableView.isHidden = tableViewisEmpty
             })
             .disposed(by: disposeBag)
     }

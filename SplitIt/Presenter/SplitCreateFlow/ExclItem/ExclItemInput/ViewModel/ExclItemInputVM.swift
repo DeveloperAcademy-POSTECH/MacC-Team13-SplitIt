@@ -23,12 +23,14 @@ class ExclItemInputVM {
         let exclItemsRelay: BehaviorRelay<[ExclItemInfo]>
         let nextButtonIsEnable: Driver<Bool>
         let showExclItemInfoModal: Driver<Void>
+        let showEmptyView: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
         let showResultView = input.nextButtonTapped
         let showExclItemInfoModal = input.exclItemAddButtonTapped
         let nextButtonIsEnable: Driver<Bool>
+        let showEmptyView = BehaviorRelay<Bool>(value: false)
 
         let exclItemRepository = SplitRepository.share.exclItemArr
         let exclMemberRepository = SplitRepository.share.exclMemberArr
@@ -48,6 +50,12 @@ class ExclItemInputVM {
             .asDriver(onErrorJustReturn: [])
             .drive(exclItemsRelay)
             .disposed(by: disposeBag)
+        
+        exclItemsRelay
+            .map{$0.count == 0}
+            .asDriver(onErrorJustReturn: false)
+            .drive(showEmptyView)
+            .disposed(by: disposeBag)
 
         nextButtonIsEnable = exclItemsRelay
             .map{ $0.count > 0 }
@@ -56,7 +64,8 @@ class ExclItemInputVM {
         return Output(showResultView: showResultView.asDriver(),
                       exclItemsRelay: exclItemsRelay,
                       nextButtonIsEnable: nextButtonIsEnable,
-                      showExclItemInfoModal: showExclItemInfoModal.asDriver())
+                      showExclItemInfoModal: showExclItemInfoModal.asDriver(),
+                      showEmptyView: showEmptyView.asDriver(onErrorJustReturn: false))
     }
 
 }
