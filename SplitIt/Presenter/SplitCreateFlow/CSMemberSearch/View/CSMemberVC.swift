@@ -16,7 +16,7 @@ class CSMemberVC: UIViewController, Reusable {
     let disposeBag = DisposeBag()
     let viewModel = CSMemberVM()
     
-    let header = NaviHeader()
+    let header = SPNavigationBar()
     let titleLabel = UILabel()
     let searchBarButton = UIButton()
     let buttonTitleLabel = UILabel()
@@ -37,8 +37,7 @@ class CSMemberVC: UIViewController, Reusable {
         view.backgroundColor = .SurfaceBrandCalmshell
         
         header.do {
-            $0.applyStyle(.csMember)
-            $0.setBackButton(viewController: self)
+            $0.applyStyle(style: .csMemberCreate, vc: self)
         }
         
         titleLabel.do {
@@ -102,9 +101,9 @@ class CSMemberVC: UIViewController, Reusable {
         }
         
         header.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
-            $0.height.equalTo(30)
-            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(96)
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
         }
         
         titleLabel.snp.makeConstraints {

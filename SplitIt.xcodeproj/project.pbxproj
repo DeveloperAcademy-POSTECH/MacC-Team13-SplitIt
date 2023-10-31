@@ -24,6 +24,7 @@
 		1A4DB22B2ADE68E400616243 /* SplitRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB22A2ADE68E400616243 /* SplitRepository.swift */; };
 		1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */; };
 		1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2522ADEB24F00616243 /* MemberLog.swift */; };
+		1A8B05DC2AF0E15A00CF5BC5 /* SPNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8B05DB2AF0E15A00CF5BC5 /* SPNavigationBar.swift */; };
 		1AB8418D2AEBFEAC006613A0 /* CSMemberSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8418C2AEBFEAC006613A0 /* CSMemberSearchVC.swift */; };
 		1AB8418F2AEC0D37006613A0 /* CSMemberSearchVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8418E2AEC0D37006613A0 /* CSMemberSearchVM.swift */; };
 		1AB841912AEC1270006613A0 /* MemberCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB841902AEC1270006613A0 /* MemberCheck.swift */; };
@@ -32,7 +33,7 @@
 		1AF5F2B32AEE6D5F00DFB71A /* CSMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF5F2B22AEE6D5F00DFB71A /* CSMemberVC.swift */; };
 		1AF5F2B52AEE6D6C00DFB71A /* CSMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF5F2B42AEE6D6C00DFB71A /* CSMemberVM.swift */; };
 		1AF5F2B72AEE7D5000DFB71A /* CSMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF5F2B62AEE7D5000DFB71A /* CSMemberCell.swift */; };
-		1AF9F0972AE2A10D000F580B /* NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF9F0962AE2A10D000F580B /* NavigationBar.swift */; };
+		1AF9F0972AE2A10D000F580B /* NaviHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF9F0962AE2A10D000F580B /* NaviHeader.swift */; };
 		6009C8142AE29DF4008B9EC1 /* ResultVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6009C8132AE29DF4008B9EC1 /* ResultVC.swift */; };
 		6009C8162AE29DFB008B9EC1 /* ResultVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6009C8152AE29DFB008B9EC1 /* ResultVM.swift */; };
 		6009C8192AE29E5D008B9EC1 /* ResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6009C8182AE29E5D008B9EC1 /* ResultCell.swift */; };
@@ -181,6 +182,7 @@
 		1A4DB22A2ADE68E400616243 /* SplitRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitRepository.swift; sourceTree = "<group>"; };
 		1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMemberLog.swift; sourceTree = "<group>"; };
 		1A4DB2522ADEB24F00616243 /* MemberLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberLog.swift; sourceTree = "<group>"; };
+		1A8B05DB2AF0E15A00CF5BC5 /* SPNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPNavigationBar.swift; sourceTree = "<group>"; };
 		1AB8418C2AEBFEAC006613A0 /* CSMemberSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberSearchVC.swift; sourceTree = "<group>"; };
 		1AB8418E2AEC0D37006613A0 /* CSMemberSearchVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberSearchVM.swift; sourceTree = "<group>"; };
 		1AB841902AEC1270006613A0 /* MemberCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCheck.swift; sourceTree = "<group>"; };
@@ -189,7 +191,7 @@
 		1AF5F2B22AEE6D5F00DFB71A /* CSMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberVC.swift; sourceTree = "<group>"; };
 		1AF5F2B42AEE6D6C00DFB71A /* CSMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberVM.swift; sourceTree = "<group>"; };
 		1AF5F2B62AEE7D5000DFB71A /* CSMemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberCell.swift; sourceTree = "<group>"; };
-		1AF9F0962AE2A10D000F580B /* NavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBar.swift; sourceTree = "<group>"; };
+		1AF9F0962AE2A10D000F580B /* NaviHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaviHeader.swift; sourceTree = "<group>"; };
 		6009C8132AE29DF4008B9EC1 /* ResultVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultVC.swift; sourceTree = "<group>"; };
 		6009C8152AE29DFB008B9EC1 /* ResultVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultVM.swift; sourceTree = "<group>"; };
 		6009C8182AE29E5D008B9EC1 /* ResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCell.swift; sourceTree = "<group>"; };
@@ -976,8 +978,9 @@
 			children = (
 				C2A797932AE274F10049E709 /* SPTextField.swift */,
 				C2A797952AE275110049E709 /* SPButton.swift */,
-				1AF9F0962AE2A10D000F580B /* NavigationBar.swift */,
+				1AF9F0962AE2A10D000F580B /* NaviHeader.swift */,
 				C229F5192AEA442E00F9E28D /* NewSPButton.swift */,
+				1A8B05DB2AF0E15A00CF5BC5 /* SPNavigationBar.swift */,
 				86C65FFD2AF0F6FB00A7942A /* DefaultEditButton.swift */,
 			);
 			path = Components;
@@ -1303,6 +1306,7 @@
 				869D1AD52AE52AEC00D166B1 /* CSTitleEditVM.swift in Sources */,
 				DE73D71D2AE6CCBC00ABF3EF /* AlertController.swift in Sources */,
 				6078ACD02ADA74AC00995811 /* HomeVC.swift in Sources */,
+				1A8B05DC2AF0E15A00CF5BC5 /* SPNavigationBar.swift in Sources */,
 				86D1E0C52AE6B4C100FBF610 /* ExclEditPageController.swift in Sources */,
 				DE73D6F72AE1983200ABF3EF /* MemberLogVC.swift in Sources */,
 				86C660002AF126DE00A7942A /* EditCSListVM.swift in Sources */,
@@ -1364,7 +1368,7 @@
 				C2A797A02AE277AF0049E709 /* CreateDateSection.swift in Sources */,
 				6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */,
 				60AD20F02ADF811A00EFACCD /* ExclMemberVC.swift in Sources */,
-				1AF9F0972AE2A10D000F580B /* NavigationBar.swift in Sources */,
+				1AF9F0972AE2A10D000F580B /* NaviHeader.swift in Sources */,
 				60115E1D2ADD2B5E0050D32C /* CSMemberInputVC.swift in Sources */,
 				DE73D6E52AE0D12C00ABF3EF /* MyBankAccountVM.swift in Sources */,
 				1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */,
