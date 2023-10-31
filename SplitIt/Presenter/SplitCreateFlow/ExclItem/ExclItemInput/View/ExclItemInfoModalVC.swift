@@ -250,13 +250,6 @@ class ExclItemInfoModalVC: UIViewController, UIScrollViewDelegate {
             })
             .disposed(by: disposeBag)
         
-        output.addExclItem
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.dismiss(animated: true)
-            })
-            .disposed(by: disposeBag)
-        
         output.titleCount
             .drive(textFiledCounter.rx.text)
             .disposed(by: disposeBag)

@@ -29,7 +29,6 @@ class ExclItemInfoModalVM {
     }
     
     struct Output {
-        let addExclItem: Driver<Void>
         let titleCount: Driver<String>
         let totalAmount: Driver<String>
         let textFieldIsValid: Driver<Bool>
@@ -44,7 +43,6 @@ class ExclItemInfoModalVM {
     
     func transform(input: Input) -> Output {
         let title = input.title
-        let showCSTotalAmountView = input.nextButtonTapped
         let textFieldCount = BehaviorRelay<String>(value: "")
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
         
@@ -86,7 +84,7 @@ class ExclItemInfoModalVM {
         
         let csInfoDriver = Driver.combineLatest(input.title, input.totalAmount)
         
-        showCSTotalAmountView
+        input.addButtonTapped
             .asDriver()
             .withLatestFrom(csInfoDriver)
             .drive(onNext: { title, totalAmount in
@@ -166,8 +164,7 @@ class ExclItemInfoModalVM {
             .bind(to: sections)
             .disposed(by: disposeBag)
         
-        return Output(addExclItem: showCSTotalAmountView.asDriver(),
-                      titleCount: textFieldCount.asDriver(),
+        return Output(titleCount: textFieldCount.asDriver(),
                       totalAmount: totalAmountString,
                       textFieldIsValid: textFieldIsValid.asDriver(),
                       titleTextFieldIsEnable: titleTextFieldCountIsEmpty,

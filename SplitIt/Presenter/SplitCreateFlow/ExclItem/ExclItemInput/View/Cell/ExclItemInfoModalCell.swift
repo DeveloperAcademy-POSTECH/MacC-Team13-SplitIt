@@ -61,16 +61,10 @@ class ExclItemInfoModalCell: UITableViewCell, Reusable {
 
     func configure(item: ExclItemTable) {
         name.text = item.name
-        
-        UIView.transition(with: self, duration: 0.22, options: .transitionCrossDissolve) {
-            self.name.textColor = item.isTarget ? .SurfaceBrandCalmshell : .TextPrimary
-            self.contentView.layer.borderColor = item.isTarget ? UIColor.SurfaceBrandWatermelonPressed.cgColor : UIColor.SurfaceBrandCalmshell.cgColor
-        }
-        UIView.animate(withDuration: 0.22) {
-            self.contentView.backgroundColor = item.isTarget ? .SurfaceBrandWatermelon : .SurfaceBrandCalmshell
-        }
 
-        self.layoutIfNeeded()
+        self.name.textColor = item.isTarget ? .SurfaceBrandCalmshell : .TextPrimary
+        self.contentView.layer.borderColor = item.isTarget ? UIColor.SurfaceBrandWatermelonPressed.cgColor : UIColor.SurfaceBrandCalmshell.cgColor
+        self.contentView.backgroundColor = item.isTarget ? .SurfaceBrandWatermelon : .SurfaceBrandCalmshell
     }
 }
 
