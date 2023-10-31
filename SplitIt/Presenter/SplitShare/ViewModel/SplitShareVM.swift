@@ -19,6 +19,8 @@ class SplitShareVM {
         let shareButtonTapped: ControlEvent<Void>
         let currentTableViewScrollState: ControlProperty<CGPoint>
         let tableView: UITableView
+        let csAddButtonTapped: ControlEvent<Void>
+        let editButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
@@ -26,24 +28,55 @@ class SplitShareVM {
         let splitResult: BehaviorRelay<[SplitMemberResult]>
         let buttonState: BehaviorRelay<Bool>
         let sendItems: BehaviorRelay<[Any]>
+        let showNewCSCreateFlow: ControlEvent<Void>
+        let showCSEditView: ControlEvent<Void>
     }
     
     func transform(input: Input) -> Output {
-        let buttonState = BehaviorRelay(value: false)
+        let split: BehaviorRelay<[Split]> = repo.splitArr
+        let splitResult: BehaviorRelay<[SplitMemberResult]> = BehaviorRelay(value: self.calcSplitResult())
+        let sendItems = BehaviorRelay<[Any]>(value: [])
+        let shareButtonState = BehaviorRelay(value: false)
+        let showNewCSCreateFlow = input.csAddButtonTapped
+        let showCSEditView = input.editButtonTapped
         
         input.viewDidAppear
             .asDriver(onErrorJustReturn: true)
             .drive(onNext: { _ in
-                print(input.tableView.frame.height)
-                print(input.tableView.contentSize.height)
-                
                 if input.tableView.contentSize.height < input.tableView.frame.height * 1.6 {
-                    buttonState.accept(true)
+                    shareButtonState.accept(true)
                 }
             })
             .disposed(by: disposeBag)
         
-        // 멤버별 정리
+        input.currentTableViewScrollState
+            .asDriver()
+            .drive(onNext: { offset in
+                if input.tableView.contentSize.height / 3 < offset.y { shareButtonState.accept(true) }
+            })
+            .disposed(by: disposeBag)
+        
+        input.shareButtonTapped
+            .asDriver()
+            .drive(onNext: {
+                guard let image = input.tableView.screenshot() else { return }
+                sendItems.accept(self.makeSendItem(image: image))
+            })
+            .disposed(by: disposeBag)
+        
+        showNewCSCreateFlow
+            .asDriver()
+            .drive(onNext: {
+                self.repo.createNewCS()
+            })
+            .disposed(by: disposeBag)
+        
+        return Output(split: split, splitResult: splitResult, buttonState: shareButtonState, sendItems: sendItems, showNewCSCreateFlow: showNewCSCreateFlow, showCSEditView: showCSEditView)
+    }
+    
+    // 결과 계산 로직 메서드
+    private func calcSplitResult() -> [SplitMemberResult] {
+        
         var splitResultArr: [SplitMemberResult] = []
         let csInfos = repo.csInfoArr.value
         
@@ -123,41 +156,23 @@ class SplitShareVM {
             }
         }
         
-        let split: BehaviorRelay<[Split]> = repo.splitArr
-        let splitResult: BehaviorRelay<[SplitMemberResult]> = BehaviorRelay(value: splitResultArr)
+        return splitResultArr
+    }
+    
+    // Image 받아와서 공유 item 만드는 메서드
+    private func makeSendItem(image: UIImage) -> [Any] {
+        var items: [Any] = []
         
-        input.currentTableViewScrollState
-            .asDriver()
-            .drive(onNext: { offset in
-                if input.tableView.contentSize.height / 3 < offset.y {
-                    buttonState.accept(true)
-                }
-            })
-            .disposed(by: disposeBag)
+        let acount = UserDefaults.standard.string(forKey: "userAccount") ?? ""
+        let bank = UserDefaults.standard.string(forKey: "userBank") ?? ""
         
-        let sendItems = BehaviorRelay<[Any]>(value: [])
+        if acount == "" || bank == "" {
+            items = [image]
+        } else {
+            let userInfo = "\(String(describing: acount)) \(String(describing: bank))"
+            items = [image, userInfo]
+        }
         
-        input.shareButtonTapped
-            .asDriver()
-            .drive(onNext: {
-                guard let image = input.tableView.screenshot() else { return }
-                
-                var items: [Any] = []
-                
-                let acount = UserDefaults.standard.string(forKey: "userAccount") ?? ""
-                let bank = UserDefaults.standard.string(forKey: "userBank") ?? ""
-                
-                if acount == "" || bank == "" {
-                    items = [image]
-                } else {
-                    let userInfo = "\(String(describing: acount)) \(String(describing: bank))"
-                    items = [image, userInfo]
-                }
-                
-                sendItems.accept(items)
-            })
-            .disposed(by: disposeBag)
-        
-        return Output(split: split, splitResult: splitResult, buttonState: buttonState, sendItems: sendItems)
+        return items
     }
 }

@@ -46,6 +46,7 @@ class MyInfoVC: UIViewController {
     
     let accountBankLabel = UILabel() //userDefaults에서 받아온 은행 이름
     let accountLabel = UILabel() //userDefault에서 받아온 사용자 계좌
+    let accountNameLabel = UILabel()
     
     let socialPayLabel = UILabel()
     
@@ -100,7 +101,6 @@ class MyInfoVC: UIViewController {
     let naverValue = UserDefaults.standard.bool(forKey: "naverPay")
     
     
-    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -115,8 +115,8 @@ class MyInfoVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         userNewInfo()
-        //asapRxData()
     }
+
     
     func userNewInfo() {
         
@@ -124,7 +124,7 @@ class MyInfoVC: UIViewController {
         let kakaoValue = userDefault.bool(forKey: "kakaoPay")
         let naverValue = userDefault.bool(forKey: "naverPay")
         
-        if let tmpuserName = UserDefaults.standard.string(forKey: "userName"), !tmpuserName.isEmpty { //userDefaults에 값이 있을 떄
+        if let tmpuserName = UserDefaults.standard.string(forKey: "userNickName"), !tmpuserName.isEmpty { //userDefaults에 값이 있을 떄
             accountView.isHidden = false
             emptyView.isHidden = true
             backViewHeight = 235
@@ -158,22 +158,23 @@ class MyInfoVC: UIViewController {
 //
             splitLabel.snp.makeConstraints { make in
                 make.top.equalTo(backView.snp.bottom).offset(16)
-                make.left.equalToSuperview().offset(40)
+                make.leading.equalToSuperview().offset(40)
             }
             
             
         }
         
         
-        self.userName.text = userDefault.string(forKey: "userName")
+        self.userName.text = userDefault.string(forKey: "userNickName")
         self.accountBankLabel.text = userDefault.string(forKey: "userBank")
         self.accountLabel.text = userDefault.string(forKey: "userAccount")
+        self.accountNameLabel.text = userDefault.string(forKey: "userName")
         
         
         if let tmpuserName = UserDefaults.standard.string(forKey: "userName"), !tmpuserName.isEmpty { //accountView가 있을 때
             if !tossValue && !kakaoValue && !naverValue  {
                 //간편페이류 없을 떄
-                print(tossValue, kakaoValue, naverValue)
+                //print(tossValue, kakaoValue, naverValue)
                 notUsedPay.isHidden = false
                 tossView.isHidden = true
                 kakaoView.isHidden = true
@@ -196,7 +197,7 @@ class MyInfoVC: UIViewController {
 
                 splitLabel.snp.makeConstraints { make in
                     make.top.equalTo(backView.snp.bottom).offset(16)
-                    make.left.equalToSuperview().offset(40)
+                    make.leading.equalToSuperview().offset(40)
                 }
                 
                 accountView.snp.makeConstraints { make in
@@ -240,19 +241,7 @@ class MyInfoVC: UIViewController {
                 kakaoView.snp.removeConstraints()
                 naverView.snp.removeConstraints()
                 
-//                
-//                            emptyView.snp.makeConstraints { make in
-//                                make.height.equalTo(104)
-//                                make.width.equalTo(330)
-//                                make.center.equalTo(backView)
-//                            }
-//                
-//                
-//                            splitLabel.snp.makeConstraints { make in
-//                                make.top.equalTo(backView.snp.bottom).offset(16)
-//                                make.left.equalToSuperview().offset(40)
-//                            }
-                
+
                 
                 backView.snp.makeConstraints { make in
                     make.height.equalTo(backViewHeight)
@@ -273,20 +262,20 @@ class MyInfoVC: UIViewController {
                 tossView.snp.makeConstraints { make in
                     make.width.equalTo(54)
                     make.height.equalTo(73)
-                    make.left.equalTo(accountView.snp.left).offset(tossPos)
+                    make.leading.equalTo(accountView.snp.leading).offset(tossPos)
                     make.top.equalTo(socialPayLabel.snp.bottom).offset(4)
                 }
                 
                 kakaoView.snp.makeConstraints { make in
                     make.width.equalTo(54)
                     make.height.equalTo(73)
-                    make.left.equalTo(accountView.snp.left).offset(kakaoPos)
+                    make.leading.equalTo(accountView.snp.leading).offset(kakaoPos)
                     make.top.equalTo(socialPayLabel.snp.bottom).offset(4)
                 }
                 naverView.snp.makeConstraints { make in
                     make.width.equalTo(54)
                     make.height.equalTo(73)
-                    make.left.equalTo(accountView.snp.left).offset(naverPos)
+                    make.leading.equalTo(accountView.snp.leading).offset(naverPos)
                     make.top.equalTo(socialPayLabel.snp.bottom).offset(4)
                 }
             }
@@ -318,9 +307,12 @@ class MyInfoVC: UIViewController {
         output.moveToPrivacyView
             .drive(onNext:{
                 print("개인정보 처리방침 이동dd")
-                let url = NSURL(string: "https://kori-collab.notion.site/e3407a6ca4724b078775fd13749741b1?pvs=4")
-                let privacyWebView: SFSafariViewController = SFSafariViewController(url: url! as URL)
-                self.present(privacyWebView, animated: true, completion: nil)
+//                let url = NSURL(string: "https://kori-collab.notion.site/e3407a6ca4724b078775fd13749741b1?pvs=4")
+//                let privacyWebView: SFSafariViewController = SFSafariViewController(url: url! as URL)
+//                self.present(privacyWebView, animated: true, completion: nil)
+                for key in UserDefaults.standard.dictionaryRepresentation().keys {
+                                    UserDefaults.standard.removeObject(forKey: key.description)
+                                }
             })
             .disposed(by: disposeBag)
         
@@ -375,7 +367,7 @@ class MyInfoVC: UIViewController {
         backView.addSubview(emptyView)
         backView.addSubview(accountView)
         
-        [userNameLabel, userName, userBar, accountInfoLabel, accountBankLabel, accountLabel, socialPayLabel, tossView, kakaoView, naverView, notUsedPay, accountEditView].forEach {
+        [userNameLabel, userName, userBar, accountInfoLabel, accountBankLabel, accountLabel,accountNameLabel, socialPayLabel, tossView, kakaoView, naverView, notUsedPay, accountEditView].forEach {
             accountView.addSubview($0)
         }
         
@@ -476,6 +468,9 @@ class MyInfoVC: UIViewController {
             $0.font = UIFont.systemFont(ofSize: 15)
         }
         
+        accountNameLabel.do {
+            $0.font = UIFont.systemFont(ofSize: 15)
+        }
         
         accountEditView.do {
             $0.backgroundColor = .clear
@@ -658,18 +653,18 @@ class MyInfoVC: UIViewController {
         
         userName.snp.makeConstraints { make in
             make.top.equalTo(accountView).offset(16)
-            make.left.equalTo(accountView).offset(16)
+            make.leading.equalTo(accountView).offset(16)
         }
         
         userNameLabel.snp.makeConstraints { make in
             make.top.equalTo(accountView).offset(20)
-            make.left.equalTo(userName.snp.right).offset(5)
+            make.leading.equalTo(userName.snp.trailing).offset(5)
         }
         
         accountEditView.snp.makeConstraints { make in
             make.width.equalTo(60)
             make.height.equalTo(18)
-            make.right.equalTo(accountView).offset(-16)
+            make.trailing.equalTo(accountView).offset(-16)
             make.bottom.equalTo(userBar.snp.bottom).offset(-8)
         }
         
@@ -684,7 +679,7 @@ class MyInfoVC: UIViewController {
             make.height.equalTo(18)
             make.width.equalTo(9)
             make.centerY.equalToSuperview()
-            make.right.equalToSuperview()
+            make.trailing.equalToSuperview()
         }
         
         userBar.snp.makeConstraints { make in
@@ -697,29 +692,33 @@ class MyInfoVC: UIViewController {
         
         accountInfoLabel.snp.makeConstraints { make in
             make.top.equalTo(userBar.snp.top).offset(16)
-            make.left.equalTo(accountView.snp.left).offset(16)
+            make.leading.equalTo(accountView.snp.leading).offset(16)
         }
         
         
         accountBankLabel.snp.makeConstraints { make in
             make.top.equalTo(accountInfoLabel.snp.bottom).offset(2)
-            make.left.equalTo(accountView.snp.left).offset(16)
+            make.leading.equalTo(accountView.snp.leading).offset(16)
         }
         
         accountLabel.snp.makeConstraints { make in
             make.top.equalTo(accountInfoLabel.snp.bottom).offset(2)
-            make.left.equalTo(accountBankLabel.snp.right).offset(4)
+            make.leading.equalTo(accountBankLabel.snp.trailing).offset(4)
         }
         
+        accountNameLabel.snp.makeConstraints { make in
+            make.top.equalTo(accountInfoLabel.snp.bottom).offset(2)
+            make.leading.equalTo(accountLabel.snp.trailing).offset(4)
+        }
         socialPayLabel.snp.makeConstraints { make in
             make.top.equalTo(accountBankLabel.snp.bottom).offset(12)
-            make.left.equalTo(accountView.snp.left).offset(16)
+            make.leading.equalTo(accountView.snp.leading).offset(16)
         }
         
         //        tossView.snp.makeConstraints { make in
         //            make.width.equalTo(54)
         //            make.height.equalTo(73)
-        //            make.left.equalTo(accountView.snp.left).offset(tossPos)
+        //            make.leading.equalTo(accountView.snp.leading).offset(tossPos)
         //            make.top.equalTo(socialPayLabel.snp.bottom).offset(4)
         //        }
         
@@ -738,7 +737,7 @@ class MyInfoVC: UIViewController {
         //        kakaoView.snp.makeConstraints { make in
         //            make.width.equalTo(54)
         //            make.height.equalTo(73)
-        //            make.left.equalTo(accountView.snp.left).offset(kakaoPos)
+        //            make.leading.equalTo(accountView.snp.leading).offset(kakaoPos)
         //            make.top.equalTo(socialPayLabel.snp.bottom).offset(4)
         //        }
         
@@ -757,7 +756,7 @@ class MyInfoVC: UIViewController {
         //        naverView.snp.makeConstraints { make in
         //            make.width.equalTo(54)
         //            make.height.equalTo(73)
-        //            make.left.equalTo(accountView.snp.left).offset(naverPos)
+        //            make.leading.equalTo(accountView.snp.leading).offset(naverPos)
         //            make.top.equalTo(socialPayLabel.snp.bottom).offset(4)
         //        }
         
@@ -774,7 +773,7 @@ class MyInfoVC: UIViewController {
         
         splitLabel.snp.makeConstraints { make in
             make.top.equalTo(backView.snp.bottom).offset(16)
-            make.left.equalToSuperview().offset(40)
+            make.leading.equalToSuperview().offset(40)
         }
         
         
@@ -798,19 +797,19 @@ class MyInfoVC: UIViewController {
         }
         
         friendListLabel.snp.makeConstraints { make in
-            make.left.equalTo(friendImage.snp.right).offset(20)
+            make.leading.equalTo(friendImage.snp.trailing).offset(20)
             make.centerY.equalTo(friendImage.snp.centerY)
         }
         
         friendChevron.snp.makeConstraints { make in
             make.centerY.equalTo(friendImage.snp.centerY)
-            make.right.equalToSuperview()
+            make.trailing.equalToSuperview()
         }
         
 //        friendBar.snp.makeConstraints { make in
 //            make.height.equalTo(1)
-//            make.left.equalTo(friendImage.snp.left)
-//            make.right.equalTo(friendChevron.snp.right)
+//            make.leading.equalTo(friendImage.snp.leading)
+//            make.trailing.equalTo(friendChevron.snp.trailing)
 //            make.centerY.equalToSuperview()
 //            make.centerX.equalToSuperview()
 //        }
@@ -828,13 +827,13 @@ class MyInfoVC: UIViewController {
 //        }
 //
 //        exclItemLabel.snp.makeConstraints { make in
-//            make.left.equalTo(friendListLabel.snp.left)
+//            make.leading.equalTo(friendListLabel.snp.leading)
 //            make.centerY.equalTo(exclItemImage.snp.centerY)
 //        }
 //
 //        exclItemChevron.snp.makeConstraints { make in
 //            make.centerY.equalTo(exclItemImage.snp.centerY)
-//            make.right.equalToSuperview()
+//            make.trailing.equalToSuperview()
 //        }
         
         privacyBtn.snp.makeConstraints { make in
@@ -844,19 +843,19 @@ class MyInfoVC: UIViewController {
         
         
         mainLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
+            make.leading.equalToSuperview().offset(16)
             make.top.equalToSuperview().offset(20)
         }
         
         subLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
+            make.leading.equalToSuperview().offset(16)
             make.top.equalTo(mainLabel.snp.bottom).offset(4)
         }
         
         emptyAccountEditView.snp.makeConstraints { make in
             make.width.equalTo(60)
             make.height.equalTo(18)
-            make.right.equalToSuperview().offset(-16)
+            make.trailing.equalToSuperview().offset(-16)
             make.bottom.equalToSuperview().offset(-12)
         }
         
@@ -871,11 +870,11 @@ class MyInfoVC: UIViewController {
             make.height.equalTo(18)
             make.width.equalTo(9)
             make.centerY.equalToSuperview()
-            make.right.equalToSuperview()
+            make.trailing.equalToSuperview()
         }
         
         notUsedPay.snp.makeConstraints { make in
-            make.left.equalTo(accountView).offset(16)
+            make.leading.equalTo(accountView).offset(16)
             make.top.equalTo(socialPayLabel.snp.bottom).offset(4)
         }
         
