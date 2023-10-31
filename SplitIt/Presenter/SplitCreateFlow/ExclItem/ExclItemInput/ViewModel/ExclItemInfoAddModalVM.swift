@@ -9,7 +9,7 @@ import RxSwift
 import RxCocoa
 import UIKit
 
-class ExclItemInfoModalVM {
+class ExclItemInfoAddModalVM {
     
     var disposeBag = DisposeBag()
     

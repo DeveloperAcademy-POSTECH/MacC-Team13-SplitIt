@@ -12,11 +12,11 @@ import SnapKit
 import Then
 import RxDataSources
 
-class ExclItemInfoModalVC: UIViewController, UIScrollViewDelegate {
+class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
     
     var disposeBag = DisposeBag()
     
-    let viewModel = ExclItemInfoModalVM()
+    let viewModel = ExclItemInfoAddModalVM()
     
     let header = NaviHeader()
     let scrollView = UIScrollView(frame: .zero)
@@ -228,7 +228,7 @@ class ExclItemInfoModalVC: UIViewController, UIScrollViewDelegate {
             totalAmountTextFiled.rx.controlEvent(.editingDidBegin).map { UIControl.Event.editingDidBegin},
             totalAmountTextFiled.rx.controlEvent(.editingDidEnd).map { UIControl.Event.editingDidEnd })
         
-        let input = ExclItemInfoModalVM.Input(title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
+        let input = ExclItemInfoAddModalVM.Input(title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
                                               totalAmount: totalAmountTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
                                               titleTextFieldControlEvent: titleTFEvent,
                                               totalAmountTextFieldControlEvent: totalAmountTFEvent,
@@ -412,7 +412,7 @@ class ExclItemInfoModalVC: UIViewController, UIScrollViewDelegate {
 }
 
 // MARK: TextField (활성화/비활성화)에 따른 UI 로직
-extension ExclItemInfoModalVC {
+extension ExclItemInfoAddModalVC {
     func focusExclMember() {
         UIView.animate(withDuration: 0.33) {
             self.tableView.layer.borderColor = UIColor.BorderPrimary.cgColor
@@ -492,7 +492,7 @@ extension ExclItemInfoModalVC {
     }
 }
 
-extension ExclItemInfoModalVC: UITextFieldDelegate {
+extension ExclItemInfoAddModalVC: UITextFieldDelegate {
     func setKeyboardNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)

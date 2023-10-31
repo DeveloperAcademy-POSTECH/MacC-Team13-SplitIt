@@ -151,7 +151,7 @@ class ExclItemInputVC: UIViewController {
         output.showExclItemInfoModal
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                let vc = ExclItemInfoModalVC()
+                let vc = ExclItemInfoAddModalVC()
                 vc.modalPresentationStyle = .formSheet
                 vc.modalTransitionStyle = .coverVertical
                 self.present(vc, animated: true)
@@ -163,6 +163,25 @@ class ExclItemInputVC: UIViewController {
                 guard let self = self else { return }
                 emptyView.isHidden = !tableViewisEmpty
                 tableView.isHidden = tableViewisEmpty
+            })
+            .disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .asDriver()
+            .drive(onNext: { [weak self] indexPath in
+                guard let self = self else { return }
+                
+                //MARK: indexPath에 값들을 모두 Modal 수정뷰의 ViewModel에 넣어주고
+                /// 해당 ViewModel은 modal에게 해당 값을 그리도록 해주어야함.
+                ///
+                /// 1. EditModalView VC
+                /// 2. EditModalView VM
+                /// 
+//                
+//                let vc = ExclItemInfoAddModalVC()
+//                vc.modalPresentationStyle = .formSheet
+//                vc.modalTransitionStyle = .coverVertical
+//                self.present(vc, animated: true)
             })
             .disposed(by: disposeBag)
     }
