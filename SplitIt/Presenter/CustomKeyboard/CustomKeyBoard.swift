@@ -74,6 +74,7 @@ class CustomKeyboard: UIInputViewController {
             $0.layer.borderWidth = 0
             
         }
+        
         deleteImage.do {
             $0.image = UIImage(systemName: "delete.left")
             $0.tintColor = UIColor.black

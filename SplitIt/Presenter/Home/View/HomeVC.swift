@@ -51,8 +51,8 @@ class HomeVC: UIViewController {
         
         output.showCreateSplit
             .drive(onNext: {
-//                let vc = CSTitleInputVC()
-                let vc = CSInfoVC()
+                let vc = CSTitleInputVC()
+//                let vc = CSInfoVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
@@ -83,7 +83,6 @@ class HomeVC: UIViewController {
         buttonView.backgroundColor = .SurfaceBrandCalmshell
 
         myInfoButton.do {
-    
             $0.applyStyle(style: .primaryCalmshell, shape: .square)
             $0.buttonState.accept(true)
         }

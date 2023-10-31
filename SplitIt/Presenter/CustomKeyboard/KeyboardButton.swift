@@ -45,11 +45,7 @@ class KeyboardButton: UIButton {
         layer.borderColor = UIColor.black.cgColor
         
       
-//        snp.makeConstraints { make in
-//            
-//            //make.width.equalTo(123)
-//        }
- 
+
 
     }
 }

@@ -23,6 +23,7 @@ class MyInfoVM: UIViewController {
        // let exclItemViewTapped: Observable<Void>
         let editAccountViewTapped: Observable<Void>
         let emptyEditAccountViewTapped: Observable<Void>
+        let madeByWCCTBtnTapped: Driver<Void>
     }
     
     struct Output {
@@ -31,6 +32,7 @@ class MyInfoVM: UIViewController {
        // let moveToExclItemListView: Observable<Void>
         let moveToEditAccountView: Observable<Void>
         let moveToInitAccountView: Observable<Void>
+        let moveToMadeByWCCT: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -39,7 +41,7 @@ class MyInfoVM: UIViewController {
        // let exclItemViewTapped = input.exclItemViewTapped
         let editAccountViewTap = input.editAccountViewTapped
         let emptyEditAccountViewTapped = input.emptyEditAccountViewTapped
-        
+        let madeByWCCTBtnTapped = input.madeByWCCTBtnTapped
         repo.fetchMemberLog()
         
         if userDefault.object(forKey: "tossPay") == nil ||
@@ -56,7 +58,8 @@ class MyInfoVM: UIViewController {
                             moveTofriendListView: friendListViewTapped,
                             //moveToExclItemListView: exclItemViewTapped,
                             moveToEditAccountView: editAccountViewTap,
-                            moveToInitAccountView: emptyEditAccountViewTapped
+                            moveToInitAccountView: emptyEditAccountViewTapped,
+                            moveToMadeByWCCT: madeByWCCTBtnTapped
         )
         
         return output
