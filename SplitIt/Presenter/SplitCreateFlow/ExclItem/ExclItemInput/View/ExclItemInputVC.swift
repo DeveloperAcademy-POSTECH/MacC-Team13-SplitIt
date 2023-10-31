@@ -43,18 +43,14 @@ class ExclItemInputVC: UIViewController {
         
         exclListLabel.do {
             $0.text = "따로 정산 목록"
-            $0.font = .KoreanBody
+            $0.font = .KoreanSubtitle
             $0.textColor = .TextPrimary
         }
         
         exclItemCountLabel.do {
-            $0.text = "1"
             $0.font = .KoreanCaption1
-            $0.textColor = .TextInvert
-            $0.textAlignment = .center
-            $0.backgroundColor = .AppColorBrandWatermelon
-            $0.layer.cornerRadius = 10
-            $0.clipsToBounds = true
+            $0.textColor = .TextPrimary
+            $0.textAlignment = .justified
         }
         
         exclItemAddButton.do {
@@ -99,9 +95,8 @@ class ExclItemInputVC: UIViewController {
         }
         
         exclItemCountLabel.snp.makeConstraints {
-            $0.centerY.equalTo(exclListLabel.snp.centerY)
+            $0.bottom.equalTo(exclListLabel.snp.bottom)
             $0.leading.equalTo(exclListLabel.snp.trailing).offset(8)
-            $0.width.height.equalTo(20)
         }
         
         exclItemAddButton.snp.makeConstraints {
@@ -128,6 +123,12 @@ class ExclItemInputVC: UIViewController {
         let input = ExclItemInputVM.Input(nextButtonTapped: nextButton.rx.tap,
                                           exclItemAddButtonTapped: exclItemAddButton.rx.tap)
         let output = viewModel.transform(input: input)
+        
+        output.exclItemsRelay
+            .map{ "\($0.count)건" }
+            .asDriver(onErrorJustReturn: "")
+            .drive(exclItemCountLabel.rx.text)
+            .disposed(by: disposeBag)
         
         output.exclItemsRelay
             .asDriver()
