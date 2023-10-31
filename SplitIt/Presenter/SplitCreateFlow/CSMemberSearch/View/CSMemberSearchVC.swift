@@ -17,8 +17,7 @@ class CSMemberSearchVC: UIViewController, Reusable {
     let disposeBag = DisposeBag()
     let viewModel = CSMemberSearchVM()
     
-    let naviTitle = UILabel()
-    let checkButton = UIButton()
+    let header = SPNavigationBar()
     let addTopBorder = UIView()
     let addLabel = UILabel()
     let addCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
@@ -42,16 +41,9 @@ class CSMemberSearchVC: UIViewController, Reusable {
     private func setAttribute() {
         view.backgroundColor = .SurfacePrimary
         
-        naviTitle.do {
-            $0.text = "멤버 추가"
-            $0.font = .KoreanTitle3
-            $0.textColor = .TextPrimary
-        }
-        
-        checkButton.do {
-            $0.setTitle("확인", for: .normal)
-            $0.setTitleColor(.SurfaceBrandPear, for: .normal)
-            $0.titleLabel?.font = .KoreanTitle3
+        header.do {
+            $0.applyStyle(style: .memberSearch, vc: self)
+            $0.buttonState.accept(true)
         }
         
         addTopBorder.do {
@@ -112,23 +104,19 @@ class CSMemberSearchVC: UIViewController, Reusable {
     }
     
     private func setLayout() {
-        [naviTitle,checkButton,addTopBorder,addLabel,addCollectionView,addBottomBorder,
+        [header,addTopBorder,addLabel,addCollectionView,addBottomBorder,
          searchTextField,addButton,searchLabel,searchTopBorder,searchTableView].forEach {
             view.addSubview($0)
         }
         
-        naviTitle.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(11)
-            $0.centerX.equalToSuperview()
-        }
-        
-        checkButton.snp.makeConstraints {
-            $0.centerY.equalTo(naviTitle)
-            $0.trailing.equalToSuperview().offset(-30)
+        header.snp.makeConstraints {
+            $0.height.equalTo(96)
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
         }
         
         addTopBorder.snp.makeConstraints {
-            $0.top.equalTo(naviTitle.snp.bottom).offset(19)
+            $0.top.equalTo(header.snp.bottom).offset(19)
             $0.height.equalTo(1)
             $0.horizontalEdges.equalToSuperview()
         }
@@ -188,7 +176,7 @@ class CSMemberSearchVC: UIViewController, Reusable {
                                            searchCellTapped: searchTableView.rx.itemSelected,
                                            selectedCellTapped: addCollectionView.rx.itemSelected,
                                            addButtonTapped: addButton.rx.tap,
-                                           checkButtonTapped: checkButton.rx.tap)
+                                           checkButtonTapped: header.rightButton.rx.tap)
         let output = viewModel.transform(input: input)
         
         output.searchMemberArr
@@ -264,12 +252,6 @@ class CSMemberSearchVC: UIViewController, Reusable {
                         cell.transform = .identity
                     }
                 }
-            })
-            .disposed(by: disposeBag)
-        
-        output.closeCurrentVC.asDriver()
-            .drive(onNext: {
-                self.dismiss(animated: true)
             })
             .disposed(by: disposeBag)
     }
