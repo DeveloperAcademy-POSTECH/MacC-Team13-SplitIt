@@ -35,11 +35,15 @@ extension NaviHeader {
         case friendSearch
         /// 스플릿 결과 View
         case result
+        /// ExclInfo 추가(Modal)
+        case exclInfoAdd
     }
 }
 
 final class NaviHeader: UIView {
     let backButton = UIButton()
+    let addButton = UIButton()
+    let cancelButton = UIButton()
     let naviTitleLabel = UILabel()
     let naviImage = UIView()
     let titleImageView = UIImageView()
@@ -87,6 +91,10 @@ final class NaviHeader: UIView {
             setExitButton()
             naviTitleLabel.text = "스플릿 결과"
             backButton.removeFromSuperview()
+        case .exclInfoAdd:
+            naviTitleLabel.text = "따로 정산 항목"
+            setCancelButton()
+            backButton.removeFromSuperview()
         }
     }
     
@@ -119,6 +127,43 @@ final class NaviHeader: UIView {
             $0.trailing.equalToSuperview().inset(30)
             $0.height.equalToSuperview()
             $0.width.equalTo(30)
+        }
+    }
+    
+    func setAddButton() {
+        addButton.do {
+            $0.setTitle("추가", for: .normal)
+            $0.setTitleColor(.SurfaceBrandWatermelon, for: .normal)
+            $0.setTitleColor(.SurfaceBrandWatermelonPressed, for: .highlighted)
+            $0.setTitleColor(.TextDeactivate, for: .disabled)
+            $0.titleLabel?.font = .KoreanSubtitle
+        }
+        
+        addSubview(addButton)
+        
+        addButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(30)
+            $0.height.equalTo(22)
+            $0.width.equalTo(39)
+        }
+    }
+    
+    func setCancelButton() {
+        cancelButton.do {
+            $0.setTitle("취소", for: .normal)
+            $0.setTitleColor(.SurfaceBrandWatermelon, for: .normal)
+            $0.setTitleColor(.SurfaceBrandWatermelonPressed, for: .highlighted)
+            $0.titleLabel?.font = .KoreanSubtitle
+        }
+        
+        addSubview(cancelButton)
+        
+        cancelButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().inset(30)
+            $0.height.equalTo(22)
+            $0.width.equalTo(39)
         }
     }
     
