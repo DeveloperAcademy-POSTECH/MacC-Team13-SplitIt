@@ -56,8 +56,8 @@ class ExclItemCell: UITableViewCell, Reusable {
         }
     }
 
-    func configure(item: String) {
-        name.text = item
+    func configure(item: ExclItemInfo) {
+        name.text = item.exclItem.name
     }
 }
 

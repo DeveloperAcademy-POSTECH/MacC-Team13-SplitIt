@@ -76,9 +76,6 @@ class ExclItemInputVC: UIViewController {
         tableView.do {
             $0.register(cellType: ExclItemCell.self)
             $0.backgroundColor = .SurfacePrimary
-            //$0.alwaysBounceVertical = false
-//            $0.isScrollEnabled = false
-//            $0.bounces = false
             $0.showsVerticalScrollIndicator = false
             $0.rowHeight = rowHeight
             $0.separatorStyle = .none
@@ -132,7 +129,7 @@ class ExclItemInputVC: UIViewController {
                                           exclItemAddButtonTapped: exclItemAddButton.rx.tap)
         let output = viewModel.transform(input: input)
         
-        output.exclItems
+        output.exclItemsRelay
             .asDriver()
             .drive(tableView.rx.items(cellIdentifier: "ExclItemCell", cellType: ExclItemCell.self)) { (idx, item, cell) in
                 cell.configure(item: item)

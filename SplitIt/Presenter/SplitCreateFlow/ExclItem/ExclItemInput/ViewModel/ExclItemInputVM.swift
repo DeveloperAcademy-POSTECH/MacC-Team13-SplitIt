@@ -20,7 +20,7 @@ class ExclItemInputVM {
     
     struct Output {
         let showResultView: Driver<Void>
-        let exclItems: BehaviorRelay<[String]>
+        let exclItemsRelay: BehaviorRelay<[ExclItemInfo]>
         let nextButtonIsEnable: Driver<Bool>
         let showExclItemInfoModal: Driver<Void>
     }
@@ -29,18 +29,32 @@ class ExclItemInputVM {
         let showResultView = input.nextButtonTapped
         let showExclItemInfoModal = input.exclItemAddButtonTapped
         let nextButtonIsEnable: Driver<Bool>
+
+        let exclItemRepository = SplitRepository.share.exclItemArr
+        let exclMemberRepository = SplitRepository.share.exclMemberArr
+        let exclItemsRelay = BehaviorRelay<[ExclItemInfo]>(value: [
+            ExclItemInfo(exclItem: ExclItem(csInfoIdx: "", name: "", price: 0), items: [])
+        ])
         
-        let exclItems = BehaviorRelay<[String]>(value: ["1","d","4"])
-        
-        nextButtonIsEnable = exclItems
+        Observable.combineLatest(exclItemRepository, exclMemberRepository)
+            .map{ (exclItems, exclMembers) -> [ExclItemInfo] in
+                let exclItemInfos = exclItems.map { exclItem in
+                    let targetMember = exclMembers.filter{ $0.exclItemIdx == exclItem.exclItemIdx }
+                    let exclItemInfo = ExclItemInfo(exclItem: exclItem, items: targetMember)
+                    return exclItemInfo
+                }
+                return exclItemInfos
+            }
+            .asDriver(onErrorJustReturn: [])
+            .drive(exclItemsRelay)
+            .disposed(by: disposeBag)
+
+        nextButtonIsEnable = exclItemsRelay
             .map{ $0.count > 0 }
             .asDriver(onErrorJustReturn: false)
         
-        
-  
-        
         return Output(showResultView: showResultView.asDriver(),
-                      exclItems: exclItems,
+                      exclItemsRelay: exclItemsRelay,
                       nextButtonIsEnable: nextButtonIsEnable,
                       showExclItemInfoModal: showExclItemInfoModal.asDriver())
     }
