@@ -65,6 +65,8 @@
 		6032DCFA2AEF5F68004A6BFA /* ExclItemInfoAddModalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCF92AEF5F68004A6BFA /* ExclItemInfoAddModalVC.swift */; };
 		6032DCFC2AEF5FBE004A6BFA /* ExclItemInfoAddModalVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCFB2AEF5FBE004A6BFA /* ExclItemInfoAddModalVM.swift */; };
 		604CDC7B2AF14A8200416454 /* ExclItemInputEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604CDC7A2AF14A8100416454 /* ExclItemInputEmptyView.swift */; };
+		604CDC7D2AF1522C00416454 /* ExclItemInfoEditModalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604CDC7C2AF1522C00416454 /* ExclItemInfoEditModalVC.swift */; };
+		604CDC7F2AF1527500416454 /* ExclItemInfoEditModalVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604CDC7E2AF1527500416454 /* ExclItemInfoEditModalVM.swift */; };
 		6078ACCC2ADA74AC00995811 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCB2ADA74AC00995811 /* AppDelegate.swift */; };
 		6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCD2ADA74AC00995811 /* SceneDelegate.swift */; };
 		6078ACD02ADA74AC00995811 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCF2ADA74AC00995811 /* HomeVC.swift */; };
@@ -217,6 +219,8 @@
 		6032DCF92AEF5F68004A6BFA /* ExclItemInfoAddModalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInfoAddModalVC.swift; sourceTree = "<group>"; };
 		6032DCFB2AEF5FBE004A6BFA /* ExclItemInfoAddModalVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInfoAddModalVM.swift; sourceTree = "<group>"; };
 		604CDC7A2AF14A8100416454 /* ExclItemInputEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInputEmptyView.swift; sourceTree = "<group>"; };
+		604CDC7C2AF1522C00416454 /* ExclItemInfoEditModalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInfoEditModalVC.swift; sourceTree = "<group>"; };
+		604CDC7E2AF1527500416454 /* ExclItemInfoEditModalVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInfoEditModalVM.swift; sourceTree = "<group>"; };
 		6078ACC82ADA74AC00995811 /* SplitIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SplitIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6078ACCB2ADA74AC00995811 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6078ACCD2ADA74AC00995811 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -650,6 +654,7 @@
 				6032DCEE2AEE5452004A6BFA /* ExclItemInputVC.swift */,
 				604CDC7A2AF14A8100416454 /* ExclItemInputEmptyView.swift */,
 				6032DCF92AEF5F68004A6BFA /* ExclItemInfoAddModalVC.swift */,
+				604CDC7C2AF1522C00416454 /* ExclItemInfoEditModalVC.swift */,
 				60104CE82AEFF73800489AAD /* ExclItemInfoModalSection.swift */,
 				607ED87D2AF0D06F00A82349 /* ExclItemInfo.swift */,
 			);
@@ -661,6 +666,7 @@
 			children = (
 				6032DCF02AEE6FFC004A6BFA /* ExclItemInputVM.swift */,
 				6032DCFB2AEF5FBE004A6BFA /* ExclItemInfoAddModalVM.swift */,
+				604CDC7E2AF1527500416454 /* ExclItemInfoEditModalVM.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1264,10 +1270,12 @@
 				869D1ADC2AE52B8800D166B1 /* CSMemberEditCell.swift in Sources */,
 				C2A797A42AE278190049E709 /* HistoryVC.swift in Sources */,
 				60115E162ADCDB840050D32C /* CSTotalAmountInputVM.swift in Sources */,
+				604CDC7F2AF1527500416454 /* ExclItemInfoEditModalVM.swift in Sources */,
 				C229F51A2AEA442E00F9E28D /* NewSPButton.swift in Sources */,
 				C2A797912AE2748E0049E709 /* UIFont+.swift in Sources */,
 				60115E312ADE715E0050D32C /* CSMemberConfirmHeaderVM.swift in Sources */,
 				6009C8162AE29DFB008B9EC1 /* ResultVM.swift in Sources */,
+				604CDC7D2AF1522C00416454 /* ExclItemInfoEditModalVC.swift in Sources */,
 				60115E2F2ADE3EDA0050D32C /* CSMemberConfirmHeader.swift in Sources */,
 				DE73D6E72AE0D20600ABF3EF /* BankListData.swift in Sources */,
 				6009C81B2AE2A300008B9EC1 /* ResultSection.swift in Sources */,

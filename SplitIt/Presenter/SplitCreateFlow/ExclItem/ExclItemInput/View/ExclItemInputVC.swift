@@ -176,12 +176,15 @@ class ExclItemInputVC: UIViewController {
                 ///
                 /// 1. EditModalView VC
                 /// 2. EditModalView VM
-                /// 
-//                
-//                let vc = ExclItemInfoAddModalVC()
-//                vc.modalPresentationStyle = .formSheet
-//                vc.modalTransitionStyle = .coverVertical
-//                self.present(vc, animated: true)
+                ///
+                let exclItemIdx = output.exclItemsRelay.value[indexPath.row].exclItem.exclItemIdx
+                let vm = ExclItemInfoEditModalVM()
+                vm.exclItemIdx = exclItemIdx
+                let vc = ExclItemInfoEditModalVC(viewModel: vm)
+                
+                vc.modalPresentationStyle = .formSheet
+                vc.modalTransitionStyle = .coverVertical
+                self.present(vc, animated: true)
             })
             .disposed(by: disposeBag)
     }
