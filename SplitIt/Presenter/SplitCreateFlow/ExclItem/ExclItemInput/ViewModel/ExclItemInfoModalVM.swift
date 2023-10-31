@@ -16,7 +16,6 @@ class ExclItemInfoModalVM {
     let maxTextCount = 8
     
     let sections = BehaviorRelay<[ExclItemInfoModalSection]>(value: [])
-    let exclMembers = BehaviorRelay<[ExclMember]>(value: [])
     let exclMemberIsActive = BehaviorRelay<Bool>(value: false)
     
     struct Input {
@@ -87,10 +86,11 @@ class ExclItemInfoModalVM {
         input.addButtonTapped
             .asDriver()
             .withLatestFrom(csInfoDriver)
-            .drive(onNext: { title, totalAmount in
+            .drive(onNext: { [weak self] title, totalAmount in
+                guard let self = self else { return }
                 let totalAmountInt = numberFormatter.number(from: totalAmount)
-                SplitRepository.share.inputCSInfoWithTitle(title: title)
-                SplitRepository.share.inputCSInfoWithTotalAmount(totalAmount: totalAmountInt ?? 0)
+                let currentExclMember = sections.value.first!.items
+                let currentExclItemIdx = SplitRepository.share.createExclItem(name: title, price: totalAmountInt ?? 0, exclMember: currentExclMember)
             })
             .disposed(by: disposeBag)
         
@@ -144,16 +144,8 @@ class ExclItemInfoModalVM {
         
         let currentMembers = SplitRepository.share.csMemberArr
         currentMembers
-            .map { csMembers -> [ExclMember] in
-                let newExclMembers = csMembers.map{ return ExclMember(exclItemIdx: "", name: $0.name) }
-                return newExclMembers
-            }
-            .bind(to: exclMembers)
-            .disposed(by: disposeBag)
-         
-        exclMembers
-            .map { $0.map { exclMember -> ExclItemTable in
-                let item = ExclItemTable(name: exclMember.name, isTarget: false)
+            .map { $0.map { csMember -> ExclItemTable in
+                let item = ExclItemTable(name: csMember.name, isTarget: false)
                 return item
             }}
             .map { items -> [ExclItemInfoModalSection] in
