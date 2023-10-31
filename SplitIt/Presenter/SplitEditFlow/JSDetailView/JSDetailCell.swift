@@ -16,7 +16,7 @@ final class JSDetailCell: UICollectionViewCell, Reusable {
     var disposeBag = DisposeBag()
     
     let csTitleLabel = UILabel()
-    let editBtnLabel = UIButton(type: .system)
+    let editBtnLabel = DefaultEditButton()
     let memberCountLabel = UILabel()
     let totalAmountLabel = UILabel()
     let exclItemCountLabel = UILabel()
@@ -46,17 +46,6 @@ final class JSDetailCell: UICollectionViewCell, Reusable {
         }
         
         editBtnLabel.do {
-            let atrString = NSMutableAttributedString(string: "수정하기")
-            atrString.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: atrString.length))
-            
-            let image = UIImage(systemName: "chevron.right")!
-                .withRenderingMode(.alwaysTemplate)
-            
-            $0.tintColor = .AppColorGrayscale1000
-            $0.setAttributedTitle(atrString, for: .normal)
-            $0.setImage(image, for: .normal)
-            $0.titleLabel?.font = .KoreanCaption2
-            $0.semanticContentAttribute = .forceRightToLeft
             $0.isEnabled = false
         }
         
