@@ -20,11 +20,12 @@ class ExclItemInfoModalVM {
     let exclMemberIsActive = BehaviorRelay<Bool>(value: false)
     
     struct Input {
-        let nextButtonTapped: ControlEvent<Void>
         let title: Driver<String>
         let totalAmount: Driver<String>
         let titleTextFieldControlEvent: Observable<UIControl.Event>
         let totalAmountTextFieldControlEvent: Observable<UIControl.Event>
+        let cancelButtonTapped: ControlEvent<Void>
+        let addButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
@@ -34,9 +35,11 @@ class ExclItemInfoModalVM {
         let textFieldIsValid: Driver<Bool>
         let titleTextFieldIsEnable: Driver<Bool>
         let totalAmountTextFieldIsEnable: Driver<Bool>
-        let nextButtonIsEnable: Driver<Bool>
+        let addButtonIsEnable: Driver<Bool>
         let titleTextFieldControlEvent: Driver<UIControl.Event>
         let totalAmountTextFieldControlEvent: Driver<UIControl.Event>
+        let cancelButtonTapped: Driver<Void>
+        let addButtonTapped: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -50,7 +53,7 @@ class ExclItemInfoModalVM {
 
         let maxCurrency = 10000000
         
-        let nextButtonIsEnable: Driver<Bool>
+        let addButtonIsEnable: Driver<Bool>
         
         let titleTextFieldCountIsEmpty = input.title
             .map{ $0.count > 0 }
@@ -60,6 +63,16 @@ class ExclItemInfoModalVM {
             .map { numberFormatter.number(from: $0) ?? 0 }
             .map{ $0 != 0 }
             .asDriver()
+        
+        let exclMemberIsValid = BehaviorRelay<Bool>(value: false)
+        sections
+            .asDriver()
+            .map { value in
+                guard let section = value.first else { return false }
+                return section.items.contains { $0.isTarget }
+            }
+            .drive(exclMemberIsValid)
+            .disposed(by: disposeBag)
         
         let totalAmountString = input.totalAmount
             .map { numberFormatter.number(from: $0) ?? 0 }
@@ -99,8 +112,10 @@ class ExclItemInfoModalVM {
             .drive(textFieldIsValid)
             .disposed(by: disposeBag)
         
-        nextButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(), totalAmountTextFieldCountIsEmpty.asDriver())
-            .map{ $0 && $1 }
+        addButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(),
+                                                  totalAmountTextFieldCountIsEmpty.asDriver(),
+                                                  exclMemberIsValid.asDriver())
+            .map{ $0 && $1 && $2 }
             .asDriver()
         
         let titleTFControlEvent: Driver<UIControl.Event> = input.titleTextFieldControlEvent
@@ -157,9 +172,11 @@ class ExclItemInfoModalVM {
                       textFieldIsValid: textFieldIsValid.asDriver(),
                       titleTextFieldIsEnable: titleTextFieldCountIsEmpty,
                       totalAmountTextFieldIsEnable: totalAmountTextFieldCountIsEmpty,
-                      nextButtonIsEnable: nextButtonIsEnable,
+                      addButtonIsEnable: addButtonIsEnable,
                       titleTextFieldControlEvent: titleTFControlEvent,
-                      totalAmountTextFieldControlEvent: totalAmountTFControlEvent)
+                      totalAmountTextFieldControlEvent: totalAmountTFControlEvent,
+                      cancelButtonTapped: input.cancelButtonTapped.asDriver(),
+                      addButtonTapped: input.addButtonTapped.asDriver())
     }
 
 }

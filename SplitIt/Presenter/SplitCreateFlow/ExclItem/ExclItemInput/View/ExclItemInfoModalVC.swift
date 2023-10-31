@@ -18,6 +18,7 @@ class ExclItemInfoModalVC: UIViewController, UIScrollViewDelegate {
     
     let viewModel = ExclItemInfoModalVM()
     
+    let header = NaviHeader()
     let scrollView = UIScrollView(frame: .zero)
     let contentView = UIView()
     let titleMessage = UILabel()
@@ -29,8 +30,6 @@ class ExclItemInfoModalVC: UIViewController, UIScrollViewDelegate {
     
     let exclMemberMessage = UILabel()
     let tableView = UITableView()
-    
-    let nextButton = NewSPButton()
     
     let tapGesture = UITapGestureRecognizer()
     
@@ -60,6 +59,12 @@ class ExclItemInfoModalVC: UIViewController, UIScrollViewDelegate {
     
     func setAttribute() {
         view.backgroundColor = .SurfacePrimary
+        
+        header.do {
+            $0.applyStyle(.exclInfoAdd)
+            $0.setAddButton()
+            $0.setCancelButton()
+        }
         
         scrollView.do {
             $0.showsVerticalScrollIndicator = false
@@ -104,11 +109,6 @@ class ExclItemInfoModalVC: UIViewController, UIScrollViewDelegate {
         }
         
         setTableView()
-        
-        nextButton.do {
-            $0.setTitle("추가하기", for: .normal)
-            $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
-        }
     }
     
     func setTableView() {
@@ -150,18 +150,24 @@ class ExclItemInfoModalVC: UIViewController, UIScrollViewDelegate {
     }
     
     func setLayout() {
-        [scrollView].forEach {
+        [header, scrollView].forEach {
             view.addSubview($0)
         }
 
         scrollView.addSubview(contentView)
         
-        [titleMessage, titleTextFiled, textFiledCounter, nextButton, totalAmountTitleMessage, totalAmountTextFiled, exclMemberMessage, tableView].forEach {
+        [titleMessage, titleTextFiled, textFiledCounter, totalAmountTitleMessage, totalAmountTextFiled, exclMemberMessage, tableView].forEach {
             contentView.addSubview($0)
         }
         
+        header.snp.makeConstraints {
+            $0.top.equalTo(view.snp.top).offset(30)
+            $0.height.equalTo(30)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(header.snp.bottom)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
@@ -222,13 +228,27 @@ class ExclItemInfoModalVC: UIViewController, UIScrollViewDelegate {
             totalAmountTextFiled.rx.controlEvent(.editingDidBegin).map { UIControl.Event.editingDidBegin},
             totalAmountTextFiled.rx.controlEvent(.editingDidEnd).map { UIControl.Event.editingDidEnd })
         
-        let input = ExclItemInfoModalVM.Input(nextButtonTapped: nextButton.rx.tap,
-                                   title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
-                                   totalAmount: totalAmountTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
-                                   titleTextFieldControlEvent: titleTFEvent,
-                                   totalAmountTextFieldControlEvent: totalAmountTFEvent
-        )
+        let input = ExclItemInfoModalVM.Input(title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
+                                              totalAmount: totalAmountTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
+                                              titleTextFieldControlEvent: titleTFEvent,
+                                              totalAmountTextFieldControlEvent: totalAmountTFEvent,
+                                              cancelButtonTapped: header.cancelButton.rx.tap,
+                                              addButtonTapped: header.addButton.rx.tap)
         let output = viewModel.transform(input: input)
+        
+        output.addButtonTapped
+            .drive(onNext: {
+                self.dismiss(animated: true)
+                print(">>> Add")
+            })
+            .disposed(by: disposeBag)
+        
+        output.cancelButtonTapped
+            .drive(onNext: {
+                self.dismiss(animated: true)
+                print(">>> Cancel")
+            })
+            .disposed(by: disposeBag)
         
         output.addExclItem
             .drive(onNext: { [weak self] _ in
@@ -267,8 +287,8 @@ class ExclItemInfoModalVC: UIViewController, UIScrollViewDelegate {
             .drive(totalAmountTextFiled.rx.text)
             .disposed(by: disposeBag)
         
-        output.nextButtonIsEnable
-            .drive(nextButton.buttonState)
+        output.addButtonIsEnable
+            .drive(header.addButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
         output.titleTextFieldControlEvent
