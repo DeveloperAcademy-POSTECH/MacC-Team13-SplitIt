@@ -32,14 +32,15 @@ class ExclItemInfoDeactiveModalCell: UITableViewCell, Reusable {
     }
     
     func setAttribute() {
-        self.backgroundColor = UIColor(white: 0, alpha: 0)
+        self.backgroundColor = .SurfaceBrandCalmshell
         self.selectionStyle = .none
         
         contentView.do {
-            $0.backgroundColor = .clear
+            $0.backgroundColor = .SurfaceBrandCalmshell
             $0.layer.cornerRadius = 8
             $0.layer.borderColor = UIColor.BorderDeactivate.cgColor
             $0.layer.borderWidth = 1
+            $0.clipsToBounds = true
             $0.frame = $0.frame.inset(by: UIEdgeInsets(top: 4,
                                                        left: 12,
                                                        bottom: 4,
@@ -47,7 +48,7 @@ class ExclItemInfoDeactiveModalCell: UITableViewCell, Reusable {
         }
         
         name.do {
-            $0.textColor = .TextDeactivate
+            $0.font = .KoreanBody
         }
     }
     
@@ -60,8 +61,15 @@ class ExclItemInfoDeactiveModalCell: UITableViewCell, Reusable {
         }
     }
 
-    func configure(item: String) {
-        name.text = item
+    func configure(item: ExclItemTable) {
+        name.text = item.name
+        
+        //MARK: 수정Cell에서 쓸 예정
+//        name.textColor = item.isTarget ? .SurfaceBrandCalmshell : .TextDeactivate
+//        contentView.backgroundColor = item.isTarget ? .AppColorGrayscale200 : .SurfaceBrandCalmshell
+//        contentView.layer.borderColor = item.isTarget ? UIColor.SurfaceBrandWatermelonPressed.cgColor : UIColor.SurfaceBrandCalmshell.cgColor
+        
+        //self.contentView.layoutIfNeeded()
     }
 }
 

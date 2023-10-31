@@ -12,7 +12,7 @@ import SnapKit
 import Then
 import RxDataSources
 
-class ExclItemInfoModalVC: UIViewController {
+class ExclItemInfoModalVC: UIViewController, UIScrollViewDelegate {
     
     var disposeBag = DisposeBag()
     
@@ -34,7 +34,7 @@ class ExclItemInfoModalVC: UIViewController {
     
     let tapGesture = UITapGestureRecognizer()
     
-    var dataSource: RxTableViewSectionedReloadDataSource<ExclItemSection>!
+    var dataSource: RxTableViewSectionedReloadDataSource<ExclItemInfoModalSection>!
     
     let cellHeight: CGFloat = 32.0
     let tableInset: CGFloat = 12.0
@@ -45,7 +45,6 @@ class ExclItemInfoModalVC: UIViewController {
         setAttribute()
         setBinding()
         setGestureRecognizer()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,8 +52,10 @@ class ExclItemInfoModalVC: UIViewController {
         setKeyboardNotification()
         titleTextFiled.becomeFirstResponder()
     }
+    
     func setGestureRecognizer() {
         view.addGestureRecognizer(tapGesture)
+        tapGesture.cancelsTouchesInView = false
     }
     
     func setAttribute() {
@@ -62,20 +63,15 @@ class ExclItemInfoModalVC: UIViewController {
         
         scrollView.do {
             $0.showsVerticalScrollIndicator = false
-            $0.delaysContentTouches = false
-            $0.isUserInteractionEnabled = true
-            $0.isScrollEnabled = true
         }
         
         titleMessage.do {
             $0.text = "어떤 정산에서 제외해야하나요?"
             $0.font = .KoreanBody
-//            $0.textColor = .TextPrimary
             $0.textColor = .TextDeactivate
         }
         
         titleTextFiled.do {
-//            $0.font = .KoreanTitle
             $0.font = .KoreanCaption1
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
@@ -92,21 +88,18 @@ class ExclItemInfoModalVC: UIViewController {
         totalAmountTitleMessage.do {
             $0.text = "해당 항목은 총 얼마였나요?"
             $0.font = .KoreanBody
-//            $0.textColor = .TextPrimary
             $0.textColor = .TextDeactivate
         }
         
         totalAmountTextFiled.do {
             $0.applyStyle(.editingDidEndNumber)
             $0.font = .KoreanSubtitle
-//            $0.font = .KoreanCaption1
             $0.textColor = .TextDeactivate
         }
 
         exclMemberMessage.do {
             $0.text = "제외할 분들을 선택하세요"
             $0.font = .KoreanBody
-//            $0.textColor = .TextPrimary
             $0.textColor = .TextDeactivate
         }
         
@@ -125,10 +118,8 @@ class ExclItemInfoModalVC: UIViewController {
             $0.register(cellType: ExclItemInfoModalCell.self)
             $0.register(cellType: ExclItemInfoDeactiveModalCell.self)
             $0.backgroundColor = .SurfacePrimary
-            //$0.alwaysBounceVertical = false
-//            $0.isScrollEnabled = false
-//            $0.bounces = false
             $0.showsVerticalScrollIndicator = false
+            $0.showsHorizontalScrollIndicator = false
             $0.rowHeight = rowHeight
             $0.separatorStyle = .none
             $0.layer.borderColor = UIColor.BorderPrimary.cgColor
@@ -138,23 +129,23 @@ class ExclItemInfoModalVC: UIViewController {
                                            left: 0.0,
                                            bottom: tableInset,
                                            right: 0.0)
+            tableView.rx.setDelegate(self)
+                .disposed(by: disposeBag)
             
-            dataSource = RxTableViewSectionedReloadDataSource<ExclItemSection>(configureCell: { dataSource, tableView, indexPath, item in
+            dataSource = RxTableViewSectionedReloadDataSource<ExclItemInfoModalSection>(configureCell: { dataSource, tableView, indexPath, item in
                 let section = dataSource.sectionModels[indexPath.section]
-                let cell = tableView.dequeueReusableCell(for: indexPath, cellType: ExclItemInfoModalCell.self)
                 let item = section.items[indexPath.row]
-                return cell
+
                 if section.isActive {
+                    let cell = tableView.dequeueReusableCell(for: indexPath, cellType: ExclItemInfoModalCell.self)
                     cell.configure(item: item)
-                    print("zxczxc")
                     return cell
                 } else {
+                    let cell = tableView.dequeueReusableCell(for: indexPath, cellType: ExclItemInfoDeactiveModalCell.self)
                     cell.configure(item: item)
-                    print("zxczx123123131c")
                     return cell
                 }
             })
-                                
         }
     }
     
@@ -177,8 +168,7 @@ class ExclItemInfoModalVC: UIViewController {
         
         contentView.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalTo(scrollView)
-            $0.width.equalTo(scrollView)
-            $0.height.equalTo(0)
+            $0.width.height.equalTo(scrollView)
         }
         
         titleMessage.snp.makeConstraints {
@@ -189,7 +179,7 @@ class ExclItemInfoModalVC: UIViewController {
         titleTextFiled.snp.makeConstraints {
             $0.top.equalTo(titleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(48) // 원래 60
+            $0.height.equalTo(48)
         }
         
         textFiledCounter.snp.makeConstraints {
@@ -205,7 +195,7 @@ class ExclItemInfoModalVC: UIViewController {
         totalAmountTextFiled.snp.makeConstraints {
             $0.top.equalTo(totalAmountTitleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(48) // 원래 60
+            $0.height.equalTo(48)
         }
         
         exclMemberMessage.snp.makeConstraints {
@@ -216,14 +206,9 @@ class ExclItemInfoModalVC: UIViewController {
         tableView.snp.makeConstraints {
             $0.top.equalTo(exclMemberMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(0)
+            $0.bottom.equalToSuperview()
         }
 
-        nextButton.snp.makeConstraints {
-            $0.top.equalTo(tableView.snp.bottom).offset(24)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(48)
-        }
     }
     
     func setBinding() {
@@ -236,10 +221,6 @@ class ExclItemInfoModalVC: UIViewController {
         let totalAmountTFEvent = Observable.merge(
             totalAmountTextFiled.rx.controlEvent(.editingDidBegin).map { UIControl.Event.editingDidBegin},
             totalAmountTextFiled.rx.controlEvent(.editingDidEnd).map { UIControl.Event.editingDidEnd })
-        
-//        let resignTF = Observable.merge(
-//
-//        )
         
         let input = ExclItemInfoModalVM.Input(nextButtonTapped: nextButton.rx.tap,
                                    title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
@@ -324,44 +305,94 @@ class ExclItemInfoModalVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
-//        output.sections
+        viewModel.sections
+            .asDriver()
+            .drive(tableView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+
+//        viewModel.exclMembers
 //            .asDriver()
-//            .drive(collectionView.rx.items(dataSource: dataSource))
+//            .drive(onNext: { [weak self] items in
+//                guard let self = self else { return }
+//                print(contentView.frame)
+//                print(tableView.frame)
+//                let tableInset = Int(self.tableInset)
+//                let cellHeight = Int(self.cellHeight)
+//                let tableViewHeight = items.count * (cellHeight + 8) + (tableInset * 2)
+//                // MARK: tableView Height
+//                self.contentView.snp.updateConstraints {
+//                    $0.height.equalTo(tableViewHeight + 320 + 120)
+//                }
+//                self.tableView.snp.updateConstraints {
+//                    $0.height.equalTo(tableViewHeight)
+//                }
+//                print(contentView.frame)
+//                print(tableView.frame)
+//                UIView.animate(withDuration: 0.33) {
+//                    self.view.layoutIfNeeded()
+//                }
+//
+//            })
 //            .disposed(by: disposeBag)
         
         
-        
-        viewModel.exclMembers
-            .asDriver()
-            .drive(onNext: { [weak self] items in
-                guard let self = self else { return }
-                let tableInset = Int(self.tableInset)
-                let cellHeight = Int(self.cellHeight)
-                let tableViewHeight = items.count * (cellHeight + 8) + (tableInset * 2)
-                // MARK: tableView Height
-                self.tableView.snp.updateConstraints {
-                    $0.height.equalTo(tableViewHeight)
-                }
-                self.contentView.snp.updateConstraints {
-                    $0.height.equalTo(tableViewHeight + 320 + 120)
-                }
+        let isTitleTextFieldActive = BehaviorRelay<Bool>(value: false)
+        let isTotalAmountTextFieldActive = BehaviorRelay<Bool>(value: false)
+
+        titleTextFiled.rx.controlEvent(.editingDidBegin)
+            .subscribe(onNext: { _ in
+                isTitleTextFieldActive.accept(true)
+            })
+            .disposed(by: disposeBag)
+
+        titleTextFiled.rx.controlEvent(.editingDidEnd)
+            .subscribe(onNext: { _ in
+                isTitleTextFieldActive.accept(false)
+            })
+            .disposed(by: disposeBag)
+
+        totalAmountTextFiled.rx.controlEvent(.editingDidBegin)
+            .subscribe(onNext: { _ in
+                isTotalAmountTextFieldActive.accept(true)
+            })
+            .disposed(by: disposeBag)
+
+        totalAmountTextFiled.rx.controlEvent(.editingDidEnd)
+            .subscribe(onNext: { _ in
+                isTotalAmountTextFieldActive.accept(false)
             })
             .disposed(by: disposeBag)
         
         tapGesture.rx.event
             .asControlEvent()
-            .subscribe(onNext: { [weak self] _ in
+            .filter { [weak self] gesture in
+                guard let self = self else { return false }
+                if isTitleTextFieldActive.value || isTotalAmountTextFieldActive.value {
+                    return true
+                }
+                let location = gesture.location(in: self.tableView)
+                return self.tableView.point(inside: location, with: nil) == false
+            }
+            .subscribe(onNext: { [weak self] gesture in
                 guard let self = self else { return }
                 titleTextFiled.endEditing(true)
                 totalAmountTextFiled.endEditing(true)
                 unfocusTitleTF()
                 unfocusTotalAmountTF()
-                
-                // MARK: TableView 배경색 변화시켜야함.
                 focusExclMember()
-                
-                // MARK: TableView 배경색 변화시켜야함.
-                
+            })
+            .disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(onNext: { [weak self] indexPath in
+                guard let self = self else { return }
+                var sections = viewModel.sections.value
+
+                var target = sections[indexPath.section].items[indexPath.row]
+                target.isTarget.toggle()
+                sections[indexPath.section].items[indexPath.row] = target
+                viewModel.sections.accept(sections)
             })
             .disposed(by: disposeBag)
     }
@@ -379,7 +410,9 @@ extension ExclItemInfoModalVC {
             self.exclMemberMessage.textColor = .TextPrimary
         }
         
-        view.layoutIfNeeded()
+        var sections = viewModel.sections.value
+        sections[0].isActive = true
+        viewModel.sections.accept(sections)
     }
     
     func unfocusExclMember() {
@@ -392,7 +425,9 @@ extension ExclItemInfoModalVC {
             self.exclMemberMessage.textColor = .TextDeactivate
         }
         
-        view.layoutIfNeeded()
+        var sections = viewModel.sections.value
+        sections[0].isActive = false
+        viewModel.sections.accept(sections)
     }
     
     func focusTitleTF() {

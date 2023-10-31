@@ -32,14 +32,13 @@ class ExclItemInfoModalCell: UITableViewCell, Reusable {
     }
     
     func setAttribute() {
-        self.backgroundColor = UIColor(white: 0, alpha: 0)
-        //self.selectionStyle = .none
+        self.backgroundColor = .clear
+        self.selectionStyle = .none
         
         contentView.do {
-            $0.backgroundColor = .SurfaceBrandCalmshell
             $0.layer.cornerRadius = 8
-            $0.layer.borderColor = UIColor.SurfaceBrandCalmshell.cgColor
             $0.layer.borderWidth = 1
+            $0.clipsToBounds = true
             $0.frame = $0.frame.inset(by: UIEdgeInsets(top: 4,
                                                        left: 12,
                                                        bottom: 4,
@@ -47,7 +46,7 @@ class ExclItemInfoModalCell: UITableViewCell, Reusable {
         }
         
         name.do {
-            $0.textColor = .TextPrimary
+            $0.font = .KoreanBody
         }
     }
     
@@ -60,8 +59,18 @@ class ExclItemInfoModalCell: UITableViewCell, Reusable {
         }
     }
 
-    func configure(item: String) {
-        name.text = item
+    func configure(item: ExclItemTable) {
+        name.text = item.name
+        
+        UIView.transition(with: self, duration: 0.22, options: .transitionCrossDissolve) {
+            self.name.textColor = item.isTarget ? .SurfaceBrandCalmshell : .TextPrimary
+            self.contentView.layer.borderColor = item.isTarget ? UIColor.SurfaceBrandWatermelonPressed.cgColor : UIColor.SurfaceBrandCalmshell.cgColor
+        }
+        UIView.animate(withDuration: 0.22) {
+            self.contentView.backgroundColor = item.isTarget ? .SurfaceBrandWatermelon : .SurfaceBrandCalmshell
+        }
+
+        self.layoutIfNeeded()
     }
 }
 

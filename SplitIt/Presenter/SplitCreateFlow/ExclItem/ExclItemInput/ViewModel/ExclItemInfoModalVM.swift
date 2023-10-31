@@ -15,13 +15,13 @@ class ExclItemInfoModalVM {
     
     let maxTextCount = 8
     
-//    let sections = BehaviorRelay<ExclMembermod>(value: [])
+    let sections = BehaviorRelay<[ExclItemInfoModalSection]>(value: [])
     let exclMembers = BehaviorRelay<[ExclMember]>(value: [])
     let exclMemberIsActive = BehaviorRelay<Bool>(value: false)
     
     struct Input {
-        let nextButtonTapped: ControlEvent<Void> // 다음 버튼
-        let title: Driver<String> // TitleTextField의 text
+        let nextButtonTapped: ControlEvent<Void>
+        let title: Driver<String>
         let totalAmount: Driver<String>
         let titleTextFieldControlEvent: Observable<UIControl.Event>
         let totalAmountTextFieldControlEvent: Observable<UIControl.Event>
@@ -129,14 +129,6 @@ class ExclItemInfoModalVM {
             }
             .asDriver(onErrorJustReturn: UIControl.Event())
         
-        ///
-        ///
-        ///
-        ///
-        ///
-        ///
-        
-        // MARK: ExclMembers를 만듦 -> 얘를 테이블뷰에 뿌려줘야함
         let currentMembers = SplitRepository.share.csMemberArr
         currentMembers
             .map { csMembers -> [ExclMember] in
@@ -145,9 +137,19 @@ class ExclItemInfoModalVM {
             }
             .bind(to: exclMembers)
             .disposed(by: disposeBag)
-        
-
-        
+         
+        exclMembers
+            .map { $0.map { exclMember -> ExclItemTable in
+                let item = ExclItemTable(name: exclMember.name, isTarget: false)
+                return item
+            }}
+            .map { items -> [ExclItemInfoModalSection] in
+                let section = ExclItemInfoModalSection(isActive: false, items: items)
+                print(section)
+                return [section]
+            }
+            .bind(to: sections)
+            .disposed(by: disposeBag)
         
         return Output(addExclItem: showCSTotalAmountView.asDriver(),
                       titleCount: textFieldCount.asDriver(),
