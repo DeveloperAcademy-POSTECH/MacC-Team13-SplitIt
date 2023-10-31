@@ -78,6 +78,7 @@ class CustomKeyboard: UIInputViewController {
             $0.image = UIImage(systemName: "delete.left")
             $0.tintColor = UIColor.black
             $0.contentMode = .scaleAspectFit
+            $0.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
         }
     }
     
