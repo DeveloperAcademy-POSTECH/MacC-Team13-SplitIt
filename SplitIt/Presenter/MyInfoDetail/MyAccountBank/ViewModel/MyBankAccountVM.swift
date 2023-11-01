@@ -25,6 +25,7 @@ class MyBankAccountVM {
         let tossTapped: Observable<Void>
         let kakaoTapeed: Observable<Void>
         let naverTapped: Observable<Void>
+        let deleteBtnTapped: Driver<Void>
         
     }
     
@@ -35,6 +36,7 @@ class MyBankAccountVM {
         let toggleTossPay: Observable<Void>
         let toggleKakaoPay: Observable<Void>
         let togglenaverPay: Observable<Void>
+        let showAlertView: Driver<Void>
 
         
     }
@@ -49,6 +51,7 @@ class MyBankAccountVM {
         let tossTapped = input.tossTapped
         let kakaoTapped = input.kakaoTapeed
         let naverTapped = input.naverTapped
+        let deleteBtnTapped = input.deleteBtnTapped
 
         var inputName: String = ""
         var inputRealName: String = ""
@@ -66,11 +69,10 @@ class MyBankAccountVM {
                     UserDefaults.standard.set(inputName, forKey: "userNickName")
                 }
 
-
                 if inputRealName != "" {
                     UserDefaults.standard.set(inputRealName, forKey: "userName")
                 }
-
+                
 
             })
             .disposed(by: disposeBag)
@@ -128,7 +130,8 @@ class MyBankAccountVM {
                             showBankModel: selectBackTapped,
                             toggleTossPay: tossTapped,
                             toggleKakaoPay: kakaoTapped,
-                            togglenaverPay: naverTapped
+                            togglenaverPay: naverTapped,
+                            showAlertView: deleteBtnTapped
                          
         )
         

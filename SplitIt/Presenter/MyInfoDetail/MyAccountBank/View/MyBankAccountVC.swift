@@ -12,7 +12,12 @@ import SnapKit
 import Then
 
 
-class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
+protocol MyInfoDeleteAlertVCDelegate: AnyObject {
+    func deleteAllInfo()
+}
+
+class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDeleteAlertVCDelegate {
+    
     
     let accountTextRelay = BehaviorRelay<String?>(value: "")
     let accountCustomKeyboard = AccountCustomKeyboard()
@@ -22,10 +27,9 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
     let maxCharacterCount = 8
     let userDefault = UserDefaults.standard
     
-    
     var isBankSelected: Bool = false
     
-    let header = NaviHeader()
+    let header = SPNavigationBar()
     
     let scrollView = UIScrollView()
     let contentView = UIView()
@@ -43,7 +47,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
     let accountLabel = UILabel()
     let accountTextField = UITextField()
     
-
     var nameLabel = UILabel()
     var nameTextField = UITextField() //예금주
     var nameCountLabel = UILabel()
@@ -66,9 +69,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
     let kakaoPayView = UIView()
     let naverPayView = UIView()
     
-    let nameClearBtn = UIButton()
-    
-    let editDoneBtn = NewSPButton()
+    let deleteBtn = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,6 +81,8 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
         setBinding()
         asapRxData()
         accountTextFieldCustomKeyboard()
+        
+        
     }
     
     
@@ -95,8 +98,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
                 self?.accountTextRelay.accept(self?.accountTextField.text)
             })
             .disposed(by: disposeBag)
-
-        print(accountTextRelay)
     }
     
     //수정버튼 활성화 비활성화 선택해주는 함수
@@ -113,21 +114,21 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
                     self.userDefault.string(forKey: "userAccount") != nil &&
                     self.userDefault.string(forKey: "userNickName") != nil {
                     
-                    self.editDoneBtn.buttonState.accept(true)
+                    self.header.buttonState.accept(true)
                     
                 } else { //값이 없는 상태
                     if !text1.isEmpty && !text2.isEmpty && !text3.isEmpty && self.isBankSelected {
-                        self.editDoneBtn.buttonState.accept(true)
+                        self.header.buttonState.accept(true)
                         
                     } else {
-                        self.editDoneBtn.buttonState.accept(false)
+                        self.header.buttonState.accept(false)
                         
                     }
                 }
             })
             .disposed(by: disposeBag)
         
-
+        
         accountTextField.rx.text.orEmpty
             .subscribe(onNext: { [weak self] text in
                 let filtered = text.filter { $0.isNumber || $0 == "-" }
@@ -136,18 +137,16 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
                 }
             })
             .disposed(by: disposeBag)
-
+        
         
     }
     
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        setKeyboardNotification()
         self.nickNameTextField.becomeFirstResponder()
     }
-
+    
     
     func setBinding() {
         
@@ -159,23 +158,16 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
         
         let input = MyBankAccountVM.Input(inputNameText: nickNameTextField.rx.text.orEmpty.changed,
                                           inputRealNameText: nameTextField.rx.text.orEmpty.changed,
-                                          editDoneBtnTapped: editDoneBtn.rx.tap.asDriver(),
+                                          editDoneBtnTapped: header.rightButton.rx.tap.asDriver(),
                                           selectBackTapped: selectedBankTap.rx.event.asObservable().map{ _ in () },
                                           inputAccountText: accountTextField.rx.text.orEmpty.changed,
                                           tossTapped: tossTap.rx.event.asObservable().map { _ in () },
                                           kakaoTapeed: kakaoTap.rx.event.asObservable().map { _ in () },
-                                          naverTapped: naverTap.rx.event.asObservable().map { _ in () }
+                                          naverTapped: naverTap.rx.event.asObservable().map { _ in () },
+                                          deleteBtnTapped: deleteBtn.rx.tap.asDriver()
         )
         
         let output = viewModel.transform(input: input)
-        
-        output.popToMyInfoView
-            .drive(onNext:{ [self] in
-                self.navigationController?.popViewController(animated: true)
-               // userDefault.set(accountTextField.text, forKey: "userAccount")
-            })
-            .disposed(by: disposeBag)
-        
         
         output.showBankModel
             .subscribe(onNext: { [weak self] in
@@ -192,8 +184,27 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
             })
             .disposed(by: disposeBag)
         
+        output.showAlertView
+            .drive(onNext: {
+                self.presentMyInfoDeleteAlertVC()
+            })
+            .disposed(by: disposeBag)
         
-        
+    }
+    
+    
+    func deleteAllInfo() {
+        for key in UserDefaults.standard.dictionaryRepresentation().keys {
+            UserDefaults.standard.removeObject(forKey: key.description)
+        }
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    func presentMyInfoDeleteAlertVC() {
+        let vc = MyInfoDeleteAlertVC()
+        vc.modalPresentationStyle = .overFullScreen
+        vc.delegate = self
+        self.present(vc, animated: false, completion: nil)
     }
     
     //UserDefaluts 변경되는 값에 따라 바로 UI 변경되도록 하는 함수
@@ -232,10 +243,9 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
                 guard let value = value else { return }
                 self.bankNameLabel.text = value
                 self.isBankSelected = true
-                
             })
             .disposed(by: disposeBag)
-
+        
         
     }
     
@@ -295,26 +305,26 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
         
         
         header.do {
-            $0.applyStyle(.myInfo)
-            $0.setBackButton(viewController: self)
+            $0.applyStyle(style: .myInfo, vc: self)
+            $0.buttonState.accept(true)
         }
-        
-        
         
         nickNameLabel.do {
             $0.text = "정산자 닉네임"
             $0.font = UIFont.KoreanCaption2
-            $0.textColor = UIColor.TextPrimary
+            $0.textColor = .TextPrimary
         }
+        
         nickNameCountLabel.do {
             $0.textColor = .TextSecondary
             $0.font = UIFont.KoreanCaption2
         }
+        
         nickNameTextField.do {
             $0.layer.cornerRadius = 8
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
             
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
@@ -326,22 +336,16 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextDeactivate])
             } else {
                 
-                $0.placeholder = userDefault.string(forKey: "userNickName")
+                $0.attributedPlaceholder = NSAttributedString(string: userDefault.string(forKey: "userNickName")!,
+                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextPrimary])
             }
-            $0.font = UIFont.systemFont(ofSize: 15)
-            
+            $0.font = .KoreanCaption1
             $0.clipsToBounds = true
             
             //textField의 앞부분의 빈공간 구현
             $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
             $0.leftViewMode = .always
             
-        }
-        
-        nameClearBtn.do {
-            $0.setImage(UIImage(systemName: "x.circle.fill"), for: .normal)
-            $0.frame = CGRect(x: 30, y: 0, width: 50, height: 30)
-            $0.setTitleColor(.black, for: .normal)
         }
         
         bankLabel.do {
@@ -353,7 +357,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
         bankView.do {
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
             $0.backgroundColor = .clear
             
         }
@@ -367,7 +371,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
                 $0.tintColor = .TextPrimary
             }
             $0.font = UIFont.KoreanCaption1
-            
         }
         
         bankArrowImage.do {
@@ -384,9 +387,9 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
             $0.layer.cornerRadius = 8
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.gray.cgColor
-            $0.keyboardType = .numberPad
-            $0.clearButtonMode = .whileEditing
+            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
+            //$0.keyboardType = .numberPad
+            //$0.clearButtonMode = .whileEditing
             
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
@@ -394,13 +397,13 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
             //MARK: 토마토, 수정뷰로 넘어왔을 때, 검은색 글자면은 이미 입력되어있는 것처럼 보여서 회색으로 처리해두었어요
             if UserDefaults.standard.string(forKey: "userAccount") == nil {
                 $0.attributedPlaceholder = NSAttributedString(string: "계좌번호를 입력해주세요",
-                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextDeactivate])
             } else {
-                $0.placeholder = userDefault.string(forKey: "userAccount")
+                $0.attributedPlaceholder = NSAttributedString(string: userDefault.string(forKey: "userAccount")!,
+                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextPrimary])
             }
             
-            
-            $0.font = UIFont.systemFont(ofSize: 15)
+            $0.font = UIFont.KoreanCaption1
             $0.clipsToBounds = true
             
             //textField의 앞부분의 빈공간 구현
@@ -426,7 +429,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
             $0.layer.cornerRadius = 8
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
             
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
@@ -436,11 +439,12 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
             if UserDefaults.standard.string(forKey: "userName") == nil {
                 $0.attributedPlaceholder = NSAttributedString(string: "성함을 입력해주세요",
                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextDeactivate])
+                //$0.textColor = .TextDeactivate
             } else {
-                
-                $0.placeholder = userDefault.string(forKey: "userName")
+                $0.attributedPlaceholder = NSAttributedString(string: userDefault.string(forKey: "userName")!,
+                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextPrimary])
             }
-            $0.font = UIFont.systemFont(ofSize: 15)
+            $0.font = .KoreanCaption1
             
             $0.clipsToBounds = true
             
@@ -454,13 +458,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
             $0.text = "간편페이 사용여부"
             $0.font = UIFont.KoreanCaption2
             $0.textColor = UIColor.TextPrimary
-        }
-        
-        
-        editDoneBtn.do {
-            $0.setTitle("저장하기", for: .normal)
-            $0.setTitle("저장하기", for: .disabled)
-            $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
         }
         
         
@@ -508,13 +505,25 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
             $0.text = "네이버페이"
             $0.font = .KoreanCaption2
             $0.textAlignment = .center
-            
+        }
+        
+        let deleteString = NSAttributedString(string: "초기화하기", attributes: [
+            NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
+        ])
+        
+        deleteBtn.do {
+            $0.titleLabel?.font = UIFont.KoreanButtonText
+            $0.titleLabel?.textColor = UIColor.AppColorStatusWarnRed
+            $0.clipsToBounds = true
+            $0.backgroundColor = .clear
+            $0.layer.borderWidth = 0
+            $0.setAttributedTitle(deleteString, for: .normal)
         }
     }
     
     func setAddView() {
         
-        [header, scrollView, editDoneBtn].forEach {
+        [header, scrollView, deleteBtn].forEach {
             view.addSubview($0)
         }
         
@@ -557,7 +566,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
         scrollView.snp.makeConstraints {
             $0.top.equalTo(header.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(editDoneBtn.snp.top)
+            $0.bottom.equalToSuperview()
         }
         
         contentView.snp.makeConstraints { make in
@@ -729,46 +738,15 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
             make.centerX.equalToSuperview()
         }
         
-        
-        
-        editDoneBtn.snp.makeConstraints { make in
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        deleteBtn.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().offset(-53)
             make.centerX.equalToSuperview()
-            make.height.equalTo(48)
-            make.width.equalTo(330)
         }
-        
         
     }
 }
 
 extension MyBankAccountVC: UITextFieldDelegate {
-    
-    func setKeyboardNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let keyboardHeight: CGFloat
-            keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
-            self.editDoneBtn.snp.updateConstraints {
-                $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(keyboardHeight + 26)
-            }
-        }
-    }
-    
-    @objc private func keyboardWillHide() {
-        self.editDoneBtn.snp.updateConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-        }
-    }
-    
-    func setKeyboardObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
     
     func setKeyboardObserverRemove() {
         NotificationCenter.default.removeObserver(self)
