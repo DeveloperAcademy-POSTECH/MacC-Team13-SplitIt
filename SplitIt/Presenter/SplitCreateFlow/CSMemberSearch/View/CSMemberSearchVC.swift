@@ -18,15 +18,15 @@ class CSMemberSearchVC: UIViewController, Reusable {
     let viewModel = CSMemberSearchVM()
     
     let header = SPNavigationBar()
-    let addTopBorder = UIView()
+    let addView = UIView()
     let addLabel = UILabel()
     let addCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-    let addBottomBorder = UIView()
     let searchTextField = UITextField()
     let addButton = UIButton()
-    let searchTopBorder = UIView()
+    let searchView = UIView()
     let searchLabel = UILabel()
     let searchTableView = UITableView(frame: .zero)
+    let backgroundView = EmptyBackGroundView()
     
     var selectedMemberArr: [MemberCheck] = []
     
@@ -46,8 +46,10 @@ class CSMemberSearchVC: UIViewController, Reusable {
             $0.buttonState.accept(true)
         }
         
-        addTopBorder.do {
-            $0.backgroundColor = .BorderPrimary
+        addView.do {
+            $0.backgroundColor = .SurfaceDeactivate
+            $0.addTopBorderWithColor(color: .BorderPrimary, borderWidth: 1)
+            $0.addBottomBorderWithColor(color: .BorderPrimary, borderWidth: 1)
         }
         
         addLabel.do {
@@ -61,18 +63,20 @@ class CSMemberSearchVC: UIViewController, Reusable {
             layout.scrollDirection = .horizontal
             
             $0.register(cellType: SelectedCell.self)
-            $0.backgroundColor = .SurfacePrimary
+            $0.backgroundColor = .SurfaceDeactivate
             $0.collectionViewLayout = layout
             $0.delegate = self
             $0.showsHorizontalScrollIndicator = false
         }
         
-        addBottomBorder.do {
-            $0.backgroundColor = .BorderPrimary
+        searchView.do {
+            $0.backgroundColor = .SurfaceDeactivate
+            $0.addTopBorderWithColor(color: .BorderPrimary, borderWidth: 1)
         }
         
         searchTextField.do {
             $0.placeholder = "이름을 입력하세요"
+            $0.clearButtonMode = .always
             $0.font = .KoreanTitle3
             $0.textColor = .TextPrimary
             $0.backgroundColor = .SurfacePrimary
@@ -81,11 +85,16 @@ class CSMemberSearchVC: UIViewController, Reusable {
         }
         
         addButton.do {
-            $0.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
+            $0.setTitle("추가", for: .normal)
+            $0.setTitleColor(.TextPrimary, for: .normal)
+            $0.titleLabel?.font = .KoreanSubtitle
+            $0.backgroundColor = .SurfaceBrandPear
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
+            $0.layer.borderWidth = 1
         }
         
-        searchTopBorder.do {
-            $0.backgroundColor = .BorderPrimary
+        searchView.do {
+            $0.backgroundColor = .SurfaceDeactivate
         }
         
         searchLabel.do {
@@ -97,16 +106,23 @@ class CSMemberSearchVC: UIViewController, Reusable {
         searchTableView.do {
             $0.register(cellType: SearchCell.self)
             $0.separatorStyle = .none
-            $0.backgroundColor = .SurfacePrimary
+            $0.backgroundColor = .SurfaceDeactivate
             $0.rowHeight = 48
             $0.showsVerticalScrollIndicator = false
         }
     }
     
     private func setLayout() {
-        [header,addTopBorder,addLabel,addCollectionView,addBottomBorder,
-         searchTextField,addButton,searchLabel,searchTopBorder,searchTableView].forEach {
+        [header,searchTextField,addButton,addView,searchView,backgroundView].forEach {
             view.addSubview($0)
+        }
+        
+        [addLabel,addCollectionView].forEach {
+            addView.addSubview($0)
+        }
+        
+        [searchLabel,searchTableView].forEach {
+            searchView.addSubview($0)
         }
         
         header.snp.makeConstraints {
@@ -115,57 +131,54 @@ class CSMemberSearchVC: UIViewController, Reusable {
             $0.leading.trailing.equalToSuperview()
         }
         
-        addTopBorder.snp.makeConstraints {
+        addView.snp.makeConstraints {
             $0.top.equalTo(header.snp.bottom).offset(19)
-            $0.height.equalTo(1)
+            $0.height.equalTo(88)
             $0.horizontalEdges.equalToSuperview()
         }
         
         addLabel.snp.makeConstraints {
-            $0.top.equalTo(addTopBorder.snp.bottom).offset(16)
-            $0.leading.equalToSuperview().offset(16)
+            $0.top.leading.equalToSuperview().offset(16)
         }
         
         addCollectionView.snp.makeConstraints {
             $0.top.equalTo(addLabel.snp.bottom)
             $0.horizontalEdges.equalToSuperview().inset(16)
-            $0.bottom.equalTo(addBottomBorder.snp.top)
-        }
-        
-        addBottomBorder.snp.makeConstraints {
-            $0.top.equalTo(addTopBorder.snp.bottom).offset(88)
-            $0.height.equalTo(1)
-            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
         
         searchTextField.snp.makeConstraints {
-            $0.top.equalTo(addBottomBorder.snp.bottom)
+            $0.top.equalTo(addView.snp.bottom)
             $0.height.equalTo(60)
             $0.leading.equalToSuperview().offset(24)
-            $0.trailing.equalTo(addButton.snp.leading)
+            $0.trailing.equalTo(addButton.snp.leading).offset(-10)
         }
         
         addButton.snp.makeConstraints {
-            $0.centerY.equalTo(searchTextField)
-            $0.trailing.equalToSuperview().offset(-24)
-            $0.size.equalTo(30)
+            $0.top.equalTo(searchTextField)
+            $0.height.equalTo(searchTextField)
+            $0.trailing.equalToSuperview()
+            $0.width.equalTo(110)
         }
         
-        searchTopBorder.snp.makeConstraints {
+        searchView.snp.makeConstraints {
             $0.top.equalTo(searchTextField.snp.bottom)
-            $0.height.equalTo(1)
-            $0.horizontalEdges.equalToSuperview()
+            $0.horizontalEdges.bottom.equalToSuperview()
         }
         
         searchLabel.snp.makeConstraints {
-            $0.top.equalTo(searchTopBorder.snp.bottom).offset(24)
-            $0.leading.equalToSuperview().offset(24)
+            $0.top.leading.equalToSuperview().offset(24)
         }
         
         searchTableView.snp.makeConstraints {
             $0.top.equalTo(searchLabel.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(16)
             $0.bottom.equalToSuperview()
+        }
+        
+        backgroundView.snp.makeConstraints {
+            $0.top.horizontalEdges.equalTo(searchTableView)
+            $0.height.equalTo(80)
         }
     }
     
@@ -187,6 +200,41 @@ class CSMemberSearchVC: UIViewController, Reusable {
             }
             .disposed(by: disposeBag)
         
+        output.searchMemberArr
+            .distinctUntilChanged()
+            .asDriver(onErrorJustReturn: [])
+            .drive(onNext: { [weak self] members in
+                guard let self = self else { return }
+                if members.isEmpty {
+                    self.backgroundView.isHidden = false
+                } else {
+                    self.backgroundView.isHidden = true
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        searchTextField.rx.text
+            .orEmpty
+            .asDriver()
+            .drive(onNext: { [weak self] text in
+                guard let self = self else { return }
+                self.backgroundView.configure(item: text)
+            })
+            .disposed(by: disposeBag)
+        
+        output.textFieldIsValid
+            .asDriver()
+            .map { [weak self] isValid -> String in
+                guard let self = self else { return "" }
+                if !isValid {
+                    return String(self.searchTextField.text?.prefix(self.viewModel.maxTextCount) ?? "")
+                } else {
+                    return self.searchTextField.text ?? ""
+                }
+            }
+            .drive(searchTextField.rx.text)
+            .disposed(by: disposeBag)
+        
         output.selectedMemberArr
             .bind(to: addCollectionView.rx.items(cellIdentifier: "SelectedCell")) { _, item, cell in
                 if let cell = cell as? SelectedCell {
@@ -200,34 +248,6 @@ class CSMemberSearchVC: UIViewController, Reusable {
             .drive(onNext: { [weak self] memberArr in
                 guard let self = self else { return }
                 self.selectedMemberArr = memberArr
-            })
-            .disposed(by: disposeBag)
-        
-        output.selectedMemberArr
-            .distinctUntilChanged()
-            .asDriver(onErrorJustReturn: [])
-            .drive(onNext: { [weak self] selectedMembers in
-                guard let self = self else { return }
-                let count = selectedMembers.count
-                if count == 0 {
-                    UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
-                        self.addBottomBorder.backgroundColor = .SurfacePrimary
-                        self.addBottomBorder.snp.updateConstraints {
-                            $0.top.equalTo(self.addTopBorder.snp.bottom)
-                        }
-                        
-                        self.view.layoutIfNeeded()
-                    })
-                } else if count == 1 && addBottomBorder.backgroundColor == .SurfacePrimary {
-                    UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
-                        self.addBottomBorder.backgroundColor = .BorderPrimary
-                        self.addBottomBorder.snp.updateConstraints {
-                            $0.top.equalTo(self.addTopBorder.snp.bottom).offset(88)
-                        }
-                        
-                        self.view.layoutIfNeeded()
-                    })
-                }
             })
             .disposed(by: disposeBag)
         
@@ -262,5 +282,29 @@ extension CSMemberSearchVC: UICollectionViewDelegateFlowLayout {
         let item = selectedMemberArr[indexPath.item]
         let dynamicWidth = SelectedCell().calculateCellWidth(item: item)
         return CGSize(width: dynamicWidth, height: collectionView.frame.height)
+    }
+}
+
+private extension UIView {
+    func addTopBorderWithColor(color: UIColor, borderWidth: CGFloat) {
+        let borderView = UIView()
+        borderView.backgroundColor = color
+        addSubview(borderView)
+        borderView.snp.makeConstraints {
+            $0.height.equalTo(borderWidth)
+            $0.horizontalEdges.equalToSuperview()
+            $0.top.equalToSuperview().offset(-1)
+        }
+    }
+    
+    func addBottomBorderWithColor(color: UIColor, borderWidth: CGFloat) {
+        let borderView = UIView()
+        borderView.backgroundColor = color
+        addSubview(borderView)
+        borderView.snp.makeConstraints {
+            $0.height.equalTo(borderWidth)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(1)
+        }
     }
 }

@@ -28,11 +28,13 @@ class SelectedCell: UICollectionViewCell, Reusable {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-
+        
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 8.0, left: 0, bottom: 16, right: 0))
     }
     
     private func setAttribute() {
+        backgroundColor = .SurfaceDeactivate
+        
         contentView.do {
             $0.backgroundColor = .SurfacePrimary
             $0.layer.cornerRadius = 16
@@ -47,8 +49,8 @@ class SelectedCell: UICollectionViewCell, Reusable {
         }
         
         xMark.do {
-            $0.image = UIImage(systemName: "x.circle")
-            $0.tintColor = .TextPrimary
+            $0.image = UIImage(named: "DeleteIconTypeD")
+            $0.contentMode = .scaleAspectFit
         }
     }
     
@@ -56,27 +58,40 @@ class SelectedCell: UICollectionViewCell, Reusable {
         [nameLabel,xMark].forEach {
             contentView.addSubview($0)
         }
-        
-        nameLabel.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalTo(12)
-        }
-        
-        xMark.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalTo(nameLabel.snp.trailing).offset(8)
-            $0.trailing.equalToSuperview().offset(-12)
-            $0.height.equalTo(18.5)
-        }
     }
     
     func configure(item: MemberCheck) {
         nameLabel.text = item.name
+        
+        if item.name != UserDefaults.standard.string(forKey: "userName") {
+            contentView.addSubview(xMark)
+            
+            xMark.snp.makeConstraints {
+                $0.centerY.equalToSuperview()
+                $0.leading.equalTo(nameLabel.snp.trailing).offset(8)
+                $0.trailing.equalToSuperview().offset(-12)
+                $0.height.equalTo(18.5)
+            }
+            
+            nameLabel.snp.remakeConstraints {
+                $0.centerY.equalToSuperview()
+                $0.leading.equalTo(12)
+            }
+        } else {
+            xMark.removeFromSuperview()
+            
+            nameLabel.snp.remakeConstraints {
+                $0.centerX.centerY.equalToSuperview()
+            }
+        }
     }
     
     func calculateCellWidth(item: MemberCheck) -> CGFloat {
         let text = item.name
         let textWidth = (text as NSString).size(withAttributes: [NSAttributedString.Key.font: UIFont.KoreanCaption1]).width
-        return textWidth + 50.5
+        
+        var plusWidth = item.name == UserDefaults.standard.string(forKey: "userName") ? 30 : 50.5
+        
+        return textWidth + plusWidth
     }
 }
