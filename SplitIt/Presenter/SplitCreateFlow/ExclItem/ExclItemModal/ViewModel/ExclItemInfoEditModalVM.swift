@@ -43,7 +43,7 @@ class ExclItemInfoEditModalVM {
         let totalAmountTextFieldControlEvent: Driver<UIControl.Event>
         let cancelButtonTapped: Driver<Void>
         let editButtonTapped: Driver<Void>
-        let deleteButtonButtonTapped: Driver<Void>
+        let showAlertVC: Driver<(String, String)>
     }
     
     func transform(input: Input) -> Output {
@@ -53,6 +53,7 @@ class ExclItemInfoEditModalVM {
         let titleResult = BehaviorRelay<String>(value: "")
         let totalAmountResult = BehaviorRelay<Int>(value: 0)
         let numberFormatter = NumberFormatterHelper()
+        let showAlertRelay = PublishRelay<(String, String)>()
 
         let maxCurrency = 10000000
         
@@ -199,8 +200,7 @@ class ExclItemInfoEditModalVM {
             .asDriver()
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                // TODO: 원래는 Alert창 띄우고 거기서 해야함
-                SplitRepository.share.deleteExclItemAndRelatedData(exclItemIdx: exclItemIdx)
+                showAlertRelay.accept((exclItemIdx, titleResult.value))
             })
             .disposed(by: disposeBag)
         
@@ -214,7 +214,7 @@ class ExclItemInfoEditModalVM {
                       totalAmountTextFieldControlEvent: totalAmountTFControlEvent,
                       cancelButtonTapped: input.cancelButtonTapped.asDriver(),
                       editButtonTapped: input.editButtonTapped.asDriver(),
-                      deleteButtonButtonTapped: input.deleteButtonTapped.asDriver())
+                      showAlertVC: showAlertRelay.asDriver(onErrorJustReturn: ("", "")))
     }
 
     func setSectionsByExclItemIdx(exclItemIdx: String) {

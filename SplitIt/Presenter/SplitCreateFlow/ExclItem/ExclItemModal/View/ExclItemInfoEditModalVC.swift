@@ -13,15 +13,6 @@ import Then
 import RxDataSources
 import RxAppState
 
-// MARK: - 내일 해야할 거
-/// 1. 수정뷰 전용 네비헤더 구현(ok)
-/// 2. 저장 로직 구현 (ok)
-/// 3. 취소버튼 탭 시 Alert 창 구현
-/// 4. 삭제버튼 레이아웃 구현 (ok)
-/// 5. 삭제버튼 로직 구현
-/// 6. 추가버튼 디자인 수정 (ok)
-/// 7. EditCell에서 isTarget True이면서 비활성일 때 배경색 바꾸기 (ok)
-
 class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
     
     var disposeBag = DisposeBag()
@@ -503,11 +494,10 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
             })
             .disposed(by: disposeBag)
         
-        output.deleteButtonButtonTapped
-            .drive(onNext: { [weak self] _ in
+        output.showAlertVC
+            .drive(onNext: { [weak self] exclItemIdx, title in
                 guard let self = self else { return }
-                // TODO: 삭제 Alert
-                self.dismiss(animated: true)
+                self.presentCustomAlert(exclItemIdx: exclItemIdx, title: title)
             })
             .disposed(by: disposeBag)
         
@@ -600,5 +590,22 @@ extension ExclItemInfoEditModalVC {
         let textAttribute = NSMutableAttributedString(string: label.text ?? "")
         textAttribute.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: textAttribute.length))
         label.attributedText = textAttribute
+    }
+}
+
+extension ExclItemInfoEditModalVC: ExcltemInfoModalAlertDelegate {
+    func didDeleteItem(exclItemIdx: String) {
+        SplitRepository.share.deleteExclItemAndRelatedData(exclItemIdx: exclItemIdx)
+        self.dismiss(animated: true)
+    }
+    
+    private func presentCustomAlert(exclItemIdx: String, title: String) {
+        let alert = ExcltemInfoModalAlertVC()
+        alert.modalPresentationStyle = .overFullScreen
+        alert.modalTransitionStyle = .crossDissolve
+        alert.delegate = self
+        alert.idx = exclItemIdx
+        alert.titleValue = title
+        self.present(alert, animated: true)
     }
 }

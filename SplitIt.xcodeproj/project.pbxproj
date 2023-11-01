@@ -67,6 +67,7 @@
 		604CDC7B2AF14A8200416454 /* ExclItemInputEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604CDC7A2AF14A8100416454 /* ExclItemInputEmptyView.swift */; };
 		604CDC7D2AF1522C00416454 /* ExclItemInfoEditModalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604CDC7C2AF1522C00416454 /* ExclItemInfoEditModalVC.swift */; };
 		604CDC7F2AF1527500416454 /* ExclItemInfoEditModalVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604CDC7E2AF1527500416454 /* ExclItemInfoEditModalVM.swift */; };
+		604CDC862AF2396300416454 /* ExcltemInfoModalAlertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604CDC852AF2396300416454 /* ExcltemInfoModalAlertVC.swift */; };
 		6078ACCC2ADA74AC00995811 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCB2ADA74AC00995811 /* AppDelegate.swift */; };
 		6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCD2ADA74AC00995811 /* SceneDelegate.swift */; };
 		6078ACD02ADA74AC00995811 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078ACCF2ADA74AC00995811 /* HomeVC.swift */; };
@@ -221,6 +222,7 @@
 		604CDC7A2AF14A8100416454 /* ExclItemInputEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInputEmptyView.swift; sourceTree = "<group>"; };
 		604CDC7C2AF1522C00416454 /* ExclItemInfoEditModalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInfoEditModalVC.swift; sourceTree = "<group>"; };
 		604CDC7E2AF1527500416454 /* ExclItemInfoEditModalVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInfoEditModalVM.swift; sourceTree = "<group>"; };
+		604CDC852AF2396300416454 /* ExcltemInfoModalAlertVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExcltemInfoModalAlertVC.swift; sourceTree = "<group>"; };
 		6078ACC82ADA74AC00995811 /* SplitIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SplitIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6078ACCB2ADA74AC00995811 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6078ACCD2ADA74AC00995811 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -684,6 +686,7 @@
 				6032DCF92AEF5F68004A6BFA /* ExclItemInfoAddModalVC.swift */,
 				604CDC7C2AF1522C00416454 /* ExclItemInfoEditModalVC.swift */,
 				60104CE82AEFF73800489AAD /* ExclItemInfoModalSection.swift */,
+				604CDC852AF2396300416454 /* ExcltemInfoModalAlertVC.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1353,6 +1356,7 @@
 				6009C8192AE29E5D008B9EC1 /* ResultCell.swift in Sources */,
 				1A07DF092AE55E8F0081E543 /* ExclPageController.swift in Sources */,
 				DE1711C82AE0BADD0097850D /* SocialPay.swift in Sources */,
+				604CDC862AF2396300416454 /* ExcltemInfoModalAlertVC.swift in Sources */,
 				60AE3EAC2AE6699E009D9D18 /* AddSplitHeaderVM.swift in Sources */,
 				60AD20FB2ADF842C00EFACCD /* ExclMemberSectionHeader.swift in Sources */,
 				60115DF92ADBF2E10050D32C /* HomeVM.swift in Sources */,
