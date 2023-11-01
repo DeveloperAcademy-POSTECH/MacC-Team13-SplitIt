@@ -15,7 +15,7 @@ import RxAppState
 
 // MARK: - 내일 해야할 거
 /// 1. 수정뷰 전용 네비헤더 구현
-/// 2. 저장 로직 구현
+/// 2. 저장 로직 구현 (ok)
 /// 3. 취소버튼 탭 시 Alert 창 구현
 /// 4. 삭제버튼 레이아웃 구현
 /// 5. 삭제버튼 로직 구현
@@ -139,7 +139,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
         tableView.do {
             $0.register(cellType: ExclItemInfoModalCell.self)
             $0.register(cellType: ExclItemInfoDeactiveModalCell.self)
-            $0.backgroundColor = .SurfacePrimary
+            $0.backgroundColor = .SurfaceSelected
             $0.showsVerticalScrollIndicator = false
             $0.showsHorizontalScrollIndicator = false
             $0.rowHeight = rowHeight
@@ -147,9 +147,9 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
             $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1.0
             $0.layer.cornerRadius = 8.0
-            $0.contentInset = UIEdgeInsets(top: tableInset,
+            $0.contentInset = UIEdgeInsets(top: tableInset - 4.0,
                                            left: 0.0,
-                                           bottom: tableInset,
+                                           bottom: tableInset - 4.0,
                                            right: 0.0)
             tableView.rx.setDelegate(self)
                 .disposed(by: disposeBag)
@@ -439,7 +439,7 @@ extension ExclItemInfoEditModalVC {
     func focusExclMember() {
         UIView.animate(withDuration: 0.33) {
             self.tableView.layer.borderColor = UIColor.BorderPrimary.cgColor
-            self.tableView.backgroundColor = .SurfaceDeactivate
+//            self.tableView.backgroundColor = .SurfaceDeactivate
         }
         
         UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) {
@@ -454,7 +454,7 @@ extension ExclItemInfoEditModalVC {
     func unfocusExclMember() {
         UIView.animate(withDuration: 0.33) {
             self.tableView.layer.borderColor = UIColor.BorderDeactivate.cgColor
-            self.tableView.backgroundColor = .SurfacePrimary
+//            self.tableView.backgroundColor = .SurfacePrimary
         }
         
         UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) {
