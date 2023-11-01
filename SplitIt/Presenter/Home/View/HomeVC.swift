@@ -72,6 +72,7 @@ class HomeVC: UIViewController {
         view.backgroundColor = .SurfaceBrandCalmshell
 
         myInfoButton.do {
+
             $0.setImage(
                 UIImage(systemName: "person.fill")?
                     .applyingSymbolConfiguration(.init(pointSize: 26)), for: .normal)

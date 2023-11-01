@@ -31,6 +31,9 @@ class MyInfoVC: UIViewController {
     
     //>>>backView위에 그려지는 뷰
     //>>>accountView 시작
+    
+    let myInfoLabel = UILabel()
+    
     let accountView = UIView() //userDefault에 정보있을 때 나타나는 뷰
     
     let userName = UILabel() // 사용자의 이름
@@ -50,17 +53,9 @@ class MyInfoVC: UIViewController {
     
     let socialPayLabel = UILabel()
     
-    let tossView = UIView()
     let tossPayBtn = UIImageView()
-    let tossPayLabel = UILabel()
-    
-    let kakaoView = UIView()
     let kakaoPayBtn = UIImageView()
-    let kakaoPayLabel = UILabel()
-    
-    let naverView = UIView()
     let naverPayBtn = UIImageView()
-    let naverPayLabel = UILabel()
     
     //>>>accountView 끝
     //>>>emptyView 시작
@@ -87,14 +82,8 @@ class MyInfoVC: UIViewController {
     let friendImage = UIImageView()
     let friendChevron = UIImageView()
     
-   // let friendBar = UIView()
-    
-//    let exclItemListView = UIView()
-//    let exclItemLabel = UILabel()
-//    let exclItemImage = UIImageView()
-//    let exclItemChevron = UIImageView()
-//
     let privacyBtn = UIButton()
+    let madeByWCCTBtn = UIButton()
     
     let tossValue = UserDefaults.standard.bool(forKey: "tossPay")
     let kakaoValue = UserDefaults.standard.bool(forKey: "kakaoPay")
@@ -141,10 +130,6 @@ class MyInfoVC: UIViewController {
             
             backViewHeight = 104
             
-//            backView.snp.updateConstraints { make in
-//                make.height.equalTo(backViewHeight)
-//            }
-            
             backView.snp.removeConstraints()
             splitLabel.snp.removeConstraints()
             
@@ -152,16 +137,15 @@ class MyInfoVC: UIViewController {
             backView.snp.makeConstraints { make in
                 make.height.equalTo(backViewHeight)
                 make.width.equalTo(330)
-                make.top.equalTo(view).offset(118)
+                make.top.equalTo(view).offset(138)
                 make.centerX.equalTo(view)
             }
-//
+
             splitLabel.snp.makeConstraints { make in
                 make.top.equalTo(backView.snp.bottom).offset(16)
                 make.leading.equalToSuperview().offset(40)
             }
-            
-            
+        
         }
         
         
@@ -174,14 +158,12 @@ class MyInfoVC: UIViewController {
         if let tmpuserName = UserDefaults.standard.string(forKey: "userName"), !tmpuserName.isEmpty { //accountView가 있을 때
             if !tossValue && !kakaoValue && !naverValue  {
                 //간편페이류 없을 떄
-                //print(tossValue, kakaoValue, naverValue)
                 notUsedPay.isHidden = false
-                tossView.isHidden = true
-                kakaoView.isHidden = true
-                naverView.isHidden = true
+                tossPayBtn.isHidden = true
+                kakaoPayBtn.isHidden = true
+                naverPayBtn.isHidden = true
                 
                 backViewHeight = 175
-                
 
                 backView.snp.removeConstraints()
                 accountView.snp.removeConstraints()
@@ -190,7 +172,7 @@ class MyInfoVC: UIViewController {
                 backView.snp.makeConstraints { make in
                     make.height.equalTo(backViewHeight)
                     make.width.equalTo(330)
-                    make.top.equalTo(view).offset(118)
+                    make.top.equalTo(view).offset(138)
                     make.centerX.equalTo(view)
 
                 }
@@ -209,11 +191,11 @@ class MyInfoVC: UIViewController {
                 
             } else {
                 //간편페이류 있음
-                backViewHeight = 235
+                backViewHeight = 221
                 notUsedPay.isHidden = true
-                tossView.isHidden = !tossValue
-                kakaoView.isHidden = !kakaoValue
-                naverView.isHidden = !naverValue
+                tossPayBtn.isHidden = !tossValue
+                kakaoPayBtn.isHidden = !kakaoValue
+                naverPayBtn.isHidden = !naverValue
                 
                 tossPos = tossValue ? 12 : 0
                 
@@ -237,16 +219,15 @@ class MyInfoVC: UIViewController {
             
                 backView.snp.removeConstraints()
                 accountView.snp.removeConstraints()
-                tossView.snp.removeConstraints()
-                kakaoView.snp.removeConstraints()
-                naverView.snp.removeConstraints()
+                tossPayBtn.snp.removeConstraints()
+                kakaoPayBtn.snp.removeConstraints()
+                naverPayBtn.snp.removeConstraints()
                 
-
-                
+ 
                 backView.snp.makeConstraints { make in
                     make.height.equalTo(backViewHeight)
                     make.width.equalTo(330)
-                    make.top.equalTo(view).offset(118)
+                    make.top.equalTo(view).offset(138)
                     make.centerX.equalTo(view)
 
                 }
@@ -257,27 +238,24 @@ class MyInfoVC: UIViewController {
                     make.center.equalTo(backView)
                 }
                 
-                
-                
-                tossView.snp.makeConstraints { make in
-                    make.width.equalTo(54)
-                    make.height.equalTo(73)
+                tossPayBtn.snp.makeConstraints { make in
+                    make.width.height.equalTo(50)
                     make.leading.equalTo(accountView.snp.leading).offset(tossPos)
-                    make.top.equalTo(socialPayLabel.snp.bottom).offset(4)
+                    make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
                 }
                 
-                kakaoView.snp.makeConstraints { make in
-                    make.width.equalTo(54)
-                    make.height.equalTo(73)
+                kakaoPayBtn.snp.makeConstraints { make in
+                    make.width.height.equalTo(50)
                     make.leading.equalTo(accountView.snp.leading).offset(kakaoPos)
-                    make.top.equalTo(socialPayLabel.snp.bottom).offset(4)
+                    make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
                 }
-                naverView.snp.makeConstraints { make in
-                    make.width.equalTo(54)
-                    make.height.equalTo(73)
+          
+                naverPayBtn.snp.makeConstraints { make in
+                    make.width.height.equalTo(50)
                     make.leading.equalTo(accountView.snp.leading).offset(naverPos)
-                    make.top.equalTo(socialPayLabel.snp.bottom).offset(4)
+                    make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
                 }
+                
             }
             
             
@@ -291,14 +269,13 @@ class MyInfoVC: UIViewController {
     func setBinding() {
         
         let friendListTap = addTapGesture(to: friendListView)
-       // let exclItemTap = addTapGesture(to: exclItemListView)
         let editBtnTap = addTapGesture(to: accountEditView)
         let startBtnTap = addTapGesture(to: emptyAccountEditView)
         
         let input = MyInfoVM.Input(privacyBtnTapped: privacyBtn.rx.tap.asDriver(),
                                    friendListViewTapped: friendListTap.rx.event.asObservable().map { _ in () },
-                                  // exclItemViewTapped: exclItemTap.rx.event.asObservable().map { _ in () },
-                                   editAccountViewTapped: editBtnTap.rx.event.asObservable().map{ _ in () }, emptyEditAccountViewTapped: startBtnTap.rx.event.asObservable().map{ _ in () }
+                                   editAccountViewTapped: editBtnTap.rx.event.asObservable().map{ _ in () }, emptyEditAccountViewTapped: startBtnTap.rx.event.asObservable().map{ _ in () },
+                                   madeByWCCTBtnTapped: madeByWCCTBtn.rx.tap.asDriver()
         )
         
         let output = viewModel.transform(input: input)
@@ -326,17 +303,6 @@ class MyInfoVC: UIViewController {
             .disposed(by: disposeBag)
         
         
-//        output.moveToExclItemListView
-//            .subscribe(onNext: {
-//                print("먹지 않은 뷰 이동")
-//                //MARK: UserDefaults 초기화 버튼으로 임시 활용
-//                for key in UserDefaults.standard.dictionaryRepresentation().keys {
-//                    UserDefaults.standard.removeObject(forKey: key.description)
-//                }
-//            })
-//            .disposed(by: disposeBag)
-//
-        
         output.moveToEditAccountView
             .subscribe(onNext: {
                 //정보수정하는 뷰로 이동
@@ -355,33 +321,32 @@ class MyInfoVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
+        output.moveToMadeByWCCT
+            .drive(onNext:{
+                print("우리가 만들었다요!")
+                let url = NSURL(string: "https://github.com/DeveloperAcademy-POSTECH/MacC-Team13-SplitIt")
+                let WCCTWebView: SFSafariViewController = SFSafariViewController(url: url! as URL)
+                self.present(WCCTWebView, animated: true, completion: nil)
+                
+            })
+            .disposed(by: disposeBag)
        
     }
     
     func setAddView() {
         
-        [header, backView, splitLabel, friendView, privacyBtn].forEach {
+        [header, backView, splitLabel, friendView, privacyBtn, madeByWCCTBtn, myInfoLabel].forEach {
             view.addSubview($0)
         }
         
         backView.addSubview(emptyView)
         backView.addSubview(accountView)
         
-        [userNameLabel, userName, userBar, accountInfoLabel, accountBankLabel, accountLabel,accountNameLabel, socialPayLabel, tossView, kakaoView, naverView, notUsedPay, accountEditView].forEach {
+        [userNameLabel, userName, userBar, accountInfoLabel, accountBankLabel, accountLabel,accountNameLabel, socialPayLabel,
+         tossPayBtn, kakaoPayBtn, naverPayBtn, notUsedPay, accountEditView].forEach {
             accountView.addSubview($0)
         }
         
-        [tossPayBtn, tossPayLabel].forEach {
-            tossView.addSubview($0)
-        }
-        
-        [kakaoPayBtn, kakaoPayLabel].forEach {
-            kakaoView.addSubview($0)
-        }
-        
-        [naverPayBtn, naverPayLabel].forEach {
-            naverView.addSubview($0)
-        }
         
         [accountEditLabel, accountEditChevron].forEach {
             accountEditView.addSubview($0)
@@ -389,18 +354,10 @@ class MyInfoVC: UIViewController {
         
         
         friendView.addSubview(friendListView)
-        
-//        [friendBar,friendListView, exclItemListView].forEach {
-//            friendView.addSubview($0)
-//        }
-//
+
         [friendImage, friendChevron, friendListLabel].forEach {
             friendListView.addSubview($0)
         }
-//        [exclItemImage, exclItemChevron, exclItemLabel].forEach {
-//            exclItemListView.addSubview($0)
-//        }
-//
         
         [mainLabel, subLabel, emptyAccountEditView].forEach{
             emptyView.addSubview($0)
@@ -423,6 +380,15 @@ class MyInfoVC: UIViewController {
             NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
         ])
         
+        
+        let madeByWCCT = NSAttributedString(string: "만든 사람들", attributes: [
+            NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
+        ])
+        
+        
+        let emptyString = NSMutableAttributedString(string: "시작하기")
+        emptyString.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: emptyString.length))
+        
         //밑줄 만들어주기 위한 attribute
         let attributedString = NSMutableAttributedString(string: "수정하기")
         attributedString.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: attributedString.length))
@@ -433,15 +399,25 @@ class MyInfoVC: UIViewController {
             $0.setBackButton(viewController: self)
         }
         
+        
+        myInfoLabel.do {
+            $0.text = "나의 정보"
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextSecondary
+        }
+        
         userName.do {
-            $0.font = UIFont.boldSystemFont(ofSize: 24)
+            $0.font = .KoreanTitle3
+            $0.textColor = .TextPrimary
         }
         
         userNameLabel.do {
             $0.text = "님"
-            $0.font = UIFont.systemFont(ofSize: 18)
+            $0.font = .KoreanBody
+            $0.textColor = .TextPrimary
         }
         
+    
         userBar.do {
             $0.layer.borderColor = UIColor.BorderDeactivate.cgColor
             $0.layer.borderWidth = 1
@@ -449,27 +425,31 @@ class MyInfoVC: UIViewController {
         
         accountView.do {
             $0.layer.cornerRadius = 16
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
             $0.backgroundColor = .clear
         }
         
         accountInfoLabel.do {
             $0.text = "정산 받을 계좌"
-            $0.font = UIFont.systemFont(ofSize: 12)
-            $0.textColor = UIColor.gray
+            $0.font = .KoreanCaption2
+            $0.textColor = .TextPrimary
+            
         }
         
         accountBankLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 18)
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextPrimary
         }
         
         accountLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 15)
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextPrimary
         }
         
         accountNameLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 15)
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextPrimary
         }
         
         accountEditView.do {
@@ -478,65 +458,47 @@ class MyInfoVC: UIViewController {
         
         accountEditLabel.do {
             $0.attributedText = attributedString
-            $0.font = UIFont.systemFont(ofSize: 13)
+            $0.font = .KoreanCaption2
+            $0.textColor = .TextPrimary
         }
         
         accountEditChevron.do {
             $0.image = UIImage(systemName: "chevron.right")
-            $0.tintColor = UIColor.gray
+            $0.tintColor = .SurfaceSecondary
         }
         
         socialPayLabel.do {
             $0.text = "사용하는 간편페이"
-            $0.font = UIFont.systemFont(ofSize: 12)
-            $0.textColor = UIColor.gray
+            $0.font = .KoreanCaption2
+            $0.textColor = .TextSecondary
+            
         }
         
         notUsedPay.do {
             $0.text = "간편페이를 사용하지 않아요"
-            $0.font = .KoreanCaption2
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextPrimary
         }
         
         
         tossPayBtn.do {
             $0.image = UIImage(named: "TossPayIconDefault")
-            
         }
-        
-        tossPayLabel.do {
-            $0.text = "토스뱅크"
-            $0.font = UIFont.systemFont(ofSize: 12)
-            $0.textAlignment = .center
-        }
-        
         
         kakaoPayBtn.do {
             $0.image = UIImage(named: "KakaoPayIconDefault")
         }
         
-        kakaoPayLabel.do {
-            $0.text = "카카오페이"
-            $0.font = UIFont.systemFont(ofSize: 12)
-            $0.textAlignment = .center
-        }
-        
         
         naverPayBtn.do {
             $0.image = UIImage(named: "NaverPayIconDefault")
-            
-            
         }
-        
-        naverPayLabel.do {
-            $0.text = "네이버페이"
-            $0.font = UIFont.systemFont(ofSize: 12)
-            $0.textAlignment = .center
-        }
+    
         
         splitLabel.do {
             $0.text = "정산 기록"
-            $0.font = UIFont.KoreanCaption2
-            $0.textColor = UIColor.TextSecondary
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextSecondary
         }
         
         
@@ -546,11 +508,7 @@ class MyInfoVC: UIViewController {
             $0.layer.borderWidth = 1
             $0.backgroundColor = .clear
         }
-        
-//        friendBar.do {
-//            $0.layer.borderColor = UIColor.BorderDeactivate.cgColor
-//            $0.layer.borderWidth = 1
-//        }
+ 
         
         friendListView.backgroundColor = .clear
         
@@ -563,27 +521,13 @@ class MyInfoVC: UIViewController {
         }
         
         friendListLabel.do {
-            $0.text = "나와 함께한 사람들"
+            $0.text = "멤버 추가 내역"
             $0.font = UIFont.KoreanCaption1
+            $0.textColor = .TextPrimary
         }
         
-//        exclItemListView.backgroundColor = .clear
-//
-//        exclItemImage.do {
-//            $0.image = UIImage(named: "SplitIconSmall")
-//        }
-//        exclItemChevron.do {
-//            $0.image = UIImage(named: "ChevronRightIconDefault")
-//        }
-//
-//        exclItemLabel.do {
-//            $0.text = "따로 계산한 것들" // 모아나: 일단 userDefault초기화댐 원래는 따로 먹은 것들
-//            $0.font = UIFont.KoreanCaption1
-//        }
-//
-        
         privacyBtn.do {
-            $0.titleLabel?.font = UIFont.KoreanCaption2
+            $0.titleLabel?.font = UIFont.KoreanCaption1
             $0.titleLabel?.textColor = UIColor.TextSecondary
             $0.clipsToBounds = true
             $0.backgroundColor = .clear
@@ -591,11 +535,14 @@ class MyInfoVC: UIViewController {
             $0.setAttributedTitle(privacyBtnString, for: .normal)
         }
         
-        
-        
-        let emptyString = NSMutableAttributedString(string: "시작하기")
-        emptyString.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: emptyString.length))
-        
+        madeByWCCTBtn.do {
+            $0.titleLabel?.font = UIFont.KoreanCaption1
+            $0.titleLabel?.textColor = UIColor.TextSecondary
+            $0.clipsToBounds = true
+            $0.backgroundColor = .clear
+            $0.layer.borderWidth = 0
+            $0.setAttributedTitle(madeByWCCT, for: .normal)
+        }
         
         emptyView.do {
             $0.layer.cornerRadius = 8
@@ -606,6 +553,7 @@ class MyInfoVC: UIViewController {
         mainLabel.do {
             $0.text = "정산자님, 반갑습니다 🥳"
             $0.font = UIFont.KoreanSubtitle
+            $0.textColor = .TextPrimary
         }
         
         subLabel.do {
@@ -621,12 +569,13 @@ class MyInfoVC: UIViewController {
         emptyAccountEditLabel.do {
             $0.attributedText = emptyString
             $0.font = UIFont.KoreanCaption2
+            $0.textColor = .TextPrimary
         }
         
         
         emptyAccountEditChevron.do {
             $0.image = UIImage(systemName: "chevron.right")
-            $0.tintColor = UIColor.gray
+            $0.tintColor = UIColor.BorderPrimary
         }
     }
     
@@ -650,6 +599,11 @@ class MyInfoVC: UIViewController {
             make.center.equalTo(backView)
         }
         
+        
+        myInfoLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(111)
+            make.leading.equalToSuperview().offset(38)
+        }
         
         userName.snp.makeConstraints { make in
             make.top.equalTo(accountView).offset(16)
@@ -685,7 +639,7 @@ class MyInfoVC: UIViewController {
         userBar.snp.makeConstraints { make in
             make.height.equalTo(1)
             make.width.equalTo(298)
-            make.top.equalTo(userName.snp.bottom).offset(4)
+            make.top.equalTo(userName.snp.bottom).offset(8)
             make.centerX.equalTo(accountView)
         }
         
@@ -697,91 +651,34 @@ class MyInfoVC: UIViewController {
         
         
         accountBankLabel.snp.makeConstraints { make in
-            make.top.equalTo(accountInfoLabel.snp.bottom).offset(2)
+            make.top.equalTo(accountInfoLabel.snp.bottom).offset(8)
             make.leading.equalTo(accountView.snp.leading).offset(16)
         }
         
         accountLabel.snp.makeConstraints { make in
-            make.top.equalTo(accountInfoLabel.snp.bottom).offset(2)
+            make.top.equalTo(accountInfoLabel.snp.bottom).offset(8)
             make.leading.equalTo(accountBankLabel.snp.trailing).offset(4)
         }
         
         accountNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(accountInfoLabel.snp.bottom).offset(2)
+            make.top.equalTo(accountInfoLabel.snp.bottom).offset(8)
             make.leading.equalTo(accountLabel.snp.trailing).offset(4)
         }
         socialPayLabel.snp.makeConstraints { make in
-            make.top.equalTo(accountBankLabel.snp.bottom).offset(12)
+            make.top.equalTo(accountBankLabel.snp.bottom).offset(16)
             make.leading.equalTo(accountView.snp.leading).offset(16)
-        }
-        
-        //        tossView.snp.makeConstraints { make in
-        //            make.width.equalTo(54)
-        //            make.height.equalTo(73)
-        //            make.leading.equalTo(accountView.snp.leading).offset(tossPos)
-        //            make.top.equalTo(socialPayLabel.snp.bottom).offset(4)
-        //        }
-        
-        tossPayBtn.snp.makeConstraints { make in
-            make.height.width.equalTo(50)
-            make.top.equalTo(tossView)
-            make.centerX.equalTo(tossView)
-        }
-        
-        tossPayLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(tossView)
-            make.centerX.equalTo(tossView)
-        }
-        
-        
-        //        kakaoView.snp.makeConstraints { make in
-        //            make.width.equalTo(54)
-        //            make.height.equalTo(73)
-        //            make.leading.equalTo(accountView.snp.leading).offset(kakaoPos)
-        //            make.top.equalTo(socialPayLabel.snp.bottom).offset(4)
-        //        }
-        
-        kakaoPayBtn.snp.makeConstraints { make in
-            make.height.width.equalTo(50)
-            make.top.equalTo(kakaoView)
-            make.centerX.equalTo(kakaoView)
-        }
-        
-        
-        kakaoPayLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(kakaoView)
-            make.centerX.equalTo(kakaoView)
-        }
-        
-        //        naverView.snp.makeConstraints { make in
-        //            make.width.equalTo(54)
-        //            make.height.equalTo(73)
-        //            make.leading.equalTo(accountView.snp.leading).offset(naverPos)
-        //            make.top.equalTo(socialPayLabel.snp.bottom).offset(4)
-        //        }
-        
-        naverPayBtn.snp.makeConstraints { make in
-            make.height.width.equalTo(50)
-            make.top.equalTo(naverView)
-            make.centerX.equalTo(naverView)
-        }
-        
-        naverPayLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(naverView)
-            make.centerX.equalTo(naverView)
         }
         
         splitLabel.snp.makeConstraints { make in
             make.top.equalTo(backView.snp.bottom).offset(16)
-            make.leading.equalToSuperview().offset(40)
+            make.leading.equalToSuperview().offset(36)
         }
         
         
         friendView.snp.makeConstraints { make in
-            //make.height.equalTo(110)
             make.height.equalTo(52)
             make.width.equalTo(330)
-            make.top.equalTo(splitLabel.snp.bottom).offset(4)
+            make.top.equalTo(splitLabel.snp.bottom).offset(8)
             make.centerX.equalToSuperview()
         }
         
@@ -806,41 +703,15 @@ class MyInfoVC: UIViewController {
             make.trailing.equalToSuperview()
         }
         
-//        friendBar.snp.makeConstraints { make in
-//            make.height.equalTo(1)
-//            make.leading.equalTo(friendImage.snp.leading)
-//            make.trailing.equalTo(friendChevron.snp.trailing)
-//            make.centerY.equalToSuperview()
-//            make.centerX.equalToSuperview()
-//        }
-        
-//        exclItemListView.snp.makeConstraints { make in
-//            make.width.equalTo(300)
-//            make.height.equalTo(52)
-//            make.centerX.equalToSuperview()
-//            make.bottom.equalToSuperview().offset(-10)
-//        }
-//
-//        exclItemImage.snp.makeConstraints { make in
-//            make.centerX.equalTo(friendImage)
-//            make.bottom.equalToSuperview().offset(-4)
-//        }
-//
-//        exclItemLabel.snp.makeConstraints { make in
-//            make.leading.equalTo(friendListLabel.snp.leading)
-//            make.centerY.equalTo(exclItemImage.snp.centerY)
-//        }
-//
-//        exclItemChevron.snp.makeConstraints { make in
-//            make.centerY.equalTo(exclItemImage.snp.centerY)
-//            make.trailing.equalToSuperview()
-//        }
-        
         privacyBtn.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-54)
-            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-50)
+            make.trailing.equalToSuperview().offset(-92)
+            
         }
-        
+        madeByWCCTBtn.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().offset(-50)
+            make.leading.equalToSuperview().offset(93)
+        }
         
         mainLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)

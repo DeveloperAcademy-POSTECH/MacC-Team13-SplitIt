@@ -43,12 +43,9 @@ class KeyboardButton: UIButton {
         layer.cornerRadius = 8
         layer.borderWidth = 1
         layer.borderColor = UIColor.black.cgColor
-     
-        snp.makeConstraints { make in
-            make.height.equalTo(54)
-            make.width.equalTo(123)
-        }
- 
+        
+      
+
 
     }
 }
