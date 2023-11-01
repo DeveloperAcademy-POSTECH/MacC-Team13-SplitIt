@@ -48,7 +48,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setKeyboardNotification()
+
         titleTextFiled.becomeFirstResponder()
     }
     
@@ -167,18 +167,19 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
         }
         
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom)
+            $0.top.equalTo(header.snp.bottom).offset(30)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
         contentView.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalTo(scrollView)
-            $0.width.height.equalTo(scrollView)
+            $0.width.equalTo(scrollView)
+            $0.height.equalTo(0)
         }
         
         titleMessage.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(30)
+            $0.top.equalToSuperview()
             $0.leading.equalToSuperview().inset(8)
         }
         
@@ -194,7 +195,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
         }
         
         totalAmountTitleMessage.snp.makeConstraints {
-            $0.top.equalTo(textFiledCounter.snp.bottom).offset(24)
+            $0.top.equalTo(titleTextFiled.snp.bottom).offset(24)
             $0.leading.equalTo(titleMessage.snp.leading).inset(8)
         }
         
@@ -210,9 +211,9 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
         }
         
         tableView.snp.makeConstraints {
-            $0.top.equalTo(exclMemberMessage.snp.bottom).offset(12)
+            $0.top.equalTo(exclMemberMessage.snp.bottom).offset(8)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.height.equalTo(0)
         }
 
     }
@@ -322,32 +323,61 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
             .asDriver()
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
-
-//        viewModel.exclMembers
-//            .asDriver()
-//            .drive(onNext: { [weak self] items in
-//                guard let self = self else { return }
-//                print(contentView.frame)
-//                print(tableView.frame)
-//                let tableInset = Int(self.tableInset)
-//                let cellHeight = Int(self.cellHeight)
-//                let tableViewHeight = items.count * (cellHeight + 8) + (tableInset * 2)
-//                // MARK: tableView Height
-//                self.contentView.snp.updateConstraints {
-//                    $0.height.equalTo(tableViewHeight + 320 + 120)
-//                }
-//                self.tableView.snp.updateConstraints {
-//                    $0.height.equalTo(tableViewHeight)
-//                }
-//                print(contentView.frame)
-//                print(tableView.frame)
-//                UIView.animate(withDuration: 0.33) {
-//                    self.view.layoutIfNeeded()
-//                }
-//
-//            })
-//            .disposed(by: disposeBag)
         
+        // MARK: 키보드 보일 때 ContentView, TableView의 Height 세팅
+        NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
+            .subscribe(onNext: { [weak self] notification in
+                guard let self = self else { return }
+                if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                    let keyboardHeight: CGFloat
+                    keyboardHeight = keyboardSize.height
+                    
+                    let items = viewModel.sections.value
+
+                    let tapArea = 204
+                    let bottomArea = 24
+                    let tableInset = Int(self.tableInset)
+                    let cellHeight = Int(self.cellHeight)
+                    let tableViewHeight = items[0].items.count * (cellHeight + 8) + (tableInset * 2)
+
+                    self.contentView.snp.remakeConstraints {
+                        $0.top.bottom.leading.trailing.equalTo(self.scrollView)
+                        $0.width.equalTo(self.scrollView)
+                        $0.height.equalTo(tableViewHeight + tapArea + bottomArea + Int(keyboardHeight))
+                    }
+                    
+                    self.tableView.snp.remakeConstraints {
+                        $0.top.equalTo(self.exclMemberMessage.snp.bottom).offset(12)
+                        $0.leading.trailing.equalToSuperview()
+                        $0.height.equalTo(tableViewHeight)
+                    }
+                }
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.sections
+            .asDriver()
+            .drive(onNext: { [weak self] items in
+                guard let self = self else { return }
+                let tapArea = 204
+                let bottomArea = 24
+                let tableInset = Int(self.tableInset)
+                let cellHeight = Int(self.cellHeight)
+                let tableViewHeight = items[0].items.count * (cellHeight + 8) + (tableInset * 2)
+
+                self.contentView.snp.remakeConstraints {
+                    $0.top.bottom.leading.trailing.equalTo(self.scrollView)
+                    $0.width.equalTo(self.scrollView)
+                    $0.height.equalTo(tableViewHeight + tapArea + bottomArea)
+                }
+                
+                self.tableView.snp.remakeConstraints {
+                    $0.top.equalTo(self.exclMemberMessage.snp.bottom).offset(12)
+                    $0.leading.trailing.equalToSuperview()
+                    $0.height.equalTo(tableViewHeight)
+                }
+            })
+            .disposed(by: disposeBag)
         
         let isTitleTextFieldActive = BehaviorRelay<Bool>(value: false)
         let isTotalAmountTextFieldActive = BehaviorRelay<Bool>(value: false)
@@ -489,38 +519,5 @@ extension ExclItemInfoAddModalVC {
         self.totalAmountTitleMessage.textColor = .TextDeactivate
         self.totalAmountTextFiled.textColor = .TextDeactivate
         self.totalAmountTextFiled.currencyLabel.textColor = .TextDeactivate
-    }
-}
-
-extension ExclItemInfoAddModalVC: UITextFieldDelegate {
-    func setKeyboardNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let keyboardHeight: CGFloat
-            keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
-            self.scrollView.snp.updateConstraints {
-                $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(keyboardHeight)
-            }
-        }
-        view.layoutIfNeeded()
-    }
-    
-    @objc private func keyboardWillHide() {
-        self.scrollView.snp.updateConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
-        }
-    }
-    
-    func setKeyboardObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    func setKeyboardObserverRemove() {
-        NotificationCenter.default.removeObserver(self)
     }
 }

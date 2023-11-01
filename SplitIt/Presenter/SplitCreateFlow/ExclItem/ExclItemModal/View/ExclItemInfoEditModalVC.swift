@@ -211,7 +211,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
         }
         
         titleMessage.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(30)
+            $0.top.equalToSuperview()
             $0.leading.equalToSuperview().inset(8)
         }
         
