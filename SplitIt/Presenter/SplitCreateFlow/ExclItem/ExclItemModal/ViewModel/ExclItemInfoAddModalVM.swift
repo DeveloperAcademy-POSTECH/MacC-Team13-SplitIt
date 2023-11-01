@@ -150,7 +150,6 @@ class ExclItemInfoAddModalVM {
             }}
             .map { items -> [ExclItemInfoModalSection] in
                 let section = ExclItemInfoModalSection(isActive: false, items: items)
-                print(section)
                 return [section]
             }
             .bind(to: sections)

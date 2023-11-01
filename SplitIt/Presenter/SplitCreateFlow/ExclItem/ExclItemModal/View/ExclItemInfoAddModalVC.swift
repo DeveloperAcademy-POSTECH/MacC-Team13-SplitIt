@@ -240,14 +240,12 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
         output.addButtonTapped
             .drive(onNext: {
                 self.dismiss(animated: true)
-                print(">>> Add")
             })
             .disposed(by: disposeBag)
         
         output.cancelButtonTapped
             .drive(onNext: {
                 self.dismiss(animated: true)
-                print(">>> Cancel")
             })
             .disposed(by: disposeBag)
         
@@ -334,16 +332,16 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
                     
                     let items = viewModel.sections.value
 
-                    let tapArea = 204
-                    let bottomArea = 24
-                    let tableInset = Int(self.tableInset)
-                    let cellHeight = Int(self.cellHeight)
-                    let tableViewHeight = items[0].items.count * (cellHeight + 8) + (tableInset * 2)
+                    let tapArea = 204.0
+                    let bottomArea = 24.0
+                    let tableInset = self.tableInset
+                    let cellHeight = self.cellHeight
+                    let tableViewHeight = CGFloat(items[0].items.count) * (cellHeight + 8.0) + (tableInset * 2.0)
 
                     self.contentView.snp.remakeConstraints {
                         $0.top.bottom.leading.trailing.equalTo(self.scrollView)
                         $0.width.equalTo(self.scrollView)
-                        $0.height.equalTo(tableViewHeight + tapArea + bottomArea + Int(keyboardHeight))
+                        $0.height.equalTo(tableViewHeight + tapArea + bottomArea + keyboardHeight)
                     }
                     
                     self.tableView.snp.remakeConstraints {
@@ -359,11 +357,11 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
             .asDriver()
             .drive(onNext: { [weak self] items in
                 guard let self = self else { return }
-                let tapArea = 204
-                let bottomArea = 24
-                let tableInset = Int(self.tableInset)
-                let cellHeight = Int(self.cellHeight)
-                let tableViewHeight = items[0].items.count * (cellHeight + 8) + (tableInset * 2)
+                let tapArea = 204.0
+                let bottomArea = 24.0 + 12.0
+                let tableInset = self.tableInset
+                let cellHeight = self.cellHeight
+                let tableViewHeight = CGFloat(items[0].items.count) * (cellHeight + 8.0) + (tableInset * 2.0)
 
                 self.contentView.snp.remakeConstraints {
                     $0.top.bottom.leading.trailing.equalTo(self.scrollView)
