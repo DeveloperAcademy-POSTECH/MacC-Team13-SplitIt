@@ -14,7 +14,7 @@ import RxAppState
 class ResultVC: UIViewController {
     
     var disposeBag = DisposeBag()
-    var headerDisposeBag = DisposeBag()
+    var footerDisposeBag = DisposeBag()
     
     let viewModel = ResultVM()
     let headerViewModel = ResultSectionHeaderVM()
@@ -33,6 +33,14 @@ class ResultVC: UIViewController {
         setLayout()
         setAttribute()
         setBinding()
+    }
+    
+    deinit {
+        footerDisposeBag = DisposeBag()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     func setAttribute() {
@@ -101,10 +109,18 @@ class ResultVC: UIViewController {
                     
                     footer.button.rx.tap
                         .asDriver()
-                        .drive(onNext: {
+                        .drive(onNext: { [weak self] in
                             // TODO: Edit Flow
+                            guard let self = self else { return }
+                            let csinfo = viewModel.csInfos.value[indexPath.section].csInfoIdx
+                            let vc = CSEditListVC(csinfoIdx: csinfo)
+                            self.navigationController?.pushViewController(vc, animated: true)
+                            
+                            footerDisposeBag = DisposeBag()
                         })
-                        .disposed(by: footer.disposeBag)
+                        .disposed(by: self.footerDisposeBag)
+                    
+                    footer.indexPath = indexPath
                     return footer
                 }
                 
@@ -168,6 +184,13 @@ class ResultVC: UIViewController {
                 }
             }
         )
+        
+//        collectionView.rx
+//            .modelSelected(ResultSectionFooter.self)
+//            .subscribe(onNext: { footer in
+//
+//            })
+//            .disposed(by: disposeBag)
     }
     
     func setLayout() {

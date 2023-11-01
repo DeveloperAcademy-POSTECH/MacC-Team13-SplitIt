@@ -23,8 +23,7 @@ class CSMemberEditVC: UIViewController {
     let searchBar = UITextField()
     let searchListTableView = UITableView()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-    
-    let nextButton = SPButton()
+    let nextButton = NewSPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,7 +73,8 @@ class CSMemberEditVC: UIViewController {
         
         nextButton.do {
             $0.setTitle("저장하기", for: .normal)
-            $0.applyStyle(.primaryPear)
+            $0.applyStyle(style: .primaryPear, shape: .rounded)
+            $0.buttonState.accept(true)
         }
 
         setSearchTableView()
@@ -261,15 +261,7 @@ class CSMemberEditVC: UIViewController {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.navigationController?.popViewController(animated: false)
-                self.nextButton.applyStyle(.primaryPearPressed)
-            })
-            .disposed(by: disposeBag)
-        
-        output.showCSMemberConfirmView
-            .delay(.milliseconds(500))
-           .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-               self.nextButton.applyStyle(.primaryPear)
+//                self.nextButton.applyStyle(.primaryPearPressed)
             })
             .disposed(by: disposeBag)
         

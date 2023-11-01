@@ -14,17 +14,22 @@ class ExclMemberEditVC: UIViewController {
     var disposeBag = DisposeBag()
     
     var viewModel: ExclMemberEditVM
-    
     var dataSource: RxCollectionViewSectionedReloadDataSource<ExclMemberEditSectionModel>!
     
     let header = NaviHeader()
     let titleMessage = UILabel()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-    let nextButton = SPButton()
+    let nextButton = NewSPButton()
     
-    init(viewModel: ExclMemberEditVM) {
+    init(index: IndexPath) {
         self.disposeBag = DisposeBag()
-        self.viewModel = viewModel
+        self.viewModel = ExclMemberEditVM(index: index)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    init() {
+        self.disposeBag = DisposeBag()
+        self.viewModel = ExclMemberEditVM()
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -54,7 +59,8 @@ class ExclMemberEditVC: UIViewController {
         
         nextButton.do {
             $0.setTitle("저장하기", for: .normal)
-            $0.applyStyle(.primaryPear)
+            $0.applyStyle(style: .primaryPear, shape: .rounded)
+            $0.buttonState.accept(true)
         }
         setCollectionView()
     }
@@ -217,22 +223,13 @@ class ExclMemberEditVC: UIViewController {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 // 현재 뷰 컨트롤러에서 3개의 뷰를 건너뛰어 이전 뷰로 돌아가기
-                self.nextButton.applyStyle(.primaryPearPressed)
-                print("실행전 아이템 갯수 =\(SplitRepository.share.exclItemArr.value.count)")
+//                self.nextButton.applyStyle(.primaryPearPressed)
                 SplitRepository.share.updateDataToDB()
                 if let navigationController = self.navigationController {
                     if let previousViewController = navigationController.viewControllers[navigationController.viewControllers.count - 4] as? CSEditListVC {
                         navigationController.popToViewController(previousViewController, animated: true)
                     }
                 }
-            })
-            .disposed(by: disposeBag)
-        
-        output.presentResultView
-            .delay(.milliseconds(500))
-           .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-               self.nextButton.applyStyle(.primaryPear)
             })
             .disposed(by: disposeBag)
         

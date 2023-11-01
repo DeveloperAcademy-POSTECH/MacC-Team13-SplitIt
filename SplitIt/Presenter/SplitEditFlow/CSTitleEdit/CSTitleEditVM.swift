@@ -13,7 +13,7 @@ class CSTitleEditVM {
     
     var disposeBag = DisposeBag()
     
-    let maxTextCount = 12
+    let maxTextCount = 8
     
     struct Input {
         let nextButtonTapped: ControlEvent<Void> // 다음 버튼
@@ -24,7 +24,8 @@ class CSTitleEditVM {
         let showCSTotalAmountView: Driver<Void>
         let titleCount: Driver<String>
         let textFieldIsValid: Driver<Bool>
-        let textFieldString: Observable<String>
+        let textFieldString: Driver<String>
+        let textfieldEmpty: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
@@ -38,7 +39,6 @@ class CSTitleEditVM {
             .asDriver()
             .withLatestFrom(input.title)
             .drive(onNext: {
-                print($0)
                 SplitRepository.share.editCSInfoTitle(title: $0)
             })
             .disposed(by: disposeBag)
@@ -59,12 +59,18 @@ class CSTitleEditVM {
             .drive(textFieldIsValid)
             .disposed(by: disposeBag)
         
-        let tfString = data.map { $0.title }.asObservable()
+        let tfString = data.map { $0.title }.asDriver(onErrorJustReturn: "")
+        
+        let textFieldCountIsEmpty = input.title
+            .map{ $0.count > 0 }
+            .asDriver()
         
         return Output(showCSTotalAmountView: showCSTotalAmountView.asDriver(),
                       titleCount: textFieldCount.asDriver(),
                       textFieldIsValid: textFieldIsValid.asDriver(),
-                      textFieldString: tfString)
+                      textFieldString: tfString,
+                      textfieldEmpty: textFieldCountIsEmpty
+        )
     }
 
 }

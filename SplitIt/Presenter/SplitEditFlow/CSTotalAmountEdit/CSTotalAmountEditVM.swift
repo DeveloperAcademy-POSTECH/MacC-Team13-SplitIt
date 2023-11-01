@@ -21,7 +21,8 @@ class CSTotalAmountEditVM {
     struct Output {
         let showCSMemberInputView: Driver<Void>
         let totalAmount: Driver<String>
-        let totalAmountString: Observable<String>
+        let totalAmountString: Driver<String>
+        let textFieldEmpty: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
@@ -30,7 +31,7 @@ class CSTotalAmountEditVM {
         let showCSMemberInputView = input.nextButtonTapped.asDriver()
         let maxCurrency = 10000000
         let data = SplitRepository.share.csInfoArr.map { $0.first! }
-        let tfString = data.map { "\($0.totalAmount)" }.asObservable()
+        let tfString = data.map { "\($0.totalAmount)" }.asDriver(onErrorJustReturn: "")
         
         let totalAmountString = input.totalAmount
             .map { numberFormatter.number(from: $0) ?? 0 }
@@ -49,9 +50,15 @@ class CSTotalAmountEditVM {
             })
             .disposed(by: disposeBag)
         
+        let textFieldCountIsEmpty = input.totalAmount
+            .map{ $0.count > 0 }
+            .asDriver()
+        
         
         return Output(showCSMemberInputView: showCSMemberInputView,
-                      totalAmount: totalAmountString, totalAmountString: tfString)
+                      totalAmount: totalAmountString,
+                      totalAmountString: tfString,
+                      textFieldEmpty: textFieldCountIsEmpty)
     }
 }
 

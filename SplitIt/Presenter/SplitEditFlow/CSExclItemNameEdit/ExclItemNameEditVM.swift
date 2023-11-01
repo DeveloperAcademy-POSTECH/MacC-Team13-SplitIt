@@ -33,7 +33,8 @@ class ExclItemNameEditVM {
         let showExclItemPriceView: Driver<Void>
         let nameCount: Driver<String>
         let textFieldIsValid: Driver<Bool>
-        let exclTitle: Observable<String>
+        let exclTitle: Driver<String>
+        let textfieldEmpty: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
@@ -58,10 +59,14 @@ class ExclItemNameEditVM {
             .drive(textFieldIsValid)
             .disposed(by: disposeBag)
         
+        let textFieldCountIsEmpty = input.name
+            .map{ $0.count > 0 }
+            .asDriver()
+        
         if let indexPath = indexPath {
             let data = SplitRepository.share.exclItemArr.map { $0[indexPath.row]   }
             var exclIdx = ""
-            let exclName = data.map { $0.name }.asObservable()
+            let exclName = data.map { $0.name }.asDriver(onErrorJustReturn: "")
             
             data.map { $0.exclItemIdx }.subscribe { st in
                 exclIdx = st
@@ -80,7 +85,8 @@ class ExclItemNameEditVM {
             return Output(showExclItemPriceView: showExclItemPriceView.asDriver(),
                           nameCount: textFieldCount.asDriver(),
                           textFieldIsValid: textFieldIsValid.asDriver(),
-                          exclTitle: exclName )
+                          exclTitle: exclName,
+                          textfieldEmpty: textFieldCountIsEmpty)
 
         } else {
             name.drive(onNext: {             SplitRepository.share.createExclItemWithName(name: $0)})
@@ -88,7 +94,8 @@ class ExclItemNameEditVM {
             return Output(showExclItemPriceView: showExclItemPriceView.asDriver(),
                           nameCount: textFieldCount.asDriver(),
                           textFieldIsValid: textFieldIsValid.asDriver(),
-                          exclTitle: Observable.just("") )
+                          exclTitle: Driver.just(""),
+                          textfieldEmpty: textFieldCountIsEmpty)
         }
         
     }
