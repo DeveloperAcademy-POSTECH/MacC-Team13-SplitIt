@@ -58,6 +58,7 @@ class ExclItemInputVC: UIViewController {
             $0.setTitle("추가하기", for: .normal)
             $0.buttonState.accept(true)
             $0.applyStyle(style: .primaryWatermelon, shape: .square)
+            $0.titleLabel?.font = .KoreanSmallButtonText
         }
         
         nextButton.do {
