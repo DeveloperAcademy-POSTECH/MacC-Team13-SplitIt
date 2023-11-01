@@ -32,7 +32,7 @@ class AccountCustomKeyboard: UIInputViewController {
         return customKeySubject.asObservable()
     }
     
-    let keyboardView = UIView(frame: CGRect(x: 0, y: 0, width: 390, height: 291))
+    let keyboardView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 291))
     
     let btn1 = KeyboardButton(title: "1")
     let btn2 = KeyboardButton(title: "2")
@@ -64,7 +64,7 @@ class AccountCustomKeyboard: UIInputViewController {
     
     func setAttribute() {
         
-        let inputView = UIInputView(frame: CGRect(x: 0, y: 0, width: 390, height: 288), inputViewStyle: .keyboard)
+        let inputView = UIInputView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 288), inputViewStyle: .keyboard)
         inputView.backgroundColor = UIColor(hex: 0xFCFCFE)
         self.inputView = inputView
         
@@ -79,6 +79,8 @@ class AccountCustomKeyboard: UIInputViewController {
         deleteImage.do {
             $0.image = UIImage(systemName: "delete.left")
             $0.tintColor = UIColor.black
+            $0.contentMode = .scaleAspectFit
+            $0.transform = CGAffineTransform(scaleX: 1.5, y: 1.4)
         }
     }
  
@@ -135,71 +137,96 @@ class AccountCustomKeyboard: UIInputViewController {
 
     
     func setKeyLayout() {
+       
         btn1.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(4)
+            make.right.equalTo(btn2.snp.left).offset(-4)
             make.top.equalToSuperview().offset(6)
+            make.height.equalTo(54)
+            make.width.equalToSuperview().multipliedBy(0.31)
         }
         
         btn2.snp.makeConstraints { make in
-            make.left.equalTo(btn1.snp.right).offset(4)
+            make.centerX.equalToSuperview()
             make.top.equalToSuperview().offset(6)
+            make.height.equalTo(54)
+            make.width.equalToSuperview().multipliedBy(0.31)
         }
         
         btn3.snp.makeConstraints { make in
             make.left.equalTo(btn2.snp.right).offset(4)
             make.top.equalToSuperview().offset(6)
+            make.height.equalTo(54)
+            make.width.equalToSuperview().multipliedBy(0.31)
         }
-
+        
         
         btn4.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(4)
+            make.right.equalTo(btn5.snp.left).offset(-4)
             make.top.equalTo(btn1.snp.bottom).offset(6)
+            make.height.equalTo(54)
+            make.width.equalToSuperview().multipliedBy(0.31)
         }
         
         btn5.snp.makeConstraints { make in
-            make.left.equalTo(btn4.snp.right).offset(4)
+            make.centerX.equalToSuperview()
             make.top.equalTo(btn1.snp.bottom).offset(6)
+            make.height.equalTo(54)
+            make.width.equalToSuperview().multipliedBy(0.31)
         }
         
         btn6.snp.makeConstraints { make in
             make.left.equalTo(btn5.snp.right).offset(4)
             make.top.equalTo(btn1.snp.bottom).offset(6)
+            make.height.equalTo(54)
+            make.width.equalToSuperview().multipliedBy(0.31)
         }
-
+        
         btn7.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(4)
+            make.right.equalTo(btn8.snp.left).offset(-4)
             make.top.equalTo(btn4.snp.bottom).offset(6)
+            make.height.equalTo(54)
+            make.width.equalToSuperview().multipliedBy(0.31)
         }
         
         btn8.snp.makeConstraints { make in
-            make.left.equalTo(btn7.snp.right).offset(4)
+            make.centerX.equalToSuperview()
             make.top.equalTo(btn4.snp.bottom).offset(6)
+            make.height.equalTo(54)
+            make.width.equalToSuperview().multipliedBy(0.31)
         }
         
         btn9.snp.makeConstraints { make in
             make.left.equalTo(btn8.snp.right).offset(4)
             make.top.equalTo(btn4.snp.bottom).offset(6)
+            make.height.equalTo(54)
+            make.width.equalToSuperview().multipliedBy(0.31)
         }
         
         optionBtn.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(4)
+            make.right.equalTo(btn0.snp.left).offset(-4)
             make.top.equalTo(btn7.snp.bottom).offset(6)
+            make.height.equalTo(54)
+            make.width.equalToSuperview().multipliedBy(0.31)
+            
         }
         
         btn0.snp.makeConstraints { make in
-            make.left.equalTo(optionBtn.snp.right).offset(4)
+            make.centerX.equalToSuperview()
             make.top.equalTo(btn7.snp.bottom).offset(6)
+            make.height.equalTo(54)
+            make.width.equalToSuperview().multipliedBy(0.31)
         }
         
         deleteButton.snp.makeConstraints { make in
             make.left.equalTo(btn0.snp.right).offset(4)
             make.top.equalTo(btn7.snp.bottom).offset(6)
+            make.height.equalTo(54)
+            make.width.equalToSuperview().multipliedBy(0.31)
         }
         
         deleteImage.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
-
     }
     
     func bindButtonAction(_ button: UIButton, value: String) {

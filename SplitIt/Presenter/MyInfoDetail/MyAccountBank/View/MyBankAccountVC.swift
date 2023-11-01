@@ -22,7 +22,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
     let maxCharacterCount = 8
     let userDefault = UserDefaults.standard
     
-    
     var isBankSelected: Bool = false
     
     let header = NaviHeader()
@@ -95,8 +94,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
                 self?.accountTextRelay.accept(self?.accountTextField.text)
             })
             .disposed(by: disposeBag)
-
-        print(accountTextRelay)
     }
     
     //수정버튼 활성화 비활성화 선택해주는 함수
@@ -299,22 +296,22 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
             $0.setBackButton(viewController: self)
         }
         
-        
-        
         nickNameLabel.do {
             $0.text = "정산자 닉네임"
             $0.font = UIFont.KoreanCaption2
-            $0.textColor = UIColor.TextPrimary
+            $0.textColor = .TextPrimary
         }
+        
         nickNameCountLabel.do {
             $0.textColor = .TextSecondary
             $0.font = UIFont.KoreanCaption2
         }
+        
         nickNameTextField.do {
             $0.layer.cornerRadius = 8
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
             
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
@@ -326,10 +323,10 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextDeactivate])
             } else {
                 
-                $0.placeholder = userDefault.string(forKey: "userNickName")
+                $0.attributedPlaceholder = NSAttributedString(string: userDefault.string(forKey: "userNickName")!,
+                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextPrimary])
             }
-            $0.font = UIFont.systemFont(ofSize: 15)
-            
+            $0.font = .KoreanCaption1
             $0.clipsToBounds = true
             
             //textField의 앞부분의 빈공간 구현
@@ -337,13 +334,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
             $0.leftViewMode = .always
             
         }
-        
-        nameClearBtn.do {
-            $0.setImage(UIImage(systemName: "x.circle.fill"), for: .normal)
-            $0.frame = CGRect(x: 30, y: 0, width: 50, height: 30)
-            $0.setTitleColor(.black, for: .normal)
-        }
-        
+
         bankLabel.do {
             $0.text = "은행"
             $0.font = UIFont.KoreanCaption2
@@ -353,7 +344,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
         bankView.do {
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
             $0.backgroundColor = .clear
             
         }
@@ -367,7 +358,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
                 $0.tintColor = .TextPrimary
             }
             $0.font = UIFont.KoreanCaption1
-            
         }
         
         bankArrowImage.do {
@@ -384,9 +374,9 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
             $0.layer.cornerRadius = 8
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.gray.cgColor
-            $0.keyboardType = .numberPad
-            $0.clearButtonMode = .whileEditing
+            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
+            //$0.keyboardType = .numberPad
+            //$0.clearButtonMode = .whileEditing
             
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
@@ -394,13 +384,13 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
             //MARK: 토마토, 수정뷰로 넘어왔을 때, 검은색 글자면은 이미 입력되어있는 것처럼 보여서 회색으로 처리해두었어요
             if UserDefaults.standard.string(forKey: "userAccount") == nil {
                 $0.attributedPlaceholder = NSAttributedString(string: "계좌번호를 입력해주세요",
-                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextDeactivate])
             } else {
-                $0.placeholder = userDefault.string(forKey: "userAccount")
+                $0.attributedPlaceholder = NSAttributedString(string: userDefault.string(forKey: "userAccount")!,
+                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextPrimary])
             }
             
-            
-            $0.font = UIFont.systemFont(ofSize: 15)
+            $0.font = UIFont.KoreanCaption1
             $0.clipsToBounds = true
             
             //textField의 앞부분의 빈공간 구현
@@ -420,13 +410,13 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
             $0.textColor = .TextSecondary
             $0.font = UIFont.KoreanCaption2
         }
-        
+
         
         nameTextField.do {
             $0.layer.cornerRadius = 8
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
             
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
@@ -436,11 +426,12 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate {
             if UserDefaults.standard.string(forKey: "userName") == nil {
                 $0.attributedPlaceholder = NSAttributedString(string: "성함을 입력해주세요",
                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextDeactivate])
+                //$0.textColor = .TextDeactivate
             } else {
-                
-                $0.placeholder = userDefault.string(forKey: "userName")
+                $0.attributedPlaceholder = NSAttributedString(string: userDefault.string(forKey: "userName")!,
+                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextPrimary])
             }
-            $0.font = UIFont.systemFont(ofSize: 15)
+            $0.font = .KoreanCaption1
             
             $0.clipsToBounds = true
             

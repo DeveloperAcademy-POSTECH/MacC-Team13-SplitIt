@@ -44,7 +44,9 @@ class HomeVC: UIViewController {
         
         output.showCreateSplit
             .drive(onNext: {
+
                 let vc = CSInfoVC()
+
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
@@ -72,6 +74,7 @@ class HomeVC: UIViewController {
         view.backgroundColor = .SurfaceBrandCalmshell
 
         myInfoButton.do {
+
             $0.setImage(
                 UIImage(systemName: "person.fill")?
                     .applyingSymbolConfiguration(.init(pointSize: 26)), for: .normal)

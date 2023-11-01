@@ -11,7 +11,7 @@ import RxSwift
 
 
 
-class TestVC: UIViewController, CustomKeyboardDelegate, UITextFieldDelegate{
+class TestVC: UIViewController, CustomKeyboardDelegate, UITextFieldDelegate {
 
     let disposeBag = DisposeBag()
     
