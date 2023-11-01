@@ -15,15 +15,19 @@ final class SplitRepository {
     static let share = SplitRepository()
     private let disposeBag = DisposeBag()
     
-    let splitArr = BehaviorRelay<[Split]>(value: [])
-    let csInfoArr = BehaviorRelay<[CSInfo]>(value: [])
-    let exclItemArr = BehaviorRelay<[ExclItem]>(value: [])
-    let exclMemberArr = BehaviorRelay<[ExclMember]>(value: [])
-    let csMemberArr = BehaviorRelay<[CSMember]>(value: [])
-    let memberLogArr = BehaviorRelay<[MemberLog]>(value: [])
+    private(set) var splitArr = BehaviorRelay<[Split]>(value: [])
+    private(set) var csInfoArr = BehaviorRelay<[CSInfo]>(value: [])
+    private(set) var exclItemArr = BehaviorRelay<[ExclItem]>(value: [])
+    private(set) var exclMemberArr = BehaviorRelay<[ExclMember]>(value: [])
+    private(set) var csMemberArr = BehaviorRelay<[CSMember]>(value: [])
+    private(set) var memberLogArr = BehaviorRelay<[MemberLog]>(value: [])
     
     private var currentCSInfo: CSInfo?
     private var newExclItem: ExclItem?
+    
+    private init() { }
+    
+    var isSmartSplit = true
 }
 
 extension SplitRepository {

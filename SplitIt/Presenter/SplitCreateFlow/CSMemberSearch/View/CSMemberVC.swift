@@ -101,9 +101,9 @@ class CSMemberVC: UIViewController, Reusable {
         }
         
         header.snp.makeConstraints {
-            $0.height.equalTo(96)
-            $0.top.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(30)
+            $0.horizontalEdges.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
         }
         
         titleLabel.snp.makeConstraints {
@@ -176,6 +176,7 @@ class CSMemberVC: UIViewController, Reusable {
             .asDriver()
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
+                
                 let vc = CSMemberSearchVC()
                 vc.modalPresentationStyle = UIModalPresentationStyle.fullScreen
                 self.present(vc, animated: true, completion: nil)
@@ -185,7 +186,7 @@ class CSMemberVC: UIViewController, Reusable {
         output.showExclView
             .asDriver()
             .drive(onNext: {
-                let vc = ExclPageController()
+                let vc = SplitRepository.share.isSmartSplit ? ExclItemInputVC() : SplitShareVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)

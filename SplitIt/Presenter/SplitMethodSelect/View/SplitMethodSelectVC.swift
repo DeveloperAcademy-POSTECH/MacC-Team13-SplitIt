@@ -115,9 +115,9 @@ class SplitMethodSelectVC: UIViewController {
         }
         
         header.snp.makeConstraints {
-            $0.height.equalTo(96)
+            $0.height.equalTo(30)
             $0.horizontalEdges.equalToSuperview()
-            $0.top.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
         }
         
         smartSplitBorderView.snp.makeConstraints {
@@ -180,6 +180,7 @@ class SplitMethodSelectVC: UIViewController {
             .drive(onNext: {
                 let vc = CSInfoVC()
                 self.navigationController?.pushViewController(vc, animated: true)
+                SplitRepository.share.isSmartSplit = true
             })
             .disposed(by: disposeBag)
         
@@ -188,6 +189,7 @@ class SplitMethodSelectVC: UIViewController {
             .drive(onNext: {
                 let vc = CSInfoVC()
                 self.navigationController?.pushViewController(vc, animated: true)
+                SplitRepository.share.isSmartSplit = false
             })
             .disposed(by: disposeBag)
     }
