@@ -29,6 +29,7 @@ class ExclItemInfoEditModalVM {
         let totalAmountTextFieldControlEvent: Observable<UIControl.Event>
         let cancelButtonTapped: ControlEvent<Void>
         let editButtonTapped: ControlEvent<Void>
+        let deleteButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
@@ -42,6 +43,7 @@ class ExclItemInfoEditModalVM {
         let totalAmountTextFieldControlEvent: Driver<UIControl.Event>
         let cancelButtonTapped: Driver<Void>
         let editButtonTapped: Driver<Void>
+        let deleteButtonButtonTapped: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -202,7 +204,8 @@ class ExclItemInfoEditModalVM {
                       titleTextFieldControlEvent: titleTFControlEvent,
                       totalAmountTextFieldControlEvent: totalAmountTFControlEvent,
                       cancelButtonTapped: input.cancelButtonTapped.asDriver(),
-                      editButtonTapped: input.editButtonTapped.asDriver())
+                      editButtonTapped: input.editButtonTapped.asDriver(),
+                      deleteButtonButtonTapped: input.deleteButtonTapped.asDriver())
     }
 
     func setSectionsByExclItemIdx(exclItemIdx: String) {

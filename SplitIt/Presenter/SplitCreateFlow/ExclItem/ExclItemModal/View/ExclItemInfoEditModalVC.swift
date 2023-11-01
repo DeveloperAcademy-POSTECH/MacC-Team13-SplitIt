@@ -14,13 +14,13 @@ import RxDataSources
 import RxAppState
 
 // MARK: - 내일 해야할 거
-/// 1. 수정뷰 전용 네비헤더 구현
+/// 1. 수정뷰 전용 네비헤더 구현(ok)
 /// 2. 저장 로직 구현 (ok)
 /// 3. 취소버튼 탭 시 Alert 창 구현
 /// 4. 삭제버튼 레이아웃 구현
 /// 5. 삭제버튼 로직 구현
 /// 6. 추가버튼 디자인 수정
-/// 7. EditCell에서 isTarget True이면서 비활성일 때 배경색 바꾸기
+/// 7. EditCell에서 isTarget True이면서 비활성일 때 배경색 바꾸기 (ok)
 
 class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
     
@@ -40,6 +40,8 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
     
     let exclMemberMessage = UILabel()
     let tableView = UITableView()
+    
+    let deleteButton = UIButton()
     
     let tapGesture = UITapGestureRecognizer()
     
@@ -69,7 +71,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setKeyboardNotification()
+//        setKeyboardNotification()
         titleTextFiled.becomeFirstResponder()
     }
     
@@ -90,6 +92,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
         
         scrollView.do {
             $0.showsVerticalScrollIndicator = false
+            $0.delaysContentTouches = false
         }
         
         titleMessage.do {
@@ -131,6 +134,13 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
         }
         
         setTableView()
+        
+        deleteButton.do {
+            $0.setTitle("이 항목 삭제하기", for: .normal)
+            setUnderLine(label: $0.titleLabel!)
+            $0.setTitleColor(.SurfaceWarnRed, for: .normal)
+            $0.setTitleColor(.SurfaceWarnRedPressed, for: .highlighted)
+        }
     }
     
     func setTableView() {
@@ -178,7 +188,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
 
         scrollView.addSubview(contentView)
         
-        [titleMessage, titleTextFiled, textFiledCounter, totalAmountTitleMessage, totalAmountTextFiled, exclMemberMessage, tableView].forEach {
+        [titleMessage, titleTextFiled, textFiledCounter, totalAmountTitleMessage, totalAmountTextFiled, exclMemberMessage, tableView, deleteButton].forEach {
             contentView.addSubview($0)
         }
         
@@ -189,14 +199,15 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
         }
         
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom)
+            $0.top.equalTo(header.snp.bottom).offset(30)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
         contentView.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalTo(scrollView)
-            $0.width.height.equalTo(scrollView)
+            $0.width.equalTo(scrollView)
+            $0.height.equalTo(0)
         }
         
         titleMessage.snp.makeConstraints {
@@ -216,7 +227,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
         }
         
         totalAmountTitleMessage.snp.makeConstraints {
-            $0.top.equalTo(textFiledCounter.snp.bottom).offset(24)
+            $0.top.equalTo(titleTextFiled.snp.bottom).offset(24)
             $0.leading.equalTo(titleMessage.snp.leading).inset(8)
         }
         
@@ -232,11 +243,16 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
         }
         
         tableView.snp.makeConstraints {
-            $0.top.equalTo(exclMemberMessage.snp.bottom).offset(12)
+            $0.top.equalTo(exclMemberMessage.snp.bottom).offset(8)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.height.equalTo(0)
         }
 
+        deleteButton.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(tableView.snp.bottom).offset(24)
+            $0.height.equalTo(48)
+        }
     }
     
     func setBinding() {
@@ -259,7 +275,8 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
                                                   titleTextFieldControlEvent: titleTFEvent,
                                                   totalAmountTextFieldControlEvent: totalAmountTFEvent,
                                                   cancelButtonTapped: header.cancelButton.rx.tap,
-                                                  editButtonTapped: header.addButton.rx.tap)
+                                                  editButtonTapped: header.addButton.rx.tap,
+                                                  deleteButtonTapped: deleteButton.rx.tap)
         let output = viewModel.transform(input: input)
         
         titleTextFiled.rx.text.orEmpty
@@ -431,6 +448,61 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
                 totalAmountRelay.accept(price)
             })
             .disposed(by: disposeBag)
+        
+        // MARK: 키보드 보일 때 ContentView, TableView의 Height 세팅
+        NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
+            .subscribe(onNext: { [weak self] notification in
+                guard let self = self else { return }
+                if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                    let keyboardHeight: CGFloat
+                    keyboardHeight = keyboardSize.height
+                    
+                    let items = viewModel.sections.value
+
+                    let tapArea = 204
+                    let bottomArea = 139
+                    let tableInset = Int(self.tableInset)
+                    let cellHeight = Int(self.cellHeight)
+                    let tableViewHeight = items[0].items.count * (cellHeight + 8) + (tableInset * 2)
+
+                    self.contentView.snp.remakeConstraints {
+                        $0.top.bottom.leading.trailing.equalTo(self.scrollView)
+                        $0.width.equalTo(self.scrollView)
+                        $0.height.equalTo(tableViewHeight + tapArea + bottomArea + Int(keyboardHeight))
+                    }
+                    
+                    self.tableView.snp.remakeConstraints {
+                        $0.top.equalTo(self.exclMemberMessage.snp.bottom).offset(12)
+                        $0.leading.trailing.equalToSuperview()
+                        $0.height.equalTo(tableViewHeight)
+                    }
+                }
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.sections
+            .asDriver()
+            .drive(onNext: { [weak self] items in
+                guard let self = self else { return }
+                let tapArea = 204
+                let bottomArea = 139
+                let tableInset = Int(self.tableInset)
+                let cellHeight = Int(self.cellHeight)
+                let tableViewHeight = items[0].items.count * (cellHeight + 8) + (tableInset * 2)
+
+                self.contentView.snp.remakeConstraints {
+                    $0.top.bottom.leading.trailing.equalTo(self.scrollView)
+                    $0.width.equalTo(self.scrollView)
+                    $0.height.equalTo(tableViewHeight + tapArea + bottomArea)
+                }
+                
+                self.tableView.snp.remakeConstraints {
+                    $0.top.equalTo(self.exclMemberMessage.snp.bottom).offset(12)
+                    $0.leading.trailing.equalToSuperview()
+                    $0.height.equalTo(tableViewHeight)
+                }
+            })
+            .disposed(by: disposeBag)
     }
 }
 
@@ -515,35 +587,10 @@ extension ExclItemInfoEditModalVC {
     }
 }
 
-extension ExclItemInfoEditModalVC: UITextFieldDelegate {
-    func setKeyboardNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let keyboardHeight: CGFloat
-            keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
-            self.scrollView.snp.updateConstraints {
-                $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(keyboardHeight)
-            }
-        }
-        view.layoutIfNeeded()
-    }
-    
-    @objc private func keyboardWillHide() {
-        self.scrollView.snp.updateConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
-        }
-    }
-    
-    func setKeyboardObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    func setKeyboardObserverRemove() {
-        NotificationCenter.default.removeObserver(self)
+extension ExclItemInfoEditModalVC {
+    func setUnderLine(label: UILabel) {
+        let textAttribute = NSMutableAttributedString(string: label.text ?? "")
+        textAttribute.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: textAttribute.length))
+        label.attributedText = textAttribute
     }
 }

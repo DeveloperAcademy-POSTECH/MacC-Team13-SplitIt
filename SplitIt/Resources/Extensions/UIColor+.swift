@@ -178,18 +178,18 @@ extension UIColor {
     class var SurfaceWhite: UIColor { return UIColor.AppColorGrayscaleBase }
 
     /**
-     주의 및 경고의 색상이 적용되는 Button의 Pressed 상태를 위한 색상입니다.
-     - parameters:
-        - property: $surface-warn
-     */
-    class var SurfaceWarnRed: UIColor { return UIColor.AppColorStatusWarnRedPressed }
-    
-    /**
      주의 및 경고의 면의 색상입니다.
      - parameters:
         - property: $surface-warn
      */
-    class var SurfaceWarnRedPressed: UIColor { return UIColor.AppColorStatusWarnRed }
+    class var SurfaceWarnRed: UIColor { return UIColor.AppColorStatusWarnRed }
+    
+    /**
+     주의 및 경고의 색상이 적용되는 Button의 Pressed 상태를 위한 색상입니다.
+     - parameters:
+        - property: $surface-warn
+     */
+    class var SurfaceWarnRedPressed: UIColor { return UIColor.AppColorStatusWarnRedPressed }
 
 
 
