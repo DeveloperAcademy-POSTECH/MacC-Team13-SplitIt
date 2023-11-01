@@ -48,13 +48,17 @@ class ExclItemInfoEditModalVM {
         let title = input.title
         let textFieldCount = BehaviorRelay<String>(value: "")
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
-        
+        let titleResult = BehaviorRelay<String>(value: "")
         let totalAmountResult = BehaviorRelay<Int>(value: 0)
         let numberFormatter = NumberFormatterHelper()
 
         let maxCurrency = 10000000
         
         let addButtonIsEnable: Driver<Bool>
+        
+        input.title
+            .drive(titleResult)
+            .disposed(by: disposeBag)
         
         let titleTextFieldCountIsEmpty = input.title
             .map{ $0.count > 0 }
@@ -92,9 +96,30 @@ class ExclItemInfoEditModalVM {
             .withLatestFrom(csInfoDriver)
             .drive(onNext: { [weak self] title, totalAmount in
                 guard let self = self else { return }
-                let totalAmountInt = numberFormatter.number(from: totalAmount)
-                let currentExclMember = sections.value.first!.items
-                let currentExclItemIdx = SplitRepository.share.createExclItem(name: title, price: totalAmountInt ?? 0, exclMember: currentExclMember)
+
+                SplitRepository.share.editExclItemName(exclItemIdx: exclItemIdx,
+                                                       name: titleResult.value)
+                SplitRepository.share.editExclItemPrice(exclItemIdx: exclItemIdx,
+                                                        price: totalAmountResult.value)
+                
+                // MARK: 현재 Table의 정보와 Repo의 exclMember를 비교하여 toggle 메서드 호출
+                /// table, repo의 member 순서가 다르므로 2중 for문으로 완전탐색
+                /// 조건 1 : table의 isTarget과 repo의 isTarget이 다를때
+                /// 조건 2 : table의 name과 repo의 name이 같을 때
+                /// 조건1, 조건2가 모두 맞으면 해당 repo의 exclMemberIdx로 toggle 메소드를 호출함.
+                let curExclMember = self.sections.value[0].items
+                SplitRepository.share.exclMemberArr.value.forEach { [weak self] exclMember in
+                    guard let self = self else { return }
+                    if exclMember.exclItemIdx == exclItemIdx {
+                        for item in curExclMember {
+                            if item.isTarget != exclMember.isTarget,
+                               item.name == exclMember.name {
+                                let toggleExclMemberIdx = exclMember.exclMemberIdx
+                                SplitRepository.share.toggleExclMember(exclMemberIdx: toggleExclMemberIdx)
+                            }
+                        }
+                    }
+                }
             })
             .disposed(by: disposeBag)
         
