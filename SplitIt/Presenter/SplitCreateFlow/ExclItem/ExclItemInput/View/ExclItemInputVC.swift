@@ -15,7 +15,7 @@ class ExclItemInputVC: UIViewController {
     
     let viewModel = ExclItemInputVM()
     
-    let header = NaviHeader()
+    let header = SPNavigationBar()
     let exclListLabel = UILabel()
     let exclItemCountLabel = UILabel()
     let exclItemAddButton = NewSPButton()
@@ -38,8 +38,7 @@ class ExclItemInputVC: UIViewController {
         view.backgroundColor = .SurfacePrimary
         
         header.do {
-            $0.applyStyle(.csExcl)
-            $0.setBackButtonToRootView(viewController: self)
+            $0.applyStyle(style: .exclItemCreate, vc: self)
         }
         
         exclListLabel.do {
@@ -87,8 +86,8 @@ class ExclItemInputVC: UIViewController {
         
         header.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
-            $0.leading.trailing.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
         }
         
         exclListLabel.snp.makeConstraints {
@@ -171,13 +170,6 @@ class ExclItemInputVC: UIViewController {
             .asDriver()
             .drive(onNext: { [weak self] indexPath in
                 guard let self = self else { return }
-                
-                //MARK: indexPath에 값들을 모두 Modal 수정뷰의 ViewModel에 넣어주고
-                /// 해당 ViewModel은 modal에게 해당 값을 그리도록 해주어야함.
-                ///
-                /// 1. EditModalView VC
-                /// 2. EditModalView VM
-                ///
                 let exclItemIdx = output.exclItemsRelay.value[indexPath.row].exclItem.exclItemIdx
                 let vm = ExclItemInfoEditModalVM()
                 vm.exclItemIdx = exclItemIdx

@@ -126,9 +126,9 @@ class CSMemberSearchVC: UIViewController, Reusable {
         }
         
         header.snp.makeConstraints {
-            $0.height.equalTo(96)
-            $0.top.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(30)
+            $0.horizontalEdges.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
         }
         
         addView.snp.makeConstraints {

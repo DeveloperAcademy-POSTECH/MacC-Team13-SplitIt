@@ -127,6 +127,7 @@ class CSMemberSearchVM {
         Driver.merge(input.addButtonTapped.asDriver(), input.textFieldEnterKeyTapped.asDriver())
             .withLatestFrom(input.textFieldValue.asDriver())
             .drive(onNext: { name in
+                if name == "" { return }
                 if name == UserDefaults.standard.string(forKey: "userName") { return }
                 if selectedMemberArr.value.map({ $0.name }).contains(name) { return }
                 
