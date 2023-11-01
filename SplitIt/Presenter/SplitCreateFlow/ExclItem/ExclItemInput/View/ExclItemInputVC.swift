@@ -188,5 +188,12 @@ class ExclItemInputVC: UIViewController {
                 self.present(vc, animated: true)
             })
             .disposed(by: disposeBag)
+        
+        output.showResultView
+            .drive(onNext: { [weak self] _ in
+                let vc = SplitShareVC()
+                self?.navigationController?.pushViewController(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
     }
 }
