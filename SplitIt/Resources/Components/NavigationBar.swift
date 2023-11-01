@@ -37,6 +37,8 @@ extension NaviHeader {
         case result
         /// ExclInfo 추가(Modal)
         case exclInfoAdd
+        /// ExclInfo 수정(Modal)
+        case exclInfoEdit
     }
 }
 
@@ -93,6 +95,10 @@ final class NaviHeader: UIView {
             backButton.removeFromSuperview()
         case .exclInfoAdd:
             naviTitleLabel.text = "따로 정산 항목"
+            setCancelButton()
+            backButton.removeFromSuperview()
+        case .exclInfoEdit:
+            naviTitleLabel.text = "따로 정산 항목 수정"
             setCancelButton()
             backButton.removeFromSuperview()
         }

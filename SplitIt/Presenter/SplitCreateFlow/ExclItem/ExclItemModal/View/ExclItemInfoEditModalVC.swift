@@ -13,6 +13,15 @@ import Then
 import RxDataSources
 import RxAppState
 
+// MARK: - 내일 해야할 거
+/// 1. 수정뷰 전용 네비헤더 구현
+/// 2. 저장 로직 구현
+/// 3. 취소버튼 탭 시 Alert 창 구현
+/// 4. 삭제버튼 레이아웃 구현
+/// 5. 삭제버튼 로직 구현
+/// 6. 추가버튼 디자인 수정
+/// 7. EditCell에서 isTarget True이면서 비활성일 때 배경색 바꾸기
+
 class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
     
     var disposeBag = DisposeBag()
@@ -73,9 +82,10 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
         view.backgroundColor = .SurfacePrimary
         
         header.do {
-            $0.applyStyle(.exclInfoAdd)
+            $0.applyStyle(.exclInfoEdit)
             $0.setAddButton()
             $0.setCancelButton()
+            $0.addButton.setTitle("저장", for: .normal)
         }
         
         scrollView.do {
@@ -249,7 +259,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
                                                   titleTextFieldControlEvent: titleTFEvent,
                                                   totalAmountTextFieldControlEvent: totalAmountTFEvent,
                                                   cancelButtonTapped: header.cancelButton.rx.tap,
-                                                  addButtonTapped: header.addButton.rx.tap)
+                                                  editButtonTapped: header.addButton.rx.tap)
         let output = viewModel.transform(input: input)
         
         titleTextFiled.rx.text.orEmpty
@@ -260,7 +270,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
             .bind(to: totalAmountRelay)
             .disposed(by: disposeBag)
         
-        output.addButtonTapped
+        output.editButtonTapped
             .drive(onNext: {
                 self.dismiss(animated: true)
             })
