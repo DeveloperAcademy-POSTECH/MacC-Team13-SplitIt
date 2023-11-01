@@ -16,7 +16,7 @@ class CSMemberVC: UIViewController, Reusable {
     let disposeBag = DisposeBag()
     let viewModel = CSMemberVM()
     
-    let header = NaviHeader()
+    let header = SPNavigationBar()
     let titleLabel = UILabel()
     let searchBarButton = UIButton()
     let buttonTitleLabel = UILabel()
@@ -37,8 +37,7 @@ class CSMemberVC: UIViewController, Reusable {
         view.backgroundColor = .SurfaceBrandCalmshell
         
         header.do {
-            $0.applyStyle(.csMember)
-            $0.setBackButton(viewController: self)
+            $0.applyStyle(style: .csMemberCreate, vc: self)
         }
         
         titleLabel.do {
@@ -88,6 +87,7 @@ class CSMemberVC: UIViewController, Reusable {
         
         nextButton.do {
             $0.applyStyle(style: .primaryPear, shape: .rounded)
+            self.nextButton.setTitle("2명부터 정산할 수 있어요", for: .normal)
         }
     }
     
@@ -101,9 +101,9 @@ class CSMemberVC: UIViewController, Reusable {
         }
         
         header.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
-            $0.height.equalTo(30)
-            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(96)
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
         }
         
         titleLabel.snp.makeConstraints {
@@ -166,8 +166,9 @@ class CSMemberVC: UIViewController, Reusable {
                 let buttonState = datas.count >= 2
                 self.nextButton.buttonState.accept(buttonState)
                 
-                buttonState ? self.nextButton.setTitle("\(datas.count)명이서 돈을 썼어요", for: .normal)
-                            : self.nextButton.setTitle("2명부터 정산할 수 있어요", for: .disabled)
+                buttonState
+                ? self.nextButton.setTitle("\(datas.count)명이서 돈을 썼어요", for: .normal)
+                : self.nextButton.setTitle("2명부터 정산할 수 있어요", for: .normal)
             })
             .disposed(by: disposeBag)
         

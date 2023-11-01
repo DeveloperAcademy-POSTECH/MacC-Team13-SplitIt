@@ -266,6 +266,7 @@ extension UIColor {
     class var AppColorStatusError: UIColor { return UIColor(hex: 0xFF3030) }
     class var AppColorStatusYellow: UIColor { return UIColor(hex: 0xFFBA09) }
     class var AppColorStatusWarnRed: UIColor { return UIColor(hex: 0xFF6363) }
+    class var AppColorStatusDarkPear: UIColor { return UIColor(hex: 0x7D8F0A) }
 }
 
 // MARK: UIColor extension: "hex 값으로 Color를 세팅합니다."

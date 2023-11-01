@@ -24,7 +24,7 @@ class CSInfoVM {
     }
     
     struct Output {
-        let showCSTotalAmountView: Driver<Void>
+        let showCSMemberView: Driver<Void>
         let titleCount: Driver<String>
         let totalAmount: Driver<String>
         let textFieldIsValid: Driver<Bool>
@@ -111,7 +111,7 @@ class CSInfoVM {
             }
             .asDriver(onErrorJustReturn: UIControl.Event())
         
-        return Output(showCSTotalAmountView: showCSTotalAmountView.asDriver(),
+        return Output(showCSMemberView: showCSTotalAmountView.asDriver(),
                       titleCount: textFieldCount.asDriver(),
                       totalAmount: totalAmountString,
                       textFieldIsValid: textFieldIsValid.asDriver(),

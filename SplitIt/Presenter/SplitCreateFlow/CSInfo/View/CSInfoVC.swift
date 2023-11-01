@@ -17,7 +17,7 @@ class CSInfoVC: UIViewController {
     
     //MARK: Notice 삭제할듯
     
-    let header = NaviHeader()
+    let header = SPNavigationBar()
     let scrollView = UIScrollView(frame: .zero)
     let contentView = UIView()
     let titleMessage = UILabel()
@@ -53,8 +53,7 @@ class CSInfoVC: UIViewController {
         }
         
         header.do {
-            $0.applyStyle(.csTitle)
-            $0.setBackButtonToRootView(viewController: self)
+            $0.applyStyle(style: .csInfoCreate, vc: self)
         }
         
         titleMessage.do {
@@ -136,8 +135,8 @@ class CSInfoVC: UIViewController {
         }
         
         header.snp.makeConstraints {
-            $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+            $0.height.equalTo(96)
+            $0.top.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
         }
         
@@ -203,10 +202,10 @@ class CSInfoVC: UIViewController {
         )
         let output = viewModel.transform(input: input)
         
-        output.showCSTotalAmountView
+        output.showCSMemberView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let vc = CSMemberPageController()
+                let vc = CSMemberVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
