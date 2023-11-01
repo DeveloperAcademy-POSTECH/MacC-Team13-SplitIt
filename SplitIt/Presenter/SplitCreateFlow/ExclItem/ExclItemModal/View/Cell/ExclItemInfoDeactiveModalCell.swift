@@ -32,13 +32,11 @@ class ExclItemInfoDeactiveModalCell: UITableViewCell, Reusable {
     }
     
     func setAttribute() {
-        self.backgroundColor = .SurfaceBrandCalmshell
+        self.backgroundColor = .clear
         self.selectionStyle = .none
         
         contentView.do {
-            $0.backgroundColor = .SurfaceBrandCalmshell
             $0.layer.cornerRadius = 8
-            $0.layer.borderColor = UIColor.BorderDeactivate.cgColor
             $0.layer.borderWidth = 1
             $0.clipsToBounds = true
             $0.frame = $0.frame.inset(by: UIEdgeInsets(top: 4,
@@ -62,14 +60,11 @@ class ExclItemInfoDeactiveModalCell: UITableViewCell, Reusable {
     }
 
     func configure(item: ExclItemTable) {
-        name.text = item.name
+        self.name.text = item.name
         
-        //MARK: 수정Cell에서 쓸 예정
-//        name.textColor = item.isTarget ? .SurfaceBrandCalmshell : .TextDeactivate
-//        contentView.backgroundColor = item.isTarget ? .AppColorGrayscale200 : .SurfaceBrandCalmshell
-//        contentView.layer.borderColor = item.isTarget ? UIColor.SurfaceBrandWatermelonPressed.cgColor : UIColor.SurfaceBrandCalmshell.cgColor
-        
-        //self.contentView.layoutIfNeeded()
+        self.name.textColor = item.isTarget ? .SurfaceBrandCalmshell : .TextDeactivate
+        self.contentView.backgroundColor = item.isTarget ? .AppColorGrayscale200 : .SurfaceBrandCalmshell
+        self.contentView.layer.borderColor = item.isTarget ? UIColor.AppColorGrayscale200.cgColor : UIColor.SurfaceBrandCalmshell.cgColor
     }
 }
 
