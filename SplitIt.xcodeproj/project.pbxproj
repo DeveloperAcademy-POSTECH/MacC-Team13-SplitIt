@@ -25,6 +25,8 @@
 		1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */; };
 		1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2522ADEB24F00616243 /* MemberLog.swift */; };
 		1A8B05DC2AF0E15A00CF5BC5 /* SPNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8B05DB2AF0E15A00CF5BC5 /* SPNavigationBar.swift */; };
+		1A8B05E12AF1466300CF5BC5 /* SplitMethodSelectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8B05E02AF1466300CF5BC5 /* SplitMethodSelectVC.swift */; };
+		1A8B05E32AF1540A00CF5BC5 /* SplitMethodSelectVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8B05E22AF1540A00CF5BC5 /* SplitMethodSelectVM.swift */; };
 		1AB8418D2AEBFEAC006613A0 /* CSMemberSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8418C2AEBFEAC006613A0 /* CSMemberSearchVC.swift */; };
 		1AB8418F2AEC0D37006613A0 /* CSMemberSearchVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8418E2AEC0D37006613A0 /* CSMemberSearchVM.swift */; };
 		1AB841912AEC1270006613A0 /* MemberCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB841902AEC1270006613A0 /* MemberCheck.swift */; };
@@ -183,6 +185,8 @@
 		1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMemberLog.swift; sourceTree = "<group>"; };
 		1A4DB2522ADEB24F00616243 /* MemberLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberLog.swift; sourceTree = "<group>"; };
 		1A8B05DB2AF0E15A00CF5BC5 /* SPNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPNavigationBar.swift; sourceTree = "<group>"; };
+		1A8B05E02AF1466300CF5BC5 /* SplitMethodSelectVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMethodSelectVC.swift; sourceTree = "<group>"; };
+		1A8B05E22AF1540A00CF5BC5 /* SplitMethodSelectVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMethodSelectVM.swift; sourceTree = "<group>"; };
 		1AB8418C2AEBFEAC006613A0 /* CSMemberSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberSearchVC.swift; sourceTree = "<group>"; };
 		1AB8418E2AEC0D37006613A0 /* CSMemberSearchVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberSearchVM.swift; sourceTree = "<group>"; };
 		1AB841902AEC1270006613A0 /* MemberCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCheck.swift; sourceTree = "<group>"; };
@@ -378,6 +382,31 @@
 			path = Repository;
 			sourceTree = "<group>";
 		};
+		1A8B05DD2AF145F000CF5BC5 /* SplitMethodSelect */ = {
+			isa = PBXGroup;
+			children = (
+				1A8B05DF2AF1460400CF5BC5 /* ViewModel */,
+				1A8B05DE2AF145FF00CF5BC5 /* View */,
+			);
+			path = SplitMethodSelect;
+			sourceTree = "<group>";
+		};
+		1A8B05DE2AF145FF00CF5BC5 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1A8B05E02AF1466300CF5BC5 /* SplitMethodSelectVC.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		1A8B05DF2AF1460400CF5BC5 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				1A8B05E22AF1540A00CF5BC5 /* SplitMethodSelectVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		1AB841872AEBF7A2006613A0 /* CSMemberSearch */ = {
 			isa = PBXGroup;
 			children = (
@@ -464,6 +493,7 @@
 		60115DF22ADBF0DD0050D32C /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
+				1A8B05DD2AF145F000CF5BC5 /* SplitMethodSelect */,
 				DEFE9D862AEF5C11009C693E /* CustomKeyboard */,
 				60AE3EB12AE77395009D9D18 /* SplitShare */,
 				6009C8102AE29DC7008B9EC1 /* Result */,
@@ -1315,9 +1345,7 @@
 				60115DF72ADBF2980050D32C /* UIColor+.swift in Sources */,
 				1A3852F92ADE5AC200E9A20B /* CSMember.swift in Sources */,
 				60115E102ADC195C0050D32C /* CreateStore.swift in Sources */,
-
 				86C65FF22AEF970F00A7942A /* JSDetailVC.swift in Sources */,
-				DE73D70B2AE3C1FC00ABF3EF /* MyInfoEmptyVC.swift in Sources */,
 				C2A797942AE274F10049E709 /* SPTextField.swift in Sources */,
 				1A3852F72ADE5AB200E9A20B /* CSInfo.swift in Sources */,
 				60115E1F2ADD2B660050D32C /* CSMemberInputVM.swift in Sources */,
@@ -1346,6 +1374,7 @@
 				6009C8192AE29E5D008B9EC1 /* ResultCell.swift in Sources */,
 				1A07DF092AE55E8F0081E543 /* ExclPageController.swift in Sources */,
 				DE1711C82AE0BADD0097850D /* SocialPay.swift in Sources */,
+				1A8B05E32AF1540A00CF5BC5 /* SplitMethodSelectVM.swift in Sources */,
 				60AE3EAC2AE6699E009D9D18 /* AddSplitHeaderVM.swift in Sources */,
 				60AD20FB2ADF842C00EFACCD /* ExclMemberSectionHeader.swift in Sources */,
 				1AB8418D2AEBFEAC006613A0 /* CSMemberSearchVC.swift in Sources */,
@@ -1391,6 +1420,7 @@
 				DE73D71B2AE6B00300ABF3EF /* SecondVC.swift in Sources */,
 				6032DCE62AECE4BC004A6BFA /* CSInfoVM.swift in Sources */,
 				869D1AF42AE52CAC00D166B1 /* ExclMemberEditSectionHeader.swift in Sources */,
+				1A8B05E12AF1466300CF5BC5 /* SplitMethodSelectVC.swift in Sources */,
 				60AE3EB82AE773F5009D9D18 /* SplitShareVM.swift in Sources */,
 				1AF5F2B32AEE6D5F00DFB71A /* CSMemberVC.swift in Sources */,
 				60AD20F72ADF838300EFACCD /* ExclMemberCell.swift in Sources */,

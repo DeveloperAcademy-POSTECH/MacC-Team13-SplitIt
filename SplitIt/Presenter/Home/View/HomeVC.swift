@@ -44,9 +44,7 @@ class HomeVC: UIViewController {
         
         output.showCreateSplit
             .drive(onNext: {
-
-                let vc = CSInfoVC()
-
+                let vc = SplitMethodSelectVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
@@ -123,7 +121,6 @@ class HomeVC: UIViewController {
         
         logoImage.do {
             $0.image = UIImage(named: "SplitItLogo")
-//            $0.tintColor = UIColor.black
         }
         
         mainTextLabel.do {
