@@ -13,6 +13,8 @@ class CSMemberSearchVM {
     let repo = SplitRepository.share
     let disposeBag = DisposeBag()
     
+    let maxTextCount = 8
+    
     struct Input {
         let viewWillAppear: Observable<Bool>
         let textFieldValue: Driver<String>
@@ -29,6 +31,7 @@ class CSMemberSearchVM {
         let isCellAppear: BehaviorRelay<Bool>
         let deleteIndex: BehaviorRelay<Int>
         let closeCurrentVC: ControlEvent<Void>
+        let textFieldIsValid: BehaviorRelay<Bool>
     }
     
     func transform(input: Input) -> Output {
@@ -40,6 +43,7 @@ class CSMemberSearchVM {
         
         let isCellAppearRelay = BehaviorRelay(value: true)
         let deleteIndexRelay = BehaviorRelay(value: 0)
+        let textFieldIsValid = BehaviorRelay<Bool>(value: true)
         
         let closeCurrentVC = input.checkButtonTapped
         
@@ -56,6 +60,14 @@ class CSMemberSearchVM {
                 
                 allMemberArr.accept(allMembers)
             })
+            .disposed(by: disposeBag)
+        
+        input.textFieldValue
+            .map { [weak self] text -> Bool in
+                guard let self = self else { return false }
+                return text.count < self.maxTextCount
+            }
+            .drive(textFieldIsValid)
             .disposed(by: disposeBag)
         
         // inputText와 allMemberArr 중 변경이 일어났을 때 해당 내용을 searchMemberArr에 반영
@@ -95,6 +107,8 @@ class CSMemberSearchVM {
         input.selectedCellTapped.asDriver()
             .drive(onNext: { indexPath in
                 let selectedMember = selectedMemberArr.value[indexPath.row]
+                if selectedMember.name == UserDefaults.standard.string(forKey: "userName") { return }
+                
                 var currentSelectedMemberArr = selectedMemberArr.value
                 
                 isCellAppearRelay.accept(false)
@@ -113,6 +127,8 @@ class CSMemberSearchVM {
         Driver.merge(input.addButtonTapped.asDriver(), input.textFieldEnterKeyTapped.asDriver())
             .withLatestFrom(input.textFieldValue.asDriver())
             .drive(onNext: { name in
+                if name == UserDefaults.standard.string(forKey: "userName") { return }
+                if selectedMemberArr.value.map({ $0.name }).contains(name) { return }
                 
                 var currentSelectedMemberArr = selectedMemberArr.value
                 
@@ -138,14 +154,14 @@ class CSMemberSearchVM {
                 self.repo.createCSMemberArr(nameArr: selectedMemberNameArr)
                 
                 for name in selectedMemberNameArr {
-                    if !allMemberArr.value.map({ $0.name }).contains(name) {
+                    if !allMemberArr.value.map({ $0.name }).contains(name) && name != UserDefaults.standard.string(forKey: "userName") {
                         self.repo.createMemberLog(name: name)
                     }
                 }
             })
             .disposed(by: disposeBag)
         
-        return Output(searchMemberArr: searchMemberArr, selectedMemberArr: selectedMemberArr, isCellAppear: isCellAppearRelay, deleteIndex: deleteIndexRelay, closeCurrentVC: closeCurrentVC)
+        return Output(searchMemberArr: searchMemberArr, selectedMemberArr: selectedMemberArr, isCellAppear: isCellAppearRelay, deleteIndex: deleteIndexRelay, closeCurrentVC: closeCurrentVC, textFieldIsValid: textFieldIsValid)
     }
     
     private func tranformIsCheckInSelectMemberArr(allMemberArrValue: [MemberCheck], name: String) -> [MemberCheck] {

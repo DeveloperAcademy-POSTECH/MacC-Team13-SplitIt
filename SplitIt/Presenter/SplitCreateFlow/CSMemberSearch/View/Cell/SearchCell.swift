@@ -30,6 +30,7 @@ class SearchCell: UITableViewCell, Reusable {
         super.prepareForReuse()
         
         contentView.backgroundColor = .SurfacePrimary
+        contentView.layer.borderWidth = 0
         checkMark.tintColor = .TextDeactivate
     }
     
@@ -40,12 +41,12 @@ class SearchCell: UITableViewCell, Reusable {
     }
     
     func setAttribute() {
-        self.backgroundColor = .SurfacePrimary
+        self.backgroundColor = .SurfaceDeactivate
         self.selectionStyle = .none
         
         contentView.do {
-            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
-            $0.layer.borderWidth = 1
+            $0.backgroundColor = .SurfacePrimary
+            $0.layer.borderWidth = 0
             $0.layer.cornerRadius = 8
             $0.clipsToBounds = true
         }
@@ -82,6 +83,8 @@ class SearchCell: UITableViewCell, Reusable {
         if item.isCheck {
             contentView.backgroundColor = .SurfaceBrandPear
             checkMark.tintColor = .TextPrimary
+            contentView.layer.borderColor = UIColor.BorderPrimary.cgColor
+            contentView.layer.borderWidth = 1
         } else {
             contentView.backgroundColor = .SurfacePrimary
             checkMark.tintColor = .TextDeactivate
