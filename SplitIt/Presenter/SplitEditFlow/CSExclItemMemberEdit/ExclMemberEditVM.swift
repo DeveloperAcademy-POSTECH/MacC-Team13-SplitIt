@@ -13,7 +13,7 @@ class ExclMemberEditVM {
     
     var disposeBag = DisposeBag()
     
-    var sections = BehaviorRelay<ExclMemberEditSectionModel>(value: ExclMemberEditSectionModel.init(type: ExclMemberEditSectionType.data(.init(exclItem: .init(csInfoIdx: "", name: ""), items: []))))
+    var sections = BehaviorRelay<ExclMemberEditSectionModel>(value: ExclMemberEditSectionModel.init(type: ExclMemberEditSectionType.data(.init(exclItem: .init(csInfoIdx: "", name: "", price: 0), items: []))))
     
     let index: IndexPath?
     
@@ -85,7 +85,7 @@ class ExclMemberEditVM {
                     if let model = exclMemberSectionModels.last {
                         return model
                     } else {
-                        return ExclMemberEditSectionModel(type: .data(.init(exclItem: .init(csInfoIdx: "", name: ""), items: [])))
+                        return ExclMemberEditSectionModel(type: .data(.init(exclItem: .init(csInfoIdx: "", name: "", price: 0), items: [])))
                     }
                 }
                 .bind(to: sections)

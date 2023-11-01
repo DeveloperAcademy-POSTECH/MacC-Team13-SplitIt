@@ -14,10 +14,10 @@ struct ExclMember {
     var isTarget: Bool
     var exclItemIdx: String
     
-    init(exclItemIdx: String, name: String) {
+    init(exclItemIdx: String, name: String, isTarget: Bool) {
         self.exclMemberIdx = ObjectId.generate().stringValue
         self.name = name
-        self.isTarget = false
+        self.isTarget = isTarget
         self.exclItemIdx = exclItemIdx
     }
 }
