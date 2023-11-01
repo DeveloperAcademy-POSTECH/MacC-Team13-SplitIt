@@ -17,9 +17,9 @@ import RxAppState
 /// 1. 수정뷰 전용 네비헤더 구현(ok)
 /// 2. 저장 로직 구현 (ok)
 /// 3. 취소버튼 탭 시 Alert 창 구현
-/// 4. 삭제버튼 레이아웃 구현
+/// 4. 삭제버튼 레이아웃 구현 (ok)
 /// 5. 삭제버튼 로직 구현
-/// 6. 추가버튼 디자인 수정
+/// 6. 추가버튼 디자인 수정 (ok)
 /// 7. EditCell에서 isTarget True이면서 비활성일 때 배경색 바꾸기 (ok)
 
 class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
@@ -434,8 +434,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
         
         viewModel.exclInfo
             .observe(on: MainScheduler.asyncInstance)
-            .map { [weak self] exclItem -> (String, String) in
-                guard let self = self else { return ("", "") }
+            .map { exclItem -> (String, String) in
                 let numberFormatter = NumberFormatterHelper()
                 let priceToString = numberFormatter.formattedString(from: exclItem.price)
                 return (exclItem.name, priceToString)
@@ -503,6 +502,15 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
                 }
             })
             .disposed(by: disposeBag)
+        
+        output.deleteButtonButtonTapped
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                // TODO: 삭제 Alert
+                self.dismiss(animated: true)
+            })
+            .disposed(by: disposeBag)
+        
     }
 }
 

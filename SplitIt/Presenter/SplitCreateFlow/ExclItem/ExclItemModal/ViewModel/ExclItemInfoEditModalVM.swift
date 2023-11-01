@@ -195,6 +195,15 @@ class ExclItemInfoEditModalVM {
             })
             .disposed(by: disposeBag)
         
+        input.deleteButtonTapped
+            .asDriver()
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                // TODO: 원래는 Alert창 띄우고 거기서 해야함
+                SplitRepository.share.deleteExclItemAndRelatedData(exclItemIdx: exclItemIdx)
+            })
+            .disposed(by: disposeBag)
+        
         return Output(titleCount: textFieldCount.asDriver(),
                       totalAmount: totalAmountString,
                       textFieldIsValid: textFieldIsValid.asDriver(),
