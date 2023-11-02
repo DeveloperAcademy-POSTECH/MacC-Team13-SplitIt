@@ -55,15 +55,13 @@ class SelectedCell: UICollectionViewCell, Reusable {
     }
     
     private func setLayout() {
-        [nameLabel,xMark].forEach {
-            contentView.addSubview($0)
-        }
+        [nameLabel].forEach { contentView.addSubview($0) }
     }
     
     func configure(item: MemberCheck) {
         nameLabel.text = item.name
         
-        if item.name != UserDefaults.standard.string(forKey: "userName") {
+        if item.name != UserDefaults.standard.string(forKey: "userNickName") && item.name != "정산자" {
             contentView.addSubview(xMark)
             
             xMark.snp.makeConstraints {
@@ -77,6 +75,7 @@ class SelectedCell: UICollectionViewCell, Reusable {
                 $0.centerY.equalToSuperview()
                 $0.leading.equalTo(12)
             }
+            
         } else {
             xMark.removeFromSuperview()
             
@@ -90,7 +89,7 @@ class SelectedCell: UICollectionViewCell, Reusable {
         let text = item.name
         let textWidth = (text as NSString).size(withAttributes: [NSAttributedString.Key.font: UIFont.KoreanCaption1]).width
         
-        var plusWidth = item.name == UserDefaults.standard.string(forKey: "userName") ? 30 : 50.5
+        let plusWidth = item.name == UserDefaults.standard.string(forKey: "userNickName") || item.name == "정산자" ? 30 : 50.5
         
         return textWidth + plusWidth
     }
