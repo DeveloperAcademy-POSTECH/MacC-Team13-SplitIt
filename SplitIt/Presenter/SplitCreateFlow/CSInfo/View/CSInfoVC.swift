@@ -91,7 +91,7 @@ class CSInfoVC: UIViewController {
         
         nextButton.do {
             $0.setTitle("다음으로", for: .normal)
-            $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
+            $0.applyStyle(style: .primaryMushroom, shape: .rounded)
         }
     }
     
