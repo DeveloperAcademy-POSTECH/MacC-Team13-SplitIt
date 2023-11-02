@@ -166,8 +166,11 @@ class SplitShareVC: UIViewController {
         
         output.showCSEditView
             .asDriver()
-            .drive(onNext: {
+            .drive(onNext: { [weak self] _ in
                 // EditView로 이동하기
+                guard let self = self else { return }
+                let vc = JSDetailVC()
+                self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
     }
