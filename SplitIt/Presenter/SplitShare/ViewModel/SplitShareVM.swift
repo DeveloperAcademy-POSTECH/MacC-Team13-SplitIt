@@ -33,6 +33,9 @@ class SplitShareVM {
     }
     
     func transform(input: Input) -> Output {
+        let idx = SplitRepository.share.splitArr.value.first!.splitIdx
+        SplitRepository.share.fetchSplitArrFromDBWithSplitIdx(splitIdx:idx)
+        
         let split: BehaviorRelay<[Split]> = repo.splitArr
         let splitResult: BehaviorRelay<[SplitMemberResult]> = BehaviorRelay(value: self.calcSplitResult())
         let sendItems = BehaviorRelay<[Any]>(value: [])
@@ -40,6 +43,15 @@ class SplitShareVM {
         let showNewCSCreateFlow = input.csAddButtonTapped
         let showCSEditView = input.editButtonTapped
         
+        input.viewWillAppear
+            .asDriver(onErrorJustReturn: true)
+            .drive (onNext: { _ in
+                let idx = SplitRepository.share.splitArr.value.first!.splitIdx
+                SplitRepository.share.fetchSplitArrFromDBWithSplitIdx(splitIdx: idx)
+                splitResult.accept (self.calcSplitResult ())
+            })
+            .disposed(by: disposeBag)
+                
         input.viewDidAppear
             .asDriver(onErrorJustReturn: true)
             .drive(onNext: { _ in
