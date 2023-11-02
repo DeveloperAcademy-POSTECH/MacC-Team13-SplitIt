@@ -24,9 +24,9 @@ class ExclItemInfoEditModalVM {
     struct Input {
         let viewDidLoad: Driver<Void>
         let title: Driver<String>
-        let totalAmount: Driver<String>
+        let price: Driver<String>
         let titleTextFieldControlEvent: Observable<UIControl.Event>
-        let totalAmountTextFieldControlEvent: Observable<UIControl.Event>
+        let priceTextFieldControlEvent: Observable<UIControl.Event>
         let cancelButtonTapped: ControlEvent<Void>
         let editButtonTapped: ControlEvent<Void>
         let deleteButtonTapped: ControlEvent<Void>
@@ -34,13 +34,13 @@ class ExclItemInfoEditModalVM {
     
     struct Output {
         let titleCount: Driver<String>
-        let totalAmount: Driver<String>
+        let price: Driver<String>
         let textFieldIsValid: Driver<Bool>
         let titleTextFieldIsEnable: Driver<Bool>
-        let totalAmountTextFieldIsEnable: Driver<Bool>
+        let priceTextFieldIsEnable: Driver<Bool>
         let addButtonIsEnable: Driver<Bool>
         let titleTextFieldControlEvent: Driver<UIControl.Event>
-        let totalAmountTextFieldControlEvent: Driver<UIControl.Event>
+        let priceTextFieldControlEvent: Driver<UIControl.Event>
         let cancelButtonTapped: Driver<Void>
         let editButtonTapped: Driver<Void>
         let showAlertVC: Driver<(String, String)>
@@ -51,7 +51,7 @@ class ExclItemInfoEditModalVM {
         let textFieldCount = BehaviorRelay<String>(value: "")
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
         let titleResult = BehaviorRelay<String>(value: "")
-        let totalAmountResult = BehaviorRelay<Int>(value: 0)
+        let priceResult = BehaviorRelay<Int>(value: 0)
         let numberFormatter = NumberFormatterHelper()
         let showAlertRelay = PublishRelay<(String, String)>()
 
@@ -67,7 +67,7 @@ class ExclItemInfoEditModalVM {
             .map{ $0.count > 0 }
             .asDriver()
         
-        let totalAmountTextFieldCountIsEmpty = input.totalAmount
+        let priceTextFieldCountIsEmpty = input.price
             .map { numberFormatter.number(from: $0) ?? 0 }
             .map{ $0 != 0 }
             .asDriver()
@@ -82,28 +82,28 @@ class ExclItemInfoEditModalVM {
             .drive(exclMemberIsValid)
             .disposed(by: disposeBag)
         
-        let totalAmountString = input.totalAmount
+        let priceString = input.price
             .map { numberFormatter.number(from: $0) ?? 0 }
             .map { min($0, maxCurrency) }
             .map { number in
-                totalAmountResult.accept(number)
+                priceResult.accept(number)
                 return number
             }
             .map { numberFormatter.formattedString(from: $0) }
             .asDriver(onErrorJustReturn: "0")
         
-        let csInfoDriver = Driver.combineLatest(input.title, input.totalAmount)
+        let csInfoDriver = Driver.combineLatest(input.title, input.price)
         
         input.editButtonTapped
             .asDriver()
             .withLatestFrom(csInfoDriver)
-            .drive(onNext: { [weak self] title, totalAmount in
+            .drive(onNext: { [weak self] title, price in
                 guard let self = self else { return }
 
                 SplitRepository.share.editExclItemName(exclItemIdx: exclItemIdx,
                                                        name: titleResult.value)
                 SplitRepository.share.editExclItemPrice(exclItemIdx: exclItemIdx,
-                                                        price: totalAmountResult.value)
+                                                        price: priceResult.value)
                 
                 // MARK: 현재 Table의 정보와 Repo의 exclMember를 비교하여 toggle 메서드 호출
                 /// table, repo의 member 순서가 다르므로 2중 for문으로 완전탐색
@@ -143,7 +143,7 @@ class ExclItemInfoEditModalVM {
             .disposed(by: disposeBag)
         
         addButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(),
-                                                  totalAmountTextFieldCountIsEmpty.asDriver(),
+                                                  priceTextFieldCountIsEmpty.asDriver(),
                                                   exclMemberIsValid.asDriver())
             .map{ $0 && $1 && $2 }
             .asDriver()
@@ -161,7 +161,7 @@ class ExclItemInfoEditModalVM {
             }
             .asDriver(onErrorJustReturn: UIControl.Event())
         
-        let totalAmountTFControlEvent: Driver<UIControl.Event> = input.totalAmountTextFieldControlEvent
+        let priceTFControlEvent: Driver<UIControl.Event> = input.priceTextFieldControlEvent
             .map { event -> UIControl.Event in
                 switch event {
                 case .editingDidBegin:
@@ -204,13 +204,13 @@ class ExclItemInfoEditModalVM {
             .disposed(by: disposeBag)
         
         return Output(titleCount: textFieldCount.asDriver(),
-                      totalAmount: totalAmountString,
+                      price: priceString,
                       textFieldIsValid: textFieldIsValid.asDriver(),
                       titleTextFieldIsEnable: titleTextFieldCountIsEmpty,
-                      totalAmountTextFieldIsEnable: totalAmountTextFieldCountIsEmpty,
+                      priceTextFieldIsEnable: priceTextFieldCountIsEmpty,
                       addButtonIsEnable: addButtonIsEnable,
                       titleTextFieldControlEvent: titleTFControlEvent,
-                      totalAmountTextFieldControlEvent: totalAmountTFControlEvent,
+                      priceTextFieldControlEvent: priceTFControlEvent,
                       cancelButtonTapped: input.cancelButtonTapped.asDriver(),
                       editButtonTapped: input.editButtonTapped.asDriver(),
                       showAlertVC: showAlertRelay.asDriver(onErrorJustReturn: ("", "")))

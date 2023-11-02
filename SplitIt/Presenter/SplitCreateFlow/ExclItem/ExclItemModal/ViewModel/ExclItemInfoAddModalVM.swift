@@ -20,22 +20,22 @@ class ExclItemInfoAddModalVM {
     
     struct Input {
         let title: Driver<String>
-        let totalAmount: Driver<String>
+        let price: Driver<String>
         let titleTextFieldControlEvent: Observable<UIControl.Event>
-        let totalAmountTextFieldControlEvent: Observable<UIControl.Event>
+        let priceTextFieldControlEvent: Observable<UIControl.Event>
         let cancelButtonTapped: ControlEvent<Void>
         let addButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
         let titleCount: Driver<String>
-        let totalAmount: Driver<String>
+        let price: Driver<String>
         let textFieldIsValid: Driver<Bool>
         let titleTextFieldIsEnable: Driver<Bool>
-        let totalAmountTextFieldIsEnable: Driver<Bool>
+        let priceTextFieldIsEnable: Driver<Bool>
         let addButtonIsEnable: Driver<Bool>
         let titleTextFieldControlEvent: Driver<UIControl.Event>
-        let totalAmountTextFieldControlEvent: Driver<UIControl.Event>
+        let priceTextFieldControlEvent: Driver<UIControl.Event>
         let cancelButtonTapped: Driver<Void>
         let addButtonTapped: Driver<Void>
     }
@@ -45,7 +45,7 @@ class ExclItemInfoAddModalVM {
         let textFieldCount = BehaviorRelay<String>(value: "")
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
         
-        let totalAmountResult = BehaviorRelay<Int>(value: 0)
+        let priceResult = BehaviorRelay<Int>(value: 0)
         let numberFormatter = NumberFormatterHelper()
 
         let maxCurrency = 10000000
@@ -56,7 +56,7 @@ class ExclItemInfoAddModalVM {
             .map{ $0.count > 0 }
             .asDriver()
         
-        let totalAmountTextFieldCountIsEmpty = input.totalAmount
+        let priceTextFieldCountIsEmpty = input.price
             .map { numberFormatter.number(from: $0) ?? 0 }
             .map{ $0 != 0 }
             .asDriver()
@@ -71,26 +71,26 @@ class ExclItemInfoAddModalVM {
             .drive(exclMemberIsValid)
             .disposed(by: disposeBag)
         
-        let totalAmountString = input.totalAmount
+        let priceString = input.price
             .map { numberFormatter.number(from: $0) ?? 0 }
             .map { min($0, maxCurrency) }
             .map { number in
-                totalAmountResult.accept(number)
+                priceResult.accept(number)
                 return number
             }
             .map { numberFormatter.formattedString(from: $0) }
             .asDriver(onErrorJustReturn: "0")
         
-        let csInfoDriver = Driver.combineLatest(input.title, input.totalAmount)
+        let csInfoDriver = Driver.combineLatest(input.title, input.price)
         
         input.addButtonTapped
             .asDriver()
             .withLatestFrom(csInfoDriver)
-            .drive(onNext: { [weak self] title, totalAmount in
+            .drive(onNext: { [weak self] title, price in
                 guard let self = self else { return }
-                let totalAmountInt = numberFormatter.number(from: totalAmount)
+                let priceInt = numberFormatter.number(from: price)
                 let currentExclMember = sections.value.first!.items
-                let currentExclItemIdx = SplitRepository.share.createExclItem(name: title, price: totalAmountInt ?? 0, exclMember: currentExclMember)
+                let currentExclItemIdx = SplitRepository.share.createExclItem(name: title, price: priceInt ?? 0, exclMember: currentExclMember)
             })
             .disposed(by: disposeBag)
         
@@ -111,7 +111,7 @@ class ExclItemInfoAddModalVM {
             .disposed(by: disposeBag)
         
         addButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(),
-                                                  totalAmountTextFieldCountIsEmpty.asDriver(),
+                                                  priceTextFieldCountIsEmpty.asDriver(),
                                                   exclMemberIsValid.asDriver())
             .map{ $0 && $1 && $2 }
             .asDriver()
@@ -129,7 +129,7 @@ class ExclItemInfoAddModalVM {
             }
             .asDriver(onErrorJustReturn: UIControl.Event())
         
-        let totalAmountTFControlEvent: Driver<UIControl.Event> = input.totalAmountTextFieldControlEvent
+        let priceTFControlEvent: Driver<UIControl.Event> = input.priceTextFieldControlEvent
             .map { event -> UIControl.Event in
                 switch event {
                 case .editingDidBegin:
@@ -156,13 +156,13 @@ class ExclItemInfoAddModalVM {
             .disposed(by: disposeBag)
         
         return Output(titleCount: textFieldCount.asDriver(),
-                      totalAmount: totalAmountString,
+                      price: priceString,
                       textFieldIsValid: textFieldIsValid.asDriver(),
                       titleTextFieldIsEnable: titleTextFieldCountIsEmpty,
-                      totalAmountTextFieldIsEnable: totalAmountTextFieldCountIsEmpty,
+                      priceTextFieldIsEnable: priceTextFieldCountIsEmpty,
                       addButtonIsEnable: addButtonIsEnable,
                       titleTextFieldControlEvent: titleTFControlEvent,
-                      totalAmountTextFieldControlEvent: totalAmountTFControlEvent,
+                      priceTextFieldControlEvent: priceTFControlEvent,
                       cancelButtonTapped: input.cancelButtonTapped.asDriver(),
                       addButtonTapped: input.addButtonTapped.asDriver())
     }
