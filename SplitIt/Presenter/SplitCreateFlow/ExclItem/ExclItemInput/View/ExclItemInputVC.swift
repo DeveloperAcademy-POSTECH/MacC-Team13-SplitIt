@@ -183,6 +183,7 @@ class ExclItemInputVC: UIViewController {
         
         output.showResultView
             .drive(onNext: { [weak self] _ in
+                SplitRepository.share.updateDataToDB()
                 let vc = SplitShareVC()
                 self?.navigationController?.pushViewController(vc, animated: true)
             })
