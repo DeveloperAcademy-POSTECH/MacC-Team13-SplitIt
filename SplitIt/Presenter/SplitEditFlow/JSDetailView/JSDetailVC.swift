@@ -12,19 +12,22 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import RxAppState
+import RealmSwift
 
-final class JSDetailVC: UIViewController {
+final class JSDetailVC: UIViewController, UIScrollViewDelegate {
     
     var disposeBag = DisposeBag()
     var viewModel = JSDetailVM()
     
     let headerView = NaviHeader()
-    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    let collectionView = UITableView(frame: .zero)
     let nextButton = NewSPButton()
     let splitTitleTF = SPTextField()
     let textFiledCounter = UILabel()
     let textFiledNotice = UILabel()
     let titleLabel = UILabel()
+    
+    var cellHeight = [0.0]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,10 +71,7 @@ final class JSDetailVC: UIViewController {
         collectionView.do {
             $0.backgroundColor = .SurfaceBrandCalmshell
             $0.register(cellType: JSDetailCell.self)
-            let layout = UICollectionViewFlowLayout()
-//            layout.estimatedItemSize = .init(width: 330, height: 208)
-            layout.itemSize = .init(width: 330, height: 208)
-            $0.collectionViewLayout = layout
+            $0.rowHeight = 208
         }
         
         nextButton.do {
@@ -123,27 +123,36 @@ final class JSDetailVC: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(30)
         }
         
+        nextButton.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(40)
+            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.height.equalTo(48)
+        }
+        
         collectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.top.equalTo(divider.snp.bottom).offset(24)
-            $0.height.equalTo(410)
-        }
-        
-        nextButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.height.equalTo(48)
+            $0.bottom.equalTo(nextButton.snp.top)
         }
         
     }
     
     func setBinding() {
+        print("@@@@@@@@")
         viewModel.csinfoList
             .drive(collectionView.rx.items(cellIdentifier: "JSDetailCell", cellType: JSDetailCell.self)) { [weak self] idx, item, cell in
                 guard let self = self else { return }
                 let memberCount = self.viewModel.memberCount()
                 let exclCount = self.viewModel.exclItemCount()
                 cell.configure(csinfo: item, csMemberCount: memberCount[idx], exclItemCount: exclCount[idx])
+                cell.setNeedsLayout()
+                cell.layoutIfNeeded()
+                
+                let size = cell.contentView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
+                self.cellHeight.append(size)
+                print("현재 셀\(idx)의 높이\(size)")
+                print("추가된 배열\(cellHeight)")
+//                return cell
             }
             .disposed(by: disposeBag)
         
