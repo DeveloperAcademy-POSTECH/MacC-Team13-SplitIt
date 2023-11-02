@@ -106,6 +106,12 @@ class CSInfoVC: UIViewController {
             contentView.addSubview($0)
         }
         
+        header.snp.makeConstraints {
+            $0.height.equalTo(30)
+            $0.horizontalEdges.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
+        }
+        
         scrollView.snp.makeConstraints {
             $0.top.equalTo(header.snp.bottom)
             $0.leading.trailing.equalToSuperview().inset(30)
@@ -117,25 +123,19 @@ class CSInfoVC: UIViewController {
             $0.edges.equalToSuperview()
         }
         
-        header.snp.makeConstraints {
-            $0.height.equalTo(30)
-            $0.horizontalEdges.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
-        }
-        
         titleMessage.snp.makeConstraints {
             $0.top.equalToSuperview().inset(30)
-            $0.leading.equalToSuperview()
+            $0.leading.equalToSuperview().inset(8)
         }
         
         titleTextFiled.snp.makeConstraints {
             $0.top.equalTo(titleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(48)
+            $0.height.equalTo(46)
         }
         
         textFiledCounter.snp.makeConstraints {
-            $0.top.equalTo(titleTextFiled.snp.bottom).offset(8)
+            $0.top.equalTo(titleTextFiled.snp.bottom).offset(4)
             $0.trailing.equalTo(titleTextFiled.snp.trailing).inset(6)
         }
         
@@ -147,7 +147,7 @@ class CSInfoVC: UIViewController {
         totalAmountTextFiled.snp.makeConstraints {
             $0.top.equalTo(totalAmountTitleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(48)
+            $0.height.equalTo(46)
         }
         
         nextButton.snp.makeConstraints {
@@ -297,6 +297,7 @@ extension CSInfoVC {
                     self.scrollView.snp.updateConstraints {
                         $0.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(keyboardHeight)
                     }
+                    self.view.layoutIfNeeded()
                 }
             })
             .disposed(by: disposeBag)
