@@ -131,15 +131,13 @@ final class SPNavigationBar: UIView {
         self.addSubview(naviTitleLabel)
         
         naviTitleLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.centerX.centerY.equalToSuperview()
         }
     }
     
     func setNaviImage(imageCase: Int) {
         let csInfoCreateView = UIImageView()
         let csMemberCreateView = UIImageView()
-        let exclItemCreateView = UIImageView()
         
         csInfoCreateView.do {
             $0.image = UIImage(named: imageCase == 0 ? "CSInfoCreateActive" : "CSInfoCreateDeactive")
@@ -151,34 +149,54 @@ final class SPNavigationBar: UIView {
             $0.sizeToFit()
         }
         
-        exclItemCreateView.do {
-            $0.image = UIImage(named: imageCase == 2 ? "ExclItemCreateActive" : "ExclItemCreateDeactive")
-            $0.sizeToFit()
-        }
-        
-        [csInfoCreateView, csMemberCreateView, exclItemCreateView].forEach {
+        [csInfoCreateView, csMemberCreateView].forEach {
             self.addSubview($0)
         }
         
-        csInfoCreateView.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
-            $0.trailing.equalTo(csMemberCreateView.snp.leading).offset(-8)
-            $0.height.equalTo(30)
-            $0.width.equalTo(60)
-        }
-        
-        csMemberCreateView.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
-            $0.centerX.equalToSuperview()
-            $0.height.equalTo(30)
-            $0.width.equalTo(60)
-        }
-        
-        exclItemCreateView.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
-            $0.leading.equalTo(csMemberCreateView.snp.trailing).offset(8)
-            $0.height.equalTo(30)
-            $0.width.equalTo(60)
+        if SplitRepository.share.isSmartSplit {
+            csInfoCreateView.snp.makeConstraints {
+                $0.centerY.equalToSuperview()
+                $0.height.equalTo(30)
+                $0.width.equalTo(60)
+                $0.trailing.equalTo(csMemberCreateView.snp.leading).offset(-8)
+            }
+            
+            csMemberCreateView.snp.makeConstraints {
+                $0.centerX.equalToSuperview()
+                $0.centerY.equalToSuperview()
+                $0.height.equalTo(30)
+                $0.width.equalTo(60)
+            }
+            
+            let exclItemCreateView = UIImageView()
+            
+            exclItemCreateView.do {
+                $0.image = UIImage(named: imageCase == 2 ? "ExclItemCreateActive" : "ExclItemCreateDeactive")
+                $0.sizeToFit()
+            }
+            
+            self.addSubview(exclItemCreateView)
+            
+            exclItemCreateView.snp.makeConstraints {
+                $0.centerY.equalToSuperview()
+                $0.leading.equalTo(csMemberCreateView.snp.trailing).offset(8)
+                $0.height.equalTo(30)
+                $0.width.equalTo(60)
+            }
+        } else {
+            csInfoCreateView.snp.makeConstraints {
+                $0.centerY.equalToSuperview()
+                $0.trailing.equalTo(self.snp.centerX).offset(-4)
+                $0.height.equalTo(30)
+                $0.width.equalTo(60)
+            }
+            
+            csMemberCreateView.snp.makeConstraints {
+                $0.centerY.equalToSuperview()
+                $0.leading.equalTo(self.snp.centerX).offset(4)
+                $0.height.equalTo(30)
+                $0.width.equalTo(60)
+            }
         }
     }
     
@@ -192,7 +210,7 @@ final class SPNavigationBar: UIView {
         self.addSubview(leftButton)
         
         leftButton.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
+            $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(30)
             $0.width.height.equalTo(30)
         }
@@ -222,9 +240,8 @@ final class SPNavigationBar: UIView {
         self.addSubview(rightButton)
         
         rightButton.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
+            $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(30)
-            $0.height.equalTo(30)
         }
         
         let backAction = UIAction { action in
@@ -252,8 +269,7 @@ final class SPNavigationBar: UIView {
         self.addSubview(leftButton)
         
         leftButton.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
-            $0.height.equalTo(30)
+            $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(30)
         }
         
@@ -274,8 +290,7 @@ final class SPNavigationBar: UIView {
         self.addSubview(rightButton)
         
         rightButton.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
-            $0.height.equalTo(30)
+            $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(30)
         }
         
@@ -304,7 +319,7 @@ final class SPNavigationBar: UIView {
         self.addSubview(rightButton)
         
         rightButton.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
+            $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(30)
             $0.width.height.equalTo(26)
         }
