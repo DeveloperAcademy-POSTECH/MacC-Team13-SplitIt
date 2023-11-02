@@ -21,13 +21,14 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
     
     let accountTextRelay = BehaviorRelay<String?>(value: "")
     let accountCustomKeyboard = AccountCustomKeyboard()
-    
+
     let viewModel = MyBankAccountVM()
     var disposeBag = DisposeBag()
     let maxCharacterCount = 8
     let userDefault = UserDefaults.standard
     
     var isBankSelected: Bool = false
+    var keyboardHeight: CGFloat = 400
     
     let header = SPNavigationBar()
     
@@ -109,15 +110,16 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
         Observable.combineLatest(nameTextCheck, accountTextCheck, nickNameTextCheck)
             .subscribe(onNext: { text1, text2, text3 in
                 
-                if self.userDefault.string(forKey: "userName") != nil && // 이미 값이 설정되었던 상태
-                    self.userDefault.string(forKey: "userBank") != nil &&
-                    self.userDefault.string(forKey: "userAccount") != nil &&
-                    self.userDefault.string(forKey: "userNickName") != nil {
-                    
+                if self.userDefault.string(forKey: "userNickName") != nil  // 이미 값이 설정되었던 상태
+//                    self.userDefault.string(forKey: "userBank") != nil &&
+//                    self.userDefault.string(forKey: "userAccount") != nil &&
+//                    self.userDefault.string(forKey: "userNickName") != nil {
+                    {
                     self.header.buttonState.accept(true)
                     
                 } else { //값이 없는 상태
-                    if !text1.isEmpty && !text2.isEmpty && !text3.isEmpty && self.isBankSelected {
+                    if !text3.isEmpty {
+//                    if !text1.isEmpty && !text2.isEmpty && !text3.isEmpty && self.isBankSelected {
                         self.header.buttonState.accept(true)
                         
                     } else {
@@ -338,6 +340,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
                 
                 $0.attributedPlaceholder = NSAttributedString(string: userDefault.string(forKey: "userNickName")!,
                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextPrimary])
+                
             }
             $0.font = .KoreanCaption1
             $0.clipsToBounds = true
@@ -746,9 +749,3 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
     }
 }
 
-extension MyBankAccountVC: UITextFieldDelegate {
-    
-    func setKeyboardObserverRemove() {
-        NotificationCenter.default.removeObserver(self)
-    }
-}

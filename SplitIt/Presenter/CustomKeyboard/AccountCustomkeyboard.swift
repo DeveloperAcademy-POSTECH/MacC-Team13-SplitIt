@@ -12,17 +12,22 @@ import SnapKit
 import Then
 
 
+
 protocol AccountCustomKeyboardDelegate: AnyObject {
     
 }
-
-
 
 class AccountCustomKeyboard: UIInputViewController {
     
     weak var delegate: AccountCustomKeyboardDelegate?
     var currentTextField: UITextField?
-        
+    
+    var originalKeyboardHeight: CGFloat = 291
+
+    var keyboardFrame: CGRect?
+    
+    var keyboardView = UIView()
+    
     let inputRelay = BehaviorRelay<String?>(value: nil)
     
     private let disposeBag = DisposeBag()
@@ -32,7 +37,6 @@ class AccountCustomKeyboard: UIInputViewController {
         return customKeySubject.asObservable()
     }
     
-    let keyboardView = UIView(frame: CGRect(x: 0, y: 0, width: 390, height: 291))
     
     let btn1 = KeyboardButton(title: "1")
     let btn2 = KeyboardButton(title: "2")
@@ -53,24 +57,40 @@ class AccountCustomKeyboard: UIInputViewController {
         
         view.backgroundColor = UIColor(hex: 0xCED0D5)
         
-        
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+
         setAttribute()
-        setAddView()
+        setLayout()
         setKeyLayout()
         setBinding()
         
     }
+
+    @objc func keyboardWillShow(notification: Notification) {
+        if let userInfo = notification.userInfo,
+            let keyboardFrameValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            originalKeyboardHeight = keyboardFrameValue.cgRectValue.height
+
+            keyboardView.snp.removeConstraints()
+            
+            keyboardView.snp.makeConstraints { make in
+                make.height.equalTo(originalKeyboardHeight)
+            }
+            
+            print(originalKeyboardHeight)
+            print("dddddddd")
+        }
+    }
     
-    func setAttribute() {
+    func setLayout() {
         
-        let inputView = UIInputView(frame: CGRect(x: 0, y: 0, width: 390, height: 288), inputViewStyle: .keyboard)
-        inputView.backgroundColor = UIColor(hex: 0xFCFCFE)
-        self.inputView = inputView
+
+        [btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, optionBtn, deleteButton].forEach {
+            keyboardView.addSubview($0)
+        }
+        deleteButton.addSubview(deleteImage)
         
-        keyboardView.backgroundColor = UIColor(hex: 0xCED0D5)
-        inputView.addSubview(keyboardView)
-        
+                
         deleteButton.do {
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 0
@@ -80,7 +100,29 @@ class AccountCustomKeyboard: UIInputViewController {
             $0.image = UIImage(systemName: "delete.left")
             $0.tintColor = UIColor.black
         }
+        
+        
+        keyboardView.snp.makeConstraints { make in
+            make.top.left.right.equalToSuperview()
+            make.height.equalTo(originalKeyboardHeight) // 초기 높이 설정
+        }
+        
     }
+    
+    func setAttribute() {
+        
+        print("작동")
+        let inputView = UIInputView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: originalKeyboardHeight), inputViewStyle: .keyboard)
+        inputView.backgroundColor = UIColor(hex: 0xFCFCFE)
+        self.inputView = inputView
+        
+        keyboardView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: originalKeyboardHeight))
+        keyboardView.backgroundColor = UIColor(hex: 0xFCFCFE)
+        inputView.addSubview(keyboardView)
+        
+        
+    }
+    
  
     func setCurrentTextField(_ textField: UITextField) {
             currentTextField = textField
@@ -106,93 +148,84 @@ class AccountCustomKeyboard: UIInputViewController {
     }
     
     
-    func setAddView() {
-        
-        [btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, optionBtn, deleteButton].forEach {
-            keyboardView.addSubview($0)
-        }
-        deleteButton.addSubview(deleteImage)
-    }
-    
-    
     func setBinding() {
-       
-            bindButtonAction(btn1, value: "1")
-            bindButtonAction(btn2, value: "2")
-            bindButtonAction(btn3, value: "3")
-            bindButtonAction(btn4, value: "4")
-            bindButtonAction(btn5, value: "5")
-            bindButtonAction(btn6, value: "6")
-            bindButtonAction(btn7, value: "7")
-            bindButtonAction(btn8, value: "8")
-            bindButtonAction(btn9, value: "9")
-            bindButtonAction(optionBtn, value: "-")
-            bindButtonAction(btn0, value: "0")
-            bindButtonAction(deleteButton, value: "del")
-            
+        
+        bindButtonAction(btn1, value: "1")
+        bindButtonAction(btn2, value: "2")
+        bindButtonAction(btn3, value: "3")
+        bindButtonAction(btn4, value: "4")
+        bindButtonAction(btn5, value: "5")
+        bindButtonAction(btn6, value: "6")
+        bindButtonAction(btn7, value: "7")
+        bindButtonAction(btn8, value: "8")
+        bindButtonAction(btn9, value: "9")
+        bindButtonAction(optionBtn, value: "-")
+        bindButtonAction(btn0, value: "0")
+        bindButtonAction(deleteButton, value: "del")
+        
        
     }
 
     
     func setKeyLayout() {
         btn1.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(4)
+            make.leading.equalToSuperview().offset(4)
             make.top.equalToSuperview().offset(6)
         }
         
         btn2.snp.makeConstraints { make in
-            make.left.equalTo(btn1.snp.right).offset(4)
+            make.leading.equalTo(btn1.snp.right).offset(4)
             make.top.equalToSuperview().offset(6)
         }
         
         btn3.snp.makeConstraints { make in
-            make.left.equalTo(btn2.snp.right).offset(4)
+            make.leading.equalTo(btn2.snp.right).offset(4)
             make.top.equalToSuperview().offset(6)
         }
 
         
         btn4.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(4)
+            make.leading.equalToSuperview().offset(4)
             make.top.equalTo(btn1.snp.bottom).offset(6)
         }
         
         btn5.snp.makeConstraints { make in
-            make.left.equalTo(btn4.snp.right).offset(4)
+            make.leading.equalTo(btn4.snp.right).offset(4)
             make.top.equalTo(btn1.snp.bottom).offset(6)
         }
         
         btn6.snp.makeConstraints { make in
-            make.left.equalTo(btn5.snp.right).offset(4)
+            make.leading.equalTo(btn5.snp.right).offset(4)
             make.top.equalTo(btn1.snp.bottom).offset(6)
         }
 
         btn7.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(4)
+            make.leading.equalToSuperview().offset(4)
             make.top.equalTo(btn4.snp.bottom).offset(6)
         }
         
         btn8.snp.makeConstraints { make in
-            make.left.equalTo(btn7.snp.right).offset(4)
+            make.leading.equalTo(btn7.snp.right).offset(4)
             make.top.equalTo(btn4.snp.bottom).offset(6)
         }
         
         btn9.snp.makeConstraints { make in
-            make.left.equalTo(btn8.snp.right).offset(4)
+            make.leading.equalTo(btn8.snp.right).offset(4)
             make.top.equalTo(btn4.snp.bottom).offset(6)
         }
         
         optionBtn.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(4)
+            make.leading.equalToSuperview().offset(4)
             make.top.equalTo(btn7.snp.bottom).offset(6)
         }
         
         btn0.snp.makeConstraints { make in
-            make.left.equalTo(optionBtn.snp.right).offset(4)
+            make.leading.equalTo(optionBtn.snp.right).offset(4)
             make.top.equalTo(btn7.snp.bottom).offset(6)
         }
         
         deleteButton.snp.makeConstraints { make in
-            make.left.equalTo(btn0.snp.right).offset(4)
+            make.leading.equalTo(btn0.snp.right).offset(4)
             make.top.equalTo(btn7.snp.bottom).offset(6)
         }
         

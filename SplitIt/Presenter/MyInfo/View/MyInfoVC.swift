@@ -72,8 +72,9 @@ class MyInfoVC: UIViewController {
     //>>>emptyView 끝
     
     let notUsedPay = UILabel() //간편페이를 사용하지 않아요
+    let notUsedAccount = UILabel() //계좌 정보가 없어요
     
-    let splitLabel = UILabel()
+   // let splitLabel = UILabel()
     
     let friendView = UIView()
     
@@ -108,162 +109,182 @@ class MyInfoVC: UIViewController {
 
     
     func userNewInfo() {
-        
-        let tossValue = userDefault.bool(forKey: "tossPay")
-        let kakaoValue = userDefault.bool(forKey: "kakaoPay")
-        let naverValue = userDefault.bool(forKey: "naverPay")
-        
-        if let tmpuserName = UserDefaults.standard.string(forKey: "userNickName"), !tmpuserName.isEmpty { //userDefaults에 값이 있을 떄
-            accountView.isHidden = false
-            emptyView.isHidden = true
-            backViewHeight = 235
             
-            backView.snp.updateConstraints { make in
-                make.height.equalTo(backViewHeight)
-            }
-
-        } else { //emptyView일 때
+            let tossValue = userDefault.bool(forKey: "tossPay")
+            let kakaoValue = userDefault.bool(forKey: "kakaoPay")
+            let naverValue = userDefault.bool(forKey: "naverPay")
             
-            accountView.isHidden = true
-            emptyView.isHidden = false
-            
-            backViewHeight = 104
-            
-            backView.snp.removeConstraints()
-            splitLabel.snp.removeConstraints()
-            
-            // backView 제약 조건 재설정
-            backView.snp.makeConstraints { make in
-                make.height.equalTo(backViewHeight)
-                make.width.equalTo(330)
-                make.top.equalTo(view).offset(138)
-                make.centerX.equalTo(view)
-            }
-
-            splitLabel.snp.makeConstraints { make in
-                make.top.equalTo(backView.snp.bottom).offset(16)
-                make.leading.equalToSuperview().offset(40)
-            }
-        
-        }
-        
-        
-        self.userName.text = userDefault.string(forKey: "userNickName")
-        self.accountBankLabel.text = userDefault.string(forKey: "userBank")
-        self.accountLabel.text = userDefault.string(forKey: "userAccount")
-        self.accountNameLabel.text = userDefault.string(forKey: "userName")
-        
-        
-        if let tmpuserName = UserDefaults.standard.string(forKey: "userName"), !tmpuserName.isEmpty { //accountView가 있을 때
-            if !tossValue && !kakaoValue && !naverValue  {
-                //간편페이류 없을 떄
-                notUsedPay.isHidden = false
-                tossPayBtn.isHidden = true
-                kakaoPayBtn.isHidden = true
-                naverPayBtn.isHidden = true
+            if let tmpuserName = UserDefaults.standard.string(forKey: "userNickName"), !tmpuserName.isEmpty { //userDefaults NickName에 값이 있을 떄
+                accountView.isHidden = false
+                emptyView.isHidden = true
+                backViewHeight = 235
                 
-                backViewHeight = 175
+                backView.snp.updateConstraints { make in
+                    make.height.equalTo(backViewHeight)
+                }
 
+            } else { //emptyView일 때
+                
+                accountView.isHidden = true
+                emptyView.isHidden = false
+                
+                backViewHeight = 104
+                
                 backView.snp.removeConstraints()
-                accountView.snp.removeConstraints()
-                splitLabel.snp.removeConstraints()
                 
+                // backView 제약 조건 재설정
                 backView.snp.makeConstraints { make in
                     make.height.equalTo(backViewHeight)
                     make.width.equalTo(330)
                     make.top.equalTo(view).offset(138)
                     make.centerX.equalTo(view)
-
-                }
-
-                splitLabel.snp.makeConstraints { make in
-                    make.top.equalTo(backView.snp.bottom).offset(16)
-                    make.leading.equalToSuperview().offset(40)
-                }
-                
-                accountView.snp.makeConstraints { make in
-                    make.height.equalTo(backViewHeight)
-                    make.width.equalTo(330)
-                    make.center.equalTo(backView)
-                }
-                
-                
-            } else {
-                //간편페이류 있음
-                backViewHeight = 210
-                notUsedPay.isHidden = true
-                tossPayBtn.isHidden = !tossValue
-                kakaoPayBtn.isHidden = !kakaoValue
-                naverPayBtn.isHidden = !naverValue
-                
-                tossPos = tossValue ? 12 : 0
-                
-                if tossValue { //토스가 true
-                    kakaoPos = 70
-                    
-                    if kakaoValue { //카카오가 참
-                        naverPos = 128
-                    } else { //카카오가 거짓
-                        naverPos = 70
-                    }
-                } else { //토스가 false
-                    kakaoPos = 12
-                    
-                    if kakaoValue { //카카오가 참
-                        naverPos = 70
-                    } else { //카카오가 거짓
-                        naverPos = 12
-                    }
                 }
             
-                backView.snp.removeConstraints()
-                accountView.snp.removeConstraints()
-                tossPayBtn.snp.removeConstraints()
-                kakaoPayBtn.snp.removeConstraints()
-                naverPayBtn.snp.removeConstraints()
+            }
+            
+            
+            self.userName.text = userDefault.string(forKey: "userNickName")
+            self.accountBankLabel.text = userDefault.string(forKey: "userBank")
+            self.accountLabel.text = userDefault.string(forKey: "userAccount")
+            self.accountNameLabel.text = userDefault.string(forKey: "userName")
+            
+            
+            if let tmpuserName = UserDefaults.standard.string(forKey: "userName"), !tmpuserName.isEmpty { //accountView가 있을 때
+                if let tmpAccount = userDefault.string(forKey: "userAccount"), tmpAccount.isEmpty { //userAccount가 비었을 때.
+                    
+                    notUsedAccount.isHidden = false
+                    notUsedPay.isHidden = false
+                    tossPayBtn.isHidden = true
+                    kakaoPayBtn.isHidden = true
+                    naverPayBtn.isHidden = true
+                    backViewHeight = 175
+                    
+                    backView.snp.removeConstraints()
+                    accountView.snp.removeConstraints()
+                    
+                    backView.snp.makeConstraints { make in
+                        make.height.equalTo(backViewHeight)
+                        make.width.equalTo(330)
+                        make.top.equalTo(view).offset(138)
+                        make.centerX.equalTo(view)
+                        
+                    }
+                  
+                    
+                    accountView.snp.makeConstraints { make in
+                        make.height.equalTo(backViewHeight)
+                        make.width.equalTo(330)
+                        make.center.equalTo(backView)
+                    }
+                    
+                } else { //userAccount가 있을 때
+                    if !tossValue && !kakaoValue && !naverValue  {
+                        //간편페이류 없을 떄
+                        notUsedAccount.isHidden = true
+                        notUsedPay.isHidden = false
+                        tossPayBtn.isHidden = true
+                        kakaoPayBtn.isHidden = true
+                        naverPayBtn.isHidden = true
+                        
+                        backViewHeight = 175
+                        
+                        backView.snp.removeConstraints()
+                        accountView.snp.removeConstraints()
+                        
+                        backView.snp.makeConstraints { make in
+                            make.height.equalTo(backViewHeight)
+                            make.width.equalTo(330)
+                            make.top.equalTo(view).offset(138)
+                            make.centerX.equalTo(view)
+                            
+                        }
+                        
+                        accountView.snp.makeConstraints { make in
+                            make.height.equalTo(backViewHeight)
+                            make.width.equalTo(330)
+                            make.center.equalTo(backView)
+                        }
+                        
+                        
+                    } else {
+                        //간편페이류 있음
+                        backViewHeight = 210
+                        notUsedAccount.isHidden = true
+                        notUsedPay.isHidden = true
+                        tossPayBtn.isHidden = !tossValue
+                        kakaoPayBtn.isHidden = !kakaoValue
+                        naverPayBtn.isHidden = !naverValue
+                        
+                        tossPos = tossValue ? 12 : 0
+                        
+                        if tossValue { //토스가 true
+                            kakaoPos = 70
+                            
+                            if kakaoValue { //카카오가 참
+                                naverPos = 128
+                            } else { //카카오가 거짓
+                                naverPos = 70
+                            }
+                        } else { //토스가 false
+                            kakaoPos = 12
+                            
+                            if kakaoValue { //카카오가 참
+                                naverPos = 70
+                            } else { //카카오가 거짓
+                                naverPos = 12
+                            }
+                        }
+                        
+                        backView.snp.removeConstraints()
+                        accountView.snp.removeConstraints()
+                        tossPayBtn.snp.removeConstraints()
+                        kakaoPayBtn.snp.removeConstraints()
+                        naverPayBtn.snp.removeConstraints()
+                        
+                        
+                        backView.snp.makeConstraints { make in
+                            make.height.equalTo(backViewHeight)
+                            make.width.equalTo(330)
+                            make.top.equalTo(view).offset(138)
+                            make.centerX.equalTo(view)
+                            
+                        }
+                        
+                        accountView.snp.makeConstraints { make in
+                            make.height.equalTo(backViewHeight)
+                            make.width.equalTo(330)
+                            make.center.equalTo(backView)
+                        }
+                        
+                        tossPayBtn.snp.makeConstraints { make in
+                            make.width.height.equalTo(50)
+                            make.leading.equalTo(accountView.snp.leading).offset(tossPos)
+                            make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
+                        }
+                        
+                        kakaoPayBtn.snp.makeConstraints { make in
+                            make.width.height.equalTo(50)
+                            make.leading.equalTo(accountView.snp.leading).offset(kakaoPos)
+                            make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
+                        }
+                        
+                        naverPayBtn.snp.makeConstraints { make in
+                            make.width.height.equalTo(50)
+                            make.leading.equalTo(accountView.snp.leading).offset(naverPos)
+                            make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
+                        }
+                        
+                    }
+                    
+                    
+                    self.view.layoutIfNeeded()
+                }
                 
+            }
+            
+        }
+
  
-                backView.snp.makeConstraints { make in
-                    make.height.equalTo(backViewHeight)
-                    make.width.equalTo(330)
-                    make.top.equalTo(view).offset(138)
-                    make.centerX.equalTo(view)
-
-                }
-                
-                accountView.snp.makeConstraints { make in
-                    make.height.equalTo(backViewHeight)
-                    make.width.equalTo(330)
-                    make.center.equalTo(backView)
-                }
-                
-                tossPayBtn.snp.makeConstraints { make in
-                    make.width.height.equalTo(50)
-                    make.leading.equalTo(accountView.snp.leading).offset(tossPos)
-                    make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
-                }
-                
-                kakaoPayBtn.snp.makeConstraints { make in
-                    make.width.height.equalTo(50)
-                    make.leading.equalTo(accountView.snp.leading).offset(kakaoPos)
-                    make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
-                }
-          
-                naverPayBtn.snp.makeConstraints { make in
-                    make.width.height.equalTo(50)
-                    make.leading.equalTo(accountView.snp.leading).offset(naverPos)
-                    make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
-                }
-                
-            }
-            
-            
-            self.view.layoutIfNeeded()
-        }
-        
-        
-        
-    }
     
     func setBinding() {
         
@@ -273,7 +294,8 @@ class MyInfoVC: UIViewController {
         
         let input = MyInfoVM.Input(privacyBtnTapped: privacyBtn.rx.tap.asDriver(),
                                    friendListViewTapped: friendListTap.rx.event.asObservable().map { _ in () },
-                                   editAccountViewTapped: editBtnTap.rx.event.asObservable().map{ _ in () }, emptyEditAccountViewTapped: startBtnTap.rx.event.asObservable().map{ _ in () },
+                                   editAccountViewTapped: editBtnTap.rx.event.asObservable().map{ _ in () },
+                                   emptyEditAccountViewTapped: startBtnTap.rx.event.asObservable().map{ _ in () },
                                    madeByWCCTBtnTapped: madeByWCCTBtn.rx.tap.asDriver()
         )
         
@@ -282,13 +304,13 @@ class MyInfoVC: UIViewController {
         
         output.moveToPrivacyView
             .drive(onNext:{
-                print("개인정보 처리방침 이동dd")
+//                print("개인정보 처리방침 이동dd")
 //                let url = NSURL(string: "https://kori-collab.notion.site/e3407a6ca4724b078775fd13749741b1?pvs=4")
 //                let privacyWebView: SFSafariViewController = SFSafariViewController(url: url! as URL)
 //                self.present(privacyWebView, animated: true, completion: nil)
                 for key in UserDefaults.standard.dictionaryRepresentation().keys {
-                                    UserDefaults.standard.removeObject(forKey: key.description)
-                                }
+                    UserDefaults.standard.removeObject(forKey: key.description)
+                }
             })
             .disposed(by: disposeBag)
         
@@ -322,7 +344,6 @@ class MyInfoVC: UIViewController {
         
         output.moveToMadeByWCCT
             .drive(onNext:{
-                print("우리가 만들었다요!")
                 let url = NSURL(string: "https://github.com/DeveloperAcademy-POSTECH/MacC-Team13-SplitIt")
                 let WCCTWebView: SFSafariViewController = SFSafariViewController(url: url! as URL)
                 self.present(WCCTWebView, animated: true, completion: nil)
@@ -334,7 +355,7 @@ class MyInfoVC: UIViewController {
     
     func setAddView() {
         
-        [header, backView, splitLabel, friendView, privacyBtn, madeByWCCTBtn, myInfoLabel].forEach {
+        [header, backView, friendView, privacyBtn, madeByWCCTBtn, myInfoLabel].forEach {
             view.addSubview($0)
         }
         
@@ -342,7 +363,7 @@ class MyInfoVC: UIViewController {
         backView.addSubview(accountView)
         
         [userNameLabel, userName, userBar, accountInfoLabel, accountBankLabel, accountLabel,accountNameLabel, socialPayLabel,
-         tossPayBtn, kakaoPayBtn, naverPayBtn, notUsedPay, accountEditView].forEach {
+         tossPayBtn, kakaoPayBtn, naverPayBtn, notUsedPay, notUsedAccount, accountEditView].forEach {
             accountView.addSubview($0)
         }
         
@@ -478,6 +499,11 @@ class MyInfoVC: UIViewController {
             $0.textColor = .TextPrimary
         }
         
+        notUsedAccount.do {
+            $0.text = "계좌 정보가 없어요"
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextPrimary
+        }
         
         tossPayBtn.do {
             $0.image = UIImage(named: "TossPayIconDefault")
@@ -493,13 +519,13 @@ class MyInfoVC: UIViewController {
         }
     
         
-        splitLabel.do {
-            $0.text = "정산 기록"
-            $0.font = .KoreanCaption1
-            $0.textColor = .TextSecondary
-        }
-        
-        
+//        splitLabel.do {
+//            $0.text = "정산 기록"
+//            $0.font = .KoreanCaption1
+//            $0.textColor = .TextSecondary
+//        }
+//
+//
         friendView.do {
             $0.layer.cornerRadius = 8
             $0.layer.borderColor = UIColor.BorderPrimary.cgColor
@@ -667,16 +693,10 @@ class MyInfoVC: UIViewController {
             make.leading.equalTo(accountView.snp.leading).offset(16)
         }
         
-        splitLabel.snp.makeConstraints { make in
-            make.top.equalTo(backView.snp.bottom).offset(16)
-            make.leading.equalToSuperview().offset(36)
-        }
-        
-        
         friendView.snp.makeConstraints { make in
             make.height.equalTo(52)
             make.width.equalTo(330)
-            make.top.equalTo(splitLabel.snp.bottom).offset(8)
+            make.top.equalTo(backView.snp.bottom).offset(16)
             make.centerX.equalToSuperview()
         }
         
@@ -744,7 +764,12 @@ class MyInfoVC: UIViewController {
         
         notUsedPay.snp.makeConstraints { make in
             make.leading.equalTo(accountView).offset(16)
-            make.top.equalTo(socialPayLabel.snp.bottom).offset(4)
+            make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
+        }
+        
+        notUsedAccount.snp.makeConstraints { make in
+            make.leading.equalTo(accountView).offset(16)
+            make.top.equalTo(accountInfoLabel.snp.bottom).offset(8)
         }
         
     }

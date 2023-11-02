@@ -22,7 +22,9 @@ class CustomKeyboard: UIInputViewController {
     
     weak var delegate: CustomKeyboardDelegate?
     var currentTextField: UITextField?
-    
+    var keyboardHeight: CGFloat = 300
+    // let inputView: UIInputView = UIInputView()
+    var keyboardView = UIView()
     
     let inputRelay = BehaviorRelay<Int?>(value: nil)
     
@@ -33,8 +35,7 @@ class CustomKeyboard: UIInputViewController {
         return customKeySubject.asObservable()
     }
     
-    let keyboardView = UIView(frame: CGRect(x: 0, y: 0, width: 390, height: 291))
-    
+   
     let btn1 = KeyboardButton(title: "1")
     let btn2 = KeyboardButton(title: "2")
     let btn3 = KeyboardButton(title: "3")
@@ -54,8 +55,8 @@ class CustomKeyboard: UIInputViewController {
         
         view.backgroundColor = UIColor(hex: 0xCED0D5)
         
-        setAttribute()
         setAddView()
+        setAttribute()
         setKeyLayout()
         setBinding()
         
@@ -63,10 +64,11 @@ class CustomKeyboard: UIInputViewController {
     
     func setAttribute() {
         
-        let inputView = UIInputView(frame: CGRect(x: 0, y: 0, width: 390, height: 288), inputViewStyle: .keyboard)
+        let inputView = UIInputView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 291), inputViewStyle: .keyboard)
         inputView.backgroundColor = UIColor(hex: 0xFCFCFE)
         self.inputView = inputView
         
+        keyboardView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 291)) //291
         keyboardView.backgroundColor = UIColor(hex: 0xCED0D5)
         inputView.addSubview(keyboardView)
         
@@ -113,7 +115,6 @@ class CustomKeyboard: UIInputViewController {
         deleteButton.addSubview(deleteImage)
     }
     
-    
     func setBinding() {
        
             bindButtonAction(btn1, value: "1")
@@ -132,7 +133,6 @@ class CustomKeyboard: UIInputViewController {
        
     }
 
-    
     func setKeyLayout() {
         btn1.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(4)
@@ -240,3 +240,27 @@ class CustomKeyboard: UIInputViewController {
 
 
 }
+
+extension CustomKeyboard: UITextFieldDelegate {
+    func setKeyboardNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+//            let keyboardHeight: CGFloat
+            keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
+        }
+    }
+    
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+    }
+    
+    func setKeyboardObserverRemove() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+}
+

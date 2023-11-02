@@ -24,8 +24,6 @@ class TestVC: UIViewController, CustomKeyboardDelegate, UITextFieldDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
         view.addSubview(textField1)
         view.addSubview(textField2)
         
@@ -36,8 +34,6 @@ class TestVC: UIViewController, CustomKeyboardDelegate, UITextFieldDelegate{
         
         customKeyboard1.delegate = self
         customKeyboard2.delegate = self
-
-        
 
         customKeyboard1.setCurrentTextField(textField1)
         customKeyboard2.setCurrentTextField(textField2)
