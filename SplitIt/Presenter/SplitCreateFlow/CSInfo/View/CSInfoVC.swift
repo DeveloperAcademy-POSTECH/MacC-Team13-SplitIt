@@ -37,11 +37,12 @@ class CSInfoVC: UIViewController {
         setAttribute()
         setBinding()
         textFieldCustomKeyboard()
+        setKeyboardObserver()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setKeyboardObserver()
+        
         titleTextFiled.becomeFirstResponder()
     }
     
@@ -293,7 +294,7 @@ extension CSInfoVC {
                 if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
                     let keyboardHeight: CGFloat
                     keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
-                    
+
                     self.scrollView.snp.updateConstraints {
                         $0.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(keyboardHeight)
                     }
