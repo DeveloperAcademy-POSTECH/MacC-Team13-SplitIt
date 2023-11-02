@@ -56,8 +56,8 @@ class AccountCustomKeyboard: UIInputViewController {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor(hex: 0xCED0D5)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+//
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
 
         setAttribute()
         setLayout()
@@ -66,21 +66,21 @@ class AccountCustomKeyboard: UIInputViewController {
         
     }
 
-    @objc func keyboardWillShow(notification: Notification) {
-        if let userInfo = notification.userInfo,
-            let keyboardFrameValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            originalKeyboardHeight = keyboardFrameValue.cgRectValue.height
-
-            keyboardView.snp.removeConstraints()
-            
-            keyboardView.snp.makeConstraints { make in
-                make.height.equalTo(originalKeyboardHeight)
-            }
-            
-            print(originalKeyboardHeight)
-            print("dddddddd")
-        }
-    }
+//    @objc func keyboardWillShow(notification: Notification) {
+//        if let userInfo = notification.userInfo,
+//            let keyboardFrameValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+//            originalKeyboardHeight = keyboardFrameValue.cgRectValue.height
+//
+//            keyboardView.snp.removeConstraints()
+//
+//            keyboardView.snp.makeConstraints { make in
+//                make.height.equalTo(originalKeyboardHeight)
+//            }
+//
+//            print(originalKeyboardHeight)
+//            print("dddddddd")
+//        }
+//    }
     
     func setLayout() {
         
@@ -103,7 +103,7 @@ class AccountCustomKeyboard: UIInputViewController {
         
         
         keyboardView.snp.makeConstraints { make in
-            make.top.left.right.equalToSuperview()
+            make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(originalKeyboardHeight) // 초기 높이 설정
         }
         
@@ -174,12 +174,12 @@ class AccountCustomKeyboard: UIInputViewController {
         }
         
         btn2.snp.makeConstraints { make in
-            make.leading.equalTo(btn1.snp.right).offset(4)
+            make.leading.equalTo(btn1.snp.trailing).offset(4)
             make.top.equalToSuperview().offset(6)
         }
         
         btn3.snp.makeConstraints { make in
-            make.leading.equalTo(btn2.snp.right).offset(4)
+            make.leading.equalTo(btn2.snp.trailing).offset(4)
             make.top.equalToSuperview().offset(6)
         }
 
@@ -190,12 +190,12 @@ class AccountCustomKeyboard: UIInputViewController {
         }
         
         btn5.snp.makeConstraints { make in
-            make.leading.equalTo(btn4.snp.right).offset(4)
+            make.leading.equalTo(btn4.snp.trailing).offset(4)
             make.top.equalTo(btn1.snp.bottom).offset(6)
         }
         
         btn6.snp.makeConstraints { make in
-            make.leading.equalTo(btn5.snp.right).offset(4)
+            make.leading.equalTo(btn5.snp.trailing).offset(4)
             make.top.equalTo(btn1.snp.bottom).offset(6)
         }
 
@@ -205,12 +205,12 @@ class AccountCustomKeyboard: UIInputViewController {
         }
         
         btn8.snp.makeConstraints { make in
-            make.leading.equalTo(btn7.snp.right).offset(4)
+            make.leading.equalTo(btn7.snp.trailing).offset(4)
             make.top.equalTo(btn4.snp.bottom).offset(6)
         }
         
         btn9.snp.makeConstraints { make in
-            make.leading.equalTo(btn8.snp.right).offset(4)
+            make.leading.equalTo(btn8.snp.trailing).offset(4)
             make.top.equalTo(btn4.snp.bottom).offset(6)
         }
         
@@ -220,12 +220,12 @@ class AccountCustomKeyboard: UIInputViewController {
         }
         
         btn0.snp.makeConstraints { make in
-            make.leading.equalTo(optionBtn.snp.right).offset(4)
+            make.leading.equalTo(optionBtn.snp.trailing).offset(4)
             make.top.equalTo(btn7.snp.bottom).offset(6)
         }
         
         deleteButton.snp.makeConstraints { make in
-            make.leading.equalTo(btn0.snp.right).offset(4)
+            make.leading.equalTo(btn0.snp.trailing).offset(4)
             make.top.equalTo(btn7.snp.bottom).offset(6)
         }
         
