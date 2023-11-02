@@ -14,6 +14,9 @@ import RxDataSources
 
 class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
     
+    let inputTextRelay = BehaviorRelay<Int?>(value: 0)
+    let customKeyboard = CustomKeyboard()
+    
     var disposeBag = DisposeBag()
     
     let viewModel = ExclItemInfoAddModalVM()
@@ -44,11 +47,11 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
         setAttribute()
         setBinding()
         setGestureRecognizer()
+        textFieldCustomKeyboard()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
         titleTextFiled.becomeFirstResponder()
     }
     
@@ -517,5 +520,19 @@ extension ExclItemInfoAddModalVC {
         self.totalAmountTitleMessage.textColor = .TextDeactivate
         self.totalAmountTextFiled.textColor = .TextDeactivate
         self.totalAmountTextFiled.currencyLabel.textColor = .TextDeactivate
+    }
+}
+
+extension ExclItemInfoAddModalVC: CustomKeyboardDelegate {
+    func textFieldCustomKeyboard() {
+        totalAmountTextFiled.inputView = customKeyboard.inputView
+        customKeyboard.delegate = self
+        customKeyboard.setCurrentTextField(totalAmountTextFiled)
+        customKeyboard.customKeyObservable
+            .subscribe(onNext: { [weak self] value in
+                self?.customKeyboard.handleInputValue(value)
+                self?.inputTextRelay.accept(Int(self?.totalAmountTextFiled.text ?? ""))
+            })
+            .disposed(by: disposeBag)
     }
 }

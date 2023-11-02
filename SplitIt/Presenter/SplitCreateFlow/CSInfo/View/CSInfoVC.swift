@@ -11,6 +11,9 @@ import RxCocoa
 
 class CSInfoVC: UIViewController {
     
+    let inputTextRelay = BehaviorRelay<Int?>(value: 0)
+    let customKeyboard = CustomKeyboard()
+    
     var disposeBag = DisposeBag()
     
     let viewModel = CSInfoVM()
@@ -27,7 +30,6 @@ class CSInfoVC: UIViewController {
     let totalAmountTitleMessage = UILabel()
     let totalAmountTextFiled = SPTextField()
     let totalAmountTextFiledNotice = UILabel()
-    
     let nextButton = NewSPButton()
     
     override func viewDidLoad() {
@@ -36,6 +38,7 @@ class CSInfoVC: UIViewController {
         setLayout()
         setAttribute()
         setBinding()
+        textFieldCustomKeyboard()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -348,5 +351,19 @@ extension CSInfoVC: UITextFieldDelegate {
     
     func setKeyboardObserverRemove() {
         NotificationCenter.default.removeObserver(self)
+    }
+}
+
+extension CSInfoVC: CustomKeyboardDelegate {
+    func textFieldCustomKeyboard() {
+        totalAmountTextFiled.inputView = customKeyboard.inputView
+        customKeyboard.delegate = self
+        customKeyboard.setCurrentTextField(totalAmountTextFiled)
+        customKeyboard.customKeyObservable
+            .subscribe(onNext: { [weak self] value in
+                self?.customKeyboard.handleInputValue(value)
+                self?.inputTextRelay.accept(Int(self?.totalAmountTextFiled.text ?? ""))
+            })
+            .disposed(by: disposeBag)
     }
 }
