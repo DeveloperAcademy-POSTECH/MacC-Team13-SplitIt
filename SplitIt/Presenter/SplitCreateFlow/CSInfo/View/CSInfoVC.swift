@@ -41,7 +41,7 @@ class CSInfoVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setKeyboardNotification()
+        setKeyboardObserver()
         titleTextFiled.becomeFirstResponder()
     }
     
@@ -148,11 +148,6 @@ class CSInfoVC: UIViewController {
             $0.top.equalTo(totalAmountTitleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(48)
-        }
-        
-        totalAmountTextFiledNotice.snp.makeConstraints {
-            $0.top.equalTo(totalAmountTextFiled.snp.bottom).offset(8)
-            $0.leading.equalTo(textFiledNotice.snp.leading)
         }
         
         nextButton.snp.makeConstraints {
@@ -290,36 +285,21 @@ extension CSInfoVC {
     }
 }
 
-extension CSInfoVC: UITextFieldDelegate {
-    func setKeyboardNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let keyboardHeight: CGFloat
-            keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
-            self.scrollView.snp.updateConstraints {
-                $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(keyboardHeight)
-            }
-        }
-        view.layoutIfNeeded()
-    }
-    
-    @objc private func keyboardWillHide() {
-        self.scrollView.snp.updateConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
-        }
-    }
-    
+extension CSInfoVC {
     func setKeyboardObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    func setKeyboardObserverRemove() {
-        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
+            .subscribe(onNext: { [weak self] notification in
+                guard let self = self else { return }
+                if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                    let keyboardHeight: CGFloat
+                    keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
+                    
+                    self.scrollView.snp.updateConstraints {
+                        $0.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(keyboardHeight)
+                    }
+                }
+            })
+            .disposed(by: disposeBag)
     }
 }
 
