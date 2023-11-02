@@ -106,7 +106,6 @@ final class NewSPButton: UIButton {
     
     // 일반 버튼, 사용자가 탭한 뒤 프로퍼티
     private func configurePressedProperties() {
-        self.isEnabled = false
         self.layer.shadowOffset = CGSize(width: 0, height: 3)
     }
     
@@ -117,7 +116,6 @@ final class NewSPButton: UIButton {
     
     // 사각 버튼, 사용자가 탭한 뒤 프로퍼티
     private func configurePressedPropertiesForSquare() {
-        self.isEnabled = false
         self.layer.shadowOffset = CGSize(width: 0, height: 1)
     }
     
@@ -141,8 +139,6 @@ final class NewSPButton: UIButton {
     private func configureHalfButtonStringExitProperties() {
         currencyLabel.text = "스플리릿 끝내기"
     }
-    
-    // applyStyle
     
     func applyStyle(style: Style, shape: Shape) {
         setCurrencyIcon(style: style)
@@ -297,25 +293,25 @@ final class NewSPButton: UIButton {
             
             // 활성 버튼, Unpressed 상태
         case .primaryCalmshell:
-            print("primaryCalmshell")
+            break
         case .primaryWatermelon:
-            print("primaryWatermelon")
+            break
         case .primaryCherry:
-            print("primaryCherry")
+            break
         case .primaryPear:
-            print("primaryPear")
+            break
         case .primaryMushroom:
-            print("primaryMushroom")
+            break
         case .primaryRadish:
-            print("primaryRadish")
+            break
         case .warningRed:
-            print("warningRed")
+            break
             
             // 활성 하프 버튼
         case .halfSmartSplit:
-            print("halfSmartSplit")
+            break
         case .halfEqualSplit:
-            print("halfEqualSplit")
+            break
             
             // 작은 버튼
         case .smallButton:
