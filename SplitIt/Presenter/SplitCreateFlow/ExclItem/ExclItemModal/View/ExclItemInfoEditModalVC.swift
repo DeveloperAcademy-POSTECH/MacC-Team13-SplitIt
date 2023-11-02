@@ -15,6 +15,9 @@ import RxAppState
 
 class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
     
+    let inputTextRelay = BehaviorRelay<Int?>(value: 0)
+    let customKeyboard = CustomKeyboard()
+    
     var disposeBag = DisposeBag()
     
     var viewModel: ExclItemInfoEditModalVM!
@@ -26,8 +29,8 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
     let titleTextFiled = SPTextField()
     let textFiledCounter = UILabel()
 
-    let totalAmountTitleMessage = UILabel()
-    let totalAmountTextFiled = SPTextField()
+    let priceTitleMessage = UILabel()
+    let priceTextFiled = SPTextField()
     
     let exclMemberMessage = UILabel()
     let tableView = UITableView()
@@ -58,11 +61,11 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
         setAttribute()
         setBinding()
         setGestureRecognizer()
+        textFieldCustomKeyboard()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        setKeyboardNotification()
         titleTextFiled.becomeFirstResponder()
     }
     
@@ -106,13 +109,13 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
             $0.textColor = .TextDeactivate
         }
         
-        totalAmountTitleMessage.do {
+        priceTitleMessage.do {
             $0.text = "해당 항목은 총 얼마였나요?"
             $0.font = .KoreanBody
             $0.textColor = .TextDeactivate
         }
         
-        totalAmountTextFiled.do {
+        priceTextFiled.do {
             $0.applyStyle(.editingDidEndNumber)
             $0.font = .KoreanSubtitle
             $0.textColor = .TextDeactivate
@@ -179,7 +182,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
 
         scrollView.addSubview(contentView)
         
-        [titleMessage, titleTextFiled, textFiledCounter, totalAmountTitleMessage, totalAmountTextFiled, exclMemberMessage, tableView, deleteButton].forEach {
+        [titleMessage, titleTextFiled, textFiledCounter, priceTitleMessage, priceTextFiled, exclMemberMessage, tableView, deleteButton].forEach {
             contentView.addSubview($0)
         }
         
@@ -217,19 +220,19 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
             $0.trailing.equalTo(titleTextFiled.snp.trailing).inset(6)
         }
         
-        totalAmountTitleMessage.snp.makeConstraints {
+        priceTitleMessage.snp.makeConstraints {
             $0.top.equalTo(titleTextFiled.snp.bottom).offset(24)
             $0.leading.equalTo(titleMessage.snp.leading).inset(8)
         }
         
-        totalAmountTextFiled.snp.makeConstraints {
-            $0.top.equalTo(totalAmountTitleMessage.snp.bottom).offset(12)
+        priceTextFiled.snp.makeConstraints {
+            $0.top.equalTo(priceTitleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(48)
         }
         
         exclMemberMessage.snp.makeConstraints {
-            $0.top.equalTo(totalAmountTextFiled.snp.bottom).offset(24)
+            $0.top.equalTo(priceTextFiled.snp.bottom).offset(24)
             $0.leading.equalTo(titleMessage.snp.leading).inset(8)
         }
         
@@ -248,7 +251,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
     
     func setBinding() {
         let titleRelay = BehaviorRelay<String>(value: "")
-        let totalAmountRelay = BehaviorRelay<String>(value: "")
+        let priceRelay = BehaviorRelay<String>(value: "")
         
         let titleTFDidEnd =  titleTextFiled.rx.controlEvent(.editingDidEnd)
         let titleTFEvent = Observable.merge(
@@ -256,15 +259,15 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
             titleTFDidEnd.map { UIControl.Event.editingDidEnd },
             titleTextFiled.rx.controlEvent(.editingDidEndOnExit).map { UIControl.Event.editingDidEndOnExit })
         
-        let totalAmountTFEvent = Observable.merge(
-            totalAmountTextFiled.rx.controlEvent(.editingDidBegin).map { UIControl.Event.editingDidBegin},
-            totalAmountTextFiled.rx.controlEvent(.editingDidEnd).map { UIControl.Event.editingDidEnd })
+        let priceTFEvent = Observable.merge(
+            priceTextFiled.rx.controlEvent(.editingDidBegin).map { UIControl.Event.editingDidBegin},
+            priceTextFiled.rx.controlEvent(.editingDidEnd).map { UIControl.Event.editingDidEnd })
         
         let input = ExclItemInfoEditModalVM.Input(viewDidLoad: Driver<Void>.just(()),
                                                   title: titleRelay.asDriver(onErrorJustReturn: ""),
-                                                  totalAmount: totalAmountRelay.asDriver(onErrorJustReturn: ""),
+                                                  price: priceRelay.asDriver(onErrorJustReturn: ""),
                                                   titleTextFieldControlEvent: titleTFEvent,
-                                                  totalAmountTextFieldControlEvent: totalAmountTFEvent,
+                                                  priceTextFieldControlEvent: priceTFEvent,
                                                   cancelButtonTapped: header.cancelButton.rx.tap,
                                                   editButtonTapped: header.addButton.rx.tap,
                                                   deleteButtonTapped: deleteButton.rx.tap)
@@ -274,8 +277,8 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
             .bind(to: titleRelay)
             .disposed(by: disposeBag)
         
-        totalAmountTextFiled.rx.text.orEmpty
-            .bind(to: totalAmountRelay)
+        priceTextFiled.rx.text.orEmpty
+            .bind(to: priceRelay)
             .disposed(by: disposeBag)
         
         output.editButtonTapped
@@ -316,8 +319,8 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
             .drive(titleTextFiled.rx.text)
             .disposed(by: disposeBag)
         
-        output.totalAmount
-            .drive(totalAmountTextFiled.rx.text)
+        output.price
+            .drive(priceTextFiled.rx.text)
             .disposed(by: disposeBag)
         
         output.addButtonIsEnable
@@ -330,10 +333,10 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
                 switch event {
                 case .editingDidBegin:
                     focusTitleTF()
-                    unfocusTotalAmountTF()
+                    unfocusPriceTF()
                     unfocusExclMember()
                 case .editingDidEnd:
-                    focusTotalAmountTF()
+                    focusPriceTF()
                     unfocusTitleTF()
                     unfocusExclMember()
                 default:
@@ -342,16 +345,16 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
             })
             .disposed(by: disposeBag)
         
-        output.totalAmountTextFieldControlEvent
+        output.priceTextFieldControlEvent
             .drive(onNext: { [weak self] event in
                 guard let self = self else { return }
                 switch event {
                 case .editingDidBegin:
-                    focusTotalAmountTF()
+                    focusPriceTF()
                     unfocusTitleTF()
                     unfocusExclMember()
                 case .editingDidEnd:
-                    unfocusTotalAmountTF()
+                    unfocusPriceTF()
                 default:
                     break
                 }
@@ -364,7 +367,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
             .disposed(by: disposeBag)
 
         let isTitleTextFieldActive = BehaviorRelay<Bool>(value: false)
-        let isTotalAmountTextFieldActive = BehaviorRelay<Bool>(value: false)
+        let isPriceTextFieldActive = BehaviorRelay<Bool>(value: false)
 
         titleTextFiled.rx.controlEvent(.editingDidBegin)
             .subscribe(onNext: { _ in
@@ -378,15 +381,15 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
             })
             .disposed(by: disposeBag)
 
-        totalAmountTextFiled.rx.controlEvent(.editingDidBegin)
+        priceTextFiled.rx.controlEvent(.editingDidBegin)
             .subscribe(onNext: { _ in
-                isTotalAmountTextFieldActive.accept(true)
+                isPriceTextFieldActive.accept(true)
             })
             .disposed(by: disposeBag)
 
-        totalAmountTextFiled.rx.controlEvent(.editingDidEnd)
+        priceTextFiled.rx.controlEvent(.editingDidEnd)
             .subscribe(onNext: { _ in
-                isTotalAmountTextFieldActive.accept(false)
+                isPriceTextFieldActive.accept(false)
             })
             .disposed(by: disposeBag)
         
@@ -394,7 +397,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
             .asControlEvent()
             .filter { [weak self] gesture in
                 guard let self = self else { return false }
-                if isTitleTextFieldActive.value || isTotalAmountTextFieldActive.value {
+                if isTitleTextFieldActive.value || isPriceTextFieldActive.value {
                     return true
                 }
                 let location = gesture.location(in: self.tableView)
@@ -403,9 +406,9 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
             .subscribe(onNext: { [weak self] gesture in
                 guard let self = self else { return }
                 titleTextFiled.endEditing(true)
-                totalAmountTextFiled.endEditing(true)
+                priceTextFiled.endEditing(true)
                 unfocusTitleTF()
-                unfocusTotalAmountTF()
+                unfocusPriceTF()
                 focusExclMember()
             })
             .disposed(by: disposeBag)
@@ -434,8 +437,8 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
                 guard let self = self else { return }
                 self.titleTextFiled.rx.text.orEmpty.onNext(name)
                 titleRelay.accept(name)
-                self.totalAmountTextFiled.rx.text.orEmpty.onNext(price)
-                totalAmountRelay.accept(price)
+                self.priceTextFiled.rx.text.orEmpty.onNext(price)
+                priceRelay.accept(price)
             })
             .disposed(by: disposeBag)
         
@@ -560,28 +563,28 @@ extension ExclItemInfoEditModalVC {
         self.textFiledCounter.textColor = .TextDeactivate
     }
     
-    func focusTotalAmountTF() {
-        self.totalAmountTextFiled.becomeFirstResponder()
+    func focusPriceTF() {
+        self.priceTextFiled.becomeFirstResponder()
         
         UIView.animate(withDuration: 0.33) {
-            self.totalAmountTextFiled.applyStyle(.editingDidBeginNumber)
+            self.priceTextFiled.applyStyle(.editingDidBeginNumber)
         }
         
         UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) {
-            self.totalAmountTitleMessage.textColor = .TextPrimary
-            self.totalAmountTextFiled.textColor = .TextPrimary
-            self.totalAmountTextFiled.currencyLabel.textColor = .TextPrimary
+            self.priceTitleMessage.textColor = .TextPrimary
+            self.priceTextFiled.textColor = .TextPrimary
+            self.priceTextFiled.currencyLabel.textColor = .TextPrimary
         }
         
         view.layoutIfNeeded()
     }
     
-    func unfocusTotalAmountTF() {
-        self.totalAmountTextFiled.applyStyle(.editingDidEndNumber)
+    func unfocusPriceTF() {
+        self.priceTextFiled.applyStyle(.editingDidEndNumber)
         
-        self.totalAmountTitleMessage.textColor = .TextDeactivate
-        self.totalAmountTextFiled.textColor = .TextDeactivate
-        self.totalAmountTextFiled.currencyLabel.textColor = .TextDeactivate
+        self.priceTitleMessage.textColor = .TextDeactivate
+        self.priceTextFiled.textColor = .TextDeactivate
+        self.priceTextFiled.currencyLabel.textColor = .TextDeactivate
     }
 }
 
@@ -607,5 +610,19 @@ extension ExclItemInfoEditModalVC: ExcltemInfoModalAlertDelegate {
         alert.idx = exclItemIdx
         alert.titleValue = title
         self.present(alert, animated: false)
+    }
+}
+
+extension ExclItemInfoEditModalVC: CustomKeyboardDelegate {
+    func textFieldCustomKeyboard() {
+        priceTextFiled.inputView = customKeyboard.inputView
+        customKeyboard.delegate = self
+        customKeyboard.setCurrentTextField(priceTextFiled)
+        customKeyboard.customKeyObservable
+            .subscribe(onNext: { [weak self] value in
+                self?.customKeyboard.handleInputValue(value)
+                self?.inputTextRelay.accept(Int(self?.priceTextFiled.text ?? ""))
+            })
+            .disposed(by: disposeBag)
     }
 }
