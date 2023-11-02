@@ -17,9 +17,7 @@ class CSInfoVC: UIViewController {
     var disposeBag = DisposeBag()
     
     let viewModel = CSInfoVM()
-    
-    //MARK: Notice 삭제할듯
-    
+
     let header = SPNavigationBar()
     let scrollView = UIScrollView(frame: .zero)
     let contentView = UIView()
@@ -62,12 +60,10 @@ class CSInfoVC: UIViewController {
         titleMessage.do {
             $0.text = "어디에 돈을 쓰셨나요?"
             $0.font = .KoreanBody
-//            $0.textColor = .TextPrimary
             $0.textColor = .TextDeactivate
         }
         
         titleTextFiled.do {
-//            $0.font = .KoreanTitle
             $0.font = .KoreanCaption1
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
@@ -75,14 +71,7 @@ class CSInfoVC: UIViewController {
             self.titleTextFiled.applyStyle(.editingDidEndNormal)
             $0.placeholder = "ex) 광란의 곱창팟, 집들이 장보기, 노래방"
         }
-        
-        textFiledNotice.do {
-//            $0.text = "ex) 광란의 곱창팟, 집들이 장보기, 노래방"
-            $0.font = .KoreanCaption1
-//            $0.textColor = .TextSecondary
-            $0.textColor = .TextDeactivate
-        }
-        
+
         textFiledCounter.do {
             $0.font = .KoreanCaption1
             $0.textColor = .TextDeactivate
@@ -91,21 +80,12 @@ class CSInfoVC: UIViewController {
         totalAmountTitleMessage.do {
             $0.text = "총 얼마를 사용하셨나요?"
             $0.font = .KoreanBody
-//            $0.textColor = .TextPrimary
             $0.textColor = .TextDeactivate
         }
         
         totalAmountTextFiled.do {
             $0.applyStyle(.editingDidEndNumber)
             $0.font = .KoreanSubtitle
-//            $0.font = .KoreanCaption1
-            $0.textColor = .TextDeactivate
-        }
-        
-        totalAmountTextFiledNotice.do {
-//            $0.text = "설마, 천만원 이상을 쓰시진 않으셨죠?"
-            $0.font = .KoreanCaption1
-//            $0.textColor = .TextSecondary
             $0.textColor = .TextDeactivate
         }
         
@@ -122,7 +102,7 @@ class CSInfoVC: UIViewController {
 
         scrollView.addSubview(contentView)
         
-        [titleMessage, titleTextFiled, textFiledCounter, textFiledNotice, nextButton, totalAmountTitleMessage, totalAmountTextFiled, totalAmountTextFiledNotice].forEach {
+        [titleMessage, titleTextFiled, textFiledCounter, nextButton, totalAmountTitleMessage, totalAmountTextFiled].forEach {
             contentView.addSubview($0)
         }
         
@@ -151,7 +131,7 @@ class CSInfoVC: UIViewController {
         titleTextFiled.snp.makeConstraints {
             $0.top.equalTo(titleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(48) // 원래 60
+            $0.height.equalTo(48)
         }
         
         textFiledCounter.snp.makeConstraints {
@@ -159,20 +139,15 @@ class CSInfoVC: UIViewController {
             $0.trailing.equalTo(titleTextFiled.snp.trailing).inset(6)
         }
         
-        textFiledNotice.snp.makeConstraints {
-            $0.top.equalTo(titleTextFiled.snp.bottom).offset(8)
-            $0.leading.equalToSuperview().inset(12)
-        }
-        
         totalAmountTitleMessage.snp.makeConstraints {
-            $0.top.equalTo(textFiledNotice.snp.bottom).offset(24)
+            $0.top.equalTo(titleTextFiled.snp.bottom).offset(24)
             $0.leading.equalTo(titleMessage.snp.leading)
         }
         
         totalAmountTextFiled.snp.makeConstraints {
             $0.top.equalTo(totalAmountTitleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(48) // 원래 60
+            $0.height.equalTo(48)
         }
         
         totalAmountTextFiledNotice.snp.makeConstraints {
@@ -201,8 +176,7 @@ class CSInfoVC: UIViewController {
                                    title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
                                    totalAmount: totalAmountTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
                                    titleTextFieldControlEvent: titleTFEvent,
-                                   totalAmountTextFieldControlEvent: totalAmountTFEvent
-        )
+                                   totalAmountTextFieldControlEvent: totalAmountTFEvent)
         let output = viewModel.transform(input: input)
         
         output.showCSMemberView
@@ -265,7 +239,6 @@ class CSInfoVC: UIViewController {
     }
 }
 
-// TODO: Notice 삭제할 듯
 // MARK: TextField (활성화/비활성화)에 따른 UI 로직
 extension CSInfoVC {
     func focusTitleTF() {
@@ -278,7 +251,6 @@ extension CSInfoVC {
         UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) {
             self.titleMessage.textColor = .TextPrimary
             self.titleTextFiled.textColor = .TextPrimary
-            self.textFiledNotice.textColor = .TextSecondary
             self.textFiledCounter.textColor = .TextSecondary
         }
         
@@ -290,7 +262,6 @@ extension CSInfoVC {
         
         self.titleMessage.textColor = .TextDeactivate
         self.titleTextFiled.textColor = .TextDeactivate
-        self.textFiledNotice.textColor = .TextDeactivate
         self.textFiledCounter.textColor = .TextDeactivate
     }
     
@@ -303,7 +274,6 @@ extension CSInfoVC {
         
         UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) {
             self.totalAmountTitleMessage.textColor = .TextPrimary
-            self.totalAmountTextFiledNotice.textColor = .TextSecondary
             self.totalAmountTextFiled.textColor = .TextPrimary
             self.totalAmountTextFiled.currencyLabel.textColor = .TextPrimary
         }
@@ -315,7 +285,6 @@ extension CSInfoVC {
         self.totalAmountTextFiled.applyStyle(.editingDidEndNumber)
         
         self.totalAmountTitleMessage.textColor = .TextDeactivate
-        self.totalAmountTextFiledNotice.textColor = .TextDeactivate
         self.totalAmountTextFiled.textColor = .TextDeactivate
         self.totalAmountTextFiled.currencyLabel.textColor = .TextDeactivate
     }
