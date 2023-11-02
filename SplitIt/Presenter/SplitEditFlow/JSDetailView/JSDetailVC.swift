@@ -154,30 +154,16 @@ final class JSDetailVC: UIViewController {
         
         let output = viewModel.transform(input: input)
         
-        output.splitTitle
-            .map { [weak self] title in
-                guard let self = self else { return title }
-                if title == "" {
-                    self.textFiledNotice.isHidden = false
-                } else {
-                    self.textFiledNotice.isHidden = true
-                }
-                return title
-            }
-            .drive(splitTitleTF.rx.text)
-            .disposed(by: disposeBag)
-        
         output.titleCount
             .drive(textFiledCounter.rx.text)
             .disposed(by: disposeBag)
         
         output.textFieldIsEmpty
-            .map { [weak self] bool in
-                guard let self = self else { return false }
-                self.textFiledNotice.isHidden = bool
-                return bool
-            }
             .drive(nextButton.buttonState)
+            .disposed(by: disposeBag)
+        
+        output.textFieldIsEmpty
+            .drive(textFiledNotice.rx.isHidden)
             .disposed(by: disposeBag)
         
         output.textFieldIsValid
@@ -199,6 +185,10 @@ final class JSDetailVC: UIViewController {
                     return self.splitTitleTF.text ?? ""
                 }
             }
+            .drive(splitTitleTF.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.splitTitle
             .drive(splitTitleTF.rx.text)
             .disposed(by: disposeBag)
         

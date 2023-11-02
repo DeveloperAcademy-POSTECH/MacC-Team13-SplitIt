@@ -15,7 +15,7 @@ final class JSDetailVM {
     
     let dataModel = SplitRepository.share
     let maxTextCount = 8
-    let splitIdx: String
+//    let splitIdx: String
     
     var split: Driver<Split> {
         dataModel.splitArr
@@ -40,11 +40,11 @@ final class JSDetailVM {
     var csMemberList: Driver<[CSMember]> {
         dataModel.csMemberArr.asDriver()
     }
-    
-    init(splitIdx: String = "653e1192001cb7e6e7996ad3") {
-        dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: splitIdx)
-        self.splitIdx = splitIdx
-    }
+//
+//    init(splitIdx: String = "653e1192001cb7e6e7996ad3") {
+//        dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: splitIdx)
+//        self.splitIdx = splitIdx
+//    }
     
     struct Input {
         let viewDidLoad: Observable<Bool>
@@ -71,23 +71,16 @@ final class JSDetailVM {
         let splitTitle = split.map { $0.title }
         let csinfoIndex = input.csEditTapped.asDriver()
         
+        let textMerge = Driver.merge(title, splitTitle)
+        
         input.viewDidLoad
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: "653e1192001cb7e6e7996ad3")
+//                self.dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: "653e1192001cb7e6e7996ad3")
             })
             .disposed(by: disposeBag)
         
-        showNextView
-            .asDriver()
-            .withLatestFrom(input.title)
-            .drive(onNext: {
-                //                SplitRepository.share.inputCSInfoWithTitle(title: $0)
-                print("\($0)")
-            })
-            .disposed(by: disposeBag)
-        
-        title
+        textMerge
             .map { title in
                 let currentTextCount = title.count > self.maxTextCount ? title.count - 1 : title.count
                 return "\(currentTextCount)/\(self.maxTextCount)"
@@ -95,15 +88,15 @@ final class JSDetailVM {
             .drive(textFieldCount)
             .disposed(by: disposeBag)
         
-        title
+        textMerge
             .map { [weak self] text -> Bool in
                 guard let self = self else { return false }
                 return text.count < self.maxTextCount
             }
             .drive(textFieldIsValid)
             .disposed(by: disposeBag)
-        
-        textFieldCountIsEmpty = input.title
+    
+        textFieldCountIsEmpty = textMerge
             .map{ $0.count > 0 }
             .asDriver()
         
@@ -116,7 +109,7 @@ final class JSDetailVM {
                       titleCount: textFieldCount.asDriver(),
                       textFieldIsValid: textFieldIsValid.asDriver(),
                       textFieldIsEmpty: textFieldCountIsEmpty,
-                      splitTitle: splitTitle,
+                      splitTitle: textMerge,
                       pushCSEditView: pushEditView)
     }
     
