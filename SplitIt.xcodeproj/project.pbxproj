@@ -143,6 +143,7 @@
 		86C660002AF126DE00A7942A /* EditCSListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FFF2AF126DE00A7942A /* EditCSListVM.swift */; };
 		86D1E0C52AE6B4C100FBF610 /* ExclEditPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D1E0C42AE6B4C100FBF610 /* ExclEditPageController.swift */; };
 		C229F51A2AEA442E00F9E28D /* NewSPButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C229F5192AEA442E00F9E28D /* NewSPButton.swift */; };
+		C291BA132AF4DD6F009501F3 /* UIDevice+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C291BA122AF4DD6F009501F3 /* UIDevice+.swift */; };
 		C2A7978D2AE2740D0049E709 /* ONEMobileBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2A7978A2AE2740D0049E709 /* ONEMobileBold.ttf */; };
 		C2A7978E2AE2740D0049E709 /* ONEMobileLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2A7978B2AE2740D0049E709 /* ONEMobileLight.ttf */; };
 		C2A7978F2AE2740D0049E709 /* ONEMobileRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2A7978C2AE2740D0049E709 /* ONEMobileRegular.ttf */; };
@@ -312,6 +313,7 @@
 		86C65FFF2AF126DE00A7942A /* EditCSListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVM.swift; sourceTree = "<group>"; };
 		86D1E0C42AE6B4C100FBF610 /* ExclEditPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclEditPageController.swift; sourceTree = "<group>"; };
 		C229F5192AEA442E00F9E28D /* NewSPButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSPButton.swift; sourceTree = "<group>"; };
+		C291BA122AF4DD6F009501F3 /* UIDevice+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+.swift"; sourceTree = "<group>"; };
 		C2A7978A2AE2740D0049E709 /* ONEMobileBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileBold.ttf; sourceTree = "<group>"; };
 		C2A7978B2AE2740D0049E709 /* ONEMobileLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileLight.ttf; sourceTree = "<group>"; };
 		C2A7978C2AE2740D0049E709 /* ONEMobileRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileRegular.ttf; sourceTree = "<group>"; };
@@ -569,6 +571,7 @@
 				C2A797902AE2748E0049E709 /* UIFont+.swift */,
 				1A07DF0A2AE569660081E543 /* UIButton+.swift */,
 				60AE3EBB2AE7743E009D9D18 /* UITableView+.swift */,
+				C291BA122AF4DD6F009501F3 /* UIDevice+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1532,6 +1535,7 @@
 				1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */,
 				DE1711CC2AE0BAF90097850D /* PayData.swift in Sources */,
 				1A4DB22B2ADE68E400616243 /* SplitRepository.swift in Sources */,
+				C291BA132AF4DD6F009501F3 /* UIDevice+.swift in Sources */,
 				869D1ACE2AE5298B00D166B1 /* CSEditListCell.swift in Sources */,
 				1A3852FD2ADE5B0100E9A20B /* ExclMember.swift in Sources */,
 				DE73D6FC2AE1993F00ABF3EF /* MemberCell.swift in Sources */,
