@@ -16,9 +16,9 @@ class ExclItemInfoAddModalVM {
     let maxTextCount = 8
     
     let sections = BehaviorRelay<[ExclItemInfoModalSection]>(value: [])
-    let exclMemberIsActive = BehaviorRelay<Bool>(value: false)
     
     struct Input {
+        let viewWillAppear: Observable<Bool>
         let title: Driver<String>
         let price: Driver<String>
         let titleTextFieldControlEvent: Observable<UIControl.Event>
@@ -30,9 +30,8 @@ class ExclItemInfoAddModalVM {
     struct Output {
         let titleCount: Driver<String>
         let price: Driver<String>
-        let textFieldIsValid: Driver<Bool>
-        let titleTextFieldIsEnable: Driver<Bool>
-        let priceTextFieldIsEnable: Driver<Bool>
+        let titleTextFieldIsValid: BehaviorRelay<Bool>
+        let priceIsLimited: Driver<Bool> // price의 합은 총액을 넘을 수 없음.
         let addButtonIsEnable: Driver<Bool>
         let titleTextFieldControlEvent: Driver<UIControl.Event>
         let priceTextFieldControlEvent: Driver<UIControl.Event>
@@ -42,13 +41,20 @@ class ExclItemInfoAddModalVM {
     
     func transform(input: Input) -> Output {
         let title = input.title
-        let textFieldCount = BehaviorRelay<String>(value: "")
-        let textFieldIsValid = BehaviorRelay<Bool>(value: true)
+        let titleTextFieldCount = BehaviorRelay<String>(value: "")
+        let titleTextFieldIsValid = BehaviorRelay<Bool>(value: true)
         
         let priceResult = BehaviorRelay<Int>(value: 0)
         let numberFormatter = NumberFormatterHelper()
-
+        
         let maxCurrency = 10000000
+        let priceLimit = BehaviorRelay<Int>(value: 0)
+        let priceIsLimited = input.price
+            .map { price in
+                let priceInt = numberFormatter.number(from: price)
+                return priceInt ?? 0 >= priceLimit.value
+            }
+            .asDriver(onErrorJustReturn: false)
         
         let addButtonIsEnable: Driver<Bool>
         
@@ -56,8 +62,8 @@ class ExclItemInfoAddModalVM {
             .map{ $0.count > 0 }
             .asDriver()
         
-        let priceTextFieldCountIsEmpty = input.price
-            .map { numberFormatter.number(from: $0) ?? 0 }
+        let priceTextFieldCountIsEmpty = priceResult
+            .asDriver()
             .map{ $0 != 0 }
             .asDriver()
         
@@ -73,7 +79,7 @@ class ExclItemInfoAddModalVM {
         
         let priceString = input.price
             .map { numberFormatter.number(from: $0) ?? 0 }
-            .map { min($0, maxCurrency) }
+            .map { min($0, priceLimit.value) }
             .map { number in
                 priceResult.accept(number)
                 return number
@@ -81,16 +87,22 @@ class ExclItemInfoAddModalVM {
             .map { numberFormatter.formattedString(from: $0) }
             .asDriver(onErrorJustReturn: "0")
         
-        let csInfoDriver = Driver.combineLatest(input.title, input.price)
+        let csInfoDriver = Driver.combineLatest(input.title, priceResult.asDriver())
+        
+        input.viewWillAppear
+            .asDriver(onErrorJustReturn: false)
+            .map{ _ in self.calculatePriceLimit() }
+            .switchLatest()
+            .drive(priceLimit)
+            .disposed(by: disposeBag)
         
         input.addButtonTapped
             .asDriver()
             .withLatestFrom(csInfoDriver)
             .drive(onNext: { [weak self] title, price in
                 guard let self = self else { return }
-                let priceInt = numberFormatter.number(from: price)
                 let currentExclMember = sections.value.first!.items
-                let currentExclItemIdx = SplitRepository.share.createExclItem(name: title, price: priceInt ?? 0, exclMember: currentExclMember)
+                SplitRepository.share.createExclItem(name: title, price: price, exclMember: currentExclMember)
             })
             .disposed(by: disposeBag)
         
@@ -99,7 +111,7 @@ class ExclItemInfoAddModalVM {
                 let currentTextCount = title.count > self.maxTextCount ? title.count - 1 : title.count
                 return "\(currentTextCount)/\(self.maxTextCount)"
             }
-            .drive(textFieldCount)
+            .drive(titleTextFieldCount)
             .disposed(by: disposeBag)
         
         title
@@ -107,7 +119,7 @@ class ExclItemInfoAddModalVM {
                 guard let self = self else { return false }
                 return text.count < self.maxTextCount
             }
-            .drive(textFieldIsValid)
+            .drive(titleTextFieldIsValid)
             .disposed(by: disposeBag)
         
         addButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(),
@@ -155,16 +167,26 @@ class ExclItemInfoAddModalVM {
             .bind(to: sections)
             .disposed(by: disposeBag)
         
-        return Output(titleCount: textFieldCount.asDriver(),
+        return Output(titleCount: titleTextFieldCount.asDriver(),
                       price: priceString,
-                      textFieldIsValid: textFieldIsValid.asDriver(),
-                      titleTextFieldIsEnable: titleTextFieldCountIsEmpty,
-                      priceTextFieldIsEnable: priceTextFieldCountIsEmpty,
+                      titleTextFieldIsValid: titleTextFieldIsValid,
+                      priceIsLimited: priceIsLimited,
                       addButtonIsEnable: addButtonIsEnable,
                       titleTextFieldControlEvent: titleTFControlEvent,
                       priceTextFieldControlEvent: priceTFControlEvent,
                       cancelButtonTapped: input.cancelButtonTapped.asDriver(),
                       addButtonTapped: input.addButtonTapped.asDriver())
+    }
+
+    func calculatePriceLimit() -> Driver<Int> {
+        
+        var priceLimitValue = SplitRepository.share.csInfoArr.value.first!.totalAmount
+        for item in SplitRepository.share.exclItemArr.value {
+            priceLimitValue -= item.price
+        }
+        
+        let priceLimitDriver = Driver<Int>.just(priceLimitValue)
+        return priceLimitDriver
     }
 
 }
