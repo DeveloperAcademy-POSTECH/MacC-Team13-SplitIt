@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxAppState
 
 class ExclItemInputVC: UIViewController {
     
@@ -54,7 +55,7 @@ class ExclItemInputVC: UIViewController {
         }
         
         exclItemAddButton.do {
-            $0.setTitle("추가하기", for: .normal)
+            $0.setTitle("항목 추가", for: .normal)
             $0.buttonState.accept(true)
             $0.applyStyle(style: .primaryWatermelon, shape: .square)
             $0.titleLabel?.font = .KoreanSmallButtonText
@@ -91,7 +92,7 @@ class ExclItemInputVC: UIViewController {
         }
         
         exclListLabel.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(27)
+            $0.top.equalTo(header.snp.bottom).offset(30)
             $0.leading.equalToSuperview().inset(34)
         }
         
@@ -101,10 +102,10 @@ class ExclItemInputVC: UIViewController {
         }
         
         exclItemAddButton.snp.makeConstraints {
-            $0.centerY.equalTo(exclListLabel.snp.centerY)
+            $0.bottom.equalTo(exclListLabel.snp.bottom)
             $0.trailing.equalToSuperview().inset(38)
-            $0.width.equalTo(112)
             $0.height.equalTo(24)
+            $0.width.equalTo(exclItemAddButton.snp.height).multipliedBy(4)
         }
         
         tableView.snp.makeConstraints {
@@ -127,7 +128,8 @@ class ExclItemInputVC: UIViewController {
     }
     
     func setBinding() {
-        let input = ExclItemInputVM.Input(nextButtonTapped: nextButton.rx.tap,
+        let input = ExclItemInputVM.Input(viewDidDisAppear: self.rx.viewDidDisappear,
+                                          nextButtonTapped: nextButton.rx.tap,
                                           exclItemAddButtonTapped: exclItemAddButton.rx.tap)
         let output = viewModel.transform(input: input)
         

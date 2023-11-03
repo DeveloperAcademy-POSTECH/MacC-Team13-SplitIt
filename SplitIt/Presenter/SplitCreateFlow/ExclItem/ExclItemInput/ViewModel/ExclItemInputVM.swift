@@ -14,6 +14,7 @@ class ExclItemInputVM {
     var disposeBag = DisposeBag()
     
     struct Input {
+        let viewDidDisAppear: Observable<Bool>
         let nextButtonTapped: ControlEvent<Void> // 다음 버튼
         let exclItemAddButtonTapped: ControlEvent<Void>
     }
@@ -37,6 +38,13 @@ class ExclItemInputVM {
         let exclItemsRelay = BehaviorRelay<[ExclItemInfo]>(value: [
             ExclItemInfo(exclItem: ExclItem(csInfoIdx: "", name: "", price: 0), items: [])
         ])
+        
+        input.viewDidDisAppear
+            .asDriver(onErrorJustReturn: false)
+            .drive(onNext: { _ in 
+                SplitRepository.share.deleteCurrentExclItemAndExclMember()
+            })
+            .disposed(by: disposeBag)
         
         Observable.combineLatest(exclItemRepository, exclMemberRepository)
             .map{ (exclItems, exclMembers) -> [ExclItemInfo] in
