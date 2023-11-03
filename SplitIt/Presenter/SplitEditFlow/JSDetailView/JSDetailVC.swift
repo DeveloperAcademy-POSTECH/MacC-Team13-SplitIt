@@ -12,25 +12,37 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import RxAppState
+import RealmSwift
 
-final class JSDetailVC: UIViewController {
+final class JSDetailVC: UIViewController, UIScrollViewDelegate {
     
     var disposeBag = DisposeBag()
     var viewModel = JSDetailVM()
     
     let headerView = NaviHeader()
-    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    let collectionView = UITableView(frame: .zero)
     let nextButton = NewSPButton()
     let splitTitleTF = SPTextField()
     let textFiledCounter = UILabel()
     let textFiledNotice = UILabel()
     let titleLabel = UILabel()
     
+    var cellHeight = [0.0]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setAttribute()
         setLayout()
         setBinding()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        setKeyboardNotification()
+        super.viewWillAppear(animated)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     func setAttribute() {
@@ -68,10 +80,15 @@ final class JSDetailVC: UIViewController {
         collectionView.do {
             $0.backgroundColor = .SurfaceBrandCalmshell
             $0.register(cellType: JSDetailCell.self)
-            let layout = UICollectionViewFlowLayout()
-//            layout.estimatedItemSize = .init(width: 330, height: 208)
-            layout.itemSize = .init(width: 330, height: 208)
-            $0.collectionViewLayout = layout
+            $0.rowHeight = 208
+            let tapGesture = UITapGestureRecognizer()
+            tapGesture.rx.event.bind { [weak self] _ in
+                guard let self = self else { return }
+                self.view.endEditing(true)
+            }.disposed(by: disposeBag)
+            
+            $0.addGestureRecognizer(tapGesture)
+            tapGesture.delegate = self
         }
         
         nextButton.do {
@@ -123,16 +140,16 @@ final class JSDetailVC: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(30)
         }
         
+        nextButton.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(40)
+            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.height.equalTo(48)
+        }
+        
         collectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.top.equalTo(divider.snp.bottom).offset(24)
-            $0.height.equalTo(410)
-        }
-        
-        nextButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.height.equalTo(48)
+            $0.bottom.equalTo(nextButton.snp.top)
         }
         
     }
@@ -144,6 +161,14 @@ final class JSDetailVC: UIViewController {
                 let memberCount = self.viewModel.memberCount()
                 let exclCount = self.viewModel.exclItemCount()
                 cell.configure(csinfo: item, csMemberCount: memberCount[idx], exclItemCount: exclCount[idx])
+                cell.setNeedsLayout()
+                cell.layoutIfNeeded()
+                
+                let size = cell.contentView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
+                self.cellHeight.append(size)
+                print("현재 셀\(idx)의 높이\(size)")
+                print("추가된 배열\(cellHeight)")
+//                return cell
             }
             .disposed(by: disposeBag)
         
@@ -199,6 +224,51 @@ final class JSDetailVC: UIViewController {
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
+        
+        output.pushNextView
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                self.navigationController?.popViewController(animated: true)
+            })
+            .disposed(by: disposeBag)
     }
     
+}
+
+extension JSDetailVC: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        return (touch.view == self.collectionView)
+    }
+}
+
+extension JSDetailVC: UITextFieldDelegate {
+    func setKeyboardNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight: CGFloat
+            keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
+            self.nextButton.snp.updateConstraints {
+                $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(keyboardHeight + 26)
+            }
+        }
+    }
+    
+    @objc private func keyboardWillHide() {
+        self.nextButton.snp.updateConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+    }
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func setKeyboardObserverRemove() {
+        NotificationCenter.default.removeObserver(self)
+    }
 }

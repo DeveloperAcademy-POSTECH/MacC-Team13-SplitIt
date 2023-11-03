@@ -15,7 +15,7 @@ final class JSDetailVM {
     
     let dataModel = SplitRepository.share
     let maxTextCount = 8
-//    let splitIdx: String
+    let splitIdx: String
     
     var split: Driver<Split> {
         dataModel.splitArr
@@ -41,10 +41,15 @@ final class JSDetailVM {
         dataModel.csMemberArr.asDriver()
     }
 //
-//    init(splitIdx: String = "653e1192001cb7e6e7996ad3") {
-//        dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: splitIdx)
-//        self.splitIdx = splitIdx
-//    }
+    init() {
+        let arrSplit = SplitRepository.share.splitArr.value
+        if let firstSplit = arrSplit.first {
+            self.splitIdx = firstSplit.splitIdx
+            self.dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: splitIdx)
+        } else {
+            splitIdx = ""
+        }
+    }
     
     struct Input {
         let viewDidLoad: Observable<Bool>
@@ -73,10 +78,18 @@ final class JSDetailVM {
         
         let textMerge = Driver.merge(title, splitTitle)
         
+        showNextView
+            .withLatestFrom(textMerge)
+            .asDriver(onErrorJustReturn: "")
+            .drive(onNext: {
+                SplitRepository.share.editSplitTitle(title: $0)
+            })
+            .disposed(by: disposeBag)
+        
         input.viewDidLoad
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-//                self.dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: "653e1192001cb7e6e7996ad3")
+                self.dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: splitIdx)
             })
             .disposed(by: disposeBag)
         

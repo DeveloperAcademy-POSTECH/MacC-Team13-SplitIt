@@ -11,7 +11,7 @@ import SnapKit
 import Then
 import RxSwift
 
-final class JSDetailCell: UICollectionViewCell, Reusable {
+final class JSDetailCell: UITableViewCell, Reusable {
     
     var disposeBag = DisposeBag()
     
@@ -21,14 +21,21 @@ final class JSDetailCell: UICollectionViewCell, Reusable {
     let totalAmountLabel = UILabel()
     let exclItemCountLabel = UILabel()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         setAttribute()
         setLayout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0))
+        backgroundColor = .SurfaceBrandCalmshell
+        selectionStyle = .none
     }
     
     func setAttribute() {
@@ -40,8 +47,8 @@ final class JSDetailCell: UICollectionViewCell, Reusable {
         }
         
         csTitleLabel.do {
-            $0.text = "완마카세 장보기"
-            $0.font = .KoreanTitle1
+            $0.text = "완마카세 창보기"
+            $0.font = .KoreanTitle2
             $0.tintColor = .TextPrimary
         }
         
@@ -66,6 +73,7 @@ final class JSDetailCell: UICollectionViewCell, Reusable {
     }
     
     func setLayout() {
+        
         let nameLabel = UILabel().then {
             $0.text = "인원"
             $0.textColor = .TextSecondary
@@ -161,7 +169,7 @@ final class JSDetailCell: UICollectionViewCell, Reusable {
         
         contentView.addSubview(mainStackView)
         mainStackView.snp.makeConstraints {
-            $0.edges.equalTo(contentView).inset(16)
+            $0.edges.equalToSuperview().inset(16)
         }
         
     }
