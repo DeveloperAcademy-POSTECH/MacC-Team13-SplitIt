@@ -73,18 +73,9 @@ final class JSDetailVM {
         let textFieldCount = BehaviorRelay<String>(value: "")
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
         let textFieldCountIsEmpty: Driver<Bool>
+        let displayString = BehaviorRelay(value: "")
         let splitTitle = split.map { $0.title }
         let csinfoIndex = input.csEditTapped.asDriver()
-        
-        let textMerge = Driver.merge(title, splitTitle)
-        
-        showNextView
-            .withLatestFrom(textMerge)
-            .asDriver(onErrorJustReturn: "")
-            .drive(onNext: {
-                SplitRepository.share.editSplitTitle(title: $0)
-            })
-            .disposed(by: disposeBag)
         
         input.viewDidLoad
             .subscribe(onNext: { [weak self] _ in
@@ -93,7 +84,39 @@ final class JSDetailVM {
             })
             .disposed(by: disposeBag)
         
-        textMerge
+        splitTitle
+            .map { [weak self] text -> String in
+                guard let self = self else { return text }
+                if text.count > self.maxTextCount {
+                    let index = text.index(text.startIndex, offsetBy: self.maxTextCount)
+                    return String(text[..<index])
+                }
+                return text
+            }
+            .drive(displayString)
+            .disposed(by: disposeBag)
+        
+        title
+            .map { [weak self] text -> String in
+                guard let self = self else { return text }
+                if text.count > self.maxTextCount {
+                    let index = text.index(text.startIndex, offsetBy: self.maxTextCount)
+                    return String(text[..<index])
+                }
+                return text
+            }
+            .drive(displayString)
+            .disposed(by: disposeBag)
+        
+        showNextView
+            .withLatestFrom(displayString)
+            .asDriver(onErrorJustReturn: "")
+            .drive(onNext: {
+                SplitRepository.share.editSplitTitle(title: $0)
+            })
+            .disposed(by: disposeBag)
+        
+        displayString.asDriver()
             .map { title in
                 let currentTextCount = title.count > self.maxTextCount ? title.count - 1 : title.count
                 return "\(currentTextCount)/\(self.maxTextCount)"
@@ -101,7 +124,7 @@ final class JSDetailVM {
             .drive(textFieldCount)
             .disposed(by: disposeBag)
         
-        textMerge
+        displayString.asDriver()
             .map { [weak self] text -> Bool in
                 guard let self = self else { return false }
                 return text.count < self.maxTextCount
@@ -109,7 +132,7 @@ final class JSDetailVM {
             .drive(textFieldIsValid)
             .disposed(by: disposeBag)
     
-        textFieldCountIsEmpty = textMerge
+        textFieldCountIsEmpty = displayString.asDriver()
             .map{ $0.count > 0 }
             .asDriver()
         
@@ -122,7 +145,7 @@ final class JSDetailVM {
                       titleCount: textFieldCount.asDriver(),
                       textFieldIsValid: textFieldIsValid.asDriver(),
                       textFieldIsEmpty: textFieldCountIsEmpty,
-                      splitTitle: textMerge,
+                      splitTitle: displayString.asDriver(),
                       pushCSEditView: pushEditView)
     }
     
