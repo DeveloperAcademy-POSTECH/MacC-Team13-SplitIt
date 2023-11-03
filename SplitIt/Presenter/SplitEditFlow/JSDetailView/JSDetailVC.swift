@@ -62,8 +62,8 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
         splitTitleTF.do {
             $0.applyStyle(.normal)
             $0.font = .KoreanCaption1
-            $0.autocorrectionType = .no
-            $0.spellCheckingType = .no
+//            $0.autocorrectionType = .no
+//            $0.spellCheckingType = .no
         }
         
         textFiledCounter.do {
@@ -199,18 +199,6 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
                 ? .TextSecondary
                 : .AppColorStatusError
             })
-            .disposed(by: disposeBag)
-        
-        output.textFieldIsValid
-            .map { [weak self] isValid -> String in
-                guard let self = self else { return "" }
-                if !isValid {
-                    return String(self.splitTitleTF.text?.prefix(self.viewModel.maxTextCount) ?? "")
-                } else {
-                    return self.splitTitleTF.text ?? ""
-                }
-            }
-            .drive(splitTitleTF.rx.text)
             .disposed(by: disposeBag)
         
         output.splitTitle
