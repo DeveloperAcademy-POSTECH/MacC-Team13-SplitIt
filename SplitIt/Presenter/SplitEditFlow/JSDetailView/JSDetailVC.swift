@@ -36,6 +36,15 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
         setBinding()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        setKeyboardNotification()
+        super.viewWillAppear(animated)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
     func setAttribute() {
         view.backgroundColor = .SurfaceBrandCalmshell
         
@@ -72,6 +81,14 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
             $0.backgroundColor = .SurfaceBrandCalmshell
             $0.register(cellType: JSDetailCell.self)
             $0.rowHeight = 208
+            let tapGesture = UITapGestureRecognizer()
+            tapGesture.rx.event.bind { [weak self] _ in
+                guard let self = self else { return }
+                self.view.endEditing(true)
+            }.disposed(by: disposeBag)
+            
+            $0.addGestureRecognizer(tapGesture)
+            tapGesture.delegate = self
         }
         
         nextButton.do {
@@ -138,7 +155,6 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
     }
     
     func setBinding() {
-        print("@@@@@@@@")
         viewModel.csinfoList
             .drive(collectionView.rx.items(cellIdentifier: "JSDetailCell", cellType: JSDetailCell.self)) { [weak self] idx, item, cell in
                 guard let self = self else { return }
@@ -208,6 +224,51 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
+        
+        output.pushNextView
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                self.navigationController?.popViewController(animated: true)
+            })
+            .disposed(by: disposeBag)
     }
     
+}
+
+extension JSDetailVC: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        return (touch.view == self.collectionView)
+    }
+}
+
+extension JSDetailVC: UITextFieldDelegate {
+    func setKeyboardNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight: CGFloat
+            keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
+            self.nextButton.snp.updateConstraints {
+                $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(keyboardHeight + 26)
+            }
+        }
+    }
+    
+    @objc private func keyboardWillHide() {
+        self.nextButton.snp.updateConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+    }
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func setKeyboardObserverRemove() {
+        NotificationCenter.default.removeObserver(self)
+    }
 }

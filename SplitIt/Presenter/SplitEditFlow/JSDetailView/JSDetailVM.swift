@@ -41,9 +41,14 @@ final class JSDetailVM {
         dataModel.csMemberArr.asDriver()
     }
 //
-    init(splitIdx: String = "653e1192001cb7e6e7996ad3") {
-        dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: splitIdx)
-        self.splitIdx = splitIdx
+    init() {
+        let arrSplit = SplitRepository.share.splitArr.value
+        if let firstSplit = arrSplit.first {
+            self.splitIdx = firstSplit.splitIdx
+            self.dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: splitIdx)
+        } else {
+            splitIdx = ""
+        }
     }
     
     struct Input {
@@ -72,6 +77,14 @@ final class JSDetailVM {
         let csinfoIndex = input.csEditTapped.asDriver()
         
         let textMerge = Driver.merge(title, splitTitle)
+        
+        showNextView
+            .withLatestFrom(textMerge)
+            .asDriver(onErrorJustReturn: "")
+            .drive(onNext: {
+                SplitRepository.share.editSplitTitle(title: $0)
+            })
+            .disposed(by: disposeBag)
         
         input.viewDidLoad
             .subscribe(onNext: { [weak self] _ in
