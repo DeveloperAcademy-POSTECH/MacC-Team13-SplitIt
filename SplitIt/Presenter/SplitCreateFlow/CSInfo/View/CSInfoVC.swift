@@ -17,16 +17,13 @@ class CSInfoVC: UIViewController {
     var disposeBag = DisposeBag()
     
     let viewModel = CSInfoVM()
-    
-    //MARK: Notice 삭제할듯
-    
+
     let header = SPNavigationBar()
     let scrollView = UIScrollView(frame: .zero)
     let contentView = UIView()
     let titleMessage = UILabel()
     let titleTextFiled = SPTextField()
     let textFiledCounter = UILabel()
-    let textFiledNotice = UILabel()
     let totalAmountTitleMessage = UILabel()
     let totalAmountTextFiled = SPTextField()
     let totalAmountTextFiledNotice = UILabel()
@@ -39,11 +36,12 @@ class CSInfoVC: UIViewController {
         setAttribute()
         setBinding()
         textFieldCustomKeyboard()
+        setKeyboardObserver()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setKeyboardNotification()
+        
         titleTextFiled.becomeFirstResponder()
     }
     
@@ -62,12 +60,10 @@ class CSInfoVC: UIViewController {
         titleMessage.do {
             $0.text = "어디에 돈을 쓰셨나요?"
             $0.font = .KoreanBody
-//            $0.textColor = .TextPrimary
             $0.textColor = .TextDeactivate
         }
         
         titleTextFiled.do {
-//            $0.font = .KoreanTitle
             $0.font = .KoreanCaption1
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
@@ -75,14 +71,7 @@ class CSInfoVC: UIViewController {
             self.titleTextFiled.applyStyle(.editingDidEndNormal)
             $0.placeholder = "ex) 광란의 곱창팟, 집들이 장보기, 노래방"
         }
-        
-        textFiledNotice.do {
-//            $0.text = "ex) 광란의 곱창팟, 집들이 장보기, 노래방"
-            $0.font = .KoreanCaption1
-//            $0.textColor = .TextSecondary
-            $0.textColor = .TextDeactivate
-        }
-        
+
         textFiledCounter.do {
             $0.font = .KoreanCaption1
             $0.textColor = .TextDeactivate
@@ -91,27 +80,25 @@ class CSInfoVC: UIViewController {
         totalAmountTitleMessage.do {
             $0.text = "총 얼마를 사용하셨나요?"
             $0.font = .KoreanBody
-//            $0.textColor = .TextPrimary
             $0.textColor = .TextDeactivate
         }
         
         totalAmountTextFiled.do {
             $0.applyStyle(.editingDidEndNumber)
             $0.font = .KoreanSubtitle
-//            $0.font = .KoreanCaption1
             $0.textColor = .TextDeactivate
         }
         
         totalAmountTextFiledNotice.do {
-//            $0.text = "설마, 천만원 이상을 쓰시진 않으셨죠?"
+            $0.text = "천만원 이상은 입력할 수 없어요"
             $0.font = .KoreanCaption1
-//            $0.textColor = .TextSecondary
-            $0.textColor = .TextDeactivate
+            $0.textColor = .SurfaceWarnRed
+            $0.isHidden = true
         }
         
         nextButton.do {
             $0.setTitle("다음으로", for: .normal)
-            $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
+            $0.applyStyle(style: .primaryMushroom, shape: .rounded)
         }
     }
     
@@ -122,8 +109,14 @@ class CSInfoVC: UIViewController {
 
         scrollView.addSubview(contentView)
         
-        [titleMessage, titleTextFiled, textFiledCounter, textFiledNotice, nextButton, totalAmountTitleMessage, totalAmountTextFiled, totalAmountTextFiledNotice].forEach {
+        [titleMessage, titleTextFiled, textFiledCounter, nextButton, totalAmountTitleMessage, totalAmountTextFiled, totalAmountTextFiledNotice].forEach {
             contentView.addSubview($0)
+        }
+        
+        header.snp.makeConstraints {
+            $0.height.equalTo(30)
+            $0.horizontalEdges.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
         }
         
         scrollView.snp.makeConstraints {
@@ -137,47 +130,36 @@ class CSInfoVC: UIViewController {
             $0.edges.equalToSuperview()
         }
         
-        header.snp.makeConstraints {
-            $0.height.equalTo(30)
-            $0.horizontalEdges.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
-        }
-        
         titleMessage.snp.makeConstraints {
             $0.top.equalToSuperview().inset(30)
-            $0.leading.equalToSuperview()
+            $0.leading.equalToSuperview().inset(8)
         }
         
         titleTextFiled.snp.makeConstraints {
             $0.top.equalTo(titleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(48) // 원래 60
+            $0.height.equalTo(46)
         }
         
         textFiledCounter.snp.makeConstraints {
-            $0.top.equalTo(titleTextFiled.snp.bottom).offset(8)
+            $0.top.equalTo(titleTextFiled.snp.bottom).offset(4)
             $0.trailing.equalTo(titleTextFiled.snp.trailing).inset(6)
         }
         
-        textFiledNotice.snp.makeConstraints {
-            $0.top.equalTo(titleTextFiled.snp.bottom).offset(8)
-            $0.leading.equalToSuperview().inset(12)
-        }
-        
         totalAmountTitleMessage.snp.makeConstraints {
-            $0.top.equalTo(textFiledNotice.snp.bottom).offset(24)
+            $0.top.equalTo(titleTextFiled.snp.bottom).offset(24)
             $0.leading.equalTo(titleMessage.snp.leading)
         }
         
         totalAmountTextFiled.snp.makeConstraints {
             $0.top.equalTo(totalAmountTitleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(48) // 원래 60
+            $0.height.equalTo(46)
         }
         
         totalAmountTextFiledNotice.snp.makeConstraints {
+            $0.leading.equalTo(totalAmountTitleMessage)
             $0.top.equalTo(totalAmountTextFiled.snp.bottom).offset(8)
-            $0.leading.equalTo(textFiledNotice.snp.leading)
         }
         
         nextButton.snp.makeConstraints {
@@ -201,8 +183,7 @@ class CSInfoVC: UIViewController {
                                    title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
                                    totalAmount: totalAmountTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
                                    titleTextFieldControlEvent: titleTFEvent,
-                                   totalAmountTextFieldControlEvent: totalAmountTFEvent
-        )
+                                   totalAmountTextFieldControlEvent: totalAmountTFEvent)
         let output = viewModel.transform(input: input)
         
         output.showCSMemberView
@@ -217,7 +198,8 @@ class CSInfoVC: UIViewController {
             .drive(textFiledCounter.rx.text)
             .disposed(by: disposeBag)
         
-        output.textFieldIsValid
+        output.titleTextFieldIsValid
+            .asDriver()
             .distinctUntilChanged()
             .drive(onNext: { [weak self] isValid in
                 guard let self = self else { return }
@@ -227,7 +209,8 @@ class CSInfoVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        output.textFieldIsValid
+        output.titleTextFieldIsValid
+            .asDriver()
             .map { [weak self] isValid -> String in
                 guard let self = self else { return "" }
                 if !isValid {
@@ -237,6 +220,15 @@ class CSInfoVC: UIViewController {
                 }
             }
             .drive(titleTextFiled.rx.text)
+            .disposed(by: disposeBag)
+
+        output.totalAmountTextFieldIsValid
+            .drive(onNext: { [weak self] isValid in
+                guard let self = self else { return }
+                UIView.transition(with: self.totalAmountTextFiledNotice, duration: 0.33, options: .transitionCrossDissolve) {
+                    self.totalAmountTextFiledNotice.isHidden = isValid
+                }
+            })
             .disposed(by: disposeBag)
         
         output.totalAmount
@@ -252,7 +244,7 @@ class CSInfoVC: UIViewController {
                 guard let self = self else { return }
                 switch event {
                 case .editingDidBegin:
-                    focusTitleTF()
+                    focusTitleTF(output: output)
                     unfocusTotalAmountTF()
                 case .editingDidEnd:
                     focusTotalAmountTF()
@@ -265,10 +257,9 @@ class CSInfoVC: UIViewController {
     }
 }
 
-// TODO: Notice 삭제할 듯
 // MARK: TextField (활성화/비활성화)에 따른 UI 로직
 extension CSInfoVC {
-    func focusTitleTF() {
+    func focusTitleTF(output: CSInfoVM.Output) {
         self.titleTextFiled.becomeFirstResponder()
         
         UIView.animate(withDuration: 0.33) {
@@ -278,8 +269,13 @@ extension CSInfoVC {
         UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) {
             self.titleMessage.textColor = .TextPrimary
             self.titleTextFiled.textColor = .TextPrimary
-            self.textFiledNotice.textColor = .TextSecondary
             self.textFiledCounter.textColor = .TextSecondary
+            
+            // Title이 focus 될 때는 경고창이 안보여야함
+            self.totalAmountTextFiledNotice.isHidden = true
+            self.textFiledCounter.textColor = output.titleTextFieldIsValid.value
+            ? .TextSecondary
+            : .AppColorStatusError
         }
         
         view.layoutIfNeeded()
@@ -290,7 +286,6 @@ extension CSInfoVC {
         
         self.titleMessage.textColor = .TextDeactivate
         self.titleTextFiled.textColor = .TextDeactivate
-        self.textFiledNotice.textColor = .TextDeactivate
         self.textFiledCounter.textColor = .TextDeactivate
     }
     
@@ -303,7 +298,6 @@ extension CSInfoVC {
         
         UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) {
             self.totalAmountTitleMessage.textColor = .TextPrimary
-            self.totalAmountTextFiledNotice.textColor = .TextSecondary
             self.totalAmountTextFiled.textColor = .TextPrimary
             self.totalAmountTextFiled.currencyLabel.textColor = .TextPrimary
         }
@@ -315,42 +309,27 @@ extension CSInfoVC {
         self.totalAmountTextFiled.applyStyle(.editingDidEndNumber)
         
         self.totalAmountTitleMessage.textColor = .TextDeactivate
-        self.totalAmountTextFiledNotice.textColor = .TextDeactivate
         self.totalAmountTextFiled.textColor = .TextDeactivate
         self.totalAmountTextFiled.currencyLabel.textColor = .TextDeactivate
     }
 }
 
-extension CSInfoVC: UITextFieldDelegate {
-    func setKeyboardNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let keyboardHeight: CGFloat
-            keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
-            self.scrollView.snp.updateConstraints {
-                $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(keyboardHeight)
-            }
-        }
-        view.layoutIfNeeded()
-    }
-    
-    @objc private func keyboardWillHide() {
-        self.scrollView.snp.updateConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
-        }
-    }
-    
+extension CSInfoVC {
     func setKeyboardObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    func setKeyboardObserverRemove() {
-        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
+            .subscribe(onNext: { [weak self] notification in
+                guard let self = self else { return }
+                if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                    let keyboardHeight: CGFloat
+                    keyboardHeight = keyboardSize.height - self.view.safeAreaInsets.bottom
+
+                    self.scrollView.snp.updateConstraints {
+                        $0.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(keyboardHeight)
+                    }
+                    self.view.layoutIfNeeded()
+                }
+            })
+            .disposed(by: disposeBag)
     }
 }
 
