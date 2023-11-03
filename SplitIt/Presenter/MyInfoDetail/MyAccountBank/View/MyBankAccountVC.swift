@@ -37,7 +37,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
     let contentView = UIView()
     
     let nickNameLabel = UILabel()
-    let nickNameTextField = UITextField()
+    let nickNameTextField = SPTextField()
     let nickNameCountLabel = UILabel()
     
     let bankView = UIView()
@@ -47,11 +47,11 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
     let bankLabel = UILabel()
     
     let accountLabel = UILabel()
-    let accountTextField = UITextField()
+    let accountTextField = SPTextField()
     let accountCountLabel = UILabel()
     
     var nameLabel = UILabel()
-    var nameTextField = UITextField() //예금주
+    var nameTextField = SPTextField() //예금주
     var nameCountLabel = UILabel()
     
     let payLabel = UILabel()
@@ -74,185 +74,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
     
     let deleteBtn = UIButton()
     
-    func setLayout() {
-        header.snp.makeConstraints {
-            $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
-            $0.leading.trailing.equalToSuperview()
-        }
-        
-        scrollView.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(10)
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
-        }
-        
-        contentView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.width.equalTo(scrollView)
-            make.height.equalTo(500)
-            make.bottom.equalToSuperview()
-        }
-        
-        
-        nickNameLabel.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(30)
-            $0.leading.equalTo(nickNameTextField.snp.leading).inset(6)
-        }
-        
-        nickNameTextField.snp.makeConstraints {
-            $0.top.equalTo(nickNameLabel.snp.bottom).offset(4)
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.height.equalTo(46)
-        }
-        
-        nickNameCountLabel.snp.makeConstraints {
-            $0.trailing.equalTo(nickNameTextField.snp.trailing).offset(-8)
-            $0.top.equalTo(nickNameTextField.snp.bottom).offset(4.5)
-        }
-        
-        bankLabel.snp.makeConstraints {
-            $0.top.equalTo(nickNameTextField.snp.bottom).offset(24)
-            $0.leading.equalTo(bankView.snp.leading).inset(6)
-        }
-        
-        bankView.snp.makeConstraints {
-            $0.height.equalTo(40)
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.top.equalTo(bankLabel.snp.bottom).offset(4)
-            
-        }
-        
-        bankNameLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(16)
-            $0.centerY.equalToSuperview()
-        }
-        
-        bankArrowImage.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-16)
-            $0.centerY.equalToSuperview()
-        }
-        
-        accountLabel.snp.makeConstraints {
-            $0.top.equalTo(bankView.snp.bottom).offset(24)
-            $0.leading.equalTo(accountTextField.snp.leading).inset(6)
-            
-        }
-        
-        accountTextField.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.top.equalTo(accountLabel.snp.bottom).offset(4)
-            $0.height.equalTo(40)
-           
-        }
-        
-        accountCountLabel.snp.makeConstraints {
-            $0.trailing.equalTo(accountTextField.snp.trailing).offset(-8)
-            $0.top.equalTo(accountTextField.snp.bottom).offset(4.5)
-        }
-        
-        nameLabel.snp.makeConstraints {
-            $0.top.equalTo(accountTextField.snp.bottom).offset(24)
-            $0.leading.equalTo(nameTextField.snp.leading).inset(6)
-        }
-        
-        nameTextField.snp.makeConstraints {
-            $0.top.equalTo(nameLabel.snp.bottom).offset(4)
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.height.equalTo(40)
-        }
-        
-        nameCountLabel.snp.makeConstraints {
-            $0.trailing.equalTo(nameTextField.snp.trailing).inset(8)
-            $0.top.equalTo(nameTextField.snp.bottom).offset(4.5)
-        }
-        
-        payLabel.snp.makeConstraints {
-            $0.top.equalTo(nameTextField.snp.bottom).offset(24)
-            $0.leading.equalTo(payView.snp.leading).inset(6)
-        }
-        
-        payView.snp.makeConstraints {
-            $0.height.equalTo(103)
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.top.equalTo(payLabel.snp.bottom).offset(4)
-        }
-        
-        leftBar.snp.makeConstraints { make in
-            make.height.equalTo(60)
-            make.width.equalTo(1)
-            make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(110)
-        }
-        
-        rightBar.snp.makeConstraints { make in
-            make.height.equalTo(60)
-            make.width.equalTo(1)
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-110)
-        }
-        
-        tossPayView.snp.makeConstraints { make in
-            make.height.equalTo(80)
-            make.width.equalTo(56)
-            make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(32)
-        }
-        
-        tossPayBtn.snp.makeConstraints { make in
-            make.width.height.equalTo(56)
-            make.top.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
-        
-        tossLabel.snp.makeConstraints { make in
-            make.top.equalTo(tossPayBtn.snp.bottom).offset(6)
-            make.centerX.equalToSuperview()
-        }
-        
-        kakaoPayView.snp.makeConstraints { make in
-            make.height.equalTo(80)
-            make.width.equalTo(56)
-            make.center.equalToSuperview()
-        }
-        
-        kakaoPayBtn.snp.makeConstraints { make in
-            make.width.height.equalTo(56)
-            make.top.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
-        
-        kakaoLabel.snp.makeConstraints { make in
-            make.top.equalTo(kakaoPayBtn.snp.bottom).offset(6)
-            make.centerX.equalToSuperview()
-        }
-        
-        
-        naverPayView.snp.makeConstraints { make in
-            make.height.equalTo(80)
-            make.width.equalTo(56)
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-32)
-        }
-        
-        naverPayBtn.snp.makeConstraints { make in
-            make.width.height.equalTo(56)
-            make.top.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
-        
-        
-        naverLabel.snp.makeConstraints { make in
-            make.top.equalTo(naverPayBtn.snp.bottom).offset(6)
-            make.centerX.equalToSuperview()
-        }
-        
-        deleteBtn.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-53)
-            make.centerX.equalToSuperview()
-        }
-        
-    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -549,19 +371,14 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
         }
         
         nickNameCountLabel.do {
-            $0.textColor = .TextSecondary
+           // $0.textColor = .TextSecondary
             $0.font = UIFont.KoreanCaption2
         }
         
+
         nickNameTextField.do {
-            
-            $0.layer.cornerRadius = 8
-            $0.backgroundColor = .clear
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
+            $0.applyStyle(.normal)
             $0.font = UIFont.KoreanCaption1
-            $0.clipsToBounds = true
-            
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
             
@@ -574,15 +391,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextPrimary])
             }
             
-           
-            
-            //textField의 앞부분의 빈공간 구현
-            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
-            $0.leftViewMode = .always
-          
-     
-            
-           
         }
         
         bankLabel.do {
@@ -594,7 +402,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
         bankView.do {
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.backgroundColor = .clear
             
         }
@@ -619,18 +427,13 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
             $0.font = UIFont.KoreanCaption2
             $0.textColor = UIColor.TextPrimary
         }
-        
+
         accountTextField.do {
-            $0.layer.cornerRadius = 8
-            $0.backgroundColor = .clear
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
+            $0.applyStyle(.normal)
             $0.font = UIFont.KoreanCaption1
-            $0.clipsToBounds = true
-            
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
-            
+  
             //MARK: 토마토, 수정뷰로 넘어왔을 때, 검은색 글자면은 이미 입력되어있는 것처럼 보여서 회색으로 처리해두었어요
             if UserDefaults.standard.string(forKey: "userAccount") == nil {
                 $0.attributedPlaceholder = NSAttributedString(string: "계좌번호를 입력해주세요",
@@ -640,17 +443,9 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextPrimary])
             }
             
-           
-            
-            //textField의 앞부분의 빈공간 구현
-            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
-            $0.leftViewMode = .always
-            
-            
         }
         
         accountCountLabel.do {
-            //$0.textColor = .TextSecondary
             $0.font = UIFont.KoreanCaption2
         }
         
@@ -661,20 +456,14 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
         }
         
         nameCountLabel.do {
-            $0.textColor = .TextSecondary
             $0.font = UIFont.KoreanCaption2
         }
         
-        
         nameTextField.do {
-            $0.layer.cornerRadius = 8
-            $0.backgroundColor = .clear
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
-            
+            $0.applyStyle(.normal)
+            $0.font = UIFont.KoreanCaption1
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
-            //$0.clearButtonMode = .whileEditing
             
             //placeholder의 색깔
             if UserDefaults.standard.string(forKey: "userName") == nil {
@@ -685,13 +474,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
                 $0.attributedPlaceholder = NSAttributedString(string: userDefault.string(forKey: "userName")!,
                                                               attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextPrimary])
             }
-            $0.font = .KoreanCaption1
             
-            $0.clipsToBounds = true
-            
-            //textField의 앞부분의 빈공간 구현
-            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
-            $0.leftViewMode = .always
             
         }
         
@@ -760,6 +543,186 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
             $0.layer.borderWidth = 0
             $0.setAttributedTitle(deleteString, for: .normal)
         }
+    }
+    
+    func setLayout() {
+        header.snp.makeConstraints {
+            $0.height.equalTo(30)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(header.snp.bottom).offset(10)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        
+        contentView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.width.equalTo(scrollView)
+            make.height.equalTo(500)
+            make.bottom.equalToSuperview()
+        }
+        
+        
+        nickNameLabel.snp.makeConstraints {
+            $0.top.equalTo(header.snp.bottom).offset(30)
+            $0.leading.equalTo(nickNameTextField.snp.leading).inset(6)
+        }
+        
+        nickNameTextField.snp.makeConstraints {
+            $0.top.equalTo(nickNameLabel.snp.bottom).offset(4)
+            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.height.equalTo(46)
+        }
+        
+        nickNameCountLabel.snp.makeConstraints {
+            $0.trailing.equalTo(nickNameTextField.snp.trailing).offset(-8)
+            $0.top.equalTo(nickNameTextField.snp.bottom).offset(4.5)
+        }
+        
+        bankLabel.snp.makeConstraints {
+            $0.top.equalTo(nickNameTextField.snp.bottom).offset(24)
+            $0.leading.equalTo(bankView.snp.leading).inset(6)
+        }
+        
+        bankView.snp.makeConstraints {
+            $0.height.equalTo(40)
+            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.top.equalTo(bankLabel.snp.bottom).offset(4)
+            
+        }
+        
+        bankNameLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(16)
+            $0.centerY.equalToSuperview()
+        }
+        
+        bankArrowImage.snp.makeConstraints {
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.centerY.equalToSuperview()
+        }
+        
+        accountLabel.snp.makeConstraints {
+            $0.top.equalTo(bankView.snp.bottom).offset(24)
+            $0.leading.equalTo(accountTextField.snp.leading).inset(6)
+            
+        }
+        
+        accountTextField.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.top.equalTo(accountLabel.snp.bottom).offset(4)
+            $0.height.equalTo(40)
+           
+        }
+        
+        accountCountLabel.snp.makeConstraints {
+            $0.trailing.equalTo(accountTextField.snp.trailing).offset(-8)
+            $0.top.equalTo(accountTextField.snp.bottom).offset(4.5)
+        }
+        
+        nameLabel.snp.makeConstraints {
+            $0.top.equalTo(accountTextField.snp.bottom).offset(24)
+            $0.leading.equalTo(nameTextField.snp.leading).inset(6)
+        }
+        
+        nameTextField.snp.makeConstraints {
+            $0.top.equalTo(nameLabel.snp.bottom).offset(4)
+            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.height.equalTo(40)
+        }
+        
+        nameCountLabel.snp.makeConstraints {
+            $0.trailing.equalTo(nameTextField.snp.trailing).inset(8)
+            $0.top.equalTo(nameTextField.snp.bottom).offset(4.5)
+        }
+        
+        payLabel.snp.makeConstraints {
+            $0.top.equalTo(nameTextField.snp.bottom).offset(24)
+            $0.leading.equalTo(payView.snp.leading).inset(6)
+        }
+        
+        payView.snp.makeConstraints {
+            $0.height.equalTo(103)
+            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.top.equalTo(payLabel.snp.bottom).offset(4)
+        }
+        
+        leftBar.snp.makeConstraints { make in
+            make.height.equalTo(60)
+            make.width.equalTo(1)
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(110)
+        }
+        
+        rightBar.snp.makeConstraints { make in
+            make.height.equalTo(60)
+            make.width.equalTo(1)
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-110)
+        }
+        
+        tossPayView.snp.makeConstraints { make in
+            make.height.equalTo(80)
+            make.width.equalTo(56)
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(32)
+        }
+        
+        tossPayBtn.snp.makeConstraints { make in
+            make.width.height.equalTo(56)
+            make.top.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+        
+        tossLabel.snp.makeConstraints { make in
+            make.top.equalTo(tossPayBtn.snp.bottom).offset(6)
+            make.centerX.equalToSuperview()
+        }
+        
+        kakaoPayView.snp.makeConstraints { make in
+            make.height.equalTo(80)
+            make.width.equalTo(56)
+            make.center.equalToSuperview()
+        }
+        
+        kakaoPayBtn.snp.makeConstraints { make in
+            make.width.height.equalTo(56)
+            make.top.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+        
+        kakaoLabel.snp.makeConstraints { make in
+            make.top.equalTo(kakaoPayBtn.snp.bottom).offset(6)
+            make.centerX.equalToSuperview()
+        }
+        
+        
+        naverPayView.snp.makeConstraints { make in
+            make.height.equalTo(80)
+            make.width.equalTo(56)
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-32)
+        }
+        
+        naverPayBtn.snp.makeConstraints { make in
+            make.width.height.equalTo(56)
+            make.top.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+        
+        
+        naverLabel.snp.makeConstraints { make in
+            make.top.equalTo(naverPayBtn.snp.bottom).offset(6)
+            make.centerX.equalToSuperview()
+        }
+        
+        deleteBtn.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().offset(-53)
+            make.centerX.equalToSuperview()
+        }
+        
     }
     
     func setAddView() {
