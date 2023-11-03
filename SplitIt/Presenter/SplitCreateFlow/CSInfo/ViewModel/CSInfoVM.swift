@@ -67,15 +67,15 @@ class CSInfoVM {
             .map { numberFormatter.formattedString(from: $0) }
             .asDriver(onErrorJustReturn: "0")
         
-        let csInfoDriver = Driver.combineLatest(input.title, input.totalAmount)
+        let csInfoDriver = Driver.combineLatest(input.title, totalAmountResult.asDriver())
         
         showCSTotalAmountView
             .asDriver()
             .withLatestFrom(csInfoDriver)
             .drive(onNext: { title, totalAmount in
-                let totalAmountInt = numberFormatter.number(from: totalAmount)
+                print(totalAmount)
                 SplitRepository.share.inputCSInfoWithTitle(title: title)
-                SplitRepository.share.inputCSInfoWithTotalAmount(totalAmount: totalAmountInt ?? 0)
+                SplitRepository.share.inputCSInfoWithTotalAmount(totalAmount: totalAmount)
             })
             .disposed(by: disposeBag)
         
