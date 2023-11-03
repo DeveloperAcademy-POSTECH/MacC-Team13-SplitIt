@@ -24,7 +24,6 @@ class CSInfoVC: UIViewController {
     let titleMessage = UILabel()
     let titleTextFiled = SPTextField()
     let textFiledCounter = UILabel()
-    let textFiledNotice = UILabel()
     let totalAmountTitleMessage = UILabel()
     let totalAmountTextFiled = SPTextField()
     let totalAmountTextFiledNotice = UILabel()
@@ -90,6 +89,13 @@ class CSInfoVC: UIViewController {
             $0.textColor = .TextDeactivate
         }
         
+        totalAmountTextFiledNotice.do {
+            $0.text = "천만원 이상은 입력할 수 없어요"
+            $0.font = .KoreanCaption1
+            $0.textColor = .SurfaceWarnRed
+            $0.isHidden = true
+        }
+        
         nextButton.do {
             $0.setTitle("다음으로", for: .normal)
             $0.applyStyle(style: .primaryMushroom, shape: .rounded)
@@ -103,7 +109,7 @@ class CSInfoVC: UIViewController {
 
         scrollView.addSubview(contentView)
         
-        [titleMessage, titleTextFiled, textFiledCounter, nextButton, totalAmountTitleMessage, totalAmountTextFiled].forEach {
+        [titleMessage, titleTextFiled, textFiledCounter, nextButton, totalAmountTitleMessage, totalAmountTextFiled, totalAmountTextFiledNotice].forEach {
             contentView.addSubview($0)
         }
         
@@ -151,6 +157,11 @@ class CSInfoVC: UIViewController {
             $0.height.equalTo(46)
         }
         
+        totalAmountTextFiledNotice.snp.makeConstraints {
+            $0.leading.equalTo(totalAmountTitleMessage)
+            $0.top.equalTo(totalAmountTextFiled.snp.bottom).offset(8)
+        }
+        
         nextButton.snp.makeConstraints {
             $0.bottom.equalToSuperview().inset(27)
             $0.leading.trailing.equalToSuperview()
@@ -187,7 +198,8 @@ class CSInfoVC: UIViewController {
             .drive(textFiledCounter.rx.text)
             .disposed(by: disposeBag)
         
-        output.textFieldIsValid
+        output.titleTextFieldIsValid
+            .asDriver()
             .distinctUntilChanged()
             .drive(onNext: { [weak self] isValid in
                 guard let self = self else { return }
@@ -197,7 +209,8 @@ class CSInfoVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        output.textFieldIsValid
+        output.titleTextFieldIsValid
+            .asDriver()
             .map { [weak self] isValid -> String in
                 guard let self = self else { return "" }
                 if !isValid {
@@ -207,6 +220,15 @@ class CSInfoVC: UIViewController {
                 }
             }
             .drive(titleTextFiled.rx.text)
+            .disposed(by: disposeBag)
+
+        output.totalAmountTextFieldIsValid
+            .drive(onNext: { [weak self] isValid in
+                guard let self = self else { return }
+                UIView.transition(with: self.totalAmountTextFiledNotice, duration: 0.33, options: .transitionCrossDissolve) {
+                    self.totalAmountTextFiledNotice.isHidden = isValid
+                }
+            })
             .disposed(by: disposeBag)
         
         output.totalAmount
@@ -222,7 +244,7 @@ class CSInfoVC: UIViewController {
                 guard let self = self else { return }
                 switch event {
                 case .editingDidBegin:
-                    focusTitleTF()
+                    focusTitleTF(output: output)
                     unfocusTotalAmountTF()
                 case .editingDidEnd:
                     focusTotalAmountTF()
@@ -237,7 +259,7 @@ class CSInfoVC: UIViewController {
 
 // MARK: TextField (활성화/비활성화)에 따른 UI 로직
 extension CSInfoVC {
-    func focusTitleTF() {
+    func focusTitleTF(output: CSInfoVM.Output) {
         self.titleTextFiled.becomeFirstResponder()
         
         UIView.animate(withDuration: 0.33) {
@@ -248,6 +270,12 @@ extension CSInfoVC {
             self.titleMessage.textColor = .TextPrimary
             self.titleTextFiled.textColor = .TextPrimary
             self.textFiledCounter.textColor = .TextSecondary
+            
+            // Title이 focus 될 때는 경고창이 안보여야함
+            self.totalAmountTextFiledNotice.isHidden = true
+            self.textFiledCounter.textColor = output.titleTextFieldIsValid.value
+            ? .TextSecondary
+            : .AppColorStatusError
         }
         
         view.layoutIfNeeded()

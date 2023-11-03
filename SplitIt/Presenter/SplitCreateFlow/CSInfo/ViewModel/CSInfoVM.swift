@@ -27,9 +27,9 @@ class CSInfoVM {
         let showCSMemberView: Driver<Void>
         let titleCount: Driver<String>
         let totalAmount: Driver<String>
-        let textFieldIsValid: Driver<Bool>
+        let titleTextFieldIsValid: BehaviorRelay<Bool>
         let titleTextFieldIsEnable: Driver<Bool>
-        let totalAmountTextFieldIsEnable: Driver<Bool>
+        let totalAmountTextFieldIsValid: Driver<Bool>
         let nextButtonIsEnable: Driver<Bool>
         let titleTextFieldControlEvent: Driver<UIControl.Event>
     }
@@ -38,9 +38,10 @@ class CSInfoVM {
         let title = input.title
         let showCSTotalAmountView = input.nextButtonTapped
         let textFieldCount = BehaviorRelay<String>(value: "")
-        let textFieldIsValid = BehaviorRelay<Bool>(value: true)
+        let titleTextFieldIsValid = BehaviorRelay<Bool>(value: true)
         
         let totalAmountResult = BehaviorRelay<Int>(value: 0)
+        let totalAmountIsValid = BehaviorRelay<Bool>(value: true)
         let numberFormatter = NumberFormatterHelper()
 
         let maxCurrency = 10000000
@@ -91,7 +92,7 @@ class CSInfoVM {
                 guard let self = self else { return false }
                 return text.count < self.maxTextCount
             }
-            .drive(textFieldIsValid)
+            .drive(titleTextFieldIsValid)
             .disposed(by: disposeBag)
         
         nextButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(), totalAmountTextFieldCountIsEmpty.asDriver())
@@ -111,12 +112,18 @@ class CSInfoVM {
             }
             .asDriver(onErrorJustReturn: UIControl.Event())
         
+        totalAmountResult
+            .asDriver()
+            .map { $0 < maxCurrency }
+            .drive(totalAmountIsValid)
+            .disposed(by: disposeBag)
+        
         return Output(showCSMemberView: showCSTotalAmountView.asDriver(),
                       titleCount: textFieldCount.asDriver(),
                       totalAmount: totalAmountString,
-                      textFieldIsValid: textFieldIsValid.asDriver(),
+                      titleTextFieldIsValid: titleTextFieldIsValid,
                       titleTextFieldIsEnable: titleTextFieldCountIsEmpty,
-                      totalAmountTextFieldIsEnable: totalAmountTextFieldCountIsEmpty,
+                      totalAmountTextFieldIsValid: totalAmountIsValid.asDriver(),
                       nextButtonIsEnable: nextButtonIsEnable,
                       titleTextFieldControlEvent: titleTFControlEvent)
     }
