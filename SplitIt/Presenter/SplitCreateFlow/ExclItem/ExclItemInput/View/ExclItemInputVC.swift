@@ -91,7 +91,7 @@ class ExclItemInputVC: UIViewController {
         }
         
         exclListLabel.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(27)
+            $0.top.equalTo(header.snp.bottom).offset(30)
             $0.leading.equalToSuperview().inset(34)
         }
         
@@ -103,7 +103,7 @@ class ExclItemInputVC: UIViewController {
         exclItemAddButton.snp.makeConstraints {
             $0.centerY.equalTo(exclListLabel.snp.centerY)
             $0.trailing.equalToSuperview().inset(38)
-            $0.width.equalTo(112)
+            $0.width.equalTo(92)
             $0.height.equalTo(24)
         }
         
