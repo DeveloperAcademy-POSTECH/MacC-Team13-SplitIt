@@ -57,6 +57,13 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
         titleTextFiled.becomeFirstResponder()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        titleTextFiled.resignFirstResponder()
+        priceTextFiled.resignFirstResponder()
+    }
+    
     func setGestureRecognizer() {
         view.addGestureRecognizer(tapGesture)
         tapGesture.cancelsTouchesInView = false
