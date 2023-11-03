@@ -229,7 +229,7 @@ final class NewSPButton: UIButton {
                 self.configureActiveProperties()
                 self.configureUnpressedPropertiesForSquare()
                 self.backgroundColor = colorArray[style]
-                self.frame = CGRect(origin: CGPoint(x: self.frame.minX, y: self.frame.minY - 4.0), size: self.frame.size)
+                self.frame = CGRect(origin: CGPoint(x: self.frame.minX, y: self.frame.minY - 2.0), size: self.frame.size)
             })
             .disposed(by: disposeBag)
             
@@ -240,7 +240,7 @@ final class NewSPButton: UIButton {
                     guard let self = self else { return }
                     self.configurePressedPropertiesForSquare()
                     self.backgroundColor = colorPressedArray[style]
-                    self.frame = CGRect(origin: CGPoint(x: self.frame.minX, y: self.frame.minY + 4.0), size: self.frame.size)
+                    self.frame = CGRect(origin: CGPoint(x: self.frame.minX, y: self.frame.minY + 2.0), size: self.frame.size)
                 })
                 .disposed(by: disposeBag)
             
