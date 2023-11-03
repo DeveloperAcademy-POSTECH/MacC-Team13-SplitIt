@@ -410,6 +410,12 @@ extension SplitRepository {
         deleteExclMember(exclItemIdx: deleteExclItem!.exclItemIdx, realmManager: realmManager)
     }
     
+    /// ExclItemInput뷰가 disAppear 될 때 초기화
+    func deleteCurrentExclItemAndExclMember() {
+        self.exclItemArr.accept([])
+        self.exclMemberArr.accept([])
+    }
+    
     /// memberLogIdx로 memberLog 삭제
     func deleteMemberLog(memberLogIdx: String) {
         RealmManager().deleteMemberLog(memberLogIdx: memberLogIdx)

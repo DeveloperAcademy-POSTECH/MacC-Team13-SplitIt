@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxAppState
 
 class ExclItemInputVC: UIViewController {
     
@@ -127,7 +128,8 @@ class ExclItemInputVC: UIViewController {
     }
     
     func setBinding() {
-        let input = ExclItemInputVM.Input(nextButtonTapped: nextButton.rx.tap,
+        let input = ExclItemInputVM.Input(viewDidDisAppear: self.rx.viewDidDisappear,
+                                          nextButtonTapped: nextButton.rx.tap,
                                           exclItemAddButtonTapped: exclItemAddButton.rx.tap)
         let output = viewModel.transform(input: input)
         
