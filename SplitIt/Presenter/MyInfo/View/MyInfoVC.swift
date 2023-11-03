@@ -290,15 +290,15 @@ class MyInfoVC: UIViewController {
             accountView.isHidden = false
             emptyView.isHidden = true
             print(tossValue, kakaoValue, naverValue)
-            if userDefault.string(forKey: "userBank") != nil &&
-                userDefault.string(forKey: "userAccount") != nil &&
+            if userDefault.string(forKey: "userBank") != nil ||
+                userDefault.string(forKey: "userAccount") != nil ||
                 userDefault.string(forKey: "userName") != nil {
                 
                 //페이류까지 다 있는 경우
                 if checkPay {
                     
                     notUsedAccount.isHidden = true
-                    notUsedPay.isHidden = !(tossValue && kakaoValue && naverValue)
+                    notUsedPay.isHidden = checkPay
                     tossPayBtn.isHidden = !tossValue
                     kakaoPayBtn.isHidden = !kakaoValue
                     naverPayBtn.isHidden = !naverValue

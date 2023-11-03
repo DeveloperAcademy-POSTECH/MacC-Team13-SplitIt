@@ -53,7 +53,7 @@ class CustomKeyboard: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(hex: 0xCED0D5)
+        view.backgroundColor = UIColor.SurfaceBrandCalmshell
         
         setAddView()
         setAttribute()
@@ -65,11 +65,11 @@ class CustomKeyboard: UIInputViewController {
     func setAttribute() {
         
         let inputView = UIInputView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 291), inputViewStyle: .keyboard)
-        inputView.backgroundColor = UIColor(hex: 0xFCFCFE)
+        inputView.backgroundColor = UIColor.SurfaceBrandCalmshell
         self.inputView = inputView
         
         keyboardView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 291)) //291
-        keyboardView.backgroundColor = UIColor(hex: 0xCED0D5)
+        keyboardView.backgroundColor = UIColor.SurfaceBrandCalmshell
         inputView.addSubview(keyboardView)
         
         deleteButton.do {

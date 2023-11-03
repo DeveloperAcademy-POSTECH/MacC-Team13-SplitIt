@@ -278,7 +278,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
     
    }
     
-    
     func accountTextFieldCustomKeyboard() {
         
         accountTextField.inputView = accountCustomKeyboard.inputView
@@ -295,30 +294,40 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
     
     //수정버튼 활성화 비활성화 선택해주는 함수
     func checkUserInfo() {
-        let nickNameTextCheck = nickNameTextField.rx.text.orEmpty
-        let accountTextCheck = accountTextField.rx.text.orEmpty
-        let nameTextCheck = nameTextField.rx.text.orEmpty
         
-        Observable.combineLatest(nameTextCheck, accountTextCheck, nickNameTextCheck)
-            .subscribe(onNext: { text1, text2, text3 in
+        let nickNameTextCheck = nickNameTextField.rx.text.orEmpty.asObservable()
+        let accountTextCheck = accountTextField.rx.text.orEmpty.asObservable()
+        let nameTextCheck = nameTextField.rx.text.orEmpty.asObservable()
+        let bankCheck = bankNameLabel.rx.observe(String.self, "text").map { $0 ?? "" }
+        
+        Observable.combineLatest(nameTextCheck, accountTextCheck, nickNameTextCheck, bankCheck)
+            .subscribe(onNext: { nameText, accountText, nickNameText, bankText in
                 
-                if self.userDefault.string(forKey: "userNickName") != nil  // 이미 값이 설정되었던 상태
-
-                    {
+                if self.userDefault.string(forKey: "userNickName") != nil &&
+                    self.userDefault.string(forKey: "userAccount") != nil &&
+                    self.userDefault.string(forKey: "userBank") != nil {
                     self.header.buttonState.accept(true)
-                    
-                } else { //값이 없는 상태
-                    if !text3.isEmpty {
+                }
+                
+                // nickname없는 상태
+                if self.userDefault.string(forKey: "userNickName") == nil {
+                    //nickName쓰고 있는 중
+                    if !nickNameText.isEmpty {
                         self.header.buttonState.accept(true)
-                        
                     } else {
                         self.header.buttonState.accept(false)
-                        
+                    }
+                //nickName 저장되어 있는 상태
+                } else {
+                    if !accountText.isEmpty && bankText != "은행을 선택해주세요" {
+                        self.header.buttonState.accept(true)
+                        print(1)
                     }
                 }
+              
             })
             .disposed(by: disposeBag)
-        
+
         
         accountTextField.rx.text.orEmpty
             .subscribe(onNext: { [weak self] text in
@@ -331,7 +340,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
         
         
     }
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -367,8 +375,10 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
                 modalVC.modalTransitionStyle = .coverVertical
                 modalVC.selectedBankName
                     .bind { bankName in
-                        self?.userDefault.set(bankName, forKey: "userBank")
-                        print(bankName)
+                        if bankName != "은행을 선택해주세요" {
+                            self?.userDefault.set(bankName, forKey: "userBank")
+                            print(bankName)
+                        }
                     }
                     .disposed(by: modalVC.disposeBag)
                 self?.present(modalVC, animated: true, completion: nil)
@@ -461,9 +471,13 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
         nickNameTextField.rx.controlEvent(.editingChanged)
             .subscribe(onNext: { [weak self] _ in
                 guard let text = self?.nickNameTextField.text else { return }
-                if text.count > self?.maxCharacterCount ?? 0 {
+                if text.count >= self?.maxCharacterCount ?? 0 {
                     let endIndex = text.index(text.startIndex, offsetBy: self?.maxCharacterCount ?? 0)
                     self?.nickNameTextField.text = String(text[..<endIndex])
+                    self?.nickNameCountLabel.textColor = .AppColorStatusWarnRed
+                } else {
+                    self?.nickNameCountLabel.textColor = .TextSecondary
+                
                 }
             })
             .disposed(by: disposeBag)
@@ -480,9 +494,12 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
         nameTextField.rx.controlEvent(.editingChanged)
             .subscribe(onNext: { [weak self] _ in
                 guard let text = self?.nameTextField.text else { return }
-                if text.count > self?.maxCharacterCount ?? 0 {
+                if text.count >= self?.maxCharacterCount ?? 0 {
                     let endIndex = text.index(text.startIndex, offsetBy: self?.maxCharacterCount ?? 0)
                     self?.nameTextField.text = String(text[..<endIndex])
+                    self?.nameCountLabel.textColor = .AppColorStatusWarnRed
+                } else {
+                    self?.nameCountLabel.textColor = .TextSecondary
                 }
             })
             .disposed(by: disposeBag)
@@ -499,13 +516,17 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
         accountTextField.rx.controlEvent(.editingChanged)
             .subscribe(onNext: { [weak self] _ in
                 guard let text = self?.accountTextField.text else { return }
-                if text.count > self?.maxAccountCount ?? 0 {
+                if text.count >= self?.maxAccountCount ?? 0 {
                     let endIndex = text.index(text.startIndex, offsetBy: self?.maxAccountCount ?? 0)
                     self?.accountTextField.text = String(text[..<endIndex])
+                    self?.accountCountLabel.textColor = .AppColorStatusWarnRed
+                } else {
+                    self?.accountCountLabel.textColor = .TextSecondary
                 }
+                
             })
             .disposed(by: disposeBag)
-
+        
         
         
         view.backgroundColor = .SurfaceBrandCalmshell
@@ -629,7 +650,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
         }
         
         accountCountLabel.do {
-            $0.textColor = .TextSecondary
+            //$0.textColor = .TextSecondary
             $0.font = UIFont.KoreanCaption2
         }
         

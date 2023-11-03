@@ -55,9 +55,7 @@ class AccountCustomKeyboard: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(hex: 0xCED0D5)
-//
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        view.backgroundColor = UIColor.SurfaceBrandCalmshell
 
         setAttribute()
         setLayout()
@@ -66,21 +64,6 @@ class AccountCustomKeyboard: UIInputViewController {
         
     }
 
-//    @objc func keyboardWillShow(notification: Notification) {
-//        if let userInfo = notification.userInfo,
-//            let keyboardFrameValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-//            originalKeyboardHeight = keyboardFrameValue.cgRectValue.height
-//
-//            keyboardView.snp.removeConstraints()
-//
-//            keyboardView.snp.makeConstraints { make in
-//                make.height.equalTo(originalKeyboardHeight)
-//            }
-//
-//            print(originalKeyboardHeight)
-//            print("dddddddd")
-//        }
-//    }
     
     func setLayout() {
         
@@ -117,7 +100,7 @@ class AccountCustomKeyboard: UIInputViewController {
         self.inputView = inputView
         
         keyboardView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: originalKeyboardHeight))
-        keyboardView.backgroundColor = UIColor(hex: 0xFCFCFE)
+        keyboardView.backgroundColor = UIColor.SurfaceBrandCalmshell
         inputView.addSubview(keyboardView)
         
         
