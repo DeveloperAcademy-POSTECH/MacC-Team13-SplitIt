@@ -22,7 +22,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
     
     let viewModel = ExclItemInfoAddModalVM()
     
-    let header = NaviHeader()
+    let header = SPNavigationBar()
     let scrollView = UIScrollView(frame: .zero)
     let contentView = UIView()
     let titleMessage = UILabel()
@@ -73,9 +73,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
         view.backgroundColor = .SurfacePrimary
         
         header.do {
-            $0.applyStyle(.exclInfoAdd)
-            $0.setAddButton()
-            $0.setCancelButton()
+            $0.applyStyle(style: .exclItemCreateModal, vc: self)
         }
         
         scrollView.do {
@@ -258,8 +256,8 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
                                                  price: priceTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
                                                  titleTextFieldControlEvent: titleTFEvent,
                                                  priceTextFieldControlEvent: priceTFEvent,
-                                                 cancelButtonTapped: header.cancelButton.rx.tap,
-                                                 addButtonTapped: header.addButton.rx.tap)
+                                                 cancelButtonTapped: header.leftButton.rx.tap,
+                                                 addButtonTapped: header.rightButton.rx.tap)
         let output = viewModel.transform(input: input)
         
         output.addButtonTapped
@@ -307,7 +305,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
             .disposed(by: disposeBag)
         
         output.addButtonIsEnable
-            .drive(header.addButton.rx.isEnabled)
+            .drive(header.rightButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
         output.titleTextFieldControlEvent
