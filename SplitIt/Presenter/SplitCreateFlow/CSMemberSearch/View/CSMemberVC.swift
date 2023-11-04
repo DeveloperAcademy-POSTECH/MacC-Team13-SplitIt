@@ -83,6 +83,7 @@ class CSMemberVC: UIViewController, Reusable {
             $0.clipsToBounds = true
             $0.rowHeight = 48
             $0.contentInset = inset
+            $0.showsVerticalScrollIndicator = false
         }
         
         nextButton.do {

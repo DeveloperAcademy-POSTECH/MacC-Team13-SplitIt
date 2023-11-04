@@ -18,7 +18,7 @@ class HistoryVC: UIViewController {
     var disposeBag = DisposeBag()
     let viewModel = HistoryVM()
     
-    let header = NaviHeader()
+    let header = SPNavigationBar()
     let emptyView = UIView()
     let emptyLabel = UILabel()
     
@@ -40,8 +40,7 @@ class HistoryVC: UIViewController {
         view.backgroundColor = .SurfacePrimary
         
         header.do {
-            $0.applyStyle(.history)
-            $0.setBackButton(viewController: self)
+            $0.applyStyle(style: .history, vc: self)
         }
         
         splitCollectionFlowLayout.do {

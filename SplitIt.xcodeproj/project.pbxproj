@@ -10,6 +10,8 @@
 		1A07DF062AE51F060081E543 /* CSMemberPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A07DF052AE51F060081E543 /* CSMemberPageController.swift */; };
 		1A07DF092AE55E8F0081E543 /* ExclPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A07DF082AE55E8F0081E543 /* ExclPageController.swift */; };
 		1A07DF0B2AE569660081E543 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A07DF0A2AE569660081E543 /* UIButton+.swift */; };
+		1A1ACC4D2AF3CAF6004AC4CD /* SplitShareSectionFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ACC4C2AF3CAF6004AC4CD /* SplitShareSectionFooter.swift */; };
+		1A1ACC532AF672F3004AC4CD /* SnapshotKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1A1ACC522AF672F3004AC4CD /* SnapshotKit */; };
 		1A251F482AF24916006C5F08 /* EmptyBackGroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A251F472AF24916006C5F08 /* EmptyBackGroundView.swift */; };
 		1A3852F52ADE5A9F00E9A20B /* Split.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3852F42ADE5A9F00E9A20B /* Split.swift */; };
 		1A3852F72ADE5AB200E9A20B /* CSInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3852F62ADE5AB200E9A20B /* CSInfo.swift */; };
@@ -186,6 +188,7 @@
 		1A07DF052AE51F060081E543 /* CSMemberPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberPageController.swift; sourceTree = "<group>"; };
 		1A07DF082AE55E8F0081E543 /* ExclPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclPageController.swift; sourceTree = "<group>"; };
 		1A07DF0A2AE569660081E543 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
+		1A1ACC4C2AF3CAF6004AC4CD /* SplitShareSectionFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitShareSectionFooter.swift; sourceTree = "<group>"; };
 		1A251F472AF24916006C5F08 /* EmptyBackGroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyBackGroundView.swift; sourceTree = "<group>"; };
 		1A3852F42ADE5A9F00E9A20B /* Split.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Split.swift; sourceTree = "<group>"; };
 		1A3852F62ADE5AB200E9A20B /* CSInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSInfo.swift; sourceTree = "<group>"; };
@@ -358,6 +361,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6078ACEF2ADA756900995811 /* RxSwift in Frameworks */,
+				1A1ACC532AF672F3004AC4CD /* SnapshotKit in Frameworks */,
 				6078ACE12ADA751D00995811 /* RxRealm in Frameworks */,
 				6078ACEA2ADA753B00995811 /* SnapKit in Frameworks */,
 				6078ACED2ADA756900995811 /* RxCocoa in Frameworks */,
@@ -966,6 +970,7 @@
 				60AE3EB62AE773C7009D9D18 /* Cell */,
 				60AE3EB42AE773BF009D9D18 /* SplitShareVC.swift */,
 				60AE3EBD2AE77467009D9D18 /* SplitShareSectionHeader.swift */,
+				1A1ACC4C2AF3CAF6004AC4CD /* SplitShareSectionFooter.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1337,6 +1342,7 @@
 				6078ACEE2ADA756900995811 /* RxSwift */,
 				6078ACF12ADA757E00995811 /* RxDataSources */,
 				60115DFB2ADBF8860050D32C /* RxAppState */,
+				1A1ACC522AF672F3004AC4CD /* SnapshotKit */,
 			);
 			productName = SplitIt;
 			productReference = 6078ACC82ADA74AC00995811 /* SplitIt.app */;
@@ -1374,6 +1380,7 @@
 				6078ACEB2ADA756900995811 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				6078ACF02ADA757E00995811 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				60115DFA2ADBF8860050D32C /* XCRemoteSwiftPackageReference "RxAppState" */,
+				1A1ACC512AF672F3004AC4CD /* XCRemoteSwiftPackageReference "SnapshotKit" */,
 			);
 			productRefGroup = 6078ACC92ADA74AC00995811 /* Products */;
 			projectDirPath = "";
@@ -1463,6 +1470,7 @@
 				6078ACD02ADA74AC00995811 /* HomeVC.swift in Sources */,
 				1A8B05DC2AF0E15A00CF5BC5 /* SPNavigationBar.swift in Sources */,
 				86D1E0C52AE6B4C100FBF610 /* ExclEditPageController.swift in Sources */,
+				1A1ACC4D2AF3CAF6004AC4CD /* SplitShareSectionFooter.swift in Sources */,
 				DE73D6F72AE1983200ABF3EF /* MemberLogVC.swift in Sources */,
 				86C660002AF126DE00A7942A /* EditCSListVM.swift in Sources */,
 				C2A7979C2AE276E90049E709 /* HistorySplitCell.swift in Sources */,
@@ -1703,7 +1711,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = B9U954AWHU;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SplitIt/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1733,7 +1741,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = B9U954AWHU;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SplitIt/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1779,6 +1787,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1A1ACC512AF672F3004AC4CD /* XCRemoteSwiftPackageReference "SnapshotKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/YK-Unit/SnapshotKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.2;
+			};
+		};
 		60115DFA2ADBF8860050D32C /* XCRemoteSwiftPackageReference "RxAppState" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pixeldock/RxAppState";
@@ -1838,6 +1854,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1A1ACC522AF672F3004AC4CD /* SnapshotKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A1ACC512AF672F3004AC4CD /* XCRemoteSwiftPackageReference "SnapshotKit" */;
+			productName = SnapshotKit;
+		};
 		60115DFB2ADBF8860050D32C /* RxAppState */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 60115DFA2ADBF8860050D32C /* XCRemoteSwiftPackageReference "RxAppState" */;
