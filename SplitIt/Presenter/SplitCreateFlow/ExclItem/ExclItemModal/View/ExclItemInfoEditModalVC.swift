@@ -22,7 +22,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
     
     var viewModel: ExclItemInfoEditModalVM!
     
-    let header = NaviHeader()
+    let header = SPNavigationBar()
     let scrollView = UIScrollView(frame: .zero)
     let contentView = UIView()
     let titleMessage = UILabel()
@@ -86,10 +86,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
         view.backgroundColor = .SurfacePrimary
         
         header.do {
-            $0.applyStyle(.exclInfoEdit)
-            $0.setAddButton()
-            $0.setCancelButton()
-            $0.addButton.setTitle("저장", for: .normal)
+            $0.applyStyle(style: .exclItemEditModal, vc: self)
         }
         
         scrollView.do {
@@ -289,8 +286,8 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
                                                   price: priceRelay.asDriver(onErrorJustReturn: ""),
                                                   titleTextFieldControlEvent: titleTFEvent,
                                                   priceTextFieldControlEvent: priceTFEvent,
-                                                  cancelButtonTapped: header.cancelButton.rx.tap,
-                                                  editButtonTapped: header.addButton.rx.tap,
+                                                  cancelButtonTapped: header.leftButton.rx.tap,
+                                                  editButtonTapped: header.rightButton.rx.tap,
                                                   deleteButtonTapped: deleteButton.rx.tap)
         let output = viewModel.transform(input: input)
         
@@ -347,7 +344,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
             .disposed(by: disposeBag)
         
         output.addButtonIsEnable
-            .drive(header.addButton.rx.isEnabled)
+            .drive(header.rightButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
         output.titleTextFieldControlEvent
