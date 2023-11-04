@@ -33,9 +33,8 @@ class EditCSMemberVM {
         input.nextButtonTapped
             .asDriver()
             .drive(onNext: {
-                if !repo.isSmartSplit {
-                    repo.updateDataToDB()
-                }
+                repo.updateDataToDB()
+                
             })
             .disposed(by: disposeBag)
         

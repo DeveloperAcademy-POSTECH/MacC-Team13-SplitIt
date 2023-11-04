@@ -60,6 +60,13 @@ final class EditCSListVM {
     }
     
     func transform(input: Input) -> Output {
+        input.viewDidLoad
+            .subscribe { [weak self]_ in
+                guard let self = self else { return }
+                self.dataModel.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: self.csInfoIdx)
+            }
+            .disposed(by: disposeBag)
+        
         let title = csinfo.map { $0.title }
         let totalAmount: Driver<NSMutableAttributedString> = csinfo.map { [weak self] csinfo in
             guard let self = self else { return NSMutableAttributedString(string: "") }

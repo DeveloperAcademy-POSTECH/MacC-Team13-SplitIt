@@ -39,12 +39,12 @@ class EditExclItemInputVM {
             ExclItemInfo(exclItem: ExclItem(csInfoIdx: "", name: "", price: 0), items: [])
         ])
         
-        input.viewDidDisAppear
-            .asDriver(onErrorJustReturn: false)
-            .drive(onNext: { _ in
-                SplitRepository.share.deleteCurrentExclItemAndExclMember()
-            })
-            .disposed(by: disposeBag)
+//        input.viewDidDisAppear
+//            .asDriver(onErrorJustReturn: false)
+//            .drive(onNext: { _ in
+//                SplitRepository.share.deleteCurrentExclItemAndExclMember()
+//            })
+//            .disposed(by: disposeBag)
         
         Observable.combineLatest(exclItemRepository, exclMemberRepository)
             .map{ (exclItems, exclMembers) -> [ExclItemInfo] in

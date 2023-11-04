@@ -14,7 +14,7 @@ class EditExclItemInputVC: UIViewController {
     
     var disposeBag = DisposeBag()
     
-    let viewModel = ExclItemInputVM()
+    let viewModel = EditExclItemInputVM()
     
     let header = SPNavigationBar()
     let exclListLabel = UILabel()
@@ -24,8 +24,6 @@ class EditExclItemInputVC: UIViewController {
     let contentView = UIView()
     let emptyView = ExclItemInputEmptyView()
     let tableView = UITableView(frame: .zero)
-    
-    let nextButton = NewSPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +37,7 @@ class EditExclItemInputVC: UIViewController {
         view.backgroundColor = .SurfacePrimary
         
         header.do {
-            $0.applyStyle(style: .exclItemCreate, vc: self)
+            $0.applyStyle(style: .csEdit, vc: self)
         }
         
         exclListLabel.do {
@@ -61,11 +59,6 @@ class EditExclItemInputVC: UIViewController {
             $0.titleLabel?.font = .KoreanSmallButtonText
         }
         
-        nextButton.do {
-            $0.setTitle("정산 결과 확인하기", for: .normal)
-            $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
-        }
-        
         setTableView()
     }
     
@@ -81,7 +74,7 @@ class EditExclItemInputVC: UIViewController {
     }
     
     func setLayout() {
-        [header, exclListLabel, exclItemCountLabel, exclItemAddButton, tableView, emptyView, nextButton].forEach {
+        [header, exclListLabel, exclItemCountLabel, exclItemAddButton, tableView, emptyView].forEach {
             view.addSubview($0)
         }
         
@@ -111,6 +104,7 @@ class EditExclItemInputVC: UIViewController {
         tableView.snp.makeConstraints {
             $0.top.equalTo(exclListLabel.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview().inset(30)
+            $0.bottom.equalToSuperview()
         }
         
         emptyView.snp.makeConstraints {
@@ -118,19 +112,16 @@ class EditExclItemInputVC: UIViewController {
             $0.leading.trailing.equalTo(tableView)
             $0.height.equalTo(emptyView.snp.width).dividedBy(3)
         }
-        
-        nextButton.snp.makeConstraints {
-            $0.top.equalTo(tableView.snp.bottom)
-            $0.bottom.equalToSuperview().inset(40)
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.height.equalTo(48)
-        }
     }
     
     func setBinding() {
-        let input = ExclItemInputVM.Input(viewDidDisAppear: self.rx.viewDidDisappear,
-                                          nextButtonTapped: nextButton.rx.tap,
+        let input = EditExclItemInputVM.Input(viewDidDisAppear: self.rx.viewDidDisappear,
+                                              nextButtonTapped: header.rightButton.rx.tap,
                                           exclItemAddButtonTapped: exclItemAddButton.rx.tap)
+        Driver.just(true)
+            .drive(header.buttonState)
+            .disposed(by: disposeBag)
+        
         let output = viewModel.transform(input: input)
         
         output.exclItemsRelay
@@ -146,9 +137,9 @@ class EditExclItemInputVC: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        output.nextButtonIsEnable
-            .drive(nextButton.buttonState)
-            .disposed(by: disposeBag)
+//        output.nextButtonIsEnable
+//            .drive(nextButton.buttonState)
+//            .disposed(by: disposeBag)
         
         output.showExclItemInfoModal
             .drive(onNext: { [weak self] in
@@ -185,9 +176,8 @@ class EditExclItemInputVC: UIViewController {
         
         output.showResultView
             .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
                 SplitRepository.share.updateDataToDB()
-                let vc = SplitShareVC()
-                self?.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
     }

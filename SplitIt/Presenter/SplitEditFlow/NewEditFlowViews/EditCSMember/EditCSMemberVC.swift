@@ -23,7 +23,6 @@ class EditCSMemberVC: UIViewController, Reusable {
     let buttonImageView = UIImageView()
     let subTitleLabel = UILabel()
     let memberTableView = UITableView(frame: .zero)
-    let nextButton = NewSPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +36,7 @@ class EditCSMemberVC: UIViewController, Reusable {
         view.backgroundColor = .SurfaceBrandCalmshell
         
         header.do {
-            $0.applyStyle(style: .csMemberCreate, vc: self)
+            $0.applyStyle(style: .csEdit, vc: self)
         }
         
         titleLabel.do {
@@ -84,15 +83,10 @@ class EditCSMemberVC: UIViewController, Reusable {
             $0.rowHeight = 48
             $0.contentInset = inset
         }
-        
-        nextButton.do {
-            $0.applyStyle(style: .primaryPear, shape: .rounded)
-            self.nextButton.setTitle("2명부터 정산할 수 있어요", for: .normal)
-        }
     }
     
     private func setLayout() {
-        [header,titleLabel,searchBarButton,subTitleLabel,memberTableView,nextButton].forEach {
+        [header,titleLabel,searchBarButton,subTitleLabel,memberTableView].forEach {
             view.addSubview($0)
         }
         
@@ -136,19 +130,13 @@ class EditCSMemberVC: UIViewController, Reusable {
         memberTableView.snp.makeConstraints {
             $0.top.equalTo(subTitleLabel.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(35)
-            $0.bottom.equalTo(nextButton.snp.top).offset(-24)
-        }
-        
-        nextButton.snp.makeConstraints {
-            $0.bottom.equalToSuperview().offset(-61)
-            $0.height.equalTo(48)
-            $0.horizontalEdges.equalToSuperview().inset(30)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-40)
         }
     }
     
     private func setBinding() {
         let input = EditCSMemberVM.Input(searchButtonTapped: searchBarButton.rx.tap,
-                                     nextButtonTapped: nextButton.rx.tap)
+                                         nextButtonTapped: header.rightButton.rx.tap)
         let output = viewModel.transform(input: input)
         
         output.tableData
@@ -164,11 +152,7 @@ class EditCSMemberVC: UIViewController, Reusable {
             .drive(onNext: { [weak self] datas in
                 guard let self = self else { return }
                 let buttonState = datas.count >= 2
-                self.nextButton.buttonState.accept(buttonState)
-                
-                buttonState
-                ? self.nextButton.setTitle("\(datas.count)명이서 돈을 썼어요", for: .normal)
-                : self.nextButton.setTitle("2명부터 정산할 수 있어요", for: .normal)
+                self.header.buttonState.accept(buttonState)
             })
             .disposed(by: disposeBag)
         
@@ -183,12 +167,5 @@ class EditCSMemberVC: UIViewController, Reusable {
             })
             .disposed(by: disposeBag)
         
-        output.showExclView
-            .asDriver()
-            .drive(onNext: { [weak self] in
-                guard let self = self else { return }
-                self.navigationController?.popViewController(animated: true)
-            })
-            .disposed(by: disposeBag)
     }
 }

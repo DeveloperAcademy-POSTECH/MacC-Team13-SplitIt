@@ -19,7 +19,7 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
     var disposeBag = DisposeBag()
     var viewModel = JSDetailVM()
     
-    let headerView = NaviHeader()
+    let headerView = SPNavigationBar()
     let collectionView = UITableView(frame: .zero)
     let nextButton = NewSPButton()
     let splitTitleTF = SPTextField()
@@ -49,8 +49,7 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
         view.backgroundColor = .SurfaceBrandCalmshell
         
         headerView.do {
-            $0.applyStyle(.edit)
-            $0.setBackButton(viewController: self)
+            $0.applyStyle(style: .splitEdit, vc: self)
         }
         
         titleLabel.do {

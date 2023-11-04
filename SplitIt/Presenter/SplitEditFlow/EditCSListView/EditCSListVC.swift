@@ -18,7 +18,7 @@ class EditCSListVC: UIViewController {
     
     let viewModel: EditCSListVM
     
-    let headerView = NaviHeader()
+    let headerView = SPNavigationBar()
     let titleLabel = UILabel()
     let totalAmountLabel = UILabel()
     let titlePriceEditBtn = DefaultEditButton()
@@ -48,8 +48,7 @@ class EditCSListVC: UIViewController {
         view.backgroundColor = .SurfaceBrandCalmshell
         
         headerView.do {
-            $0.applyStyle(.edit)
-            $0.setBackButton(viewController: self)
+            $0.applyStyle(style: .csEdit, vc: self)
         }
         
         titleLabel.do {
@@ -169,6 +168,10 @@ class EditCSListVC: UIViewController {
                                        exclItemEditTapped: exclEditBtn.rx.tap)
         
         let output = viewModel.transform(input: input)
+        
+        Driver.just(true)
+            .drive(headerView.buttonState)
+            .disposed(by: disposeBag)
         
         output.csTitle
             .drive(titleLabel.rx.text)

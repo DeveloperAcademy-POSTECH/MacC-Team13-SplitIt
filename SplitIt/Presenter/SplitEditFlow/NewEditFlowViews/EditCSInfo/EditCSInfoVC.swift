@@ -27,7 +27,6 @@ class EditCSInfoVC: UIViewController {
     let totalAmountTitleMessage = UILabel()
     let totalAmountTextFiled = SPTextField()
     let totalAmountTextFiledNotice = UILabel()
-    let nextButton = NewSPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,7 +53,7 @@ class EditCSInfoVC: UIViewController {
         }
         
         header.do {
-            $0.applyStyle(style: .csInfoCreate, vc: self)
+            $0.applyStyle(style: .csEdit, vc: self)
         }
         
         titleMessage.do {
@@ -95,11 +94,6 @@ class EditCSInfoVC: UIViewController {
             $0.textColor = .SurfaceWarnRed
             $0.isHidden = true
         }
-        
-        nextButton.do {
-            $0.setTitle("다음으로", for: .normal)
-            $0.applyStyle(style: .primaryMushroom, shape: .rounded)
-        }
     }
     
     func setLayout() {
@@ -109,7 +103,7 @@ class EditCSInfoVC: UIViewController {
 
         scrollView.addSubview(contentView)
         
-        [titleMessage, titleTextFiled, textFiledCounter, nextButton, totalAmountTitleMessage, totalAmountTextFiled, totalAmountTextFiledNotice].forEach {
+        [titleMessage, titleTextFiled, textFiledCounter, totalAmountTitleMessage, totalAmountTextFiled, totalAmountTextFiledNotice].forEach {
             contentView.addSubview($0)
         }
         
@@ -161,12 +155,6 @@ class EditCSInfoVC: UIViewController {
             $0.leading.equalTo(totalAmountTitleMessage)
             $0.top.equalTo(totalAmountTextFiled.snp.bottom).offset(8)
         }
-        
-        nextButton.snp.makeConstraints {
-            $0.bottom.equalToSuperview().inset(27)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(48)
-        }
     }
     
     func setBinding() {
@@ -179,7 +167,7 @@ class EditCSInfoVC: UIViewController {
             totalAmountTextFiled.rx.controlEvent(.editingDidBegin).map { UIControl.Event.editingDidBegin},
             totalAmountTextFiled.rx.controlEvent(.editingDidEnd).map { UIControl.Event.editingDidEnd })
         
-        let input = EditCSInfoVM.Input(nextButtonTapped: nextButton.rx.tap,
+        let input = EditCSInfoVM.Input(nextButtonTapped: header.rightButton.rx.tap,
                                    title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
                                    totalAmount: totalAmountTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
                                    titleTextFieldControlEvent: titleTFEvent,
@@ -189,7 +177,7 @@ class EditCSInfoVC: UIViewController {
         output.showCSMemberView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.navigationController?.popViewController(animated: true)
+//                self.navigationController?.popViewController(animated: true)
             })
             .disposed(by: disposeBag)
         
@@ -226,7 +214,7 @@ class EditCSInfoVC: UIViewController {
             .disposed(by: disposeBag)
         
         output.nextButtonIsEnable
-            .drive(nextButton.buttonState)
+            .drive(header.buttonState)
             .disposed(by: disposeBag)
         
         output.titleTextFieldControlEvent
