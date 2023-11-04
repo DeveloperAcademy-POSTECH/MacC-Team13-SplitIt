@@ -135,7 +135,8 @@ class EditCSMemberVC: UIViewController, Reusable {
     }
     
     private func setBinding() {
-        let input = EditCSMemberVM.Input(searchButtonTapped: searchBarButton.rx.tap,
+        let input = EditCSMemberVM.Input(viewDidLoad: Observable<Void>.just(()),
+                                         searchButtonTapped: searchBarButton.rx.tap,
                                          nextButtonTapped: header.rightButton.rx.tap)
         let output = viewModel.transform(input: input)
         

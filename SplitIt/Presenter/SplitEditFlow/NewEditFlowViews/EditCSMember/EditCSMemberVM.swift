@@ -13,6 +13,7 @@ class EditCSMemberVM {
     let disposeBag = DisposeBag()
     
     struct Input {
+        let viewDidLoad: Observable<Void>
         let searchButtonTapped: ControlEvent<Void>
         let nextButtonTapped: ControlEvent<Void>
     }
@@ -25,16 +26,16 @@ class EditCSMemberVM {
     
     func transform(input: Input) -> Output {
         let repo = SplitRepository.share
-        
-        let tableData = SplitRepository.share.csMemberArr
+        let tableData = repo.csMemberArr
         let showSearchView = input.searchButtonTapped
         let showExclView = input.nextButtonTapped
         
         input.nextButtonTapped
             .asDriver()
             .drive(onNext: {
-                repo.updateDataToDB()
-                
+                //
+                repo.editCSMemberAndExclMember()
+                print("repo.exclMemberArr.value: \(repo.exclMemberArr.value)")
             })
             .disposed(by: disposeBag)
         

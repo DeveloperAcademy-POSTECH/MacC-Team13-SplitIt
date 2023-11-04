@@ -165,9 +165,6 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
                 
                 let size = cell.contentView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
                 self.cellHeight.append(size)
-                print("현재 셀\(idx)의 높이\(size)")
-                print("추가된 배열\(cellHeight)")
-//                return cell
             }
             .disposed(by: disposeBag)
         
