@@ -60,6 +60,13 @@ final class EditCSListVM {
     }
     
     func transform(input: Input) -> Output {
+        input.viewDidLoad
+            .subscribe { [weak self]_ in
+                guard let self = self else { return }
+                self.dataModel.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: self.csInfoIdx)
+            }
+            .disposed(by: disposeBag)
+        
         let title = csinfo.map { $0.title }
         let totalAmount: Driver<NSMutableAttributedString> = csinfo.map { [weak self] csinfo in
             guard let self = self else { return NSMutableAttributedString(string: "") }
@@ -144,7 +151,13 @@ final class EditCSListVM {
             return finalString
         case 1:
             name = items[0].name
-            count = ""
+            let numberString = NSAttributedString(string: name, attributes: numberAttributes)
+            let textString = NSAttributedString(string: " 외  0 건", attributes: textAttributes)
+
+            let finalString = NSMutableAttributedString()
+            finalString.append(numberString)
+            finalString.append(textString)
+            return finalString
         default:
             name = items[1].name
             count = "\(items.count - 1)"

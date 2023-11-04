@@ -19,7 +19,7 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
     var disposeBag = DisposeBag()
     var viewModel = JSDetailVM()
     
-    let headerView = NaviHeader()
+    let headerView = SPNavigationBar()
     let collectionView = UITableView(frame: .zero)
     let nextButton = NewSPButton()
     let splitTitleTF = SPTextField()
@@ -49,8 +49,7 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
         view.backgroundColor = .SurfaceBrandCalmshell
         
         headerView.do {
-            $0.applyStyle(.edit)
-            $0.setBackButton(viewController: self)
+            $0.applyStyle(style: .splitEdit, vc: self)
         }
         
         titleLabel.do {
@@ -166,9 +165,6 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
                 
                 let size = cell.contentView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
                 self.cellHeight.append(size)
-                print("현재 셀\(idx)의 높이\(size)")
-                print("추가된 배열\(cellHeight)")
-//                return cell
             }
             .disposed(by: disposeBag)
         
@@ -208,7 +204,7 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
         output.pushCSEditView
             .drive(onNext: { [weak self] csinfoIdx in
                 guard let self = self else { return }
-                let vc = CSEditListVC(csinfoIdx: csinfoIdx)
+                let vc = EditCSListVC(csinfoIdx: csinfoIdx)
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)

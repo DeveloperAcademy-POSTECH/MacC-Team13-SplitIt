@@ -144,6 +144,12 @@
 		86C65FFE2AF0F6FB00A7942A /* DefaultEditButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FFD2AF0F6FB00A7942A /* DefaultEditButton.swift */; };
 		86C660002AF126DE00A7942A /* EditCSListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FFF2AF126DE00A7942A /* EditCSListVM.swift */; };
 		86D1E0C52AE6B4C100FBF610 /* ExclEditPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D1E0C42AE6B4C100FBF610 /* ExclEditPageController.swift */; };
+		86DACB0C2AF4ECC9008D7BAF /* EditCSInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB0B2AF4ECC9008D7BAF /* EditCSInfoVC.swift */; };
+		86DACB0E2AF4ECE7008D7BAF /* EditCSInfoVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB0D2AF4ECE7008D7BAF /* EditCSInfoVM.swift */; };
+		86DACB112AF639E0008D7BAF /* EditCSMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB102AF639E0008D7BAF /* EditCSMemberVC.swift */; };
+		86DACB132AF63A08008D7BAF /* EditCSMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB122AF63A08008D7BAF /* EditCSMemberVM.swift */; };
+		86DACB162AF63B99008D7BAF /* EditExclItemInputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB152AF63B99008D7BAF /* EditExclItemInputVC.swift */; };
+		86DACB182AF63BED008D7BAF /* EditExclItemInputVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB172AF63BED008D7BAF /* EditExclItemInputVM.swift */; };
 		C229F51A2AEA442E00F9E28D /* NewSPButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C229F5192AEA442E00F9E28D /* NewSPButton.swift */; };
 		C291BA132AF4DD6F009501F3 /* UIDevice+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C291BA122AF4DD6F009501F3 /* UIDevice+.swift */; };
 		C2A7978D2AE2740D0049E709 /* ONEMobileBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2A7978A2AE2740D0049E709 /* ONEMobileBold.ttf */; };
@@ -315,6 +321,12 @@
 		86C65FFD2AF0F6FB00A7942A /* DefaultEditButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultEditButton.swift; sourceTree = "<group>"; };
 		86C65FFF2AF126DE00A7942A /* EditCSListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVM.swift; sourceTree = "<group>"; };
 		86D1E0C42AE6B4C100FBF610 /* ExclEditPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclEditPageController.swift; sourceTree = "<group>"; };
+		86DACB0B2AF4ECC9008D7BAF /* EditCSInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSInfoVC.swift; sourceTree = "<group>"; };
+		86DACB0D2AF4ECE7008D7BAF /* EditCSInfoVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSInfoVM.swift; sourceTree = "<group>"; };
+		86DACB102AF639E0008D7BAF /* EditCSMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSMemberVC.swift; sourceTree = "<group>"; };
+		86DACB122AF63A08008D7BAF /* EditCSMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSMemberVM.swift; sourceTree = "<group>"; };
+		86DACB152AF63B99008D7BAF /* EditExclItemInputVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExclItemInputVC.swift; sourceTree = "<group>"; };
+		86DACB172AF63BED008D7BAF /* EditExclItemInputVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExclItemInputVM.swift; sourceTree = "<group>"; };
 		C229F5192AEA442E00F9E28D /* NewSPButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSPButton.swift; sourceTree = "<group>"; };
 		C291BA122AF4DD6F009501F3 /* UIDevice+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+.swift"; sourceTree = "<group>"; };
 		C2A7978A2AE2740D0049E709 /* ONEMobileBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileBold.ttf; sourceTree = "<group>"; };
@@ -994,6 +1006,7 @@
 		869D1AC92AE5292A00D166B1 /* SplitEditFlow */ = {
 			isa = PBXGroup;
 			children = (
+				86DACB092AF4EC4F008D7BAF /* NewEditFlowViews */,
 				86C65FFA2AF0F4B300A7942A /* EditCSListView */,
 				86C65FF02AEF96E700A7942A /* JSDetailView */,
 				86D1E0C32AE6B4AF00FBF610 /* ExclEditPageController */,
@@ -1100,6 +1113,43 @@
 				86D1E0C42AE6B4C100FBF610 /* ExclEditPageController.swift */,
 			);
 			path = ExclEditPageController;
+			sourceTree = "<group>";
+		};
+		86DACB092AF4EC4F008D7BAF /* NewEditFlowViews */ = {
+			isa = PBXGroup;
+			children = (
+				86DACB142AF63B01008D7BAF /* EditCSExclItem */,
+				86DACB0F2AF6393C008D7BAF /* EditCSMember */,
+				86DACB0A2AF4ECB8008D7BAF /* EditCSInfo */,
+			);
+			path = NewEditFlowViews;
+			sourceTree = "<group>";
+		};
+		86DACB0A2AF4ECB8008D7BAF /* EditCSInfo */ = {
+			isa = PBXGroup;
+			children = (
+				86DACB0B2AF4ECC9008D7BAF /* EditCSInfoVC.swift */,
+				86DACB0D2AF4ECE7008D7BAF /* EditCSInfoVM.swift */,
+			);
+			path = EditCSInfo;
+			sourceTree = "<group>";
+		};
+		86DACB0F2AF6393C008D7BAF /* EditCSMember */ = {
+			isa = PBXGroup;
+			children = (
+				86DACB102AF639E0008D7BAF /* EditCSMemberVC.swift */,
+				86DACB122AF63A08008D7BAF /* EditCSMemberVM.swift */,
+			);
+			path = EditCSMember;
+			sourceTree = "<group>";
+		};
+		86DACB142AF63B01008D7BAF /* EditCSExclItem */ = {
+			isa = PBXGroup;
+			children = (
+				86DACB152AF63B99008D7BAF /* EditExclItemInputVC.swift */,
+				86DACB172AF63BED008D7BAF /* EditExclItemInputVM.swift */,
+			);
+			path = EditCSExclItem;
 			sourceTree = "<group>";
 		};
 		C2A797872AE273E90049E709 /* Assets */ = {
@@ -1435,6 +1485,7 @@
 				60115E182ADD19CD0050D32C /* NumberFormatterHelper.swift in Sources */,
 				869D1AE42AE52BFF00D166B1 /* ExclItemNameEditVC.swift in Sources */,
 				60AE3EC32AE77491009D9D18 /* SplitResult.swift in Sources */,
+				86DACB182AF63BED008D7BAF /* EditExclItemInputVM.swift in Sources */,
 				60115E2D2ADE221D0050D32C /* CSMemberConfirmCell.swift in Sources */,
 				1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */,
 				1AF5F2B52AEE6D6C00DFB71A /* CSMemberVM.swift in Sources */,
@@ -1450,6 +1501,7 @@
 				86C65FFE2AF0F6FB00A7942A /* DefaultEditButton.swift in Sources */,
 				C229F51A2AEA442E00F9E28D /* NewSPButton.swift in Sources */,
 				C2A797912AE2748E0049E709 /* UIFont+.swift in Sources */,
+				86DACB162AF63B99008D7BAF /* EditExclItemInputVC.swift in Sources */,
 				60115E312ADE715E0050D32C /* CSMemberConfirmHeaderVM.swift in Sources */,
 				6009C8162AE29DFB008B9EC1 /* ResultVM.swift in Sources */,
 				604CDC7D2AF1522C00416454 /* ExclItemInfoEditModalVC.swift in Sources */,
@@ -1461,6 +1513,7 @@
 				60AD20F22ADF812300EFACCD /* ExclMemberVM.swift in Sources */,
 				60AD20E22ADEC15000EFACCD /* ExclItemNameInputVC.swift in Sources */,
 				869D1AEE2AE52C6900D166B1 /* ExclMemberEditVC.swift in Sources */,
+				86DACB132AF63A08008D7BAF /* EditCSMemberVM.swift in Sources */,
 				60C6F0802AE158950092836E /* ExclMemberSection.swift in Sources */,
 				C2A797962AE275110049E709 /* SPButton.swift in Sources */,
 				DEFE9D832AEAB80A009C693E /* KeyboardButton.swift in Sources */,
@@ -1500,6 +1553,7 @@
 				6078ACCC2ADA74AC00995811 /* AppDelegate.swift in Sources */,
 				DEFE9D982AEFC33B009C693E /* AccountCustomkeyboard.swift in Sources */,
 				DE73D6EB2AE0D29000ABF3EF /* BankManager.swift in Sources */,
+				86DACB0E2AF4ECE7008D7BAF /* EditCSInfoVM.swift in Sources */,
 				1A4DB2292ADE61E800616243 /* RealmManager.swift in Sources */,
 				1A3853032ADE5B4500E9A20B /* RealmCSMember.swift in Sources */,
 				1A3853012ADE5B3100E9A20B /* RealmCSInfo.swift in Sources */,
@@ -1510,6 +1564,7 @@
 				1A3853072ADE5B9D00E9A20B /* RealmExclMember.swift in Sources */,
 				6009C8192AE29E5D008B9EC1 /* ResultCell.swift in Sources */,
 				1A07DF092AE55E8F0081E543 /* ExclPageController.swift in Sources */,
+				86DACB112AF639E0008D7BAF /* EditCSMemberVC.swift in Sources */,
 				DE1711C82AE0BADD0097850D /* SocialPay.swift in Sources */,
 				604CDC862AF2396300416454 /* ExcltemInfoModalAlertVC.swift in Sources */,
 				1A8B05E32AF1540A00CF5BC5 /* SplitMethodSelectVM.swift in Sources */,
@@ -1546,6 +1601,7 @@
 				C291BA132AF4DD6F009501F3 /* UIDevice+.swift in Sources */,
 				869D1ACE2AE5298B00D166B1 /* CSEditListCell.swift in Sources */,
 				1A3852FD2ADE5B0100E9A20B /* ExclMember.swift in Sources */,
+				86DACB0C2AF4ECC9008D7BAF /* EditCSInfoVC.swift in Sources */,
 				DE73D6FC2AE1993F00ABF3EF /* MemberCell.swift in Sources */,
 				6032DCE42AECE4B3004A6BFA /* CSInfoVC.swift in Sources */,
 				60AD20EB2ADEC8BA00EFACCD /* ExclItemPriceInputVM.swift in Sources */,
