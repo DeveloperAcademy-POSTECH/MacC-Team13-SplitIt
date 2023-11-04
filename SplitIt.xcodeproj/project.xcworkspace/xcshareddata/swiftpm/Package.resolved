@@ -73,6 +73,15 @@
       }
     },
     {
+      "identity" : "snapshotkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/YK-Unit/SnapshotKit",
+      "state" : {
+        "revision" : "79452a8560f9caef218f46fecc46eb7615222b97",
+        "version" : "0.3.2"
+      }
+    },
+    {
       "identity" : "then",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/devxoul/Then",

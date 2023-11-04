@@ -8,27 +8,32 @@
 import UIKit
 
 extension UITableView {
-    func screenshot() -> UIImage? {
-        // self.scrollToRow(at: lastIndex, at: UITableView.ScrollPosition.none, animated: false)
-        
+    func screenshot(completion: @escaping (UIImage?) -> Void) {
         let contentWidthOrigin = self.contentSize.width
         let contentHeightOrigin = self.contentSize.height
-
         let savedContentOffset = self.contentOffset
         let savedFrame = self.frame
 
-        self.contentOffset = CGPoint.zero
-        self.layer.frame = CGRect(x: 0, y: 0, width: contentWidthOrigin, height: contentHeightOrigin)
+        self.contentOffset = .zero
 
-        UIGraphicsBeginImageContextWithOptions(CGSize(width: contentWidthOrigin, height: contentHeightOrigin), false, 2.0)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.layer.frame = CGRect(x: 0, y: 0, width: contentWidthOrigin * 2, height: contentHeightOrigin * 2)
+            self.layer.borderColor = UIColor.clear.cgColor
+            self.isScrollEnabled = false
 
-        self.layer.render(in: UIGraphicsGetCurrentContext()!)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsBeginImageContextWithOptions(CGSize(width: contentWidthOrigin, height: contentHeightOrigin), false, 3.0)
 
-        self.contentOffset = savedContentOffset
-        self.frame = savedFrame
-        UIGraphicsEndImageContext()
-        
-        return image
+            self.layer.render(in: UIGraphicsGetCurrentContext()!)
+            let capturedImage = UIGraphicsGetImageFromCurrentImageContext()
+
+            self.contentOffset = savedContentOffset
+            self.frame = savedFrame
+            self.layer.borderColor = UIColor.BorderPrimary.cgColor
+            self.isScrollEnabled = true
+
+            UIGraphicsEndImageContext()
+
+            completion(capturedImage)
+        }
     }
 }

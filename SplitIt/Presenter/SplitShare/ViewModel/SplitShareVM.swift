@@ -25,9 +25,10 @@ class SplitShareVM {
     
     struct Output {
         let split: BehaviorRelay<[Split]>
+        let csInfos: BehaviorRelay<[CSInfo]>
         let splitResult: BehaviorRelay<[SplitMemberResult]>
         let buttonState: BehaviorRelay<Bool>
-        let sendItems: BehaviorRelay<[Any]>
+        let showShareView: ControlEvent<Void>
         let showNewCSCreateFlow: ControlEvent<Void>
         let showCSEditView: ControlEvent<Void>
     }
@@ -37,9 +38,10 @@ class SplitShareVM {
         SplitRepository.share.fetchSplitArrFromDBWithSplitIdx(splitIdx:idx)
         
         let split: BehaviorRelay<[Split]> = repo.splitArr
+        let csInfos: BehaviorRelay<[CSInfo]> = repo.csInfoArr
         let splitResult: BehaviorRelay<[SplitMemberResult]> = BehaviorRelay(value: self.calcSplitResult())
-        let sendItems = BehaviorRelay<[Any]>(value: [])
         let shareButtonState = BehaviorRelay(value: false)
+        let showShareView = input.shareButtonTapped
         let showNewCSCreateFlow = input.csAddButtonTapped
         let showCSEditView = input.editButtonTapped
         
@@ -71,8 +73,7 @@ class SplitShareVM {
         input.shareButtonTapped
             .asDriver()
             .drive(onNext: {
-                guard let image = input.tableView.screenshot() else { return }
-                sendItems.accept(self.makeSendItem(image: image))
+                
             })
             .disposed(by: disposeBag)
         
@@ -83,7 +84,7 @@ class SplitShareVM {
             })
             .disposed(by: disposeBag)
         
-        return Output(split: split, splitResult: splitResult, buttonState: shareButtonState, sendItems: sendItems, showNewCSCreateFlow: showNewCSCreateFlow, showCSEditView: showCSEditView)
+        return Output(split: split, csInfos: csInfos, splitResult: splitResult, buttonState: shareButtonState, showShareView: showShareView, showNewCSCreateFlow: showNewCSCreateFlow, showCSEditView: showCSEditView)
     }
     
     // 결과 계산 로직 메서드
@@ -169,22 +170,5 @@ class SplitShareVM {
         }
         
         return splitResultArr
-    }
-    
-    // Image 받아와서 공유 item 만드는 메서드
-    private func makeSendItem(image: UIImage) -> [Any] {
-        var items: [Any] = []
-        
-        let acount = UserDefaults.standard.string(forKey: "userAccount") ?? ""
-        let bank = UserDefaults.standard.string(forKey: "userBank") ?? ""
-        
-        if acount == "" || bank == "" {
-            items = [image]
-        } else {
-            let userInfo = "\(String(describing: acount)) \(String(describing: bank))"
-            items = [image, userInfo]
-        }
-        
-        return items
     }
 }

@@ -70,6 +70,9 @@ class HistoryVM {
                     currentGroup = [split]
                 }
             }
+            
+            let newDateSection = CreateDateSection(items: currentGroup)
+            section.append(newDateSection)
         }
         return section
     }

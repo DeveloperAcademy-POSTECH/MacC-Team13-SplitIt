@@ -12,12 +12,14 @@ import RxAppState
 import Then
 import SnapKit
 import Reusable
+import SnapshotKit
 
 class SplitShareVC: UIViewController {
     let disposeBag = DisposeBag()
     let viewModel = SplitShareVM()
     
-    let header = NaviHeader()
+    let header = SPNavigationBar()
+    let mainTitle = UILabel()
     let tableView = UITableView(frame: .zero, style: .grouped)
     let csAddButton = NewSPButton()
     let editButton = NewSPButton()
@@ -26,6 +28,7 @@ class SplitShareVC: UIViewController {
     var splitDate: Date = .now
     
     var resultArr: [SplitMemberResult] = []
+    var csInfos: [CSInfo] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,29 +42,35 @@ class SplitShareVC: UIViewController {
         view.backgroundColor = .SurfacePrimary
         
         header.do {
-            $0.applyStyle(.print)
-            $0.setBackButton(viewController: self)
+            $0.applyStyle(style: .print, vc: self)
+        }
+        
+        mainTitle.do {
+            $0.text = "영수증을 스크롤하여 확인해보세요"
+            $0.font = .KoreanBody
+            $0.textColor = .TextPrimary
         }
         
         tableView.do {
             $0.separatorStyle = .none
             $0.delegate = self
-            $0.backgroundColor = UIColor(red: 0.9915664792, green: 0.9719635844, blue: 0.9203471541, alpha: 1)
+            $0.backgroundColor = .white
             $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
             $0.register(cellType: SplitShareTableCell.self)
             $0.rowHeight = UITableView.automaticDimension
             $0.estimatedRowHeight = 100
+            $0.showsVerticalScrollIndicator = false
         }
         
         csAddButton.do {
-            $0.applyStyle(style: .smallButton, shape: .square)
+            $0.applyStyle(style: .primaryMushroom, shape: .square)
             $0.setTitle("+ 2차 추가", for: .normal)
             $0.buttonState.accept(true)
         }
         
         editButton.do {
-            $0.applyStyle(style: .smallButton, shape: .square)
+            $0.applyStyle(style: .primaryCalmshell, shape: .square)
             $0.setTitle("✎ 정산 수정", for: .normal)
             $0.buttonState.accept(true)
         }
@@ -74,7 +83,7 @@ class SplitShareVC: UIViewController {
     }
     
     private func setLayout() {
-        [header,tableView,csAddButton,editButton,shareButton].forEach {
+        [header,mainTitle,tableView,csAddButton,editButton,shareButton].forEach {
             view.addSubview($0)
         }
         
@@ -84,8 +93,13 @@ class SplitShareVC: UIViewController {
             $0.leading.trailing.equalToSuperview()
         }
         
+        mainTitle.snp.makeConstraints {
+            $0.top.equalTo(header.snp.bottom).offset(30)
+            $0.centerX.equalToSuperview()
+        }
+        
         tableView.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(24)
+            $0.top.equalTo(mainTitle.snp.bottom).offset(24)
             $0.horizontalEdges.equalToSuperview().inset(30)
             $0.bottom.equalTo(csAddButton.snp.top).offset(-24)
         }
@@ -119,17 +133,22 @@ class SplitShareVC: UIViewController {
                                        tableView: tableView,
                                        csAddButtonTapped: csAddButton.rx.tap,
                                        editButtonTapped: editButton.rx.tap)
-        
         let output = viewModel.transform(input: input)
         
-        resultArr = output.splitResult.value
-        
         output.splitResult
-            .bind(to: tableView.rx.items(cellIdentifier: "SplitShareTableCell")) { _, item, cell in
-                if let cell = cell as? SplitShareTableCell {
-                    cell.configure(item: item)
-                }
-            }
+            .asDriver()
+            .drive(onNext: { [weak self] results in
+                guard let self = self else { return }
+                self.resultArr = results
+            })
+            .disposed(by: disposeBag)
+        
+        output.csInfos
+            .asDriver()
+            .drive(onNext: { [weak self] csInfos in
+                guard let self = self else { return }
+                self.csInfos = csInfos
+            })
             .disposed(by: disposeBag)
         
         output.split
@@ -140,26 +159,48 @@ class SplitShareVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
+        output.splitResult
+            .bind(to: tableView.rx.items(cellIdentifier: "SplitShareTableCell")) { indexPath, item, cell in
+                if let cell = cell as? SplitShareTableCell {
+                    cell.configure(item: item, indexPath: indexPath)
+                }
+            }
+            .disposed(by: disposeBag)
+        
         output.buttonState
             .asDriver()
             .drive(shareButton.buttonState)
             .disposed(by: disposeBag)
         
-        output.sendItems
+        output.showShareView
             .asDriver()
-            .drive(onNext: { items in
-                if items.count != 0 {
-                    let vc = UIActivityViewController(activityItems: items, applicationActivities: nil)
-                    vc.excludedActivityTypes = [.saveToCameraRoll]
-                    self.present(vc, animated: true)
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.tableView.layer.borderColor = UIColor.clear.cgColor
+                let image = self.tableView.takeSnapshotOfFullContent()
+                var items: [Any] = [image as Any]
+                
+                let acount = UserDefaults.standard.string(forKey: "userAccount") ?? ""
+                let bank = UserDefaults.standard.string(forKey: "userBank") ?? ""
+                let name = UserDefaults.standard.string(forKey: "userName") ?? ""
+                
+                if acount != "" && bank != "" {
+                    let userInfo = "\(String(describing: bank)) \(String(describing: acount)) \(String(describing: name))"
+                    items.append(userInfo)
                 }
+                
+                let vc = UIActivityViewController(activityItems: items, applicationActivities: nil)
+                vc.excludedActivityTypes = [.saveToCameraRoll]
+                self.present(vc, animated: true)
+                
+                self.tableView.layer.borderColor = UIColor.BorderPrimary.cgColor
             })
             .disposed(by: disposeBag)
         
         output.showNewCSCreateFlow
             .asDriver()
             .drive(onNext: {
-                let vc = CSInfoVC()
+                let vc = SplitMethodSelectVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
@@ -167,7 +208,6 @@ class SplitShareVC: UIViewController {
         output.showCSEditView
             .asDriver()
             .drive(onNext: { [weak self] _ in
-                // EditView로 이동하기
                 guard let self = self else { return }
                 let vc = JSDetailVC()
                 self.navigationController?.pushViewController(vc, animated: true)
@@ -179,10 +219,23 @@ class SplitShareVC: UIViewController {
 extension SplitShareVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = SplitShareSectionHeader()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy년 MM월 dd일"
-        headerView.dateLabel.text = "정산 날짜: \(dateFormatter.string(from: splitDate))"
+        headerView.configure(item: self.csInfos, splitDate: splitDate)
         return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        let count = csInfos.count
+        var defaultHeight: CGFloat = 100
+        
+        if count > 0 { defaultHeight += 18 }
+        
+        let headerHeight = defaultHeight + CGFloat(count * 20)
+        return headerHeight
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = SplitShareSectionFooter()
+        return footerView
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -11,6 +11,7 @@ import Then
 import SnapKit
 
 class SplitShareTableCell: UITableViewCell, Reusable {
+    let dotView = UIView()
     let nameLabel = UILabel()
     let priceLabel = UILabel()
     let krwLabel = UILabel()
@@ -38,8 +39,15 @@ class SplitShareTableCell: UITableViewCell, Reusable {
     }
     
     private func setAttribute() {
-        backgroundColor = UIColor(red: 0.9915664792, green: 0.9719635844, blue: 0.9203471541, alpha: 1)
+        backgroundColor = .white
         selectionStyle = .none
+        
+        dotView.do {
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
+            $0.layer.borderWidth = 1
+            $0.layer.cornerRadius = 4
+            $0.clipsToBounds = true
+        }
         
         nameLabel.do {
             $0.font = .KoreanBody
@@ -83,13 +91,19 @@ class SplitShareTableCell: UITableViewCell, Reusable {
     
     private func setLayout() {
         
-        [nameLabel,priceLabel,krwLabel,stackView,dashLineView].forEach {
+        [dotView,nameLabel,priceLabel,krwLabel,stackView,dashLineView].forEach {
             addSubview($0)
+        }
+        
+        dotView.snp.makeConstraints {
+            $0.centerY.equalTo(nameLabel)
+            $0.leading.equalToSuperview().offset(18)
+            $0.size.equalTo(8)
         }
         
         nameLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(12)
-            $0.leading.equalToSuperview().offset(18)
+            $0.leading.equalTo(dotView.snp.trailing).offset(4)
         }
         
         krwLabel.snp.makeConstraints {
@@ -114,7 +128,10 @@ class SplitShareTableCell: UITableViewCell, Reusable {
         }
     }
     
-    func configure(item: SplitMemberResult) {
+    func configure(item: SplitMemberResult, indexPath: Int) {
+        let colorSet: [UIColor] = [.SurfaceBrandCherry, .SurfaceBrandPear, .SurfaceBrandRadish, .SurfaceBrandWatermelon]
+        
+        dotView.backgroundColor = colorSet[indexPath % 4]
         nameLabel.text = item.memberName
         priceLabel.text = NumberFormatter.localizedString(from: item.memberPrice as NSNumber, number: .decimal)
         
@@ -122,7 +139,7 @@ class SplitShareTableCell: UITableViewCell, Reusable {
             let exclTitle = UILabel()
             
             exclTitle.do {
-                $0.text = "정산에서 제외"
+                $0.text = "  정산에서 제외"
                 $0.font = .KoreanCaption2
                 $0.textColor = .TextSecondary
             }
@@ -133,7 +150,7 @@ class SplitShareTableCell: UITableViewCell, Reusable {
                 let dataLabel = UILabel()
                 
                 dataLabel.do {
-                    $0.text = str
+                    $0.text = "   · \(str)"
                     $0.font = .KoreanCaption2
                     $0.textColor = .TextPrimary
                     $0.numberOfLines = 0
