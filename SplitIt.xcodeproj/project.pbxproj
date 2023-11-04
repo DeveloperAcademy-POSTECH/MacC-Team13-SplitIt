@@ -146,6 +146,8 @@
 		86DACB0E2AF4ECE7008D7BAF /* EditCSInfoVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB0D2AF4ECE7008D7BAF /* EditCSInfoVM.swift */; };
 		86DACB112AF639E0008D7BAF /* EditCSMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB102AF639E0008D7BAF /* EditCSMemberVC.swift */; };
 		86DACB132AF63A08008D7BAF /* EditCSMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB122AF63A08008D7BAF /* EditCSMemberVM.swift */; };
+		86DACB162AF63B99008D7BAF /* EditExclItemInputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB152AF63B99008D7BAF /* EditExclItemInputVC.swift */; };
+		86DACB182AF63BED008D7BAF /* EditExclItemInputVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB172AF63BED008D7BAF /* EditExclItemInputVM.swift */; };
 		C229F51A2AEA442E00F9E28D /* NewSPButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C229F5192AEA442E00F9E28D /* NewSPButton.swift */; };
 		C291BA132AF4DD6F009501F3 /* UIDevice+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C291BA122AF4DD6F009501F3 /* UIDevice+.swift */; };
 		C2A7978D2AE2740D0049E709 /* ONEMobileBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2A7978A2AE2740D0049E709 /* ONEMobileBold.ttf */; };
@@ -320,6 +322,8 @@
 		86DACB0D2AF4ECE7008D7BAF /* EditCSInfoVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSInfoVM.swift; sourceTree = "<group>"; };
 		86DACB102AF639E0008D7BAF /* EditCSMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSMemberVC.swift; sourceTree = "<group>"; };
 		86DACB122AF63A08008D7BAF /* EditCSMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSMemberVM.swift; sourceTree = "<group>"; };
+		86DACB152AF63B99008D7BAF /* EditExclItemInputVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExclItemInputVC.swift; sourceTree = "<group>"; };
+		86DACB172AF63BED008D7BAF /* EditExclItemInputVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExclItemInputVM.swift; sourceTree = "<group>"; };
 		C229F5192AEA442E00F9E28D /* NewSPButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSPButton.swift; sourceTree = "<group>"; };
 		C291BA122AF4DD6F009501F3 /* UIDevice+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+.swift"; sourceTree = "<group>"; };
 		C2A7978A2AE2740D0049E709 /* ONEMobileBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileBold.ttf; sourceTree = "<group>"; };
@@ -1109,6 +1113,7 @@
 		86DACB092AF4EC4F008D7BAF /* NewEditFlowViews */ = {
 			isa = PBXGroup;
 			children = (
+				86DACB142AF63B01008D7BAF /* EditCSExclItem */,
 				86DACB0F2AF6393C008D7BAF /* EditCSMember */,
 				86DACB0A2AF4ECB8008D7BAF /* EditCSInfo */,
 			);
@@ -1131,6 +1136,15 @@
 				86DACB122AF63A08008D7BAF /* EditCSMemberVM.swift */,
 			);
 			path = EditCSMember;
+			sourceTree = "<group>";
+		};
+		86DACB142AF63B01008D7BAF /* EditCSExclItem */ = {
+			isa = PBXGroup;
+			children = (
+				86DACB152AF63B99008D7BAF /* EditExclItemInputVC.swift */,
+				86DACB172AF63BED008D7BAF /* EditExclItemInputVM.swift */,
+			);
+			path = EditCSExclItem;
 			sourceTree = "<group>";
 		};
 		C2A797872AE273E90049E709 /* Assets */ = {
@@ -1464,6 +1478,7 @@
 				60115E182ADD19CD0050D32C /* NumberFormatterHelper.swift in Sources */,
 				869D1AE42AE52BFF00D166B1 /* ExclItemNameEditVC.swift in Sources */,
 				60AE3EC32AE77491009D9D18 /* SplitResult.swift in Sources */,
+				86DACB182AF63BED008D7BAF /* EditExclItemInputVM.swift in Sources */,
 				60115E2D2ADE221D0050D32C /* CSMemberConfirmCell.swift in Sources */,
 				1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */,
 				1AF5F2B52AEE6D6C00DFB71A /* CSMemberVM.swift in Sources */,
@@ -1479,6 +1494,7 @@
 				86C65FFE2AF0F6FB00A7942A /* DefaultEditButton.swift in Sources */,
 				C229F51A2AEA442E00F9E28D /* NewSPButton.swift in Sources */,
 				C2A797912AE2748E0049E709 /* UIFont+.swift in Sources */,
+				86DACB162AF63B99008D7BAF /* EditExclItemInputVC.swift in Sources */,
 				60115E312ADE715E0050D32C /* CSMemberConfirmHeaderVM.swift in Sources */,
 				6009C8162AE29DFB008B9EC1 /* ResultVM.swift in Sources */,
 				604CDC7D2AF1522C00416454 /* ExclItemInfoEditModalVC.swift in Sources */,

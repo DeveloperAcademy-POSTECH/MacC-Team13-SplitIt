@@ -214,7 +214,7 @@ class EditCSListVC: UIViewController {
         output.pushCSExclItemEditView
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                let vc = UIViewController()
+                let vc = EditExclItemInputVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
