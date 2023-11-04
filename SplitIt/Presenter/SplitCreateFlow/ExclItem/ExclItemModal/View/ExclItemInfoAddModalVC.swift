@@ -11,6 +11,7 @@ import RxCocoa
 import SnapKit
 import Then
 import RxDataSources
+import RxAppState
 
 class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
     
@@ -26,10 +27,11 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
     let contentView = UIView()
     let titleMessage = UILabel()
     let titleTextFiled = SPTextField()
-    let textFiledCounter = UILabel()
+    let titleTextFiledCounter = UILabel()
 
     let priceTitleMessage = UILabel()
     let priceTextFiled = SPTextField()
+    let priceTextFiledNotice = UILabel()
     
     let exclMemberMessage = UILabel()
     let tableView = UITableView()
@@ -53,6 +55,13 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         titleTextFiled.becomeFirstResponder()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        titleTextFiled.resignFirstResponder()
+        priceTextFiled.resignFirstResponder()
     }
     
     func setGestureRecognizer() {
@@ -88,7 +97,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
             $0.placeholder = "ex) 술, 삽겹살, 마라샹궈, 오이냉국"
         }
         
-        textFiledCounter.do {
+        titleTextFiledCounter.do {
             $0.font = .KoreanCaption1
             $0.textColor = .TextDeactivate
         }
@@ -105,6 +114,13 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
             $0.textColor = .TextDeactivate
         }
 
+        priceTextFiledNotice.do {
+            $0.text = "전체 총액을 넘을 수 없어요"
+            $0.font = .KoreanCaption1
+            $0.textColor = .SurfaceWarnRed
+            $0.isHidden = true
+        }
+        
         exclMemberMessage.do {
             $0.text = "제외할 분들을 선택하세요"
             $0.font = .KoreanBody
@@ -159,7 +175,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
 
         scrollView.addSubview(contentView)
         
-        [titleMessage, titleTextFiled, textFiledCounter, priceTitleMessage, priceTextFiled, exclMemberMessage, tableView].forEach {
+        [titleMessage, titleTextFiled, titleTextFiledCounter, priceTitleMessage, priceTextFiled, priceTextFiledNotice, exclMemberMessage, tableView].forEach {
             contentView.addSubview($0)
         }
         
@@ -189,11 +205,11 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
         titleTextFiled.snp.makeConstraints {
             $0.top.equalTo(titleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(48)
+            $0.height.equalTo(46)
         }
         
-        textFiledCounter.snp.makeConstraints {
-            $0.top.equalTo(titleTextFiled.snp.bottom).offset(8)
+        titleTextFiledCounter.snp.makeConstraints {
+            $0.top.equalTo(titleTextFiled.snp.bottom).offset(4)
             $0.trailing.equalTo(titleTextFiled.snp.trailing).inset(6)
         }
         
@@ -205,11 +221,16 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
         priceTextFiled.snp.makeConstraints {
             $0.top.equalTo(priceTitleMessage.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(48)
+            $0.height.equalTo(46)
+        }
+        
+        priceTextFiledNotice.snp.makeConstraints {
+            $0.leading.equalTo(priceTitleMessage)
+            $0.top.equalTo(priceTextFiled.snp.bottom).offset(8)
         }
         
         exclMemberMessage.snp.makeConstraints {
-            $0.top.equalTo(priceTextFiled.snp.bottom).offset(24)
+            $0.top.equalTo(priceTextFiled.snp.bottom).offset(48)
             $0.leading.equalTo(titleMessage.snp.leading).inset(8)
         }
         
@@ -232,12 +253,13 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
             priceTextFiled.rx.controlEvent(.editingDidBegin).map { UIControl.Event.editingDidBegin},
             priceTextFiled.rx.controlEvent(.editingDidEnd).map { UIControl.Event.editingDidEnd })
         
-        let input = ExclItemInfoAddModalVM.Input(title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
-                                              price: priceTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
-                                              titleTextFieldControlEvent: titleTFEvent,
-                                              priceTextFieldControlEvent: priceTFEvent,
-                                              cancelButtonTapped: header.cancelButton.rx.tap,
-                                              addButtonTapped: header.addButton.rx.tap)
+        let input = ExclItemInfoAddModalVM.Input(viewWillAppear: self.rx.viewWillAppear,
+                                                 title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
+                                                 price: priceTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
+                                                 titleTextFieldControlEvent: titleTFEvent,
+                                                 priceTextFieldControlEvent: priceTFEvent,
+                                                 cancelButtonTapped: header.cancelButton.rx.tap,
+                                                 addButtonTapped: header.addButton.rx.tap)
         let output = viewModel.transform(input: input)
         
         output.addButtonTapped
@@ -253,20 +275,22 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
             .disposed(by: disposeBag)
         
         output.titleCount
-            .drive(textFiledCounter.rx.text)
+            .drive(titleTextFiledCounter.rx.text)
             .disposed(by: disposeBag)
         
-        output.textFieldIsValid
+        output.titleTextFieldIsValid
+            .asDriver()
             .distinctUntilChanged()
             .drive(onNext: { [weak self] isValid in
                 guard let self = self else { return }
-                self.textFiledCounter.textColor = isValid
+                self.titleTextFiledCounter.textColor = isValid
                 ? .TextSecondary
                 : .AppColorStatusError
             })
             .disposed(by: disposeBag)
         
-        output.textFieldIsValid
+        output.titleTextFieldIsValid
+            .asDriver()
             .map { [weak self] isValid -> String in
                 guard let self = self else { return "" }
                 if !isValid {
@@ -291,7 +315,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
                 guard let self = self else { return }
                 switch event {
                 case .editingDidBegin:
-                    focusTitleTF()
+                    focusTitleTF(output: output)
                     unfocusPriceTF()
                     unfocusExclMember()
                 case .editingDidEnd:
@@ -439,6 +463,15 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
                 viewModel.sections.accept(sections)
             })
             .disposed(by: disposeBag)
+        
+        output.priceIsLimited
+            .drive(onNext: { [weak self] isLimited in
+                guard let self = self else { return }
+                UIView.transition(with: self.priceTextFiledNotice, duration: 0.33, options: .transitionCrossDissolve) {
+                    self.priceTextFiledNotice.isHidden = !isLimited
+                }
+            })
+            .disposed(by: disposeBag)
     }
 }
 
@@ -447,11 +480,11 @@ extension ExclItemInfoAddModalVC {
     func focusExclMember() {
         UIView.animate(withDuration: 0.33) {
             self.tableView.layer.borderColor = UIColor.BorderPrimary.cgColor
-//            self.tableView.backgroundColor = .SurfaceDeactivate
         }
         
         UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) {
             self.exclMemberMessage.textColor = .TextPrimary
+            self.priceTextFiledNotice.isHidden = true
         }
         
         var sections = viewModel.sections.value
@@ -462,7 +495,6 @@ extension ExclItemInfoAddModalVC {
     func unfocusExclMember() {
         UIView.animate(withDuration: 0.33) {
             self.tableView.layer.borderColor = UIColor.BorderDeactivate.cgColor
-//            self.tableView.backgroundColor = .SurfacePrimary
         }
         
         UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) {
@@ -474,7 +506,7 @@ extension ExclItemInfoAddModalVC {
         viewModel.sections.accept(sections)
     }
     
-    func focusTitleTF() {
+    func focusTitleTF(output: ExclItemInfoAddModalVM.Output) {
         self.titleTextFiled.becomeFirstResponder()
         
         UIView.animate(withDuration: 0.33) {
@@ -484,7 +516,11 @@ extension ExclItemInfoAddModalVC {
         UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) {
             self.titleMessage.textColor = .TextPrimary
             self.titleTextFiled.textColor = .TextPrimary
-            self.textFiledCounter.textColor = .TextSecondary
+            
+            self.priceTextFiledNotice.isHidden = true
+            self.titleTextFiledCounter.textColor = output.titleTextFieldIsValid.value
+            ? .TextSecondary
+            : .AppColorStatusError
         }
         
         view.layoutIfNeeded()
@@ -495,7 +531,7 @@ extension ExclItemInfoAddModalVC {
         
         self.titleMessage.textColor = .TextDeactivate
         self.titleTextFiled.textColor = .TextDeactivate
-        self.textFiledCounter.textColor = .TextDeactivate
+        self.titleTextFiledCounter.textColor = .TextDeactivate
     }
     
     func focusPriceTF() {
