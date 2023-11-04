@@ -206,7 +206,7 @@ class EditCSListVC: UIViewController {
         output.pushCSMemberEditView
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                let vc = UIViewController()
+                let vc = EditCSMemberVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
