@@ -270,6 +270,36 @@ extension SplitRepository {
         exclItemArr.accept(exclItems)
     }
     
+    func editCSMemberAndExclMember() {
+        let realm = RealmManager()
+        let currentCSInfoIdx = csMemberArr.value.first!.csInfoIdx
+        let realmCurrentCSMemberIdxArr = realm.bringCSMemberWithCSInfoIdxArr(csInfoIdxArr: [currentCSInfoIdx]).map { $0.csMemberIdx }
+        let exclItemIdxArr = exclItemArr.value.map { $0.exclItemIdx }
+        let realmCurrentExclMemberIdxArr = realm.bringExclMemberWithExclItemIdxArr(exclItemIdxArr: exclItemIdxArr).map { $0.exclMemberIdx }
+        
+        let currentExclMemberNameArr = exclMemberArr.value.map { $0.name }
+        var nameAndIsTargetHash: [String: Bool] = [:]
+        
+        exclMemberArr.value.forEach {
+            nameAndIsTargetHash.updateValue($0.isTarget, forKey: $0.name)
+        }
+        
+        realm.deleteCSMember(csMemberIdxArr: realmCurrentCSMemberIdxArr)
+        realm.deleteExclMember(exclMemberIdxArr: realmCurrentExclMemberIdxArr)
+        
+        realm.updateData(csMemberArr: csMemberArr.value)
+        
+        var newExclMembers: [ExclMember] = []
+        
+        for itemIdx in exclItemIdxArr {
+            for csMember in csMemberArr.value {
+                newExclMembers.append(ExclMember(exclItemIdx: itemIdx, name: csMember.name, isTarget: nameAndIsTargetHash[csMember.name] ?? false))
+            }
+        }
+        
+        realm.updateData(exclMemberArr: newExclMembers)
+    }
+    
     /// split의 createDate를 현재시간으로 수정
     private func editSplitCreateDate() {
         let splits: [Split] = splitArr.value
