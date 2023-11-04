@@ -194,6 +194,31 @@ class EditCSListVC: UIViewController {
                 self.exclLabel.attributedText = attriString
             })
             .disposed(by: disposeBag)
+        
+        output.pushCSEditTitlePriceView
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                let vc = EditCSInfoVC()
+                self.navigationController?.pushViewController(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        output.pushCSMemberEditView
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                let vc = UIViewController()
+                self.navigationController?.pushViewController(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        output.pushCSExclItemEditView
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                let vc = UIViewController()
+                self.navigationController?.pushViewController(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
     }
 
 }

@@ -144,7 +144,13 @@ final class EditCSListVM {
             return finalString
         case 1:
             name = items[0].name
-            count = ""
+            let numberString = NSAttributedString(string: name, attributes: numberAttributes)
+            let textString = NSAttributedString(string: " 외  0 건", attributes: textAttributes)
+
+            let finalString = NSMutableAttributedString()
+            finalString.append(numberString)
+            finalString.append(textString)
+            return finalString
         default:
             name = items[1].name
             count = "\(items.count - 1)"
