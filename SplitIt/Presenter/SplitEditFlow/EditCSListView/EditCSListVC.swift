@@ -26,6 +26,8 @@ class EditCSListVC: UIViewController {
     let memberEditBtn = DefaultEditButton()
     let exclLabel = UILabel()
     let exclEditBtn = DefaultEditButton()
+    let delButton = UILabel()
+    let delBtnTap = UITapGestureRecognizer()
     
     init(csinfoIdx: String) {
         self.disposeBag = DisposeBag()
@@ -47,6 +49,9 @@ class EditCSListVC: UIViewController {
     func setAttribute() {
         view.backgroundColor = .SurfaceBrandCalmshell
         
+        let atrString = NSMutableAttributedString(string: "이 차수 삭제하기")
+        atrString.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: atrString.length))
+        
         headerView.do {
             $0.applyStyle(style: .csEdit, vc: self)
         }
@@ -54,6 +59,15 @@ class EditCSListVC: UIViewController {
         titleLabel.do {
             $0.textColor = .TextPrimary
             $0.font = .KoreanTitle3
+        }
+        
+        delButton.do {
+            $0.attributedText = atrString
+            $0.textAlignment = .center
+            $0.font = .KoreanButtonText
+            $0.textColor = .SurfaceWarnRed
+            $0.isUserInteractionEnabled = true
+            $0.addGestureRecognizer(self.delBtnTap)
         }
     }
     
@@ -80,7 +94,7 @@ class EditCSListVC: UIViewController {
         let exclView = setExclView()
         
         
-        [headerView, subtitle, titlePriceView, subMember, memberView, subExcl, exclView].forEach {
+        [headerView, subtitle, titlePriceView, subMember, memberView, subExcl, exclView, delButton].forEach {
             view.addSubview($0)
         }
         
@@ -158,6 +172,10 @@ class EditCSListVC: UIViewController {
             $0.trailing.equalToSuperview().inset(16)
         }
         
+        delButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(40)
+        }
         
     }
     
@@ -165,7 +183,8 @@ class EditCSListVC: UIViewController {
         let input = EditCSListVM.Input(viewDidLoad: self.rx.viewWillAppear,
                                        titlePriceEditTapped: titlePriceEditBtn.rx.tap,
                                        memberEditTapped: memberEditBtn.rx.tap,
-                                       exclItemEditTapped: exclEditBtn.rx.tap)
+                                       exclItemEditTapped: exclEditBtn.rx.tap,
+                                       delButtonTapped: delBtnTap.rx.event)
         
         let output = viewModel.transform(input: input)
         
@@ -220,6 +239,16 @@ class EditCSListVC: UIViewController {
                 let vc = EditExclItemInputVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
+            .disposed(by: disposeBag)
+        
+        output.popDeleteCSInfo
+            .drive(onNext: { [weak self]_ in
+                self?.navigationController?.popViewController(animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        output.deleteBtnHidden
+            .drive(delButton.rx.isHidden)
             .disposed(by: disposeBag)
         
     }
