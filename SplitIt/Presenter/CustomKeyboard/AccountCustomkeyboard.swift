@@ -64,7 +64,7 @@ class AccountCustomKeyboard: UIInputViewController {
     
     func setAttribute() {
         
-        let inputView = UIInputView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 288), inputViewStyle: .keyboard)
+        let inputView = UIInputView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 291), inputViewStyle: .keyboard)
         inputView.backgroundColor = UIColor(hex: 0xFCFCFE)
         self.inputView = inputView
         
