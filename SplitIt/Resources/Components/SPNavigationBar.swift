@@ -105,8 +105,13 @@ final class SPNavigationBar: UIView {
             setLeftBackButton(action: .toBack, vc: vc)
             setRightBackButton(title: "확인", titleColor: .SurfaceBrandWatermelon, vc: vc)
         case .print:
-            setNaviTitle(title: "정산 영수증")
-            setExitButton(vc: vc)
+            if SplitRepository.share.isCreate {
+                setNaviTitle(title: "정산 결과")
+                setExitButton(vc: vc)
+            } else {
+                setNaviTitle(title: "정산 결과")
+                setLeftBackButton(action: .toBack, vc: vc)
+            }
         case .history:
             setNaviTitle(title: "과거 정산 내역")
             setLeftBackButton(action: .toBack, vc: vc)
