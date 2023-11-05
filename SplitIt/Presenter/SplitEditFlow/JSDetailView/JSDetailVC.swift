@@ -14,7 +14,7 @@ import RxCocoa
 import RxAppState
 import RealmSwift
 
-final class JSDetailVC: UIViewController, UIScrollViewDelegate {
+final class JSDetailVC: UIViewController, UIScrollViewDelegate, SPAlertDelegate {
     
     var disposeBag = DisposeBag()
     var viewModel = JSDetailVM()
@@ -26,6 +26,7 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
     let textFiledCounter = UILabel()
     let textFiledNotice = UILabel()
     let titleLabel = UILabel()
+    let alert = SPAlertController()
     
     var cellHeight = [0.0]
     
@@ -49,7 +50,7 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
         view.backgroundColor = .SurfaceBrandCalmshell
         
         headerView.do {
-            $0.applyStyle(style: .splitEdit, vc: self)
+            $0.applyStyle(style: .splitEditToAlert, vc: self)
         }
         
         titleLabel.do {
@@ -211,6 +212,27 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
         
         output.pushNextView
             .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                self.navigationController?.popViewController(animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        headerView.leftButton.rx.tap
+            .asDriver()
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                showAlert(view: self.alert,
+                          type: .warnNormal,
+                          title: "수정을 중단하시겠어요?",
+                          descriptions: "지금까지 수정하신 내역이 사라져요",
+                          leftButtonTitle: "취 소",
+                          rightButtonTitle: "중단하기")
+            })
+            .disposed(by: disposeBag)
+        
+        alert.rightButtonTapSubject
+            .asDriver(onErrorJustReturn: ())
+            .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.navigationController?.popViewController(animated: true)
             })

@@ -42,11 +42,15 @@ extension SPNavigationBar {
         case myInfo
         ///  멤버 추가 내역 View
         case memberSearchHistory
+        
+        case splitEditToAlert
+        /// Split수정 View
     }
     
     enum ActionType {
         case toBack
         case toRoot
+        case toAlert
     }
 }
 
@@ -116,6 +120,9 @@ final class SPNavigationBar: UIView {
         case .memberSearchHistory:
             setNaviTitle(title: "멤버 추가 내역")
             setLeftBackButton(action: .toBack, vc: vc)
+        case .splitEditToAlert:
+            setNaviTitle(title: "정산 수정")
+            setLeftBackButton(action: .toAlert, vc: vc)
         }
     }
     
@@ -224,6 +231,10 @@ final class SPNavigationBar: UIView {
         case .toRoot:
             let backAction = UIAction { action in
                 vc.navigationController?.popToRootViewController(animated: true)
+            }
+        case .toAlert:
+            let backAction = UIAction {_ in
+                
             }
             leftButton.addAction(backAction, for: .touchUpInside)
         }

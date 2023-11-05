@@ -95,13 +95,6 @@ final class EditCSListVM {
         let exclEditView = input.exclItemEditTapped.asDriver()
         let delbtn = input.delButtonTapped.asDriver()
         
-        delbtn
-            .map { [weak self] in
-                guard let self = self else { return $0 }
-                self.dataModel.deleteCSInfoAndRelatedData(csInfoIdx: self.csInfoIdx)
-                return $0
-            }
-        
         return Output(csTitle: title,
                       csTotalAmount: totalAmount,
                       csMember: member,
