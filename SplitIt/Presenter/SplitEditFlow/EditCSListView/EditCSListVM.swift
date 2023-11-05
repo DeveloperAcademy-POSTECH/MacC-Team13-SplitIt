@@ -16,6 +16,7 @@ final class EditCSListVM {
     let dataModel = SplitRepository.share
     let maxTextCount = 8
     let csInfoIdx: String
+    let csCount: Bool
     
     var csinfo: Driver<CSInfo> {
         dataModel.csInfoArr
@@ -38,6 +39,8 @@ final class EditCSListVM {
     }
     
     init(csinfoIdx: String) {
+        self.csCount = dataModel.csInfoArr.value.count > 1 ? false : true
+        
         dataModel.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: csinfoIdx)
         self.csInfoIdx = csinfoIdx
     }
@@ -47,6 +50,7 @@ final class EditCSListVM {
         let titlePriceEditTapped: ControlEvent<Void>
         let memberEditTapped: ControlEvent<Void>
         let exclItemEditTapped: ControlEvent<Void>
+        let delButtonTapped: ControlEvent<UITapGestureRecognizer>
     }
     
     struct Output {
@@ -57,6 +61,8 @@ final class EditCSListVM {
         let pushCSEditTitlePriceView: Driver<Void>
         let pushCSMemberEditView: Driver<Void>
         let pushCSExclItemEditView: Driver<Void>
+        let popDeleteCSInfo: Driver<UITapGestureRecognizer>
+        let deleteBtnHidden: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
@@ -87,7 +93,14 @@ final class EditCSListVM {
         let titlePriceEditView = input.titlePriceEditTapped.asDriver()
         let memberEditView = input.memberEditTapped.asDriver()
         let exclEditView = input.exclItemEditTapped.asDriver()
+        let delbtn = input.delButtonTapped.asDriver()
         
+        delbtn
+            .map { [weak self] in
+                guard let self = self else { return $0 }
+                self.dataModel.deleteCSInfoAndRelatedData(csInfoIdx: self.csInfoIdx)
+                return $0
+            }
         
         return Output(csTitle: title,
                       csTotalAmount: totalAmount,
@@ -95,7 +108,9 @@ final class EditCSListVM {
                       csExclItemString: exclString,
                       pushCSEditTitlePriceView: titlePriceEditView,
                       pushCSMemberEditView: memberEditView,
-                      pushCSExclItemEditView: exclEditView)
+                      pushCSExclItemEditView: exclEditView,
+                      popDeleteCSInfo: delbtn,
+                      deleteBtnHidden: Driver<Bool>.just(self.csCount))
     }
     
     func memberAttributeString(member: [CSMember]) -> NSMutableAttributedString {
@@ -116,7 +131,10 @@ final class EditCSListVM {
             count = ""
         case 1:
             name = member[0].name
-            count = ""
+            let numberString = NSAttributedString(string: name, attributes: numberAttributes)
+            let finalString = NSMutableAttributedString()
+            finalString.append(numberString)
+            return finalString
         default:
             name = member[1].name
             count = "\(member.count - 1)"
@@ -152,11 +170,9 @@ final class EditCSListVM {
         case 1:
             name = items[0].name
             let numberString = NSAttributedString(string: name, attributes: numberAttributes)
-            let textString = NSAttributedString(string: " 외  0 건", attributes: textAttributes)
 
             let finalString = NSMutableAttributedString()
             finalString.append(numberString)
-            finalString.append(textString)
             return finalString
         default:
             name = items[1].name
