@@ -15,11 +15,12 @@ class CSMemberVM {
     struct Input {
         let searchButtonTapped: ControlEvent<Void>
         let nextButtonTapped: ControlEvent<Void>
+        let tableViewTapped: ControlEvent<UITapGestureRecognizer>
     }
     
     struct Output {
         let tableData: BehaviorRelay<[CSMember]>
-        let showSearchView: ControlEvent<Void>
+        let showSearchView: Driver<Void>
         let showExclView: ControlEvent<Void>
     }
     
@@ -27,8 +28,12 @@ class CSMemberVM {
         let repo = SplitRepository.share
         
         let tableData = SplitRepository.share.csMemberArr
-        let showSearchView = input.searchButtonTapped
         let showExclView = input.nextButtonTapped
+        
+        let showSearchView: Driver<Void> = Driver.merge(
+            input.searchButtonTapped.asDriver().map { _ in () },
+            input.tableViewTapped.asDriver().map { _ in () }
+        )
         
         input.nextButtonTapped
             .asDriver()

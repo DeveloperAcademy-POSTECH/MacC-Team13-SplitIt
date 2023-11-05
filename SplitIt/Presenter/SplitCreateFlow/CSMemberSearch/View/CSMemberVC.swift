@@ -25,6 +25,8 @@ class CSMemberVC: UIViewController, Reusable {
     let memberTableView = UITableView(frame: .zero)
     let nextButton = NewSPButton()
     
+    let tableViewTapGesture = UITapGestureRecognizer()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -84,6 +86,7 @@ class CSMemberVC: UIViewController, Reusable {
             $0.rowHeight = 48
             $0.contentInset = inset
             $0.showsVerticalScrollIndicator = false
+            $0.addGestureRecognizer(tableViewTapGesture)
         }
         
         nextButton.do {
@@ -149,7 +152,7 @@ class CSMemberVC: UIViewController, Reusable {
     
     private func setBinding() {
         let input = CSMemberVM.Input(searchButtonTapped: searchBarButton.rx.tap,
-                                     nextButtonTapped: nextButton.rx.tap)
+                                     nextButtonTapped: nextButton.rx.tap, tableViewTapped: tableViewTapGesture.rx.event)
         let output = viewModel.transform(input: input)
         
         output.tableData
