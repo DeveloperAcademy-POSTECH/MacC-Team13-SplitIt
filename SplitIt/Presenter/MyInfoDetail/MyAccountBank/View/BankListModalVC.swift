@@ -42,7 +42,7 @@ class BankListModalVC: UIViewController, UIScrollViewDelegate {
         }
         
         topView.snp.makeConstraints { make in
-            make.width.equalTo(390)
+            make.leading.trailing.equalToSuperview()
             make.height.equalTo(90)
             make.top.centerX.equalToSuperview()
         }

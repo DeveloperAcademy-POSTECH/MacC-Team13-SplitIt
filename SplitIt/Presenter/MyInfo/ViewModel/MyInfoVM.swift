@@ -43,15 +43,15 @@ class MyInfoVM: UIViewController {
         let emptyEditAccountViewTapped = input.emptyEditAccountViewTapped
         let madeByWCCTBtnTapped = input.madeByWCCTBtnTapped
         repo.fetchMemberLog()
-        
-        if userDefault.object(forKey: "tossPay") == nil ||
-           userDefault.object(forKey: "kakaoPay") == nil ||
-           userDefault.object(forKey: "naverPay") == nil {
-            userDefault.set(false, forKey: "tossPay")
-            userDefault.set(false, forKey: "kakaoPay")
-            userDefault.set(false, forKey: "naverPay")
-        }
-        
+//        
+//        if userDefault.object(forKey: "tossPay") == nil ||
+//           userDefault.object(forKey: "kakaoPay") == nil ||
+//           userDefault.object(forKey: "naverPay") == nil {
+//            userDefault.set(false, forKey: "tossPay")
+//            userDefault.set(false, forKey: "kakaoPay")
+//            userDefault.set(false, forKey: "naverPay")
+//        }
+//        
         
         
         let output = Output(moveToPrivacyView: privacyBtnTapped,

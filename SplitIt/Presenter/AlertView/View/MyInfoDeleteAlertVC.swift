@@ -15,6 +15,7 @@ import Then
 class MyInfoDeleteAlertVC: UIViewController {
     
     weak var delegate: MyInfoDeleteAlertVCDelegate?
+    weak var deleteBtnDelegate: MyInfoPressedBtnDelegate?
     let disposeBag = DisposeBag()
     
     let alertView = UIView()
@@ -51,7 +52,13 @@ class MyInfoDeleteAlertVC: UIViewController {
             .asObservable()
             .subscribe(onNext: { [weak self] in
                 self?.delegate?.deleteAllInfo()
-                self?.dismiss(animated: false)
+                self?.deleteBtnDelegate?.newLayout()
+                //self?.dismiss(animated: false)
+                self?.dismiss(animated: false, completion: {
+                    if let myInfoVC = self?.presentingViewController as? MyInfoVC {
+                        myInfoVC.viewWillAppear(false) // 수동으로 viewWillAppear 호출
+                    }
+                })
             })
             .disposed(by: disposeBag)
     }

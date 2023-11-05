@@ -17,8 +17,7 @@ protocol MyInfoDeleteAlertVCDelegate: AnyObject {
 }
 
 class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDeleteAlertVCDelegate {
-    
-    
+
     let accountTextRelay = BehaviorRelay<String?>(value: "")
     let accountCustomKeyboard = AccountCustomKeyboard()
 
@@ -75,7 +74,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
     let deleteBtn = UIButton()
     
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -86,11 +84,12 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
         setBinding()
         asapRxData()
         accountTextFieldCustomKeyboard()
+        textFieldTextAttribute()
+        
         
         let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
-        
         
     }
     
@@ -122,33 +121,33 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
         let nameTextCheck = nameTextField.rx.text.orEmpty.asObservable()
         let bankCheck = bankNameLabel.rx.observe(String.self, "text").map { $0 ?? "" }
         
-        Observable.combineLatest(nameTextCheck, accountTextCheck, nickNameTextCheck, bankCheck)
-            .subscribe(onNext: { nameText, accountText, nickNameText, bankText in
-                
-                if self.userDefault.string(forKey: "userNickName") != nil &&
-                    self.userDefault.string(forKey: "userAccount") != nil &&
-                    self.userDefault.string(forKey: "userBank") != nil {
-                    self.header.buttonState.accept(true)
-                }
-                
-                // nickname없는 상태
-                if self.userDefault.string(forKey: "userNickName") == nil {
-                    //nickName쓰고 있는 중
-                    if !nickNameText.isEmpty {
-                        self.header.buttonState.accept(true)
-                    } else {
-                        self.header.buttonState.accept(false)
-                    }
-                //nickName 저장되어 있는 상태
-                } else {
-                    if !accountText.isEmpty && bankText != "은행을 선택해주세요" {
-                        self.header.buttonState.accept(true)
-                        print(1)
-                    }
-                }
-              
-            })
-            .disposed(by: disposeBag)
+        
+//        Observable.combineLatest(nameTextCheck, accountTextCheck, nickNameTextCheck, bankCheck)
+//            .subscribe(onNext: { nameText, accountText, nickNameText, bankText in
+//
+//                if self.userDefault.string(forKey: "userNickName") != nil &&
+//                    self.userDefault.string(forKey: "userAccount") != nil &&
+//                    self.userDefault.string(forKey: "userBank") != nil {
+//                    self.header.buttonState.accept(true)
+//                }
+//
+//                // nickname없는 상태
+//                if self.userDefault.string(forKey: "userNickName") == "" {
+//                    //nickName쓰고 있는 중
+//                    if !nickNameText.isEmpty {
+//                        self.header.buttonState.accept(true)
+//                    } else {
+//                        self.header.buttonState.accept(false)
+//                    }
+//                //nickName 저장되어 있는 상태
+//                } else {
+//                    if !accountText.isEmpty && bankText != "은행을 선택해주세요" {
+//                        self.header.buttonState.accept(true)
+//                    }
+//                }
+//
+//            })
+//            .disposed(by: disposeBag)
 
         
         accountTextField.rx.text.orEmpty
@@ -159,6 +158,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
                 }
             })
             .disposed(by: disposeBag)
+        
         
         
     }
@@ -198,7 +198,8 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
                 modalVC.selectedBankName
                     .bind { bankName in
                         if bankName != "은행을 선택해주세요" {
-                            self?.userDefault.set(bankName, forKey: "userBank")
+                            self?.bankNameLabel.text = bankName
+                            //self?.userDefault.set(bankName, forKey: "userBank")
                             print(bankName)
                         }
                     }
@@ -213,14 +214,18 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
             })
             .disposed(by: disposeBag)
         
+     
     }
     
-    
     func deleteAllInfo() {
-        for key in UserDefaults.standard.dictionaryRepresentation().keys {
-            print(key.description)
-            UserDefaults.standard.removeObject(forKey: key.description)
-        }
+        UserDefaults.standard.set(false, forKey: "tossPay")
+        UserDefaults.standard.set(false, forKey: "kakaoPay")
+        UserDefaults.standard.set(false, forKey: "naverPay")
+        UserDefaults.standard.set("", forKey: "userAccount")
+        UserDefaults.standard.set("", forKey: "userNickName")
+        UserDefaults.standard.set("", forKey: "userName")
+        UserDefaults.standard.set("", forKey: "userBank")
+        
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -233,6 +238,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
     
     //UserDefaluts 변경되는 값에 따라 바로 UI 변경되도록 하는 함수
     func asapRxData() {
+                
         userDefault.rx
             .observe(Bool.self, "tossPay")
             .subscribe(onNext: { value in
@@ -265,11 +271,10 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
             .observe(String.self, "userBank")
             .subscribe(onNext: { value in
                 guard let value = value else { return }
-                self.bankNameLabel.text = value
+                self.bankNameLabel.text = value != "" ? value : "은행을 선택해주세요"
                 self.isBankSelected = true
             })
             .disposed(by: disposeBag)
-        
         
     }
     
@@ -279,8 +284,8 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
         return tapGesture
     }
     
-    func setAttribute() {
-        //이름 글자수 카운트
+    //textField의 글자수 제한, warn 등 에 대한 함수
+    func textFieldTextAttribute() {
         nickNameTextField.rx.text.orEmpty
             .map { text -> String in
                 let cnt = min(text.count, 8)
@@ -325,7 +330,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
                 }
             })
             .disposed(by: disposeBag)
-
         accountTextField.rx.text.orEmpty
             .map { text -> String in
                 let cnt = min(text.count, 17)
@@ -348,8 +352,9 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
                 
             })
             .disposed(by: disposeBag)
-        
-        
+    }
+    
+    func setAttribute() {
         
         view.backgroundColor = .SurfaceBrandCalmshell
         
@@ -371,24 +376,23 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
         }
         
         nickNameCountLabel.do {
-           // $0.textColor = .TextSecondary
             $0.font = UIFont.KoreanCaption2
+            $0.textColor = UIColor.TextSecondary
         }
         
-
+        
         nickNameTextField.do {
             $0.applyStyle(.normal)
             $0.font = UIFont.KoreanCaption1
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
             
-            //MARK: 토마토, 수정뷰로 넘어왔을 때, 검은색 글자면은 이미 입력되어있는 것처럼 보여서 회색으로 처리해두었어요
-            if UserDefaults.standard.string(forKey: "userNickName") == nil {
-                $0.attributedPlaceholder = NSAttributedString(string: "닉네임을 입력해주세요",
-                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextDeactivate])
+            if userDefault.string(forKey: "userNickName") == nil || userDefault.string(forKey: "userNickName") == "" {
+                $0.placeholder = "닉네임을 입력해주세요"
             } else {
-                $0.attributedPlaceholder = NSAttributedString(string: userDefault.string(forKey: "userNickName")!,
-                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextPrimary])
+                
+                $0.text = userDefault.string(forKey: "userNickName")
+
             }
             
         }
@@ -408,7 +412,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
         }
         
         bankNameLabel.do {
-            if UserDefaults.standard.string(forKey: "userBank") == nil {
+            if userDefault.string(forKey: "userBank") == "" {
                 $0.text = "은행을 선택해주세요"
                 $0.tintColor = .TextPrimary
             } else {
@@ -434,19 +438,18 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
   
-            //MARK: 토마토, 수정뷰로 넘어왔을 때, 검은색 글자면은 이미 입력되어있는 것처럼 보여서 회색으로 처리해두었어요
-            if UserDefaults.standard.string(forKey: "userAccount") == nil {
-                $0.attributedPlaceholder = NSAttributedString(string: "계좌번호를 입력해주세요",
-                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextDeactivate])
+            if userDefault.string(forKey: "userAccount") == nil || userDefault.string(forKey: "userAccount") == "" {
+                $0.placeholder = "계좌번호를 입력해주세요"
             } else {
-                $0.attributedPlaceholder = NSAttributedString(string: userDefault.string(forKey: "userAccount")!,
-                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextPrimary])
+                $0.text = userDefault.string(forKey: "userAccount")
             }
             
         }
         
         accountCountLabel.do {
             $0.font = UIFont.KoreanCaption2
+            $0.textColor = UIColor.TextSecondary
+
         }
         
         nameLabel.do {
@@ -457,6 +460,8 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
         
         nameCountLabel.do {
             $0.font = UIFont.KoreanCaption2
+            $0.textColor = UIColor.TextSecondary
+
         }
         
         nameTextField.do {
@@ -465,17 +470,12 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
             
-            //placeholder의 색깔
-            if UserDefaults.standard.string(forKey: "userName") == nil {
-                $0.attributedPlaceholder = NSAttributedString(string: "성함을 입력해주세요",
-                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextDeactivate])
-                //$0.textColor = .TextDeactivate
+            if userDefault.string(forKey: "userName") == nil || userDefault.string(forKey: "userName") == "" {
+                $0.placeholder = "성함을 입력해주세요"
             } else {
-                $0.attributedPlaceholder = NSAttributedString(string: userDefault.string(forKey: "userName")!,
-                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.TextPrimary])
+                $0.text = userDefault.string(forKey: "userName")
             }
-            
-            
+        
         }
         
         payLabel.do {

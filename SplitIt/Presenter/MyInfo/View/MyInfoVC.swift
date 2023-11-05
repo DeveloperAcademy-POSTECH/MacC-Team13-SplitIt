@@ -13,10 +13,18 @@ import SnapKit
 import Then
 import RealmSwift
 
-class MyInfoVC: UIViewController {
+
+protocol MyInfoPressedBtnDelegate: AnyObject {
+    func newLayout()
+}
+
+class MyInfoVC: UIViewController, MyInfoPressedBtnDelegate {
+    
+    
+    
     
     let header = SPNavigationBar()
-
+    
     var viewModel = MyInfoVM()
     var disposeBag = DisposeBag()
     let userDefault = UserDefaults.standard
@@ -28,6 +36,9 @@ class MyInfoVC: UIViewController {
     var kakaoPos: CGFloat = 100
     var naverPos: CGFloat = 300
     
+    let tossValue = UserDefaults.standard.bool(forKey: "tossPay")
+    let kakaoValue = UserDefaults.standard.bool(forKey: "kakaoPay")
+    let naverValue = UserDefaults.standard.bool(forKey: "naverPay")
     
     //>>>backView위에 그려지는 뷰
     //>>>accountView 시작
@@ -72,7 +83,7 @@ class MyInfoVC: UIViewController {
     
     let notUsedPay = UILabel() //간편페이를 사용하지 않아요
     let notUsedAccount = UILabel() //계좌 정보가 없어요
-
+    
     let friendListView = UIView()
     let friendListLabel = UILabel()
     let friendImage = UIImageView()
@@ -80,7 +91,7 @@ class MyInfoVC: UIViewController {
     
     let privacyBtn = UIButton()
     let madeByWCCTBtn = UIButton()
-
+    
     func setLayout() {
         
         header.snp.makeConstraints {
@@ -88,7 +99,7 @@ class MyInfoVC: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             $0.leading.trailing.equalToSuperview()
         }
-
+        
         backView.snp.makeConstraints {
             $0.height.equalTo(104)
             $0.leading.trailing.equalToSuperview().inset(30)
@@ -219,7 +230,7 @@ class MyInfoVC: UIViewController {
             $0.leading.equalToSuperview().offset(16)
             $0.top.equalTo(mainLabel.snp.bottom).offset(4)
         }
-
+        
         emptyAccountEditLabel.snp.makeConstraints {
             $0.bottom.equalToSuperview().inset(14)
             $0.trailing.equalTo(emptyAccountEditChevron.snp.leading).offset(-4)
@@ -243,12 +254,12 @@ class MyInfoVC: UIViewController {
         }
         
     }
-
+    
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
-
+        
         setAddView()
         setAttribute()
         setLayout()
@@ -261,21 +272,29 @@ class MyInfoVC: UIViewController {
         userNewInfo()
     }
     
+    
+    
     func userNewInfo() {
         
-        var tossValue = UserDefaults.standard.bool(forKey: "tossPay")
-        var kakaoValue = UserDefaults.standard.bool(forKey: "kakaoPay")
-        var naverValue = UserDefaults.standard.bool(forKey: "naverPay")
+        let tossValue = UserDefaults.standard.bool(forKey: "tossPay")
+        let kakaoValue = UserDefaults.standard.bool(forKey: "kakaoPay")
+        let naverValue = UserDefaults.standard.bool(forKey: "naverPay")
         
-        let checkPay = tossValue || kakaoValue || naverValue //하나라도 참이면 checkPay는 참
+        //정보가 없다면 false, 정보 있으면 true
+        var nickName: Bool = userDefault.string(forKey: "userNickName") == "" ? false : true
+        var name: Bool = userDefault.string(forKey: "userName") == "" ? false : true
+        var account: Bool = userDefault.string(forKey: "userAccount") == "" ? false : true
+        var bank: Bool = userDefault.string(forKey: "userBank") == "" ? false : true
+        var checkPay = tossValue || kakaoValue || naverValue //하나라도 참이면 checkPay는 참
         
-        self.userName.text = userDefault.string(forKey: "userNickName")
+        self.userName.text = userDefault.string(forKey: "userNickName") == "" ? "정산자" : userDefault.string(forKey: "userNickName")
         self.accountBankLabel.text = userDefault.string(forKey: "userBank")
         self.accountLabel.text = userDefault.string(forKey: "userAccount")
         self.accountNameLabel.text = userDefault.string(forKey: "userName")
-            
         
-        if userDefault.string(forKey: "userNickName") == nil {
+        print(nickName, name, account, bank)
+        //모든 정보가 없을 때,
+        if !nickName && !name && !account && !bank && !checkPay {
             backViewHeight = 104
             
             accountView.isHidden = true
@@ -285,135 +304,108 @@ class MyInfoVC: UIViewController {
                 make.height.equalTo(backViewHeight)
             }
             
-        } else {
+        }
+        //페이류만 있을 때
+        else if checkPay {
             
             accountView.isHidden = false
             emptyView.isHidden = true
-            print(tossValue, kakaoValue, naverValue)
-            if userDefault.string(forKey: "userBank") != nil ||
-                userDefault.string(forKey: "userAccount") != nil ||
-                userDefault.string(forKey: "userName") != nil {
+            
+            notUsedAccount.isHidden = account
+            notUsedPay.isHidden = checkPay
+            tossPayBtn.isHidden = !tossValue
+            kakaoPayBtn.isHidden = !kakaoValue
+            naverPayBtn.isHidden = !naverValue
+            
+            backViewHeight = 221
+            
+            tossPos = tossValue ? 12 : 0
+            
+            if tossValue { //토스가 true
+                kakaoPos = 70
                 
-                //페이류까지 다 있는 경우
-                if checkPay {
-                    
-                    notUsedAccount.isHidden = true
-                    notUsedPay.isHidden = checkPay
-                    tossPayBtn.isHidden = !tossValue
-                    kakaoPayBtn.isHidden = !kakaoValue
-                    naverPayBtn.isHidden = !naverValue
-                    
-                    backViewHeight = 221
-                    
-                    tossPos = tossValue ? 12 : 0
-                    
-                    if tossValue { //토스가 true
-                        kakaoPos = 70
-                        
-                        if kakaoValue { //카카오가 참
-                            naverPos = 128
-                        } else { //카카오가 거짓
-                            naverPos = 70
-                        }
-                    } else { //토스가 false
-                        kakaoPos = 12
-                        
-                        if kakaoValue { //카카오가 참
-                            naverPos = 70
-                        } else { //카카오가 거짓
-                            naverPos = 12
-                        }
-                    }
-                    
-                    backView.snp.updateConstraints { make in
-                        make.height.equalTo(backViewHeight)
-                        
-                    }
-                    
-                    accountView.snp.updateConstraints { make in
-                        make.height.equalTo(backViewHeight)
-                        
-                    }
-                    
-                    tossPayBtn.snp.updateConstraints { make in
-                        make.width.height.equalTo(50)
-                        make.leading.equalTo(accountView.snp.leading).offset(tossPos)
-                        make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
-                    }
-                    
-                    kakaoPayBtn.snp.makeConstraints { make in
-                        make.width.height.equalTo(50)
-                        make.leading.equalTo(accountView.snp.leading).offset(kakaoPos)
-                        make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
-                    }
-                    
-                    naverPayBtn.snp.makeConstraints { make in
-                        make.width.height.equalTo(50)
-                        make.leading.equalTo(accountView.snp.leading).offset(naverPos)
-                        make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
-                    }
-                    
-                    
-                    
-                    
-                    
+                if kakaoValue { //카카오가 참
+                    naverPos = 128
+                } else { //카카오가 거짓
+                    naverPos = 70
                 }
+            } else { //토스가 false
+                kakaoPos = 12
                 
-                //닉네임, 은행, 계좌, 예금주 다 있을 때, 근데 페이류는 없음
-                else {
-                    
-                    
-                    notUsedAccount.isHidden = true
-                    notUsedPay.isHidden = false
-                    tossPayBtn.isHidden = true
-                    kakaoPayBtn.isHidden = true
-                    naverPayBtn.isHidden = true
-                    
-                    backViewHeight = 188
-                    
-                    backView.snp.updateConstraints { make in
-                        make.height.equalTo(backViewHeight)
-                        
-                    }
-                    
-                    accountView.snp.updateConstraints { make in
-                        make.height.equalTo(backViewHeight)
-                        
-                    }
-                    
+                if kakaoValue { //카카오가 참
+                    naverPos = 70
+                } else { //카카오가 거짓
+                    naverPos = 12
                 }
-                //닉네임만 있을 때
-            } else {
-                backViewHeight = 186
-                
-                emptyView.isHidden = true
-                accountView.isHidden = false
-                
-                notUsedAccount.isHidden = false
-                notUsedPay.isHidden = false
-                
-             
-                backView.snp.updateConstraints { make in
-                    make.height.equalTo(backViewHeight)
-                }
-                
-                accountView.snp.updateConstraints { make in
-                    make.height.equalTo(backViewHeight)
-                }
+            }
+            
+            backView.snp.updateConstraints { make in
+                make.height.equalTo(backViewHeight)
                 
             }
             
+            accountView.snp.updateConstraints { make in
+                make.height.equalTo(backViewHeight)
+                
+            }
             
+            tossPayBtn.snp.updateConstraints { make in
+                make.width.height.equalTo(50)
+                make.leading.equalTo(accountView.snp.leading).offset(tossPos)
+                make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
+            }
             
+            kakaoPayBtn.snp.makeConstraints { make in
+                make.width.height.equalTo(50)
+                make.leading.equalTo(accountView.snp.leading).offset(kakaoPos)
+                make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
+            }
+            
+            naverPayBtn.snp.makeConstraints { make in
+                make.width.height.equalTo(50)
+                make.leading.equalTo(accountView.snp.leading).offset(naverPos)
+                make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
+            }
             
         }
         
+        //페이류 없을 때
+        else {
+            
+            accountView.isHidden = false
+            emptyView.isHidden = true
+            
+            notUsedAccount.isHidden = account
+            notUsedPay.isHidden = checkPay
+            tossPayBtn.isHidden = true
+            kakaoPayBtn.isHidden = true
+            naverPayBtn.isHidden = true
+            
+            backViewHeight = 188
+            
+            backView.snp.updateConstraints { make in
+                make.height.equalTo(backViewHeight)
+                
+            }
+            
+            accountView.snp.updateConstraints { make in
+                make.height.equalTo(backViewHeight)
+                
+            }
+            
+        }
         
-        
+        self.view.setNeedsLayout()
         self.view.layoutIfNeeded()
     }
     
-
+    //delegate 때문에 이렇게 해 둠
+    func newLayout() {
+        self.view.setNeedsLayout()
+        self.view.layoutIfNeeded()
+    }
+    
+    
     func setBinding() {
         
         let friendListTap = addTapGesture(to: friendListView)
@@ -432,14 +424,14 @@ class MyInfoVC: UIViewController {
         
         output.moveToPrivacyView
             .drive(onNext:{
-//                print("개인정보 처리방침 이동dd")
-//                let url = NSURL(string: "https://kori-collab.notion.site/e3407a6ca4724b078775fd13749741b1?pvs=4")
-//                let privacyWebView: SFSafariViewController = SFSafariViewController(url: url! as URL)
-//                self.present(privacyWebView, animated: true, completion: nil)
+                //                print("개인정보 처리방침 이동dd")
+                //                let url = NSURL(string: "https://kori-collab.notion.site/e3407a6ca4724b078775fd13749741b1?pvs=4")
+                //                let privacyWebView: SFSafariViewController = SFSafariViewController(url: url! as URL)
+                //                self.present(privacyWebView, animated: true, completion: nil)
                 for key in UserDefaults.standard.dictionaryRepresentation().keys {
                     UserDefaults.standard.removeObject(forKey: key.description)
                 }
-               
+                
             })
             .disposed(by: disposeBag)
         
@@ -479,7 +471,7 @@ class MyInfoVC: UIViewController {
                 
             })
             .disposed(by: disposeBag)
-       
+        
     }
     
     func setAddView() {
@@ -557,7 +549,7 @@ class MyInfoVC: UIViewController {
             $0.textColor = .TextPrimary
         }
         
-    
+        
         userBar.do {
             $0.layer.borderColor = UIColor.BorderDeactivate.cgColor
             $0.layer.borderWidth = 1
@@ -718,7 +710,7 @@ class MyInfoVC: UIViewController {
         return tapGesture
     }
     
-
-
+    
+    
 }
 
