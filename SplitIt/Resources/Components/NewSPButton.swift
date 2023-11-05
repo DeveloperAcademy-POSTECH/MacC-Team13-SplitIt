@@ -141,8 +141,6 @@ final class NewSPButton: UIButton {
     }
     
     func applyStyle(style: Style, shape: Shape) {
-        setCurrencyIcon(style: style)
-        setCurrencyLabel(style: style)
         
         disposeBag = DisposeBag()
         
@@ -245,6 +243,8 @@ final class NewSPButton: UIButton {
                 .disposed(by: disposeBag)
             
         case .half:
+            setCurrencyIcon(style: style)
+            setCurrencyLabel(style: style)
             self.configureCommonPropertiesForHalf()
             
             buttonState
