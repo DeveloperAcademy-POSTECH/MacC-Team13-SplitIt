@@ -14,7 +14,20 @@ class MyBankAccountVM {
     var disposeBag = DisposeBag()
     let userDefault = UserDefaults.standard
     
+    var isTossPayToggled: Bool = UserDefaults.standard.bool(forKey: "tossPay")
+    var isKakaoPayToggled: Bool = false
+    var isNaverPayToggled: Bool = false
+    
+    var inputName: String = ""
+    var inputRealName: String = ""
+    var inputAccount: String = ""
+    
+    var checkInputName: Int = 0
+    var checkAccount: Int = 0
+    var checkRealName: Int = 0
+ 
     var inputAccountRelay = BehaviorRelay<String?>(value: nil)
+    
     
     struct Input {
         let inputNameText: ControlEvent<String>
@@ -25,6 +38,7 @@ class MyBankAccountVM {
         let tossTapped: Observable<Void>
         let kakaoTapeed: Observable<Void>
         let naverTapped: Observable<Void>
+        let deleteBtnTapped: Driver<Void>
         
     }
     
@@ -35,8 +49,8 @@ class MyBankAccountVM {
         let toggleTossPay: Observable<Void>
         let toggleKakaoPay: Observable<Void>
         let togglenaverPay: Observable<Void>
+        let showAlertView: Driver<Void>
 
-        
     }
     
     func transform(input: Input) -> Output {
@@ -49,62 +63,56 @@ class MyBankAccountVM {
         let tossTapped = input.tossTapped
         let kakaoTapped = input.kakaoTapeed
         let naverTapped = input.naverTapped
-
-        var inputName: String = ""
-        var inputRealName: String = ""
-
+        let deleteBtnTapped = input.deleteBtnTapped
 
         editDoneBtnTapped
             .drive(onNext: {
-                let accountValue = self.inputAccountRelay.value ?? ""
-                print("수정버튼 눌림")
+               // let accountValue = self.inputAccountRelay.value ?? ""
                 
-                if !accountValue.isEmpty {
-                    UserDefaults.standard.set(accountValue, forKey: "userAccount")
+//                if !accountValue.isEmpty || self.checkAccount == 1 {
+//                    UserDefaults.standard.set(accountValue, forKey: "userAccount")
+//                    self.checkAccount = 0
+//                    print(accountValue)
+//                }
+                
+                if !self.inputAccount.isEmpty || self.checkAccount == 1 {
+                    UserDefaults.standard.set(self.inputAccount, forKey: "userAccount")
+                    self.checkAccount = 0
+                    print(self.inputAccount)
                 }
-                if inputName != "" {
-                    UserDefaults.standard.set(inputName, forKey: "userNickName")
+               
+                
+                if !self.inputName.isEmpty || self.checkInputName == 1 {
+                    
+                    UserDefaults.standard.set(self.inputName, forKey: "userNickName")
+                    print(self.inputName)
+                    self.checkInputName = 0
+                    
                 }
-
-
-                if inputRealName != "" {
-                    UserDefaults.standard.set(inputRealName, forKey: "userName")
+                
+                if !self.inputRealName.isEmpty || self.checkRealName == 1 {
+                    UserDefaults.standard.set(self.inputRealName, forKey: "userName")
+                    self.checkRealName = 0
+                    print(self.inputRealName)
                 }
-
-
             })
             .disposed(by: disposeBag)
 
         
+//        tossTapped
+//            .subscribe(onNext:
+//                isTossPayToggled.toggle()
+//            )
+//            .disposed(by: disposeBag)
         
-        inputNameText
-            .bind(onNext: { text in
-                if text != "" {
-                    inputName = text
-                }
-            })
-            .disposed(by: disposeBag)
-
-        inputRealNameText
-            .bind(onNext: { text in
-                if text != "" {
-                    inputRealName = text
-                }
-            })
-            .disposed(by: disposeBag)
         
-        inputAccountText
-            .bind(to: inputAccountRelay)
-            .disposed(by: disposeBag)
-
-      
+        
         tossTapped
             .subscribe(onNext: {
                 let isToggled = !self.userDefault.bool(forKey: "tossPay")
                 self.userDefault.set(isToggled, forKey: "tossPay")
             })
             .disposed(by: disposeBag)
-        
         
         kakaoTapped
             .subscribe(onNext: {
@@ -119,21 +127,63 @@ class MyBankAccountVM {
                 self.userDefault.set(isnaverToggled, forKey: "naverPay")
             })
             .disposed(by: disposeBag)
+     
+        inputNameText
+            .bind(onNext: { text in
+                if text.isEmpty {
+                    self.inputName = ""
+                    self.checkInputName = 1
+                } else {
+                    self.inputName = text
+                }
+
+            })
+            .disposed(by: disposeBag)
+
         
-       
+        inputRealNameText
+            .bind(onNext: { text in
+                if text.isEmpty {
+                    self.inputRealName = ""
+                    self.checkRealName = 1
+                } else {
+                    self.inputRealName = text
+                }
+            })
+            .disposed(by: disposeBag)
+
+        
+        
+        inputAccountText
+            .bind(onNext: { text in
+                if text.isEmpty {
+                    self.inputAccount = ""
+                    self.checkAccount = 1
+                } else {
+                    self.inputAccount = text
+                }
+            })
+            .disposed(by: disposeBag)
+
        
      
-        
-        let output = Output(popToMyInfoView: editDoneBtnTapped,
+    let output = Output(popToMyInfoView: editDoneBtnTapped,
                             showBankModel: selectBackTapped,
                             toggleTossPay: tossTapped,
                             toggleKakaoPay: kakaoTapped,
-                            togglenaverPay: naverTapped
+                            togglenaverPay: naverTapped,
+                            showAlertView: deleteBtnTapped
                          
         )
         
         return output
     }
+    
+    
+    func tossTap() {
+        isTossPayToggled.toggle()
+    }
+    
     
     
 }

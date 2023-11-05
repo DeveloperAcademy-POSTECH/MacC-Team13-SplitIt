@@ -29,7 +29,32 @@ class HomeVM {
         let showInfoView = input.myInfoButtonTapped.asDriver()
         let showHistoryView = input.recentSplitButtonTapped.asDriver()
         
-      
+        showInfoView
+            .drive(onNext: {
+                if UserDefaults.standard.object(forKey: "tossPay") == nil {
+                    UserDefaults.standard.set(false, forKey: "tossPay")
+                }
+                if UserDefaults.standard.object(forKey: "kakaoPay") == nil {
+                    UserDefaults.standard.set(false, forKey: "kakaoPay")
+                }
+                if UserDefaults.standard.object(forKey: "naverPay") == nil {
+                    UserDefaults.standard.set(false, forKey: "naverPay")
+                }
+                if UserDefaults.standard.object(forKey: "userAccount") == nil {
+                    UserDefaults.standard.set("", forKey: "userAccount")
+                }
+                if UserDefaults.standard.object(forKey: "userNickName") == nil {
+                    UserDefaults.standard.set("", forKey: "userNickName")
+                }
+                if UserDefaults.standard.object(forKey: "userName") == nil {
+                    UserDefaults.standard.set("", forKey: "userName")
+                }
+                if UserDefaults.standard.object(forKey: "userBank") == nil {
+                    UserDefaults.standard.set("", forKey: "userBank")
+                }
+                
+            })
+            .disposed(by: disposeBag)
         
         
         showCreateSplit

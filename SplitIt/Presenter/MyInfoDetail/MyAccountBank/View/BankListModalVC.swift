@@ -40,15 +40,15 @@ class BankListModalVC: UIViewController, UIScrollViewDelegate {
             make.leading.trailing.bottom.equalToSuperview()
 
         }
+        
         topView.snp.makeConstraints { make in
-            make.width.equalTo(390)
-            make.height.equalTo(86)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(90)
             make.top.centerX.equalToSuperview()
         }
         
         selectedBankLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
-        
         }
         
     }
@@ -78,6 +78,7 @@ class BankListModalVC: UIViewController, UIScrollViewDelegate {
         collectionView.rx.modelSelected(Bank.self)
             .subscribe(onNext: { bank in
                 UserDefaults.standard.set(bank.name, forKey: "userBank")
+               // UserData.shared.updateUserBankName(bank.name)
                 self.dismiss(animated: true, completion: nil)
                 self.selectedBankName.accept(bank.name)
             })
@@ -95,20 +96,12 @@ class BankListModalVC: UIViewController, UIScrollViewDelegate {
     
     func setAttribute() {
         
-        view.backgroundColor = .SurfaceBrandCalmshell
-        view.layer.borderColor = UIColor.BorderPrimary.cgColor
-   
+        view.backgroundColor = .white
+        collectionView.backgroundColor = .white
+        topView.backgroundColor = .white
         
-        collectionView.backgroundColor = .SurfaceBrandCalmshell
-        topView.backgroundColor = .SurfaceBrandCalmshell
-        
-        selectedBankLabel.do {
-            $0.text = "정산받을 은행을 선택해주세요"
-            $0.font = .KoreanSubtitle
-            $0.textColor = .AppColorGrayscale1000
-            
-        }
-        
+        selectedBankLabel.text = "정산받을 은행을 선택해주세요"
+        selectedBankLabel.font = UIFont.systemFont(ofSize: 21)
         
         
     }
