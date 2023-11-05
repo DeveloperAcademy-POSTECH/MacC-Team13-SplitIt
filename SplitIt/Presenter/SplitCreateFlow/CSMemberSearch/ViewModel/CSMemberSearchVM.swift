@@ -155,7 +155,8 @@ class CSMemberSearchVM {
                 self.repo.createCSMemberArr(nameArr: selectedMemberNameArr)
                 
                 for name in selectedMemberNameArr {
-                    if !allMemberArr.value.map({ $0.name }).contains(name) && (name != UserDefaults.standard.string(forKey: "userNickName") || name != "정산자" ) {
+                    if !allMemberArr.value.map({ $0.name }).contains(name) && name != UserDefaults.standard.string(forKey: "userNickName") && name != "정산자" {
+                        print(name)
                         self.repo.createMemberLog(name: name)
                     }
                 }
