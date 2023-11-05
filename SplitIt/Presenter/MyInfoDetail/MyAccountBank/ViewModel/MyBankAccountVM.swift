@@ -12,19 +12,22 @@ import SnapKit
 class MyBankAccountVM {
     
     var disposeBag = DisposeBag()
+    var bankModalListVC: BankListModalVC?
     let userDefault = UserDefaults.standard
     
-    var isTossPayToggled: Bool = UserDefaults.standard.bool(forKey: "tossPay")
-    var isKakaoPayToggled: Bool = false
-    var isNaverPayToggled: Bool = false
+    var isTossPayToggled = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "tossPay"))
+    var isKakaoPayToggled = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "kakaoPay"))
+    var isNaverPayToggled = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "naverPay"))
     
     var inputName: String = ""
     var inputRealName: String = ""
     var inputAccount: String = ""
+    var inputBankName: String = ""
     
     var checkInputName: Int = 0
     var checkAccount: Int = 0
     var checkRealName: Int = 0
+    var checkBank: Int = 0
  
     var inputAccountRelay = BehaviorRelay<String?>(value: nil)
     
@@ -67,25 +70,19 @@ class MyBankAccountVM {
 
         editDoneBtnTapped
             .drive(onNext: {
-               // let accountValue = self.inputAccountRelay.value ?? ""
                 
-//                if !accountValue.isEmpty || self.checkAccount == 1 {
-//                    UserDefaults.standard.set(accountValue, forKey: "userAccount")
-//                    self.checkAccount = 0
-//                    print(accountValue)
-//                }
-                
+                if !self.inputBankName.isEmpty || self.checkBank == 1 {
+                    UserDefaults.standard.set(self.inputBankName, forKey: "userBank")
+                    self.checkBank = 0
+                }
+
                 if !self.inputAccount.isEmpty || self.checkAccount == 1 {
                     UserDefaults.standard.set(self.inputAccount, forKey: "userAccount")
                     self.checkAccount = 0
-                    print(self.inputAccount)
                 }
-               
                 
                 if !self.inputName.isEmpty || self.checkInputName == 1 {
-                    
                     UserDefaults.standard.set(self.inputName, forKey: "userNickName")
-                    print(self.inputName)
                     self.checkInputName = 0
                     
                 }
@@ -93,38 +90,46 @@ class MyBankAccountVM {
                 if !self.inputRealName.isEmpty || self.checkRealName == 1 {
                     UserDefaults.standard.set(self.inputRealName, forKey: "userName")
                     self.checkRealName = 0
-                    print(self.inputRealName)
                 }
+                
+                self.isTossPayToggled
+                    .subscribe(onNext: { toggled in
+                        UserDefaults.standard.set(toggled, forKey: "tossPay")
+                    })
+                    .disposed(by: self.disposeBag)
+                
+                self.isKakaoPayToggled
+                    .subscribe(onNext: { toggled in
+                        UserDefaults.standard.set(toggled, forKey: "kakaoPay")
+                    })
+                    .disposed(by: self.disposeBag)
+                
+                self.isNaverPayToggled
+                    .subscribe(onNext: { toggled in
+                        UserDefaults.standard.set(toggled, forKey: "naverPay")
+                    })
+                    .disposed(by: self.disposeBag)
+              
+
+                
             })
             .disposed(by: disposeBag)
 
-        
-//        tossTapped
-//            .subscribe(onNext:
-//                isTossPayToggled.toggle()
-//            )
-//            .disposed(by: disposeBag)
-        
-        
-        
         tossTapped
             .subscribe(onNext: {
-                let isToggled = !self.userDefault.bool(forKey: "tossPay")
-                self.userDefault.set(isToggled, forKey: "tossPay")
+                self.isTossPayToggled.accept(!self.isTossPayToggled.value)
             })
             .disposed(by: disposeBag)
-        
+
         kakaoTapped
             .subscribe(onNext: {
-                let iskakaoToggled = !self.userDefault.bool(forKey: "kakaoPay")
-                self.userDefault.set(iskakaoToggled, forKey: "kakaoPay")
+                self.isKakaoPayToggled.accept(!self.isKakaoPayToggled.value)
             })
             .disposed(by: disposeBag)
-        
+
         naverTapped
             .subscribe(onNext: {
-                let isnaverToggled = !self.userDefault.bool(forKey: "naverPay")
-                self.userDefault.set(isnaverToggled, forKey: "naverPay")
+                self.isNaverPayToggled.accept(!self.isNaverPayToggled.value)
             })
             .disposed(by: disposeBag)
      
@@ -172,19 +177,14 @@ class MyBankAccountVM {
                             toggleTossPay: tossTapped,
                             toggleKakaoPay: kakaoTapped,
                             togglenaverPay: naverTapped,
-                            showAlertView: deleteBtnTapped
-                         
+                        showAlertView: deleteBtnTapped
         )
         
         return output
     }
     
     
-    func tossTap() {
-        isTossPayToggled.toggle()
-    }
-    
-    
+  
     
 }
 
