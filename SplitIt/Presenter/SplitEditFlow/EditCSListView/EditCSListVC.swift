@@ -12,7 +12,7 @@ import RxSwift
 import RxCocoa
 import Reusable
 
-class EditCSListVC: UIViewController {
+class EditCSListVC: UIViewController, SPAlertDelegate {
     
     var disposeBag = DisposeBag()
     
@@ -28,6 +28,7 @@ class EditCSListVC: UIViewController {
     let exclEditBtn = DefaultEditButton()
     let delButton = UILabel()
     let delBtnTap = UITapGestureRecognizer()
+    let alert = SPAlertController()
     
     init(csinfoIdx: String) {
         self.disposeBag = DisposeBag()
@@ -243,12 +244,27 @@ class EditCSListVC: UIViewController {
         
         output.popDeleteCSInfo
             .drive(onNext: { [weak self]_ in
-                self?.navigationController?.popViewController(animated: true)
+                guard let self = self else { return }
+                showAlert(view: self.alert,
+                          type: .warnWithItem(item: self.titleLabel.text ?? ""),
+                          title: "차수를 삭제할까요?",
+                          descriptions: "이 작업은 돌이킬 수 없어요",
+                          leftButtonTitle: "취 소",
+                          rightButtonTitle: "삭제하기")
             })
             .disposed(by: disposeBag)
         
         output.deleteBtnHidden
             .drive(delButton.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        alert.rightButtonTapSubject
+            .asDriver(onErrorJustReturn: ())
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                SplitRepository.share.deleteCSInfoAndRelatedData(csInfoIdx: self.viewModel.csInfoIdx)
+                self.navigationController?.popViewController(animated: true)
+            })
             .disposed(by: disposeBag)
         
     }
