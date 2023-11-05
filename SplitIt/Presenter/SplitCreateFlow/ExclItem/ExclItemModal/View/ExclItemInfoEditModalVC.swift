@@ -13,15 +13,17 @@ import Then
 import RxDataSources
 import RxAppState
 
-class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
+class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDelegate {
     
     let inputTextRelay = BehaviorRelay<Int?>(value: 0)
+    var currentExclItemIdx: String = ""
     let customKeyboard = CustomKeyboard()
     
     var disposeBag = DisposeBag()
     
     var viewModel: ExclItemInfoEditModalVM!
     
+    let alert = SPAlertController()
     let header = SPNavigationBar()
     let scrollView = UIScrollView(frame: .zero)
     let contentView = UIView()
@@ -529,10 +531,24 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate {
         output.showAlertVC
             .drive(onNext: { [weak self] exclItemIdx, title in
                 guard let self = self else { return }
-                self.presentCustomAlert(exclItemIdx: exclItemIdx, title: title)
+                showAlert(view: alert,
+                          type: .warnWithItem(item: title),
+                          title: "항목을 삭제할까요?",
+                          descriptions: "이 작업은 돌이킬 수 없습니다.",
+                          leftButtonTitle: "취 소",
+                          rightButtonTitle: "삭제하기")
+                self.currentExclItemIdx = exclItemIdx
             })
             .disposed(by: disposeBag)
         
+        alert.rightButtonTapSubject
+            .asDriver(onErrorJustReturn: ())
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                SplitRepository.share.deleteExclItemAndRelatedData(exclItemIdx: self.currentExclItemIdx)
+                self.dismiss(animated: true)
+            })
+            .disposed(by: disposeBag)
     }
 }
 
@@ -625,23 +641,6 @@ extension ExclItemInfoEditModalVC {
         let textAttribute = NSMutableAttributedString(string: label.text ?? "")
         textAttribute.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: textAttribute.length))
         label.attributedText = textAttribute
-    }
-}
-
-extension ExclItemInfoEditModalVC: ExcltemInfoModalAlertDelegate {
-    func didDeleteItem(exclItemIdx: String) {
-        SplitRepository.share.deleteExclItemAndRelatedData(exclItemIdx: exclItemIdx)
-        self.dismiss(animated: true)
-    }
-    
-    private func presentCustomAlert(exclItemIdx: String, title: String) {
-        let alert = ExcltemInfoModalAlertVC()
-        alert.modalPresentationStyle = .overFullScreen
-        alert.modalTransitionStyle = .crossDissolve
-        alert.delegate = self
-        alert.idx = exclItemIdx
-        alert.titleValue = title
-        self.present(alert, animated: false)
     }
 }
 

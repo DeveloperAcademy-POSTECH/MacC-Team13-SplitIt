@@ -10,11 +10,15 @@ import RxSwift
 import RxCocoa
 import RxAppState
 
-class ExclItemInputVC: UIViewController {
+class ExclItemInputVC: UIViewController, SPAlertDelegate {
     
     var disposeBag = DisposeBag()
     
     let viewModel = ExclItemInputVM()
+    
+    var backAlert = SPAlertController()
+    var exitAlert = SPAlertController()
+    var isExit: Bool? = nil
     
     let header = SPNavigationBar()
     let exclListLabel = UILabel()
@@ -26,7 +30,7 @@ class ExclItemInputVC: UIViewController {
     let tableView = UITableView(frame: .zero)
     
     let nextButton = NewSPButton()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -130,7 +134,9 @@ class ExclItemInputVC: UIViewController {
     func setBinding() {
         let input = ExclItemInputVM.Input(viewDidDisAppear: self.rx.viewDidDisappear,
                                           nextButtonTapped: nextButton.rx.tap,
-                                          exclItemAddButtonTapped: exclItemAddButton.rx.tap)
+                                          exclItemAddButtonTapped: exclItemAddButton.rx.tap,
+                                          exitButtonTapped: header.rightButton.rx.tap,
+                                          backButtonTapped: header.leftButton.rx.tap)
         let output = viewModel.transform(input: input)
         
         output.exclItemsRelay
@@ -184,10 +190,51 @@ class ExclItemInputVC: UIViewController {
             .disposed(by: disposeBag)
         
         output.showResultView
-            .drive(onNext: { [weak self] _ in
+            .drive(onNext: { [weak self] indexPath in
+                guard let self = self else { return }
                 SplitRepository.share.updateDataToDB()
                 let vc = SplitShareVC()
-                self?.navigationController?.pushViewController(vc, animated: true)
+                self.navigationController?.pushViewController(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        output.showBackAlert
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                let itemCount = output.exclItemsRelay.value.count
+                if itemCount > 0 {
+                    self.showAlert(view: backAlert,
+                              type: .warnNormal,
+                              title: "정산 멤버를 다시 선택하시겠어요?",
+                              descriptions: "추가한 따로 정산 목록 \(itemCount)개가 사라져요",
+                              leftButtonTitle: "취 소",
+                              rightButtonTitle: "다시 선택")
+                } else {
+                    self.navigationController?.popViewController(animated: true)
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        output.showExitAlert
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.showExitAlert(view: exitAlert)
+            })
+            .disposed(by: disposeBag)
+        
+        backAlert.rightButtonTapSubject
+            .asDriver(onErrorJustReturn: ())
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.navigationController?.popViewController(animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        exitAlert.rightButtonTapSubject
+            .asDriver(onErrorJustReturn: ())
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.navigationController?.popToRootViewController(animated: true)
             })
             .disposed(by: disposeBag)
     }

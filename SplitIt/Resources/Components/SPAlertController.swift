@@ -173,8 +173,8 @@ final class SPAlertController: UIViewController {
             .asDriver()
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.leftButtonTapSubject.onNext(())
                 self.dismiss(animated: true)
+                self.leftButtonTapSubject.onNext(())
             })
             .disposed(by: disposeBag)
         
@@ -183,8 +183,8 @@ final class SPAlertController: UIViewController {
             .asDriver()
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.rightButtonTapSubject.onNext(())
                 self.dismiss(animated: true)
+                self.rightButtonTapSubject.onNext(())
             })
             .disposed(by: disposeBag)
     }
@@ -215,6 +215,21 @@ extension SPAlertDelegate where Self: UIViewController {
         view.alertDescription = descriptions
         view.leftButtonTitle = leftButtonTitle
         view.rightButtonTitle = rightButtonTitle
+        
+        view.modalPresentationStyle = .overFullScreen
+        view.modalTransitionStyle = .crossDissolve
+        
+        self.present(view, animated: false, completion: nil)
+    }
+    
+    func showExitAlert(
+        view: SPAlertController
+    ) {
+        view.alertType = .warnNormal
+        view.alertTitle = "정산을 종료하시겠어요?"
+        view.alertDescription = "지금까지 정산하신 내역이 사라져요"
+        view.leftButtonTitle = "취 소"
+        view.rightButtonTitle = "종료하기"
         
         view.modalPresentationStyle = .overFullScreen
         view.modalTransitionStyle = .crossDissolve
