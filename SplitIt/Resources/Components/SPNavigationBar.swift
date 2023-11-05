@@ -88,7 +88,7 @@ final class SPNavigationBar: UIView {
             setRightDismissButton(title: "확인", titleColor: .AppColorStatusDarkPear, vc: vc)
         case .exclItemCreate:
             setNaviImage(imageCase: 2)
-            setLeftBackButton(action: .toBack, vc: vc)
+            setLeftBackButton(action: .none, vc: vc)
             setExitButton(vc: vc)
         case .exclItemCreateModal:
             setNaviTitle(title: "따로 정산 항목")
