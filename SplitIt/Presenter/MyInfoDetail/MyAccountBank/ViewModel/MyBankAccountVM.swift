@@ -12,6 +12,7 @@ import SnapKit
 class MyBankAccountVM {
     
     var disposeBag = DisposeBag()
+    var bankModalListVC: BankListModalVC?
     let userDefault = UserDefaults.standard
     
     var isTossPayToggled: Bool = UserDefaults.standard.bool(forKey: "tossPay")
@@ -21,6 +22,7 @@ class MyBankAccountVM {
     var inputName: String = ""
     var inputRealName: String = ""
     var inputAccount: String = ""
+    var inputBankName: String = ""
     
     var checkInputName: Int = 0
     var checkAccount: Int = 0
@@ -67,13 +69,8 @@ class MyBankAccountVM {
 
         editDoneBtnTapped
             .drive(onNext: {
-               // let accountValue = self.inputAccountRelay.value ?? ""
-                
-//                if !accountValue.isEmpty || self.checkAccount == 1 {
-//                    UserDefaults.standard.set(accountValue, forKey: "userAccount")
-//                    self.checkAccount = 0
-//                    print(accountValue)
-//                }
+
+                UserDefaults.standard.set(self.inputBankName, forKey: "userBank")
                 
                 if !self.inputAccount.isEmpty || self.checkAccount == 1 {
                     UserDefaults.standard.set(self.inputAccount, forKey: "userAccount")
@@ -104,7 +101,7 @@ class MyBankAccountVM {
 //                isTossPayToggled.toggle()
 //            )
 //            .disposed(by: disposeBag)
-        
+     
         
         
         tossTapped
@@ -172,8 +169,7 @@ class MyBankAccountVM {
                             toggleTossPay: tossTapped,
                             toggleKakaoPay: kakaoTapped,
                             togglenaverPay: naverTapped,
-                            showAlertView: deleteBtnTapped
-                         
+                        showAlertView: deleteBtnTapped
         )
         
         return output
@@ -183,6 +179,8 @@ class MyBankAccountVM {
     func tossTap() {
         isTossPayToggled.toggle()
     }
+    
+   
     
     
     

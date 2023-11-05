@@ -11,16 +11,12 @@ import RxCocoa
 import SnapKit
 import Then
 
-
-protocol MyInfoDeleteAlertVCDelegate: AnyObject {
-    func deleteAllInfo()
-}
-
-class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDeleteAlertVCDelegate {
+class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertDelegate {
 
     let accountTextRelay = BehaviorRelay<String?>(value: "")
     let accountCustomKeyboard = AccountCustomKeyboard()
-
+    
+    let alert = SPAlertController()
     let viewModel = MyBankAccountVM()
     var disposeBag = DisposeBag()
     let maxCharacterCount = 8
@@ -113,14 +109,39 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
             .disposed(by: disposeBag)
     }
     
+    func setAlert() {
+        showAlert(view: alert,
+                type: .warnNormal,
+                title: "나의 정보를 초기화 하시겠어요?",
+                descriptions: "이 작업은 돌이킬 수 없어요",
+                leftButtonTitle: "취 소",
+                rightButtonTitle: "초기화")
+        
+        
+        alert.rightButtonTapSubject
+              .asDriver(onErrorJustReturn: ())
+              .drive(onNext: {
+                  self.deleteAllInfo()
+                  print("ex. alert의 삭제 버튼 탭 시 무언가가 삭제되는 로직")
+              })
+              .disposed(by: disposeBag)
+        
+        alert.leftButtonTapSubject
+               .asDriver(onErrorJustReturn: ())
+               .drive(onNext: {
+                   print("ex. alert의 뒤로가기 탭 시 무언가의 이벤트")
+               })
+               .disposed(by: disposeBag)
+       
+    }
+    
     //수정버튼 활성화 비활성화 선택해주는 함수
     func checkUserInfo() {
-        
-        let nickNameTextCheck = nickNameTextField.rx.text.orEmpty.asObservable()
-        let accountTextCheck = accountTextField.rx.text.orEmpty.asObservable()
-        let nameTextCheck = nameTextField.rx.text.orEmpty.asObservable()
-        let bankCheck = bankNameLabel.rx.observe(String.self, "text").map { $0 ?? "" }
-        
+//
+//        let nickNameTextCheck = nickNameTextField.rx.text.orEmpty.asObservable()
+//        let accountTextCheck = accountTextField.rx.text.orEmpty.asObservable()
+//        let nameTextCheck = nameTextField.rx.text.orEmpty.asObservable()
+//        let bankCheck = bankNameLabel.rx.observe(String.self, "text").map { $0 ?? "" }
         
 //        Observable.combineLatest(nameTextCheck, accountTextCheck, nickNameTextCheck, bankCheck)
 //            .subscribe(onNext: { nameText, accountText, nickNameText, bankText in
@@ -199,7 +220,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
                     .bind { bankName in
                         if bankName != "은행을 선택해주세요" {
                             self?.bankNameLabel.text = bankName
-                            //self?.userDefault.set(bankName, forKey: "userBank")
+                            self?.viewModel.inputBankName = self?.bankNameLabel.text ?? ""
                             print(bankName)
                         }
                     }
@@ -210,9 +231,10 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
         
         output.showAlertView
             .drive(onNext: {
-                self.presentMyInfoDeleteAlertVC()
+                self.setAlert()
             })
             .disposed(by: disposeBag)
+        
         
      
     }
@@ -227,13 +249,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, MyInfoDe
         UserDefaults.standard.set("", forKey: "userBank")
         
         self.navigationController?.popViewController(animated: true)
-    }
-    
-    func presentMyInfoDeleteAlertVC() {
-//        let vc = MyInfoDeleteAlertVC()
-//        vc.modalPresentationStyle = .overFullScreen
-//        vc.delegate = self
-//        self.present(vc, animated: false, completion: nil)
     }
     
     //UserDefaluts 변경되는 값에 따라 바로 UI 변경되도록 하는 함수

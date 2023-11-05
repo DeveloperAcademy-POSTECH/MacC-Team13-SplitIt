@@ -53,8 +53,6 @@ class AccountCustomKeyboard: UIInputViewController {
         
         view.backgroundColor = UIColor(hex: 0xCED0D5)
         
-        
-        
         setAttribute()
         setAddView()
         setKeyLayout()
