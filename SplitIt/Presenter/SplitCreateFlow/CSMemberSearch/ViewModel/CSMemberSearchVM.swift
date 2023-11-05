@@ -47,6 +47,8 @@ class CSMemberSearchVM {
         
         let closeCurrentVC = input.checkButtonTapped
         
+        let hapticManager = HapticManager()
+        
         // 현재 csMember에 들어가 있는 값은 처음 뷰에 들어올 때부터 selectedMemberArr에 들어가 있어야하고 isCheck도 true여야 한다
         input.viewWillAppear.asDriver(onErrorJustReturn: true)
             .drive(onNext: { _ in
@@ -100,6 +102,8 @@ class CSMemberSearchVM {
                 }
                 
                 allMemberArr.accept(self.tranformIsCheckInSelectMemberArr(allMemberArrValue: allMemberArr.value, name: selectMember.name))
+                
+                hapticManager.hapticImpact(style: .light)
             })
             .disposed(by: disposeBag)
         
@@ -143,6 +147,8 @@ class CSMemberSearchVM {
                 }
                 
                 searchMemberArr.accept(allMemberArr.value)
+                
+                hapticManager.hapticNotification(type: .success)
             })
             .disposed(by: disposeBag)
         
