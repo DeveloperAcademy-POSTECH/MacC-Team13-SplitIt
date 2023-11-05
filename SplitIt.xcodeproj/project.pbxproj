@@ -167,8 +167,6 @@
 		C2A797A62AE2784B0049E709 /* HistoryVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A797A52AE2784B0049E709 /* HistoryVM.swift */; };
 		DE1711C22AE0BA9B0097850D /* MyInfoVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1711C12AE0BA9B0097850D /* MyInfoVM.swift */; };
 		DE1711C42AE0BAB30097850D /* MyInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1711C32AE0BAB30097850D /* MyInfoVC.swift */; };
-		DE1711C82AE0BADD0097850D /* SocialPay.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1711C72AE0BADD0097850D /* SocialPay.swift */; };
-		DE1711CC2AE0BAF90097850D /* PayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1711CB2AE0BAF90097850D /* PayData.swift */; };
 		DE73D6E32AE0D12300ABF3EF /* MyBankAccountVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D6E22AE0D12300ABF3EF /* MyBankAccountVC.swift */; };
 		DE73D6E52AE0D12C00ABF3EF /* MyBankAccountVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D6E42AE0D12C00ABF3EF /* MyBankAccountVM.swift */; };
 		DE73D6E72AE0D20600ABF3EF /* BankListData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D6E62AE0D20600ABF3EF /* BankListData.swift */; };
@@ -344,8 +342,6 @@
 		C2A797A52AE2784B0049E709 /* HistoryVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVM.swift; sourceTree = "<group>"; };
 		DE1711C12AE0BA9B0097850D /* MyInfoVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoVM.swift; sourceTree = "<group>"; };
 		DE1711C32AE0BAB30097850D /* MyInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoVC.swift; sourceTree = "<group>"; };
-		DE1711C72AE0BADD0097850D /* SocialPay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialPay.swift; sourceTree = "<group>"; };
-		DE1711CB2AE0BAF90097850D /* PayData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayData.swift; sourceTree = "<group>"; };
 		DE73D6E22AE0D12300ABF3EF /* MyBankAccountVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBankAccountVC.swift; sourceTree = "<group>"; };
 		DE73D6E42AE0D12C00ABF3EF /* MyBankAccountVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBankAccountVM.swift; sourceTree = "<group>"; };
 		DE73D6E62AE0D20600ABF3EF /* BankListData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankListData.swift; sourceTree = "<group>"; };
@@ -1241,8 +1237,6 @@
 			children = (
 				DE1711C02AE0BA8C0097850D /* ViewModel */,
 				DE1711BF2AE0BA830097850D /* View */,
-				DE1711C72AE0BADD0097850D /* SocialPay.swift */,
-				DE1711CB2AE0BAF90097850D /* PayData.swift */,
 			);
 			path = MyInfo;
 			sourceTree = "<group>";
@@ -1574,7 +1568,6 @@
 				6009C8192AE29E5D008B9EC1 /* ResultCell.swift in Sources */,
 				1A07DF092AE55E8F0081E543 /* ExclPageController.swift in Sources */,
 				86DACB112AF639E0008D7BAF /* EditCSMemberVC.swift in Sources */,
-				DE1711C82AE0BADD0097850D /* SocialPay.swift in Sources */,
 				604CDC862AF2396300416454 /* ExcltemInfoModalAlertVC.swift in Sources */,
 				1A8B05E32AF1540A00CF5BC5 /* SplitMethodSelectVM.swift in Sources */,
 				60AE3EAC2AE6699E009D9D18 /* AddSplitHeaderVM.swift in Sources */,
@@ -1604,7 +1597,6 @@
 				60115E1D2ADD2B5E0050D32C /* CSMemberInputVC.swift in Sources */,
 				DE73D6E52AE0D12C00ABF3EF /* MyBankAccountVM.swift in Sources */,
 				1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */,
-				DE1711CC2AE0BAF90097850D /* PayData.swift in Sources */,
 				1A4DB22B2ADE68E400616243 /* SplitRepository.swift in Sources */,
 				C291BA132AF4DD6F009501F3 /* UIDevice+.swift in Sources */,
 				869D1ACE2AE5298B00D166B1 /* CSEditListCell.swift in Sources */,
