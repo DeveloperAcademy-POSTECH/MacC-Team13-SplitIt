@@ -28,6 +28,7 @@ final class SplitRepository {
     private init() { }
     
     var isSmartSplit = true
+    var isCreate = true
 }
 
 extension SplitRepository {
@@ -356,24 +357,9 @@ extension SplitRepository {
     /// csInfoIdx를 기준으로 csInfo 삭제 및 연관 데이터 전체 삭제
     func deleteCSInfoAndRelatedData(csInfoIdx: String) {
         let realmManager = RealmManager()
-        let csInfos: [CSInfo] = csInfoArr.value
-        var deleteCSInfo: CSInfo?
-        var newCSInfos: [CSInfo] = []
+        let deleteCSInfo: [CSInfo] = csInfoArr.value
         
-        for info in csInfos {
-            if info.csInfoIdx == csInfoIdx {
-                deleteCSInfo = info
-            } else {
-                newCSInfos.append(info)
-            }
-        }
-        
-        csInfoArr.accept(newCSInfos)
-        realmManager.deleteCSInfo(csInfoIdxArr: [deleteCSInfo!.csInfoIdx])
-        
-        if newCSInfos.isEmpty {
-            deleteSplitAndRelatedData(splitIdx: deleteCSInfo!.splitIdx)
-        }
+        realmManager.deleteCSInfo(csInfoIdxArr: [deleteCSInfo.first!.csInfoIdx])
     }
     
     /// csMemberIdx를 기준으로 csMember 삭제 및 연관 데이터 전체 삭제

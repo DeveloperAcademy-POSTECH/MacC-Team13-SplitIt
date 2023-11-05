@@ -65,7 +65,6 @@ class SplitShareVC: UIViewController {
         
         csAddButton.do {
             $0.applyStyle(style: .primaryMushroom, shape: .square)
-            $0.setTitle("+ 2차 추가", for: .normal)
             $0.buttonState.accept(true)
         }
         
@@ -148,6 +147,7 @@ class SplitShareVC: UIViewController {
             .drive(onNext: { [weak self] csInfos in
                 guard let self = self else { return }
                 self.csInfos = csInfos
+                csAddButton.setTitle("+ \(csInfos.count+1)차 추가", for: .normal)
             })
             .disposed(by: disposeBag)
         
@@ -155,7 +155,7 @@ class SplitShareVC: UIViewController {
             .asDriver()
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                self.splitDate = $0.map { $0.createDate }.first!
+                self.splitDate = $0.map { $0.createDate }.first ?? .now
             })
             .disposed(by: disposeBag)
         

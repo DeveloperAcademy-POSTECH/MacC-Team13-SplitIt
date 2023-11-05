@@ -75,6 +75,8 @@ class CSInfoVM {
             .drive(onNext: { title, totalAmount in
                 SplitRepository.share.inputCSInfoWithTitle(title: title)
                 SplitRepository.share.inputCSInfoWithTotalAmount(totalAmount: totalAmount)
+                
+                SplitRepository.share.isCreate = true
             })
             .disposed(by: disposeBag)
         

@@ -145,7 +145,7 @@ class HistorySplitCell: UICollectionViewCell, Reusable {
     }
     
     func configure(split: Split, index: Int) {
-        self.splitTitleLabel.text = split.title
+        self.splitTitleLabel.text = split.title == "" ? viewModel.getCSTitles(splitIdx: split.splitIdx) : split.title
         self.csTitleLabel.text = viewModel.getCSTitles(splitIdx: split.splitIdx)
         self.csMemberLabel.text = viewModel.getCSMembers()
         self.totalAmountLabel.text = viewModel.getTotalAmount()
