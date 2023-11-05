@@ -173,7 +173,7 @@ class CSMemberSearchVC: UIViewController, Reusable {
         searchTableView.snp.makeConstraints {
             $0.top.equalTo(searchLabel.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(16)
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-20)
         }
         
         backgroundView.snp.makeConstraints {
@@ -271,6 +271,39 @@ class CSMemberSearchVC: UIViewController, Reusable {
                     UIView.animate(withDuration: 0.3) {
                         cell.transform = .identity
                     }
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
+            .subscribe(onNext: { [weak self] notification in
+                guard let self = self else { return }
+                if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                    let keyboardHeight: CGFloat = keyboardSize.height
+                    
+                    UIView.animate(withDuration: 0.3) {
+                        self.searchTableView.snp.remakeConstraints {
+                            $0.top.equalTo(self.searchLabel.snp.bottom).offset(8)
+                            $0.horizontalEdges.equalToSuperview().inset(16)
+                            $0.bottom.equalToSuperview().offset(-keyboardHeight-10)
+                        }
+                        self.view.layoutIfNeeded()
+                    }
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification)
+            .subscribe(onNext: { [weak self] notification in
+                guard let self = self else { return }
+                
+                UIView.animate(withDuration: 0.3) {
+                    self.searchTableView.snp.remakeConstraints {
+                        $0.top.equalTo(self.searchLabel.snp.bottom).offset(8)
+                        $0.horizontalEdges.equalToSuperview().inset(16)
+                        $0.bottom.equalToSuperview().offset(-20)
+                    }
+                    self.view.layoutIfNeeded()
                 }
             })
             .disposed(by: disposeBag)
