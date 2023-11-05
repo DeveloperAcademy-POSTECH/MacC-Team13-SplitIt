@@ -17,6 +17,7 @@ class ExclItemInputVM {
         let viewDidDisAppear: Observable<Bool>
         let nextButtonTapped: ControlEvent<Void> // 다음 버튼
         let exclItemAddButtonTapped: ControlEvent<Void>
+        let exitButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
@@ -25,6 +26,7 @@ class ExclItemInputVM {
         let nextButtonIsEnable: Driver<Bool>
         let showExclItemInfoModal: Driver<Void>
         let showEmptyView: Driver<Bool>
+        let showExitAlert: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -73,7 +75,8 @@ class ExclItemInputVM {
                       exclItemsRelay: exclItemsRelay,
                       nextButtonIsEnable: nextButtonIsEnable,
                       showExclItemInfoModal: showExclItemInfoModal.asDriver(),
-                      showEmptyView: showEmptyView.asDriver(onErrorJustReturn: false))
+                      showEmptyView: showEmptyView.asDriver(onErrorJustReturn: false),
+                      showExitAlert: input.exitButtonTapped.asDriver())
     }
 
 }

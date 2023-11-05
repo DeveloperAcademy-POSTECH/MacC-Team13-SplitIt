@@ -9,10 +9,12 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class CSInfoVC: UIViewController {
+class CSInfoVC: UIViewController, SPAlertDelegate {
     
     let inputTextRelay = BehaviorRelay<Int?>(value: 0)
     let customKeyboard = CustomKeyboard()
+    let alert = SPAlertController()
+    var isExit: Bool? = nil
     
     var disposeBag = DisposeBag()
     
@@ -183,7 +185,10 @@ class CSInfoVC: UIViewController {
                                    title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
                                    totalAmount: totalAmountTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
                                    titleTextFieldControlEvent: titleTFEvent,
-                                   totalAmountTextFieldControlEvent: totalAmountTFEvent)
+                                   totalAmountTextFieldControlEvent: totalAmountTFEvent,
+                                   exitButtonTapped: header.rightButton.rx.tap,
+                                   backButtonTapped: header.leftButton.rx.tap
+        )
         let output = viewModel.transform(input: input)
         
         output.showCSMemberView
@@ -251,6 +256,40 @@ class CSInfoVC: UIViewController {
                     unfocusTitleTF()
                 default:
                     break
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        output.showBackAlert
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                showAlert(view: alert,
+                          type: .warnNormal,
+                          title: "정산 방법을 다시 선택하시겠어요?",
+                          descriptions: "지금까지 정산하신 내역이 사라져요",
+                          leftButtonTitle: "취 소",
+                          rightButtonTitle: "다시 선택")
+                isExit = false
+            })
+            .disposed(by: disposeBag)
+        
+        output.showExitAlert
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                showExitAlert(view: alert)
+                isExit = true
+            })
+            .disposed(by: disposeBag)
+        
+        alert.rightButtonTapSubject
+            .asDriver(onErrorJustReturn: ())
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                guard let isExit else { return }
+                if isExit {
+                    self.navigationController?.popToRootViewController(animated: true)
+                } else {
+                    self.navigationController?.popViewController(animated: true)
                 }
             })
             .disposed(by: disposeBag)

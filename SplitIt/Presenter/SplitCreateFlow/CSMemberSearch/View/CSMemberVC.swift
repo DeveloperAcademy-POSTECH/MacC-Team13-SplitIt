@@ -12,7 +12,7 @@ import RxCocoa
 import RxSwift
 import Reusable
 
-class CSMemberVC: UIViewController, Reusable {
+class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     let disposeBag = DisposeBag()
     let viewModel = CSMemberVM()
     
@@ -24,6 +24,8 @@ class CSMemberVC: UIViewController, Reusable {
     let subTitleLabel = UILabel()
     let memberTableView = UITableView(frame: .zero)
     let nextButton = NewSPButton()
+    
+    let alert = SPAlertController()
     
     let tableViewTapGesture = UITapGestureRecognizer()
     
@@ -152,7 +154,9 @@ class CSMemberVC: UIViewController, Reusable {
     
     private func setBinding() {
         let input = CSMemberVM.Input(searchButtonTapped: searchBarButton.rx.tap,
-                                     nextButtonTapped: nextButton.rx.tap, tableViewTapped: tableViewTapGesture.rx.event)
+                                     nextButtonTapped: nextButton.rx.tap,
+                                     tableViewTapped: tableViewTapGesture.rx.event,
+                                     exitButtonTapped: header.rightButton.rx.tap)
         let output = viewModel.transform(input: input)
         
         output.tableData
@@ -189,10 +193,28 @@ class CSMemberVC: UIViewController, Reusable {
         
         output.showExclView
             .asDriver()
-            .drive(onNext: {
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                
                 let vc = SplitRepository.share.isSmartSplit ? ExclItemInputVC() : SplitShareVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
+        
+        output.showExitAlert
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.showExitAlert(view: alert)
+            })
+            .disposed(by: disposeBag)
+        
+        alert.rightButtonTapSubject
+            .asDriver(onErrorJustReturn: ())
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.navigationController?.popToRootViewController(animated: true)
+            })
+            .disposed(by: disposeBag)
+        
     }
 }

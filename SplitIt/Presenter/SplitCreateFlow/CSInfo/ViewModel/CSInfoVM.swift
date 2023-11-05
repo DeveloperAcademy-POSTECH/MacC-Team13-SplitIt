@@ -21,6 +21,8 @@ class CSInfoVM {
         let totalAmount: Driver<String>
         let titleTextFieldControlEvent: Observable<UIControl.Event>
         let totalAmountTextFieldControlEvent: Observable<UIControl.Event>
+        let exitButtonTapped: ControlEvent<Void>
+        let backButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
@@ -32,6 +34,8 @@ class CSInfoVM {
         let totalAmountTextFieldIsValid: Driver<Bool>
         let nextButtonIsEnable: Driver<Bool>
         let titleTextFieldControlEvent: Driver<UIControl.Event>
+        let showExitAlert: Driver<Void>
+        let showBackAlert: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -124,7 +128,9 @@ class CSInfoVM {
                       titleTextFieldIsEnable: titleTextFieldCountIsEmpty,
                       totalAmountTextFieldIsValid: totalAmountIsValid.asDriver(),
                       nextButtonIsEnable: nextButtonIsEnable,
-                      titleTextFieldControlEvent: titleTFControlEvent)
+                      titleTextFieldControlEvent: titleTFControlEvent,
+                      showExitAlert: input.exitButtonTapped.asDriver(),
+                      showBackAlert: input.backButtonTapped.asDriver())
     }
 
 }

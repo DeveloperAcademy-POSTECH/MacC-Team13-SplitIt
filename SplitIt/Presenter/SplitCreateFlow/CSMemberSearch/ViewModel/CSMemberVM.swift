@@ -16,12 +16,14 @@ class CSMemberVM {
         let searchButtonTapped: ControlEvent<Void>
         let nextButtonTapped: ControlEvent<Void>
         let tableViewTapped: ControlEvent<UITapGestureRecognizer>
+        let exitButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
         let tableData: BehaviorRelay<[CSMember]>
         let showSearchView: Driver<Void>
         let showExclView: ControlEvent<Void>
+        let showExitAlert: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -35,6 +37,8 @@ class CSMemberVM {
             input.tableViewTapped.asDriver().map { _ in () }
         )
         
+        let showExitAlert: Driver<Void> = input.exitButtonTapped.asDriver()
+        
         input.nextButtonTapped
             .asDriver()
             .drive(onNext: {
@@ -44,6 +48,10 @@ class CSMemberVM {
             })
             .disposed(by: disposeBag)
         
-        return Output(tableData: tableData, showSearchView: showSearchView, showExclView: showExclView)
+        return Output(tableData: tableData,
+                      showSearchView: showSearchView,
+                      showExclView: showExclView,
+                      showExitAlert: showExitAlert
+        )
     }
 }

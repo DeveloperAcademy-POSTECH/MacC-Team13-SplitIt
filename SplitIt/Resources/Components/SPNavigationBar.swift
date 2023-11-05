@@ -51,6 +51,7 @@ extension SPNavigationBar {
         case toBack
         case toRoot
         case toAlert
+        case none
     }
 }
 
@@ -76,7 +77,7 @@ final class SPNavigationBar: UIView {
             setLeftBackButton(action: .toRoot, vc: vc)
         case .csInfoCreate:
             setNaviImage(imageCase: 0)
-            setLeftBackButton(action: .toBack, vc: vc)
+            setLeftBackButton(action: .none, vc: vc)
             setExitButton(vc: vc)
         case .csMemberCreate:
             setNaviImage(imageCase: 1)
@@ -234,9 +235,11 @@ final class SPNavigationBar: UIView {
             }
         case .toAlert:
             let backAction = UIAction {_ in
-                
+
             }
             leftButton.addAction(backAction, for: .touchUpInside)
+        case .none:
+            break
         }
     }
     
@@ -335,9 +338,9 @@ final class SPNavigationBar: UIView {
             $0.width.height.equalTo(26)
         }
         
-        let exitAction = UIAction { action in
-            vc.navigationController?.popToRootViewController(animated: true)
-        }
-        rightButton.addAction(exitAction, for: .touchUpInside)
+//        let exitAction = UIAction { action in
+//            vc.navigationController?.popToRootViewController(animated: true)
+//        }
+//        rightButton.addAction(exitAction, for: .touchUpInside)
     }
 }

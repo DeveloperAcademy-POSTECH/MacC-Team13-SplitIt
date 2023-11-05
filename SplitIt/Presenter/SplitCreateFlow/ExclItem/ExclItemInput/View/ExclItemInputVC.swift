@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 import RxAppState
 
-class ExclItemInputVC: UIViewController {
+class ExclItemInputVC: UIViewController, SPAlertDelegate {
     
     var disposeBag = DisposeBag()
     
@@ -26,6 +26,8 @@ class ExclItemInputVC: UIViewController {
     let tableView = UITableView(frame: .zero)
     
     let nextButton = NewSPButton()
+    
+    let alert = SPAlertController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -130,7 +132,8 @@ class ExclItemInputVC: UIViewController {
     func setBinding() {
         let input = ExclItemInputVM.Input(viewDidDisAppear: self.rx.viewDidDisappear,
                                           nextButtonTapped: nextButton.rx.tap,
-                                          exclItemAddButtonTapped: exclItemAddButton.rx.tap)
+                                          exclItemAddButtonTapped: exclItemAddButton.rx.tap,
+                                          exitButtonTapped: header.rightButton.rx.tap)
         let output = viewModel.transform(input: input)
         
         output.exclItemsRelay
@@ -184,10 +187,26 @@ class ExclItemInputVC: UIViewController {
             .disposed(by: disposeBag)
         
         output.showResultView
-            .drive(onNext: { [weak self] _ in
+            .drive(onNext: { [weak self] indexPath in
+                guard let self = self else { return }
                 SplitRepository.share.updateDataToDB()
                 let vc = SplitShareVC()
-                self?.navigationController?.pushViewController(vc, animated: true)
+                self.navigationController?.pushViewController(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        output.showExitAlert
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.showExitAlert(view: alert)
+            })
+            .disposed(by: disposeBag)
+        
+        alert.rightButtonTapSubject
+            .asDriver(onErrorJustReturn: ())
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.navigationController?.popToRootViewController(animated: true)
             })
             .disposed(by: disposeBag)
     }
