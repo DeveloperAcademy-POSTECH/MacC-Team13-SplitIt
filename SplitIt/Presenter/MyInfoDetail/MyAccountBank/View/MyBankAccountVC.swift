@@ -221,6 +221,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
                         if bankName != "은행을 선택해주세요" {
                             self?.bankNameLabel.text = bankName
                             self?.viewModel.inputBankName = self?.bankNameLabel.text ?? ""
+                            self?.viewModel.checkBank = 1
                             print(bankName)
                         }
                     }
@@ -253,34 +254,63 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     
     //UserDefaluts 변경되는 값에 따라 바로 UI 변경되도록 하는 함수
     func asapRxData() {
-                
-        userDefault.rx
-            .observe(Bool.self, "tossPay")
-            .subscribe(onNext: { value in
-                guard let value = value else { return }
-                let newImage = value ? "TossPayIconChecked" : "TossPayIconUnchecked"
-                self.tossPayBtn.image = UIImage(named: newImage)
+        
+        viewModel.isTossPayToggled
+            .subscribe(onNext: { [weak self] isToggled in
+                let newImage = isToggled ? "TossPayIconChecked" : "TossPayIconUnchecked"
+                self?.tossPayBtn.image = UIImage(named: newImage)
                 
             })
             .disposed(by: disposeBag)
         
-        userDefault.rx
-            .observe(Bool.self, "kakaoPay")
-            .subscribe(onNext: { value in
-                guard let value = value else { return }
-                let newImage = value ? "KakaoPayIconChecked" : "KakaoPayIconUnchecked"
-                self.kakaoPayBtn.image = UIImage(named: newImage)
+        viewModel.isKakaoPayToggled
+            .subscribe(onNext: { [weak self] isToggled in
+                let newImage = isToggled ? "KakaoPayIconChecked" : "KakaoPayIconUnchecked"
+                self?.kakaoPayBtn.image = UIImage(named: newImage)
+                
             })
             .disposed(by: disposeBag)
         
-        userDefault.rx
-            .observe(Bool.self, "naverPay")
-            .subscribe(onNext: { value in
-                guard let value = value else { return }
-                let newImage = value ? "NaverPayIconChecked" : "NaverPayIconUnchecked"
-                self.naverPayBtn.image = UIImage(named: newImage)
+        
+        viewModel.isNaverPayToggled
+            .subscribe(onNext: { [weak self] isToggled in
+                let newImage = isToggled ? "NaverPayIconChecked" : "NaverPayIconUnchecked"
+                self?.naverPayBtn.image = UIImage(named: newImage)
+                
             })
             .disposed(by: disposeBag)
+        
+        
+//        userDefault.rx
+//            .observe(Bool.self, "tossPay")
+//            .subscribe(onNext: { value in
+//                guard let value = value else { return }
+//                let newImage = value ? "TossPayIconChecked" : "TossPayIconUnchecked"
+//                self.tossPayBtn.image = UIImage(named: newImage)
+//                self.viewModel.isTossPayToggled = value
+//
+//            })
+//            .disposed(by: disposeBag)
+        
+//        userDefault.rx
+//            .observe(Bool.self, "kakaoPay")
+//            .subscribe(onNext: { value in
+//                guard let value = value else { return }
+//                let newImage = value ? "KakaoPayIconChecked" : "KakaoPayIconUnchecked"
+//                self.kakaoPayBtn.image = UIImage(named: newImage)
+//                self.viewModel.isKakaoPayToggled = value
+//            })
+//            .disposed(by: disposeBag)
+//
+//        userDefault.rx
+//            .observe(Bool.self, "naverPay")
+//            .subscribe(onNext: { value in
+//                guard let value = value else { return }
+//                let newImage = value ? "NaverPayIconChecked" : "NaverPayIconUnchecked"
+//                self.naverPayBtn.image = UIImage(named: newImage)
+//                self.viewModel.isNaverPayToggled = value
+//            })
+//            .disposed(by: disposeBag)
         
         userDefault.rx
             .observe(String.self, "userBank")

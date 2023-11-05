@@ -28,9 +28,7 @@ class MyInfoVC: UIViewController {
     var kakaoPos: CGFloat = 100
     var naverPos: CGFloat = 300
     
-    let tossValue = UserDefaults.standard.bool(forKey: "tossPay")
-    let kakaoValue = UserDefaults.standard.bool(forKey: "kakaoPay")
-    let naverValue = UserDefaults.standard.bool(forKey: "naverPay")
+    
     
     //>>>backView위에 그려지는 뷰
     //>>>accountView 시작
@@ -265,7 +263,6 @@ class MyInfoVC: UIViewController {
     }
     
     
-    
     func userNewInfo() {
         
         let tossValue = UserDefaults.standard.bool(forKey: "tossPay")
@@ -273,18 +270,17 @@ class MyInfoVC: UIViewController {
         let naverValue = UserDefaults.standard.bool(forKey: "naverPay")
         
         //정보가 없다면 false, 정보 있으면 true
-        var nickName: Bool = userDefault.string(forKey: "userNickName") == "" ? false : true
-        var name: Bool = userDefault.string(forKey: "userName") == "" ? false : true
-        var account: Bool = userDefault.string(forKey: "userAccount") == "" ? false : true
-        var bank: Bool = userDefault.string(forKey: "userBank") == "" ? false : true
-        var checkPay = tossValue || kakaoValue || naverValue //하나라도 참이면 checkPay는 참
+        let nickName: Bool = userDefault.string(forKey: "userNickName") == "" ? false : true
+        let name: Bool = userDefault.string(forKey: "userName") == "" ? false : true
+        let account: Bool = userDefault.string(forKey: "userAccount") == "" ? false : true
+        let bank: Bool = userDefault.string(forKey: "userBank") == "" ? false : true
+        let checkPay = tossValue || kakaoValue || naverValue //하나라도 참이면 checkPay는 참
         
         self.userName.text = userDefault.string(forKey: "userNickName") == "" ? "정산자" : userDefault.string(forKey: "userNickName")
         self.accountBankLabel.text = userDefault.string(forKey: "userBank")
         self.accountLabel.text = userDefault.string(forKey: "userAccount")
         self.accountNameLabel.text = userDefault.string(forKey: "userName")
         
-        print(nickName, name, account, bank)
         //모든 정보가 없을 때,
         if !nickName && !name && !account && !bank && !checkPay {
             backViewHeight = 104
@@ -308,7 +304,6 @@ class MyInfoVC: UIViewController {
             tossPayBtn.isHidden = !tossValue
             kakaoPayBtn.isHidden = !kakaoValue
             naverPayBtn.isHidden = !naverValue
-            
             backViewHeight = 221
             
             tossPos = tossValue ? 12 : 0
@@ -347,13 +342,13 @@ class MyInfoVC: UIViewController {
                 make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
             }
             
-            kakaoPayBtn.snp.makeConstraints { make in
+            kakaoPayBtn.snp.updateConstraints { make in
                 make.width.height.equalTo(50)
                 make.leading.equalTo(accountView.snp.leading).offset(kakaoPos)
                 make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
             }
             
-            naverPayBtn.snp.makeConstraints { make in
+            naverPayBtn.snp.updateConstraints { make in
                 make.width.height.equalTo(50)
                 make.leading.equalTo(accountView.snp.leading).offset(naverPos)
                 make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
@@ -410,13 +405,10 @@ class MyInfoVC: UIViewController {
         
         output.moveToPrivacyView
             .drive(onNext:{
-                //                print("개인정보 처리방침 이동dd")
-                //                let url = NSURL(string: "https://kori-collab.notion.site/e3407a6ca4724b078775fd13749741b1?pvs=4")
-                //                let privacyWebView: SFSafariViewController = SFSafariViewController(url: url! as URL)
-                //                self.present(privacyWebView, animated: true, completion: nil)
-                for key in UserDefaults.standard.dictionaryRepresentation().keys {
-                    UserDefaults.standard.removeObject(forKey: key.description)
-                }
+                print("개인정보 처리방침 이동dd")
+                let url = NSURL(string: "https://kori-collab.notion.site/e3407a6ca4724b078775fd13749741b1?pvs=4")
+                let privacyWebView: SFSafariViewController = SFSafariViewController(url: url! as URL)
+                self.present(privacyWebView, animated: true, completion: nil)
                 
             })
             .disposed(by: disposeBag)
