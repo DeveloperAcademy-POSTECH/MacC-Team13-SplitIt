@@ -17,6 +17,8 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     let accountCustomKeyboard = AccountCustomKeyboard()
     
     let alert = SPAlertController()
+    let backAlert = SPAlertController()
+    
     let viewModel = MyBankAccountVM()
     var disposeBag = DisposeBag()
     let maxCharacterCount = 8
@@ -120,21 +122,35 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         
         alert.rightButtonTapSubject
               .asDriver(onErrorJustReturn: ())
-              .drive(onNext: {
-                  self.deleteAllInfo()
+              .drive(onNext: { [weak self] in
+                  self?.deleteAllInfo()
                   print("ex. alert의 삭제 버튼 탭 시 무언가가 삭제되는 로직")
               })
               .disposed(by: disposeBag)
         
-        alert.leftButtonTapSubject
-               .asDriver(onErrorJustReturn: ())
-               .drive(onNext: {
-                   print("ex. alert의 뒤로가기 탭 시 무언가의 이벤트")
-               })
-               .disposed(by: disposeBag)
        
     }
     
+    func setBackAlert() {
+        
+        showAlert(view: backAlert,
+                type: .warnNormal,
+                title: "입력을 중단하시겠어요?",
+                descriptions: "지금까지 작성하신 내역이 사라져요",
+                leftButtonTitle: "취 소",
+                rightButtonTitle: "중단하기")
+        
+        
+        backAlert.rightButtonTapSubject
+              .asDriver(onErrorJustReturn: ())
+              .drive(onNext: { [weak self] in
+                  self?.navigationController?.popViewController(animated: true)
+              })
+              .disposed(by: disposeBag)
+    }
+    
+
+
     //수정버튼 활성화 비활성화 선택해주는 함수
     func checkUserInfo() {
 //
@@ -206,7 +222,8 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
                                           tossTapped: tossTap.rx.event.asObservable().map { _ in () },
                                           kakaoTapeed: kakaoTap.rx.event.asObservable().map { _ in () },
                                           naverTapped: naverTap.rx.event.asObservable().map { _ in () },
-                                          deleteBtnTapped: deleteBtn.rx.tap.asDriver()
+                                          deleteBtnTapped: deleteBtn.rx.tap.asDriver(),
+                                          cancelBtnTapped: header.leftButton.rx.tap.asDriver()
         )
         
         let output = viewModel.transform(input: input)
@@ -231,11 +248,17 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             .disposed(by: disposeBag)
         
         output.showAlertView
-            .drive(onNext: {
-                self.setAlert()
+            .drive(onNext: { [weak self] in
+                self?.setAlert()
             })
             .disposed(by: disposeBag)
         
+        output.cancelBackToView
+            .drive(onNext: { [weak self] in
+                self?.setBackAlert()
+                print(1111)
+            })
+            .disposed(by: disposeBag)
         
      
     }
@@ -252,7 +275,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         self.navigationController?.popViewController(animated: true)
     }
     
-    //UserDefaluts 변경되는 값에 따라 바로 UI 변경되도록 하는 함수
+    //페이류 변경되는 값에 따라 바로 UI 변경되도록 하는 함수
     func asapRxData() {
         
         viewModel.isTossPayToggled
@@ -280,38 +303,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             })
             .disposed(by: disposeBag)
         
-        
-//        userDefault.rx
-//            .observe(Bool.self, "tossPay")
-//            .subscribe(onNext: { value in
-//                guard let value = value else { return }
-//                let newImage = value ? "TossPayIconChecked" : "TossPayIconUnchecked"
-//                self.tossPayBtn.image = UIImage(named: newImage)
-//                self.viewModel.isTossPayToggled = value
-//
-//            })
-//            .disposed(by: disposeBag)
-        
-//        userDefault.rx
-//            .observe(Bool.self, "kakaoPay")
-//            .subscribe(onNext: { value in
-//                guard let value = value else { return }
-//                let newImage = value ? "KakaoPayIconChecked" : "KakaoPayIconUnchecked"
-//                self.kakaoPayBtn.image = UIImage(named: newImage)
-//                self.viewModel.isKakaoPayToggled = value
-//            })
-//            .disposed(by: disposeBag)
-//
-//        userDefault.rx
-//            .observe(Bool.self, "naverPay")
-//            .subscribe(onNext: { value in
-//                guard let value = value else { return }
-//                let newImage = value ? "NaverPayIconChecked" : "NaverPayIconUnchecked"
-//                self.naverPayBtn.image = UIImage(named: newImage)
-//                self.viewModel.isNaverPayToggled = value
-//            })
-//            .disposed(by: disposeBag)
-        
+  
         userDefault.rx
             .observe(String.self, "userBank")
             .subscribe(onNext: { value in
@@ -412,6 +404,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         header.do {
             $0.applyStyle(style: .myInfo, vc: self)
             $0.buttonState.accept(true)
+            $0.leftButton.removeTarget(nil, action: nil, for: .touchUpInside)
         }
         
         nickNameLabel.do {
