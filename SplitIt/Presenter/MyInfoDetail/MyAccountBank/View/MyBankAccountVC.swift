@@ -256,7 +256,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         output.cancelBackToView
             .drive(onNext: { [weak self] in
                 self?.setBackAlert()
-                print(1111)
             })
             .disposed(by: disposeBag)
         

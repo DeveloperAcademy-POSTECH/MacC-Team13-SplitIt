@@ -30,6 +30,10 @@ class KeyboardButton: UIButton {
     
     private func setupButton() {
         
+        let keyboardHeight = KeyboardButton.getKeyboardHeightForCurrentDevice()
+        let btnWidth = Int((UIScreen.main.bounds.width - 24) / 3)
+        let btnHeight = Int(keyboardHeight - 50) / 4
+        
         let customFont = UIFont(name: "ONEMobileRegular", size: 30) ?? UIFont.systemFont(ofSize: 20)
         let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: customFont]
         let attributedString = NSAttributedString(string: btnTitle, attributes: attributes)
@@ -44,8 +48,33 @@ class KeyboardButton: UIButton {
         layer.borderWidth = 1
         layer.borderColor = UIColor.black.cgColor
         
-      
-
-
+        snp.makeConstraints { make in
+            make.width.equalTo(btnWidth)
+            make.height.equalTo(btnHeight)
+        }
     }
+    
+    static func getKeyboardHeightForCurrentDevice() -> CGFloat {
+        let screenSize = UIScreen.main.nativeBounds.size
+        let isIPhoneXSeries = (screenSize.height == 2436 || screenSize.height == 2688 || screenSize.height == 1792 || screenSize.height == 2532)
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            switch screenSize.height {
+            case 1136:
+                return isIPhoneXSeries ? 335 : 216
+            case 1334:
+                return isIPhoneXSeries ? 335 : 216
+            case 1920, 2208:
+                return isIPhoneXSeries ? 348 : 226
+            case 2436, 2688, 1792, 2532:
+                return 291
+            default:
+                return 216
+            }
+        } else {
+            return 291
+        }
+    }
+    
+   
 }
