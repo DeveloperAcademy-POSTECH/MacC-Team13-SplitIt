@@ -53,6 +53,7 @@ class ExclItemInfoEditModalVM {
         let priceResult = BehaviorRelay<Int>(value: 0)
         let numberFormatter = NumberFormatterHelper()
         let showAlertRelay = PublishRelay<(String, String)>()
+        let alertItem = BehaviorRelay<(String, String)>(value: ("", ""))
 
         let maxCurrency = 10000000
         let priceLimit = BehaviorRelay<Int>(value: 0)
@@ -208,11 +209,20 @@ class ExclItemInfoEditModalVM {
             })
             .disposed(by: disposeBag)
         
-        input.deleteButtonTapped
+        titleResult
             .asDriver()
+            .drive(onNext: { [weak self] title in
+                guard let self = self else { return }
+                alertItem.accept((self.exclItemIdx, title))
+            })
+            .disposed(by: disposeBag)
+
+        input.deleteButtonTapped
+            .withLatestFrom(alertItem)
+            .asDriver(onErrorJustReturn: (("", "")))
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                showAlertRelay.accept((exclItemIdx, titleResult.value))
+                showAlertRelay.accept($0)
             })
             .disposed(by: disposeBag)
         

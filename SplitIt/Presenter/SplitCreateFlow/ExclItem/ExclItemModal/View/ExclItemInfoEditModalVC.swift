@@ -144,11 +144,25 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
         setTableView()
         
         deleteButton.do {
+            $0.layer.cornerRadius = 8
             $0.setTitle("이 항목 삭제하기", for: .normal)
-            setUnderLine(label: $0.titleLabel!)
             $0.setTitleColor(.SurfaceWarnRed, for: .normal)
-            $0.setTitleColor(.SurfaceWarnRedPressed, for: .highlighted)
+            $0.backgroundColor = .clear
+            $0.titleLabel?.font = UIFont.KoreanButtonText
+            setUnderLine(label: $0.titleLabel!)
         }
+        
+        deleteButton.rx.controlEvent(.touchDown)
+            .asDriver()
+            .map{ _ -> UIColor in UIColor(hex: 0xF8F0ED) }
+            .drive(deleteButton.rx.backgroundColor)
+            .disposed(by: disposeBag)
+        
+        deleteButton.rx.controlEvent([.touchUpInside, .touchCancel, .touchDragExit, .touchUpOutside])
+            .asDriver()
+            .map{ _ -> UIColor in .clear }
+            .drive(deleteButton.rx.backgroundColor)
+            .disposed(by: disposeBag)
     }
     
     func setTableView() {
