@@ -167,19 +167,12 @@ class EditCSInfoVC: UIViewController {
             totalAmountTextFiled.rx.controlEvent(.editingDidBegin).map { UIControl.Event.editingDidBegin},
             totalAmountTextFiled.rx.controlEvent(.editingDidEnd).map { UIControl.Event.editingDidEnd })
         
-        let input = EditCSInfoVM.Input(nextButtonTapped: header.rightButton.rx.tap,
+        let input = EditCSInfoVM.Input(confirmButtonTapped: header.rightButton.rx.tap,
                                    title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
                                    totalAmount: totalAmountTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
                                    titleTextFieldControlEvent: titleTFEvent,
                                    totalAmountTextFieldControlEvent: totalAmountTFEvent)
         let output = viewModel.transform(input: input)
-        
-        output.showCSMemberView
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-//                self.navigationController?.popViewController(animated: true)
-            })
-            .disposed(by: disposeBag)
         
         output.titleString
             .drive(titleTextFiled.rx.text)
@@ -213,7 +206,7 @@ class EditCSInfoVC: UIViewController {
             .drive(totalAmountTextFiled.rx.text)
             .disposed(by: disposeBag)
         
-        output.nextButtonIsEnable
+        output.confirmButtonIsEnable
             .drive(header.buttonState)
             .disposed(by: disposeBag)
         

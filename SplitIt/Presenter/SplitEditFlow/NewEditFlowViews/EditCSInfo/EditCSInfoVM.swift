@@ -18,7 +18,7 @@ class EditCSInfoVM {
     let csinfo = SplitRepository.share.csInfoArr.value.first
     
     struct Input {
-        let nextButtonTapped: ControlEvent<Void> // 다음 버튼
+        let confirmButtonTapped: ControlEvent<Void> // 다음 버튼
         let title: Driver<String> // TitleTextField의 text
         let totalAmount: Driver<String>
         let titleTextFieldControlEvent: Observable<UIControl.Event>
@@ -26,20 +26,19 @@ class EditCSInfoVM {
     }
     
     struct Output {
-        let showCSMemberView: Driver<Void>
         let titleString: Driver<String>
         let titleCount: Driver<String>
         let totalAmount: Driver<String>
         let titleTextFieldIsValid: BehaviorRelay<Bool>
         let titleTextFieldIsEnable: Driver<Bool>
         let totalAmountTextFieldIsValid: Driver<Bool>
-        let nextButtonIsEnable: Driver<Bool>
+        let confirmButtonIsEnable: Driver<Bool>
         let titleTextFieldControlEvent: Driver<UIControl.Event>
     }
     
     func transform(input: Input) -> Output {
         let inputTitle = input.title
-        let showCSTotalAmountView = input.nextButtonTapped
+        let saveCSInfo = input.confirmButtonTapped
         let textFieldCount = BehaviorRelay<String>(value: "")
         let titleTextFieldIsValid = BehaviorRelay<Bool>(value: true)
         
@@ -49,7 +48,7 @@ class EditCSInfoVM {
 
         let maxCurrency = 10000000
         
-        let nextButtonIsEnable: Driver<Bool>
+        let confirmButtonIsEnable: Driver<Bool>
         
         let title = BehaviorRelay(value: "")
         var price = Driver.merge(input.totalAmount)
@@ -105,7 +104,7 @@ class EditCSInfoVM {
         
         let csInfoDriver = Driver.combineLatest(title.asDriver(), input.totalAmount)
         
-        showCSTotalAmountView
+        saveCSInfo
             .asDriver()
             .withLatestFrom(csInfoDriver)
             .drive(onNext: { title, totalAmount in
@@ -131,7 +130,7 @@ class EditCSInfoVM {
             .drive(titleTextFieldIsValid)
             .disposed(by: disposeBag)
         
-        nextButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(), totalAmountTextFieldCountIsEmpty.asDriver())
+        confirmButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(), totalAmountTextFieldCountIsEmpty.asDriver())
             .map{ $0 && $1 }
             .asDriver()
         
@@ -154,14 +153,13 @@ class EditCSInfoVM {
             .drive(totalAmountIsValid)
             .disposed(by: disposeBag)
         
-        return Output(showCSMemberView: showCSTotalAmountView.asDriver(),
-                      titleString: title.asDriver(),
+        return Output(titleString: title.asDriver(),
                       titleCount: textFieldCount.asDriver(),
                       totalAmount: totalAmountString,
                       titleTextFieldIsValid: titleTextFieldIsValid,
                       titleTextFieldIsEnable: titleTextFieldCountIsEmpty,
                       totalAmountTextFieldIsValid: totalAmountIsValid.asDriver(),
-                      nextButtonIsEnable: nextButtonIsEnable,
+                      confirmButtonIsEnable: confirmButtonIsEnable,
                       titleTextFieldControlEvent: titleTFControlEvent)
     }
 
