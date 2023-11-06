@@ -85,26 +85,26 @@ final class SPNavigationBar: UIView {
             setExitButton(vc: vc, action: false)
         case .memberSearch:
             setNaviTitle(title: "멤버 추가")
-            setRightDismissButton(title: "확인", titleColor: .AppColorStatusDarkPear, vc: vc)
+            setRightDismissButton(title: "확인", titleColor: .AppColorStatusDarkPear, selectedColor: .SurfaceBrandPearPressed, vc: vc)
         case .exclItemCreate:
             setNaviImage(imageCase: 2)
             setLeftBackButton(action: .none, vc: vc)
             setExitButton(vc: vc, action: false)
         case .exclItemCreateModal:
             setNaviTitle(title: "따로 정산 항목")
-            setLeftDismissButton(title: "취소", titleColor: .SurfaceBrandWatermelon, vc: vc)
-            setRightDismissButton(title: "추가", titleColor: .SurfaceBrandWatermelon, vc: vc)
+            setLeftDismissButton(title: "취소", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
+            setRightDismissButton(title: "추가", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
         case .exclItemEditModal:
             setNaviTitle(title: "따로 정산 항목 수정")
-            setLeftDismissButton(title: "취소", titleColor: .SurfaceBrandWatermelon, vc: vc)
-            setRightDismissButton(title: "저장", titleColor: .SurfaceBrandWatermelon, vc: vc)
+            setLeftDismissButton(title: "취소", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
+            setRightDismissButton(title: "저장", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
         case .splitEdit:
             setNaviTitle(title: "정산 수정하기")
             setLeftBackButton(action: .toBack, vc: vc)
         case .csEdit:
             setNaviTitle(title: "차수 수정하기")
             setLeftBackButton(action: .toBack, vc: vc)
-            setRightBackButton(title: "확인", titleColor: .SurfaceBrandWatermelon, vc: vc)
+            setRightBackButton(title: "확인", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
         case .print:
             if SplitRepository.share.isCreate {
                 setNaviTitle(title: "정산 결과")
@@ -122,7 +122,7 @@ final class SPNavigationBar: UIView {
         case .myInfo:
             setNaviTitle(title: "나의 정보")
             setLeftBackButton(action: .toBack, vc: vc)
-            setRightBackButton(title: "저장", titleColor: .SurfaceBrandWatermelon, vc: vc)
+            setRightBackButton(title: "저장", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
         case .memberSearchHistory:
             setNaviTitle(title: "멤버 추가 내역")
             setLeftBackButton(action: .toBack, vc: vc)
@@ -248,11 +248,12 @@ final class SPNavigationBar: UIView {
         }
     }
     
-    func setRightBackButton(title: String, titleColor: UIColor, vc: UIViewController) {
+    func setRightBackButton(title: String, titleColor: UIColor, selectedColor: UIColor, vc: UIViewController) {
         rightButton.do {
             $0.setTitle(title, for: .normal)
             $0.titleLabel?.font = .KoreanSubtitle
             $0.setTitleColor(titleColor, for: .normal)
+            $0.setTitleColor(selectedColor, for: .highlighted)
             $0.setTitleColor(.TextDeactivate, for: .disabled)
         }
         
@@ -278,10 +279,11 @@ final class SPNavigationBar: UIView {
             .disposed(by: disposeBag)
     }
     
-    func setLeftDismissButton(title: String, titleColor: UIColor, vc: UIViewController) {
+    func setLeftDismissButton(title: String, titleColor: UIColor, selectedColor: UIColor, vc: UIViewController) {
         leftButton.do {
             $0.setTitle(title, for: .normal)
             $0.setTitleColor(titleColor, for: .normal)
+            $0.setTitleColor(selectedColor, for: .highlighted)
             $0.titleLabel?.font = .KoreanSubtitle
         }
         
@@ -298,11 +300,12 @@ final class SPNavigationBar: UIView {
         leftButton.addAction(dismissAction, for: .touchUpInside)
     }
     
-    func setRightDismissButton(title: String, titleColor: UIColor, vc: UIViewController) {
+    func setRightDismissButton(title: String, titleColor: UIColor, selectedColor: UIColor, vc: UIViewController) {
         rightButton.do {
             $0.setTitle(title, for: .normal)
             $0.titleLabel?.font = .KoreanSubtitle
             $0.setTitleColor(titleColor, for: .normal)
+            $0.setTitleColor(selectedColor, for: .highlighted)
             $0.setTitleColor(.TextDeactivate, for: .disabled)
         }
         
