@@ -78,18 +78,18 @@ final class SPNavigationBar: UIView {
         case .csInfoCreate:
             setNaviImage(imageCase: 0)
             setLeftBackButton(action: .none, vc: vc)
-            setExitButton(vc: vc)
+            setExitButton(vc: vc, action: false)
         case .csMemberCreate:
             setNaviImage(imageCase: 1)
             setLeftBackButton(action: .toBack, vc: vc)
-            setExitButton(vc: vc)
+            setExitButton(vc: vc, action: false)
         case .memberSearch:
             setNaviTitle(title: "멤버 추가")
             setRightDismissButton(title: "확인", titleColor: .AppColorStatusDarkPear, vc: vc)
         case .exclItemCreate:
             setNaviImage(imageCase: 2)
             setLeftBackButton(action: .none, vc: vc)
-            setExitButton(vc: vc)
+            setExitButton(vc: vc, action: false)
         case .exclItemCreateModal:
             setNaviTitle(title: "따로 정산 항목")
             setLeftDismissButton(title: "취소", titleColor: .SurfaceBrandWatermelon, vc: vc)
@@ -108,7 +108,7 @@ final class SPNavigationBar: UIView {
         case .print:
             if SplitRepository.share.isCreate {
                 setNaviTitle(title: "정산 결과")
-                setExitButton(vc: vc)
+                setExitButton(vc: vc, action: true)
             } else {
                 setNaviTitle(title: "정산 결과")
                 setLeftBackButton(action: .toBack, vc: vc)
@@ -328,7 +328,7 @@ final class SPNavigationBar: UIView {
             .disposed(by: disposeBag)
     }
     
-    func setExitButton(vc: UIViewController) {
+    func setExitButton(vc: UIViewController, action: Bool) {
         rightButton.do {
             $0.setImage(UIImage(named: "XMark"), for: .normal)
             $0.imageView?.tintColor = UIColor.TextPrimary
@@ -343,9 +343,11 @@ final class SPNavigationBar: UIView {
             $0.width.height.equalTo(26)
         }
         
-//        let exitAction = UIAction { action in
-//            vc.navigationController?.popToRootViewController(animated: true)
-//        }
-//        rightButton.addAction(exitAction, for: .touchUpInside)
+        if action {
+            let exitAction = UIAction { action in
+                vc.navigationController?.popToRootViewController(animated: true)
+            }
+            rightButton.addAction(exitAction, for: .touchUpInside)
+        }
     }
 }

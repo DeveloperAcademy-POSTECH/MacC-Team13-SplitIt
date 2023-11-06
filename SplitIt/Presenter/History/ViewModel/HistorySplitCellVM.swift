@@ -31,6 +31,7 @@ class HistorySplitCellVM {
     
     func getTotalAmount() -> String {
         let calcResult: Int = csInfoArr.map{ $0.totalAmount }.reduce(0, +)
-        return String(calcResult)
+        let numberFormetter = NumberFormatterHelper()
+        return numberFormetter.formattedString(from: calcResult)
     }
 }
