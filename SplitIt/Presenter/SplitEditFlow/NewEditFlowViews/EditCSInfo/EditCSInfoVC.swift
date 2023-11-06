@@ -54,7 +54,6 @@ class EditCSInfoVC: UIViewController {
         
         header.do {
             $0.applyStyle(style: .csEdit, vc: self)
-            $0.buttonState.accept(true)
         }
         
         titleMessage.do {
@@ -194,17 +193,36 @@ class EditCSInfoVC: UIViewController {
             })
             .disposed(by: disposeBag)
 
-        output.totalAmountTextFieldIsValid
-            .drive(onNext: { [weak self] isValid in
-                guard let self = self else { return }
+        
+        
+        Driver.combineLatest(output.totalAmountTextFieldIsValid,
+                           output.totalAmountTextFieldMinIsValid)
+        .drive(onNext: { [weak self] isValid, isMinValid in
+            guard let self = self else { return }
+            if !isValid {
                 UIView.transition(with: self.totalAmountTextFiledNotice, duration: 0.33, options: .transitionCrossDissolve) {
-                    self.totalAmountTextFiledNotice.isHidden = isValid
+                    self.totalAmountTextFiledNotice.isHidden = false
+                    self.totalAmountTextFiledNotice.text = "천만원 이상은 입력할 수 없어요"
                 }
-            })
-            .disposed(by: disposeBag)
+            } else if !isMinValid {
+                UIView.transition(with: self.totalAmountTextFiledNotice, duration: 0.33, options: .transitionCrossDissolve) {
+                    self.totalAmountTextFiledNotice.isHidden = false
+                    self.totalAmountTextFiledNotice.text = "총 금액은 제외 항목의 총합보다 커야해요"
+                }
+            } else {
+                UIView.transition(with: self.totalAmountTextFiledNotice, duration: 0.33, options: .transitionCrossDissolve) {
+                    self.totalAmountTextFiledNotice.isHidden = true
+                }
+            }
+        })
+        .disposed(by: disposeBag)
         
         output.totalAmount
             .drive(totalAmountTextFiled.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.confirmButtonIsEnable
+            .drive(header.buttonState)
             .disposed(by: disposeBag)
         
         output.titleTextFieldControlEvent

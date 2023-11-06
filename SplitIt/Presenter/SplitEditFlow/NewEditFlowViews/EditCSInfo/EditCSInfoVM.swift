@@ -32,6 +32,8 @@ class EditCSInfoVM {
         let titleTextFieldIsValid: BehaviorRelay<Bool>
         let titleTextFieldIsEnable: Driver<Bool>
         let totalAmountTextFieldIsValid: Driver<Bool>
+        let totalAmountTextFieldMinIsValid: Driver<Bool>
+        let confirmButtonIsEnable: Driver<Bool>
         let titleTextFieldControlEvent: Driver<UIControl.Event>
     }
     
@@ -43,9 +45,12 @@ class EditCSInfoVM {
         
         let totalAmountResult = BehaviorRelay<Int>(value: 0)
         let totalAmountIsValid = BehaviorRelay<Bool>(value: true)
+        let totalAmountMinIsValid = BehaviorRelay<Bool>(value: false)
         let numberFormatter = NumberFormatterHelper()
 
         let maxCurrency = 10000000
+        
+        let confirmButtonIsEnable: Driver<Bool>
         
         let title = BehaviorRelay(value: "")
         var totalAmount = Driver.merge(input.totalAmount)
@@ -89,6 +94,14 @@ class EditCSInfoVM {
             .map{ $0 != 0 }
             .asDriver()
         
+        let totalAmountMinIsValidDriver = totalAmountResult
+            .asDriver()
+            .map(calculateMinTotalAmount)
+        
+        totalAmountMinIsValidDriver
+            .drive(totalAmountMinIsValid)
+            .disposed(by: disposeBag)
+        
         let totalAmountString = totalAmount
             .map { numberFormatter.number(from: $0) ?? 0 }
             .map { min($0, maxCurrency) }
@@ -126,6 +139,10 @@ class EditCSInfoVM {
             .drive(titleTextFieldIsValid)
             .disposed(by: disposeBag)
         
+        confirmButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(), totalAmountTextFieldCountIsEmpty.asDriver(), totalAmountMinIsValidDriver.asDriver())
+            .map{ $0 && $1 && $2 }
+            .asDriver()
+        
         let titleTFControlEvent: Driver<UIControl.Event> = input.titleTextFieldControlEvent
             .map { event -> UIControl.Event in
                 switch event {
@@ -151,7 +168,18 @@ class EditCSInfoVM {
                       titleTextFieldIsValid: titleTextFieldIsValid,
                       titleTextFieldIsEnable: titleTextFieldCountIsEmpty,
                       totalAmountTextFieldIsValid: totalAmountIsValid.asDriver(),
+                      totalAmountTextFieldMinIsValid: totalAmountMinIsValidDriver,
+                      confirmButtonIsEnable: confirmButtonIsEnable,
                       titleTextFieldControlEvent: titleTFControlEvent)
+    }
+    
+    func calculateMinTotalAmount(_ value: Int) -> Bool {
+        var minTotalAmount: Int = 0
+        for item in SplitRepository.share.exclItemArr.value {
+            minTotalAmount += item.price
+        }
+        let isValid = value >= minTotalAmount
+        return isValid
     }
 }
 
