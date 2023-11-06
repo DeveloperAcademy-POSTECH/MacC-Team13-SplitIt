@@ -24,7 +24,6 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate, SPAlertDelegate 
     let nextButton = NewSPButton()
     let splitTitleTF = SPTextField()
     let textFiledCounter = UILabel()
-    let textFiledNotice = UILabel()
     let titleLabel = UILabel()
     let alert = SPAlertController()
     
@@ -62,19 +61,13 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate, SPAlertDelegate 
         splitTitleTF.do {
             $0.applyStyle(.normal)
             $0.font = .KoreanCaption1
-//            $0.autocorrectionType = .no
-//            $0.spellCheckingType = .no
+            $0.placeholder = "ex) 팀 회식, 생일파티, 집들이"
+            $0.autocorrectionType = .no
+            $0.spellCheckingType = .no
         }
         
         textFiledCounter.do {
-            $0.font = .KoreanCaption2
-        }
-        
-        textFiledNotice.do {
-            $0.text = "ex) 팀 회식, 생일파티, 집들이"
             $0.font = .KoreanCaption1
-//            $0.textColor = .TextSecondary
-            $0.textColor = .TextDeactivate
         }
         
         collectionView.do {
@@ -103,7 +96,8 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate, SPAlertDelegate 
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.BorderDeactivate.cgColor
         }
-        [headerView, titleLabel, splitTitleTF, textFiledCounter, textFiledNotice, divider, collectionView, nextButton].forEach {
+        
+        [headerView, titleLabel, splitTitleTF, textFiledCounter, divider, collectionView, nextButton].forEach {
             view.addSubview($0)
         }
         
@@ -127,11 +121,6 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate, SPAlertDelegate 
         textFiledCounter.snp.makeConstraints {
             $0.top.equalTo(splitTitleTF.snp.bottom).offset(6)
             $0.trailing.equalTo(splitTitleTF.snp.trailing).inset(5)
-        }
-        
-        textFiledNotice.snp.makeConstraints {
-            $0.centerY.equalTo(splitTitleTF)
-            $0.leading.equalTo(splitTitleTF).inset(15)
         }
         
         divider.snp.makeConstraints {
@@ -178,14 +167,6 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate, SPAlertDelegate 
         
         output.titleCount
             .drive(textFiledCounter.rx.text)
-            .disposed(by: disposeBag)
-        
-        output.textFieldIsEmpty
-            .drive(nextButton.buttonState)
-            .disposed(by: disposeBag)
-        
-        output.textFieldIsEmpty
-            .drive(textFiledNotice.rx.isHidden)
             .disposed(by: disposeBag)
         
         output.textFieldIsValid
