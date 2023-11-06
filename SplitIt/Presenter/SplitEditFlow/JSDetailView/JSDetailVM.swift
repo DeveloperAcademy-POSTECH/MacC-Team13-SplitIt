@@ -40,7 +40,7 @@ final class JSDetailVM {
     var csMemberList: Driver<[CSMember]> {
         dataModel.csMemberArr.asDriver()
     }
-//
+
     init() {
         let arrSplit = SplitRepository.share.splitArr.value
         if let firstSplit = arrSplit.first {
@@ -138,8 +138,10 @@ final class JSDetailVM {
         
         let pushEditView: Driver<String> = csinfoIndex
             .withLatestFrom(self.csinfoList) { indexPath, data in
+                // MARK: 수정하기로 들어가도 SplitTitle이 저장되도록 수정
+                SplitRepository.share.editSplitTitle(title: displayString.value)
                 return data[indexPath.row].csInfoIdx
-        }
+            }
         
         return Output(pushNextView: showNextView.asDriver(),
                       titleCount: textFieldCount.asDriver(),
