@@ -94,8 +94,8 @@ extension SplitRepository {
     func createDatasForCreateFlow() {
         let newSplit = Split()
         let newCSInfo = CSInfo(splitIdx: newSplit.splitIdx)
-        let name = UserDefaults.standard.string(forKey: "userNickName")
-        let newCSMember = CSMember(csInfoIdx: newCSInfo.csInfoIdx, name: name ?? "정산자")
+        let name = UserDefaults.standard.string(forKey: "userNickName") == "" ? "정산자" : UserDefaults.standard.string(forKey: "userNickName") ?? "정산자"
+        let newCSMember = CSMember(csInfoIdx: newCSInfo.csInfoIdx, name: name)
         
         currentCSInfo = newCSInfo
         
