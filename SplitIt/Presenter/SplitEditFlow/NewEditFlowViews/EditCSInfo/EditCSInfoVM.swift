@@ -32,7 +32,6 @@ class EditCSInfoVM {
         let titleTextFieldIsValid: BehaviorRelay<Bool>
         let titleTextFieldIsEnable: Driver<Bool>
         let totalAmountTextFieldIsValid: Driver<Bool>
-        let confirmButtonIsEnable: Driver<Bool>
         let titleTextFieldControlEvent: Driver<UIControl.Event>
     }
     
@@ -48,10 +47,8 @@ class EditCSInfoVM {
 
         let maxCurrency = 10000000
         
-        let confirmButtonIsEnable: Driver<Bool>
-        
         let title = BehaviorRelay(value: "")
-        var price = Driver.merge(input.totalAmount)
+        var totalAmount = Driver.merge(input.totalAmount)
         
         inputTitle
             .map { [weak self] text -> String in
@@ -66,11 +63,11 @@ class EditCSInfoVM {
             .disposed(by: disposeBag)
         
         if let csinfo = self.csinfo {
-            let tittttle = Driver<String>.just(csinfo.title)
-            let prrrice = Driver<String>.just("\(csinfo.totalAmount)")
-            price = Driver.merge(input.totalAmount, prrrice)
+            let titleDriver = Driver<String>.just(csinfo.title)
+            let totalAmountDriver = Driver<String>.just("\(csinfo.totalAmount)")
+            totalAmount = Driver.merge(input.totalAmount, totalAmountDriver)
             
-            tittttle
+            titleDriver
                 .map { [weak self] text -> String in
                     guard let self = self else { return "\(text)" }
                     if text.count > self.maxTextCount {
@@ -92,7 +89,7 @@ class EditCSInfoVM {
             .map{ $0 != 0 }
             .asDriver()
         
-        let totalAmountString = price
+        let totalAmountString = totalAmount
             .map { numberFormatter.number(from: $0) ?? 0 }
             .map { min($0, maxCurrency) }
             .map { number in
@@ -102,15 +99,14 @@ class EditCSInfoVM {
             .map { numberFormatter.formattedString(from: $0) }
             .asDriver(onErrorJustReturn: "0")
         
-        let csInfoDriver = Driver.combineLatest(title.asDriver(), input.totalAmount)
+        let csInfoDriver = Driver.combineLatest(title.asDriver(), totalAmountResult.asDriver())
         
         saveCSInfo
             .asDriver()
             .withLatestFrom(csInfoDriver)
             .drive(onNext: { title, totalAmount in
-                let totalAmountInt = numberFormatter.number(from: totalAmount)
                 SplitRepository.share.editCSInfoTitle(title: title)
-                SplitRepository.share.editCSInfoTotalAcount(totalAcount: totalAmountInt ?? 0)
+                SplitRepository.share.editCSInfoTotalAcount(totalAcount: totalAmount)
             })
             .disposed(by: disposeBag)
         
@@ -129,10 +125,6 @@ class EditCSInfoVM {
             }
             .drive(titleTextFieldIsValid)
             .disposed(by: disposeBag)
-        
-        confirmButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(), totalAmountTextFieldCountIsEmpty.asDriver())
-            .map{ $0 && $1 }
-            .asDriver()
         
         let titleTFControlEvent: Driver<UIControl.Event> = input.titleTextFieldControlEvent
             .map { event -> UIControl.Event in
@@ -159,9 +151,7 @@ class EditCSInfoVM {
                       titleTextFieldIsValid: titleTextFieldIsValid,
                       titleTextFieldIsEnable: titleTextFieldCountIsEmpty,
                       totalAmountTextFieldIsValid: totalAmountIsValid.asDriver(),
-                      confirmButtonIsEnable: confirmButtonIsEnable,
                       titleTextFieldControlEvent: titleTFControlEvent)
     }
-
 }
 

@@ -54,6 +54,7 @@ class EditCSInfoVC: UIViewController {
         
         header.do {
             $0.applyStyle(style: .csEdit, vc: self)
+            $0.buttonState.accept(true)
         }
         
         titleMessage.do {
@@ -206,10 +207,6 @@ class EditCSInfoVC: UIViewController {
             .drive(totalAmountTextFiled.rx.text)
             .disposed(by: disposeBag)
         
-        output.confirmButtonIsEnable
-            .drive(header.buttonState)
-            .disposed(by: disposeBag)
-        
         output.titleTextFieldControlEvent
             .drive(onNext: { [weak self] event in
                 guard let self = self else { return }
@@ -240,7 +237,6 @@ extension EditCSInfoVC {
         UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) {
             self.titleMessage.textColor = .TextPrimary
             self.titleTextFiled.textColor = .TextPrimary
-            self.textFiledCounter.textColor = .TextSecondary
             
             // Title이 focus 될 때는 경고창이 안보여야함
             self.totalAmountTextFiledNotice.isHidden = true
