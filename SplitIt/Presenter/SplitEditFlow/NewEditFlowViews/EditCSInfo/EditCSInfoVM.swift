@@ -18,7 +18,7 @@ class EditCSInfoVM {
     let csinfo = SplitRepository.share.csInfoArr.value.first
     
     struct Input {
-        let nextButtonTapped: ControlEvent<Void> // 다음 버튼
+        let confirmButtonTapped: ControlEvent<Void> // 다음 버튼
         let title: Driver<String> // TitleTextField의 text
         let totalAmount: Driver<String>
         let titleTextFieldControlEvent: Observable<UIControl.Event>
@@ -26,33 +26,34 @@ class EditCSInfoVM {
     }
     
     struct Output {
-        let showCSMemberView: Driver<Void>
         let titleString: Driver<String>
         let titleCount: Driver<String>
         let totalAmount: Driver<String>
         let titleTextFieldIsValid: BehaviorRelay<Bool>
         let titleTextFieldIsEnable: Driver<Bool>
         let totalAmountTextFieldIsValid: Driver<Bool>
-        let nextButtonIsEnable: Driver<Bool>
+        let totalAmountTextFieldMinIsValid: Driver<Bool>
+        let confirmButtonIsEnable: Driver<Bool>
         let titleTextFieldControlEvent: Driver<UIControl.Event>
     }
     
     func transform(input: Input) -> Output {
         let inputTitle = input.title
-        let showCSTotalAmountView = input.nextButtonTapped
+        let saveCSInfo = input.confirmButtonTapped
         let textFieldCount = BehaviorRelay<String>(value: "")
         let titleTextFieldIsValid = BehaviorRelay<Bool>(value: true)
         
         let totalAmountResult = BehaviorRelay<Int>(value: 0)
         let totalAmountIsValid = BehaviorRelay<Bool>(value: true)
+        let totalAmountMinIsValid = BehaviorRelay<Bool>(value: false)
         let numberFormatter = NumberFormatterHelper()
 
         let maxCurrency = 10000000
         
-        let nextButtonIsEnable: Driver<Bool>
+        let confirmButtonIsEnable: Driver<Bool>
         
         let title = BehaviorRelay(value: "")
-        var price = Driver.merge(input.totalAmount)
+        var totalAmount = Driver.merge(input.totalAmount)
         
         inputTitle
             .map { [weak self] text -> String in
@@ -67,11 +68,11 @@ class EditCSInfoVM {
             .disposed(by: disposeBag)
         
         if let csinfo = self.csinfo {
-            let tittttle = Driver<String>.just(csinfo.title)
-            let prrrice = Driver<String>.just("\(csinfo.totalAmount)")
-            price = Driver.merge(input.totalAmount, prrrice)
+            let titleDriver = Driver<String>.just(csinfo.title)
+            let totalAmountDriver = Driver<String>.just("\(csinfo.totalAmount)")
+            totalAmount = Driver.merge(input.totalAmount, totalAmountDriver)
             
-            tittttle
+            titleDriver
                 .map { [weak self] text -> String in
                     guard let self = self else { return "\(text)" }
                     if text.count > self.maxTextCount {
@@ -93,7 +94,15 @@ class EditCSInfoVM {
             .map{ $0 != 0 }
             .asDriver()
         
-        let totalAmountString = price
+        let totalAmountMinIsValidDriver = totalAmountResult
+            .asDriver()
+            .map(calculateMinTotalAmount)
+        
+        totalAmountMinIsValidDriver
+            .drive(totalAmountMinIsValid)
+            .disposed(by: disposeBag)
+        
+        let totalAmountString = totalAmount
             .map { numberFormatter.number(from: $0) ?? 0 }
             .map { min($0, maxCurrency) }
             .map { number in
@@ -103,15 +112,14 @@ class EditCSInfoVM {
             .map { numberFormatter.formattedString(from: $0) }
             .asDriver(onErrorJustReturn: "0")
         
-        let csInfoDriver = Driver.combineLatest(title.asDriver(), input.totalAmount)
+        let csInfoDriver = Driver.combineLatest(title.asDriver(), totalAmountResult.asDriver())
         
-        showCSTotalAmountView
+        saveCSInfo
             .asDriver()
             .withLatestFrom(csInfoDriver)
             .drive(onNext: { title, totalAmount in
-                let totalAmountInt = numberFormatter.number(from: totalAmount)
                 SplitRepository.share.editCSInfoTitle(title: title)
-                SplitRepository.share.editCSInfoTotalAcount(totalAcount: totalAmountInt ?? 0)
+                SplitRepository.share.editCSInfoTotalAcount(totalAcount: totalAmount)
             })
             .disposed(by: disposeBag)
         
@@ -131,8 +139,8 @@ class EditCSInfoVM {
             .drive(titleTextFieldIsValid)
             .disposed(by: disposeBag)
         
-        nextButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(), totalAmountTextFieldCountIsEmpty.asDriver())
-            .map{ $0 && $1 }
+        confirmButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(), totalAmountTextFieldCountIsEmpty.asDriver(), totalAmountMinIsValidDriver.asDriver())
+            .map{ $0 && $1 && $2 }
             .asDriver()
         
         let titleTFControlEvent: Driver<UIControl.Event> = input.titleTextFieldControlEvent
@@ -154,16 +162,24 @@ class EditCSInfoVM {
             .drive(totalAmountIsValid)
             .disposed(by: disposeBag)
         
-        return Output(showCSMemberView: showCSTotalAmountView.asDriver(),
-                      titleString: title.asDriver(),
+        return Output(titleString: title.asDriver(),
                       titleCount: textFieldCount.asDriver(),
                       totalAmount: totalAmountString,
                       titleTextFieldIsValid: titleTextFieldIsValid,
                       titleTextFieldIsEnable: titleTextFieldCountIsEmpty,
                       totalAmountTextFieldIsValid: totalAmountIsValid.asDriver(),
-                      nextButtonIsEnable: nextButtonIsEnable,
+                      totalAmountTextFieldMinIsValid: totalAmountMinIsValidDriver,
+                      confirmButtonIsEnable: confirmButtonIsEnable,
                       titleTextFieldControlEvent: titleTFControlEvent)
     }
-
+    
+    func calculateMinTotalAmount(_ value: Int) -> Bool {
+        var minTotalAmount: Int = 0
+        for item in SplitRepository.share.exclItemArr.value {
+            minTotalAmount += item.price
+        }
+        let isValid = value >= minTotalAmount
+        return isValid
+    }
 }
 

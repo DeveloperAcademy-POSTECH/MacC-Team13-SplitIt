@@ -238,11 +238,11 @@ final class SPNavigationBar: UIView {
             let backAction = UIAction { action in
                 vc.navigationController?.popToRootViewController(animated: true)
             }
+            leftButton.addAction(backAction, for: .touchUpInside)
         case .toAlert:
             let backAction = UIAction {_ in
 
             }
-            leftButton.addAction(backAction, for: .touchUpInside)
         case .none:
             break
         }

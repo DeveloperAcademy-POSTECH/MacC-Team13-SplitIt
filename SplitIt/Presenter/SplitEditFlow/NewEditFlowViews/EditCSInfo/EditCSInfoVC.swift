@@ -167,19 +167,12 @@ class EditCSInfoVC: UIViewController {
             totalAmountTextFiled.rx.controlEvent(.editingDidBegin).map { UIControl.Event.editingDidBegin},
             totalAmountTextFiled.rx.controlEvent(.editingDidEnd).map { UIControl.Event.editingDidEnd })
         
-        let input = EditCSInfoVM.Input(nextButtonTapped: header.rightButton.rx.tap,
+        let input = EditCSInfoVM.Input(confirmButtonTapped: header.rightButton.rx.tap,
                                    title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
                                    totalAmount: totalAmountTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
                                    titleTextFieldControlEvent: titleTFEvent,
                                    totalAmountTextFieldControlEvent: totalAmountTFEvent)
         let output = viewModel.transform(input: input)
-        
-        output.showCSMemberView
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-//                self.navigationController?.popViewController(animated: true)
-            })
-            .disposed(by: disposeBag)
         
         output.titleString
             .drive(titleTextFiled.rx.text)
@@ -200,20 +193,35 @@ class EditCSInfoVC: UIViewController {
             })
             .disposed(by: disposeBag)
 
-        output.totalAmountTextFieldIsValid
-            .drive(onNext: { [weak self] isValid in
-                guard let self = self else { return }
+        
+        
+        Driver.combineLatest(output.totalAmountTextFieldIsValid,
+                           output.totalAmountTextFieldMinIsValid)
+        .drive(onNext: { [weak self] isValid, isMinValid in
+            guard let self = self else { return }
+            if !isValid {
                 UIView.transition(with: self.totalAmountTextFiledNotice, duration: 0.33, options: .transitionCrossDissolve) {
-                    self.totalAmountTextFiledNotice.isHidden = isValid
+                    self.totalAmountTextFiledNotice.isHidden = false
+                    self.totalAmountTextFiledNotice.text = "천만원 이상은 입력할 수 없어요"
                 }
-            })
-            .disposed(by: disposeBag)
+            } else if !isMinValid {
+                UIView.transition(with: self.totalAmountTextFiledNotice, duration: 0.33, options: .transitionCrossDissolve) {
+                    self.totalAmountTextFiledNotice.isHidden = false
+                    self.totalAmountTextFiledNotice.text = "총 금액은 제외 항목의 총합보다 커야해요"
+                }
+            } else {
+                UIView.transition(with: self.totalAmountTextFiledNotice, duration: 0.33, options: .transitionCrossDissolve) {
+                    self.totalAmountTextFiledNotice.isHidden = true
+                }
+            }
+        })
+        .disposed(by: disposeBag)
         
         output.totalAmount
             .drive(totalAmountTextFiled.rx.text)
             .disposed(by: disposeBag)
         
-        output.nextButtonIsEnable
+        output.confirmButtonIsEnable
             .drive(header.buttonState)
             .disposed(by: disposeBag)
         
@@ -247,7 +255,6 @@ extension EditCSInfoVC {
         UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) {
             self.titleMessage.textColor = .TextPrimary
             self.titleTextFiled.textColor = .TextPrimary
-            self.textFiledCounter.textColor = .TextSecondary
             
             // Title이 focus 될 때는 경고창이 안보여야함
             self.totalAmountTextFiledNotice.isHidden = true
