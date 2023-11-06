@@ -180,8 +180,6 @@
 		DE73D6FC2AE1993F00ABF3EF /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D6FB2AE1993F00ABF3EF /* MemberCell.swift */; };
 		DE73D7132AE654D800ABF3EF /* CustomAlertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D7122AE654D800ABF3EF /* CustomAlertVC.swift */; };
 		DE73D7172AE65D1800ABF3EF /* AccountAlertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D7162AE65D1800ABF3EF /* AccountAlertVC.swift */; };
-		DE73D7192AE6A2F100ABF3EF /* TestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D7182AE6A2F100ABF3EF /* TestVC.swift */; };
-		DE73D71B2AE6B00300ABF3EF /* SecondVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D71A2AE6B00300ABF3EF /* SecondVC.swift */; };
 		DE73D71D2AE6CCBC00ABF3EF /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D71C2AE6CCBC00ABF3EF /* AlertController.swift */; };
 		DEFE9D812AEAAD91009C693E /* CustomKeyBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFE9D802AEAAD91009C693E /* CustomKeyBoard.swift */; };
 		DEFE9D832AEAB80A009C693E /* KeyboardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFE9D822AEAB80A009C693E /* KeyboardButton.swift */; };
@@ -356,8 +354,6 @@
 		DE73D6FB2AE1993F00ABF3EF /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		DE73D7122AE654D800ABF3EF /* CustomAlertVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertVC.swift; sourceTree = "<group>"; };
 		DE73D7162AE65D1800ABF3EF /* AccountAlertVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountAlertVC.swift; sourceTree = "<group>"; };
-		DE73D7182AE6A2F100ABF3EF /* TestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestVC.swift; sourceTree = "<group>"; };
-		DE73D71A2AE6B00300ABF3EF /* SecondVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondVC.swift; sourceTree = "<group>"; };
 		DE73D71C2AE6CCBC00ABF3EF /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
 		DEFE9D802AEAAD91009C693E /* CustomKeyBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyBoard.swift; sourceTree = "<group>"; };
 		DEFE9D822AEAB80A009C693E /* KeyboardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardButton.swift; sourceTree = "<group>"; };
@@ -1365,8 +1361,6 @@
 			children = (
 				DEFE9D802AEAAD91009C693E /* CustomKeyBoard.swift */,
 				DEFE9D822AEAB80A009C693E /* KeyboardButton.swift */,
-				DE73D7182AE6A2F100ABF3EF /* TestVC.swift */,
-				DE73D71A2AE6B00300ABF3EF /* SecondVC.swift */,
 				DEFE9D972AEFC33B009C693E /* AccountCustomkeyboard.swift */,
 			);
 			path = CustomKeyboard;
@@ -1610,7 +1604,6 @@
 				6032DCE42AECE4B3004A6BFA /* CSInfoVC.swift in Sources */,
 				60AD20EB2ADEC8BA00EFACCD /* ExclItemPriceInputVM.swift in Sources */,
 				1AB8418F2AEC0D37006613A0 /* CSMemberSearchVM.swift in Sources */,
-				DE73D7192AE6A2F100ABF3EF /* TestVC.swift in Sources */,
 				1AB841962AEC226F006613A0 /* SearchCell.swift in Sources */,
 				869D1AEB2AE52C4700D166B1 /* ExclItemPriceEditVM.swift in Sources */,
 				607ED87E2AF0D06F00A82349 /* ExclItemInfo.swift in Sources */,
@@ -1620,7 +1613,6 @@
 				1AB841982AECFCC5006613A0 /* SelectedCell.swift in Sources */,
 				60AE3EA82AE55D2A009D9D18 /* ResultExclItemCell.swift in Sources */,
 				86C65FF62AEF9ADF00A7942A /* JSDetailCell.swift in Sources */,
-				DE73D71B2AE6B00300ABF3EF /* SecondVC.swift in Sources */,
 				6032DCE62AECE4BC004A6BFA /* CSInfoVM.swift in Sources */,
 				869D1AF42AE52CAC00D166B1 /* ExclMemberEditSectionHeader.swift in Sources */,
 				1A8B05E12AF1466300CF5BC5 /* SplitMethodSelectVC.swift in Sources */,
