@@ -70,13 +70,13 @@ class HistorySplitCell: UICollectionViewCell, Reusable {
         }
         
         krwLabel.do {
-            $0.text = "KRW"
+            $0.text = "₩"
             $0.textColor = .TextPrimary
             $0.font = .KoreanCaption2
         }
         
         enterEditLabel.do {
-            $0.text = "수정하기"
+            $0.text = "자세히 보기"
             $0.textColor = .TextPrimary
             $0.font = .KoreanCaption2
         }
@@ -123,12 +123,13 @@ class HistorySplitCell: UICollectionViewCell, Reusable {
         }
         
         krwLabel.snp.makeConstraints {
-            $0.bottom.trailing.equalToSuperview()
+            $0.trailing.equalTo(totalAmountLabel.snp.leading).offset(-2)
+            $0.bottom.equalToSuperview()
         }
         
         totalAmountLabel.snp.makeConstraints {
             $0.bottom.equalToSuperview()
-            $0.trailing.equalTo(krwLabel.snp.leading).offset(-4)
+            $0.trailing.equalToSuperview()
         }
         
         enterEditImage.snp.makeConstraints {
