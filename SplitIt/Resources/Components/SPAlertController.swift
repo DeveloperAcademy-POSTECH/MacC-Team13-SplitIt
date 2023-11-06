@@ -46,9 +46,14 @@ final class SPAlertController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setBinding()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         setAttribute()
         setLayout()
-        setBinding()
     }
     
     private func setAttribute() {
