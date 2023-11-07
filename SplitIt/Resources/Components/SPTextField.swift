@@ -91,6 +91,14 @@ final class SPTextField: UITextField {
     }
 
     private func configureCommonProperties() {
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.TextSecondary,
+        ]
+
+        let attributedPlaceholder = NSAttributedString(string: self.placeholder ?? "", attributes: attributes)
+
+        self.attributedPlaceholder = attributedPlaceholder
+
         self.backgroundColor = UIColor.SurfacePrimary
         self.layer.cornerRadius = 8
         self.layer.borderWidth = 1

@@ -82,6 +82,9 @@ class CSMemberSearchVC: UIViewController, Reusable {
             $0.backgroundColor = .SurfacePrimary
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
+            let attributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.TextSecondary]
+            let attributedPlaceholder = NSAttributedString(string: $0.placeholder ?? "", attributes: attributes)
+            $0.attributedPlaceholder = attributedPlaceholder
         }
         
         addButton.do {
