@@ -101,7 +101,7 @@ class BankListModalVC: UIViewController, UIScrollViewDelegate {
         
         selectedBankLabel.text = "정산받을 은행을 선택해주세요"
         selectedBankLabel.font = UIFont.systemFont(ofSize: 21)
-        
+        selectedBankLabel.textColor = .TextPrimary
         
     }
 }
