@@ -426,6 +426,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             
             if userDefault.string(forKey: "userNickName") == nil || userDefault.string(forKey: "userNickName") == "" {
                 $0.placeholder = "닉네임을 입력해주세요"
+                $0.textColor = .TextPrimary
             } else {
                 $0.text = userDefault.string(forKey: "userNickName")
                 $0.textColor = .TextPrimary
@@ -473,6 +474,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             
             if userDefault.string(forKey: "userAccount") == nil || userDefault.string(forKey: "userAccount") == "" {
                 $0.placeholder = "계좌번호를 입력해주세요"
+                $0.textColor = .TextPrimary
             } else {
                 $0.text = userDefault.string(forKey: "userAccount")
                 $0.textColor = .TextPrimary
@@ -506,6 +508,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             
             if userDefault.string(forKey: "userName") == nil || userDefault.string(forKey: "userName") == "" {
                 $0.placeholder = "성함을 입력해주세요"
+                $0.textColor = .TextPrimary
             } else {
                 $0.text = userDefault.string(forKey: "userName")
                 $0.textColor = .TextPrimary
