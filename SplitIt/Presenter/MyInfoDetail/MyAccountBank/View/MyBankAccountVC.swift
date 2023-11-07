@@ -427,11 +427,9 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             if userDefault.string(forKey: "userNickName") == nil || userDefault.string(forKey: "userNickName") == "" {
                 $0.placeholder = "닉네임을 입력해주세요"
             } else {
-                
                 $0.text = userDefault.string(forKey: "userNickName")
-
+                $0.textColor = .TextPrimary
             }
-            
         }
         
         bankLabel.do {
@@ -445,18 +443,16 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.backgroundColor = .clear
-            
         }
         
         bankNameLabel.do {
             if userDefault.string(forKey: "userBank") == "" {
                 $0.text = "은행을 선택해주세요"
-                $0.tintColor = .TextPrimary
             } else {
                 $0.text = UserDefaults.standard.string(forKey: "userBank")
-                $0.tintColor = .TextPrimary
             }
             $0.font = UIFont.KoreanCaption1
+            $0.textColor = .TextPrimary
         }
         
         bankArrowImage.do {
@@ -474,11 +470,12 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             $0.font = UIFont.KoreanCaption1
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
-  
+            
             if userDefault.string(forKey: "userAccount") == nil || userDefault.string(forKey: "userAccount") == "" {
                 $0.placeholder = "계좌번호를 입력해주세요"
             } else {
                 $0.text = userDefault.string(forKey: "userAccount")
+                $0.textColor = .TextPrimary
             }
             
         }
@@ -511,6 +508,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
                 $0.placeholder = "성함을 입력해주세요"
             } else {
                 $0.text = userDefault.string(forKey: "userName")
+                $0.textColor = .TextPrimary
             }
         
         }
@@ -553,12 +551,14 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             $0.text = "토스"
             $0.font = .KoreanCaption2
             $0.textAlignment = .center
+            $0.textColor = .TextPrimary
         }
         
         kakaoLabel.do {
             $0.text = "카카오페이"
             $0.font = .KoreanCaption2
             $0.textAlignment = .center
+            $0.textColor = .TextPrimary
             
         }
         
@@ -566,6 +566,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             $0.text = "네이버페이"
             $0.font = .KoreanCaption2
             $0.textAlignment = .center
+            $0.textColor = .TextPrimary
         }
         
         let deleteString = NSAttributedString(string: "초기화하기", attributes: [
