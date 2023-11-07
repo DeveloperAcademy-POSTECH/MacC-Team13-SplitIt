@@ -23,6 +23,7 @@ final class JSDetailCell: UITableViewCell, Reusable {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
         setAttribute()
         setLayout()
     }
@@ -47,18 +48,18 @@ final class JSDetailCell: UITableViewCell, Reusable {
         }
         
         csTitleLabel.do {
-            $0.text = "완마카세 창보기"
-            $0.font = .KoreanTitle2
-            $0.tintColor = .TextPrimary
+            $0.font = .KoreanTitle1
+            $0.textColor = .TextPrimary
         }
         
         editBtnLabel.do {
             $0.isEnabled = false
+            $0.setTitleColor(.TextPrimary, for: .normal)
         }
         
         memberCountLabel.do {
-//            $0.text = "6 명"
             $0.textAlignment = .right
+            $0.textColor = .TextPrimary
         }
         
         totalAmountLabel.do {
@@ -68,8 +69,8 @@ final class JSDetailCell: UITableViewCell, Reusable {
         
         exclItemCountLabel.do {
             $0.textAlignment = .right
+            $0.textColor = .TextPrimary
         }
-        
     }
     
     func setLayout() {
@@ -93,6 +94,7 @@ final class JSDetailCell: UITableViewCell, Reusable {
         }
         
         let titleStack = UIStackView(arrangedSubviews: [csTitleLabel, editBtnLabel])
+        
         titleStack.do {
             $0.axis = .horizontal
             $0.spacing = 35
@@ -134,6 +136,7 @@ final class JSDetailCell: UITableViewCell, Reusable {
             shapeLayer.path = path
             $0.layer.addSublayer(shapeLayer)
         }
+        
         let divView2 = UIView().then {
             let lineDashPattern: [NSNumber]? = [6, 6]
 
@@ -159,7 +162,7 @@ final class JSDetailCell: UITableViewCell, Reusable {
             $0.height.equalTo(1)
         }
         
-        setLineDot(view: divView1) // 왜 점선 안그려짐 ㅡ
+        setLineDot(view: divView1)
         setLineDot(view: divView2)
 
         let mainStackView = UIStackView(arrangedSubviews: [titleStack, divView1, nameStackView, priceStackView, divView2, exclStackView]).then {
@@ -171,10 +174,10 @@ final class JSDetailCell: UITableViewCell, Reusable {
         mainStackView.snp.makeConstraints {
             $0.edges.equalToSuperview().inset(16)
         }
-        
     }
     
     func setLineDot(view: UIView){
+        
         let borderLayer = CAShapeLayer()
         borderLayer.strokeColor = UIColor.black.cgColor
         borderLayer.lineDashPattern = [4, 4]
@@ -186,13 +189,14 @@ final class JSDetailCell: UITableViewCell, Reusable {
     }
     
     func attributeStringSet(st1: String, st2: String) -> NSMutableAttributedString {
+        
         let numberAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.KoreanCaption1
         ]
-
         let textAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.KoreanCaption2
         ]
+        
         let numberString = NSAttributedString(string: st1, attributes: numberAttributes)
         let textString = NSAttributedString(string: " \(st2)", attributes: textAttributes)
 
@@ -227,16 +231,15 @@ final class JSDetailCell: UITableViewCell, Reusable {
     }
     
     func configure(csinfo: CSInfo, csMemberCount: Int, exclItemCount: Int) {
-        csTitleLabel.text = csinfo.title
+        
         let member = attributeStringSet(st1: "\(csMemberCount)", st2: "명")
         let price = attributeStringSet2(st1: "₩", st2: csinfo.totalAmount)
         let excl = attributeStringSet(st1: "\(exclItemCount)", st2: "건")
-        totalAmountLabel.attributedText = price
-        memberCountLabel.attributedText = member
-        exclItemCountLabel.attributedText = excl
         
+        csTitleLabel.text = csinfo.title
+        memberCountLabel.attributedText = member
+        totalAmountLabel.attributedText = price
+        exclItemCountLabel.attributedText = excl
     }
- 
-    
 }
 

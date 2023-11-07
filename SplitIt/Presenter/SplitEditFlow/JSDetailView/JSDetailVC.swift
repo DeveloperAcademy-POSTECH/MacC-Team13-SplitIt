@@ -53,7 +53,7 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate, SPAlertDelegate 
         }
         
         titleLabel.do {
-            $0.text = "영수증 이름을 지어보세요"
+            $0.text = "이름이 있으면 나중에 찾기 쉬워요"
             $0.textColor = .TextPrimary
             $0.font = .KoreanBody
         }
@@ -61,6 +61,7 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate, SPAlertDelegate 
         splitTitleTF.do {
             $0.applyStyle(.normal)
             $0.font = .KoreanCaption1
+            $0.textColor = .TextPrimary
             $0.placeholder = "ex) 팀 회식, 생일파티, 집들이"
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
@@ -68,6 +69,7 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate, SPAlertDelegate 
         
         textFiledCounter.do {
             $0.font = .KoreanCaption1
+            $0.textColor = .TextSecondary
         }
         
         collectionView.do {
@@ -103,7 +105,7 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate, SPAlertDelegate 
         
         headerView.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(4)
             $0.leading.trailing.equalToSuperview()
         }
         
