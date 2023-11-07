@@ -88,8 +88,7 @@ final class EditCSListVM {
             guard let self = self else { return NSMutableAttributedString(string: "") }
             return self.exclItemAttributeString(items: items)
         }
-        
-        
+
         let titlePriceEditView = input.titlePriceEditTapped.asDriver()
         let memberEditView = input.memberEditTapped.asDriver()
         let exclEditView = input.exclItemEditTapped.asDriver()
@@ -108,11 +107,13 @@ final class EditCSListVM {
     
     func memberAttributeString(member: [CSMember]) -> NSMutableAttributedString {
         let numberAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanBody
+            .font: UIFont.KoreanBody,
+            .foregroundColor: UIColor.TextPrimary
         ]
 
         let textAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanCaption2
+            .font: UIFont.KoreanCaption2,
+            .foregroundColor: UIColor.TextPrimary
         ]
         
         var name = ""
@@ -145,12 +146,15 @@ final class EditCSListVM {
     
     func exclItemAttributeString(items: [ExclItem]) -> NSMutableAttributedString {
         let numberAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanBody
+            .font: UIFont.KoreanBody,
+            .foregroundColor: UIColor.TextPrimary,
         ]
 
         let textAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanCaption2
+            .font: UIFont.KoreanCaption2,
+            .foregroundColor: UIColor.TextPrimary
         ]
+        
         var name = ""
         var count = ""
         
@@ -160,6 +164,7 @@ final class EditCSListVM {
             let finalString = NSMutableAttributedString()
             finalString.append(numberString)
             return finalString
+            
         case 1:
             name = items[0].name
             let numberString = NSAttributedString(string: name, attributes: numberAttributes)
@@ -167,6 +172,7 @@ final class EditCSListVM {
             let finalString = NSMutableAttributedString()
             finalString.append(numberString)
             return finalString
+            
         default:
             name = items[1].name
             count = "\(items.count - 1)"
@@ -183,12 +189,15 @@ final class EditCSListVM {
     }
     
     func totalAmountAttributeString(price: Int) -> NSMutableAttributedString {
+        
         let numberAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanCaption2
+            .font: UIFont.KoreanCaption2,
+            .foregroundColor: UIColor.TextPrimary
         ]
 
         let textAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanBody
+            .font: UIFont.KoreanBody,
+            .foregroundColor: UIColor.TextPrimary
         ]
 
         let formatter = NumberFormatter()
@@ -204,6 +213,4 @@ final class EditCSListVM {
         
         return finalString
     }
-
-
 }

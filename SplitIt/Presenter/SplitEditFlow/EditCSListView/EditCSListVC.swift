@@ -42,6 +42,7 @@ class EditCSListVC: UIViewController, SPAlertDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setAttribute()
         setLayout()
         setBinding()
@@ -74,10 +75,11 @@ class EditCSListVC: UIViewController, SPAlertDelegate {
     
     func setLayout() {
         let subtitle = UILabel().then {
-            $0.text = "이름 / 총액"
+            $0.text = "이름 및 총액"
             $0.font = .KoreanCaption1
             $0.textColor = .TextSecondary
         }
+        
         let titlePriceView = setTitleView()
         
         let subMember = UILabel().then {
@@ -85,6 +87,7 @@ class EditCSListVC: UIViewController, SPAlertDelegate {
             $0.font = .KoreanCaption1
             $0.textColor = .TextSecondary
         }
+        
         let memberView = setMemberView()
         
         let subExcl = UILabel().then {
@@ -92,16 +95,16 @@ class EditCSListVC: UIViewController, SPAlertDelegate {
             $0.font = .KoreanCaption1
             $0.textColor = .TextSecondary
         }
+        
         let exclView = setExclView()
-        
-        
+
         [headerView, subtitle, titlePriceView, subMember, memberView, subExcl, exclView, delButton].forEach {
             view.addSubview($0)
         }
         
         headerView.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(4)
             $0.leading.trailing.equalToSuperview()
         }
         
@@ -174,10 +177,9 @@ class EditCSListVC: UIViewController, SPAlertDelegate {
         }
         
         delButton.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(30)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(40)
         }
-        
     }
     
     func setBinding() {
@@ -215,6 +217,7 @@ class EditCSListVC: UIViewController, SPAlertDelegate {
             .drive(onNext: { [weak self] attriString in
                 guard let self = self else { return }
                 self.exclLabel.attributedText = attriString
+                // 수정하기 뭐임?
             })
             .disposed(by: disposeBag)
         
@@ -266,9 +269,7 @@ class EditCSListVC: UIViewController, SPAlertDelegate {
                 self.navigationController?.popViewController(animated: true)
             })
             .disposed(by: disposeBag)
-        
     }
-
 }
 
 // MARK: View Draw Function
@@ -282,6 +283,7 @@ extension EditCSListVC {
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.BorderSecondary.cgColor
         }
+        
         return totalPriceStack
     }
     
@@ -293,6 +295,7 @@ extension EditCSListVC {
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.BorderSecondary.cgColor
         }
+        
         return view
     }
     
@@ -304,6 +307,7 @@ extension EditCSListVC {
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.BorderSecondary.cgColor
         }
+        
         return view
     }
 }

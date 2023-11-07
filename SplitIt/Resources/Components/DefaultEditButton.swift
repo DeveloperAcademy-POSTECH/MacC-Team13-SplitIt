@@ -29,7 +29,7 @@ final class DefaultEditButton: UIButton {
         setAttributedTitle(atrString, for: .normal)
         setImage(image, for: .normal)
         titleLabel?.font = .KoreanCaption2
+        titleLabel?.textColor = .TextPrimary
         semanticContentAttribute = .forceRightToLeft
-//        isEnabled = false
     }
 }
