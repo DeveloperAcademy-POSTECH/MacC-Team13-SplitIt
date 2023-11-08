@@ -138,7 +138,7 @@ class MyInfoVC: UIViewController {
             accountView.isHidden = false
             emptyView.isHidden = true
             
-            notUsedAccount.isHidden = account
+            notUsedAccount.isHidden = account || bank
             notUsedPay.isHidden = checkPay
             tossPayBtn.isHidden = !tossValue
             kakaoPayBtn.isHidden = !kakaoValue
@@ -201,7 +201,7 @@ class MyInfoVC: UIViewController {
             accountView.isHidden = false
             emptyView.isHidden = true
             
-            notUsedAccount.isHidden = account
+            notUsedAccount.isHidden = account || bank
             notUsedPay.isHidden = checkPay
             tossPayBtn.isHidden = true
             kakaoPayBtn.isHidden = true

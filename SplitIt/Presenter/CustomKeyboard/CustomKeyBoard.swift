@@ -53,7 +53,6 @@ class CustomKeyboard: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //keyboardHeight = getKeyboardHeightForCurrentDevice()
         keyboardView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: keyboardHeight))
         view.backgroundColor = UIColor(hex: 0xCED0D5)
         
@@ -61,6 +60,7 @@ class CustomKeyboard: UIInputViewController {
         setAddView()
         setKeyLayout()
         setBinding()
+        bindDeleteButtonLongPress()
         
     }
     
@@ -255,6 +255,30 @@ class CustomKeyboard: UIInputViewController {
             }
             
         }
+    }
+    
+    func startDeletingCharacters() {
+        guard let textField = currentTextField, let text = textField.text, !text.isEmpty else { return }
+        Observable<Int>.interval(.milliseconds(200), scheduler: MainScheduler.instance)
+            .take(until: deleteButton.rx.controlEvent([.touchUpInside, .touchUpOutside, .touchCancel]).asObservable())
+            .subscribe(onNext: { [weak self] _ in
+                guard let text = textField.text, !text.isEmpty else { return }
+                var newText = text
+                newText.removeLast()
+                textField.text = newText
+                textField.sendActions(for: .editingChanged)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+
+    func bindDeleteButtonLongPress() {
+        deleteButton.rx.controlEvent(.touchDown)
+            .subscribe(onNext: { [weak self] in
+                self?.startDeletingCharacters()
+            })
+            .disposed(by: disposeBag)
+
     }
     
    
