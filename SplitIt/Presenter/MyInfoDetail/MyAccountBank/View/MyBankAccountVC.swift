@@ -37,10 +37,9 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     let nickNameTextField = SPTextField()
     let nickNameCountLabel = UILabel()
     
-    let bankView = UIView()
-    var bankNameLabel = UILabel()
-    let bankArrowImage = UIImageView()
     
+    let bankTextField = SPTextField()
+    let bankArrowImage = UIImageView()
     let bankLabel = UILabel()
     
     let accountLabel = UILabel()
@@ -150,14 +149,18 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     
     //수정버튼 활성화 비활성화 선택해주는 함수
     func checkUserInfo() {
+        
         let nickNameRelay = BehaviorRelay<String>(value: self.userDefault.string(forKey: "userNickName") ?? "")
         let accountRelay = BehaviorRelay<String>(value: self.userDefault.string(forKey: "userAccount") ?? "")
         let bankRelay = BehaviorRelay<String>(value: self.userDefault.string(forKey: "userBank") ?? "은행을 선택해주세요")
+        
         Observable.combineLatest(nickNameRelay.asObservable(),
                                  accountRelay.asObservable(),
                                  bankRelay.asObservable())
             .subscribe(onNext: { nickNameText, accountText, bankText in
                 
+                print(accountText.count, bankText)
+                self.header.buttonState.accept(false)
                 if accountText.count == 0 || bankText == "은행을 선택해주세요" {
                     print("둘 중 하나 안됨")
                     self.header.buttonState.accept(false)
@@ -187,7 +190,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     
     func setBinding() {
         
-        let selectedBankTap = addTapGesture(to: bankView)
+        let selectedBankTap = addTapGesture(to: bankTextField)
         let tossTap = addTapGesture(to: tossPayView)
         let kakaoTap = addTapGesture(to: kakaoPayView)
         let naverTap = addTapGesture(to: naverPayView)
@@ -215,8 +218,8 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
                 modalVC.selectedBankName
                     .bind { bankName in
                         if bankName != "은행을 선택해주세요" {
-                            self?.bankNameLabel.text = bankName
-                            self?.viewModel.inputBankName = self?.bankNameLabel.text ?? ""
+                            self?.bankTextField.text = bankName
+                            self?.viewModel.inputBankName = bankName
                             self?.viewModel.checkBank = 1
                             print(bankName)
                         }
@@ -231,6 +234,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
                 self?.setAlert()
             })
             .disposed(by: disposeBag)
+        
         
         output.cancelBackToView
             .drive(onNext: { [weak self] in
@@ -286,7 +290,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             .observe(String.self, "userBank")
             .subscribe(onNext: { value in
                 guard let value = value else { return }
-                self.bankNameLabel.text = value != "" ? value : "은행을 선택해주세요"
+                self.bankTextField.text = value != "" ? value : "은행을 선택해주세요"
                 self.isBankSelected = true
             })
             .disposed(by: disposeBag)
@@ -418,23 +422,22 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             $0.textColor = UIColor.TextPrimary
         }
         
-        bankView.do {
-            $0.layer.cornerRadius = 8
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
-            $0.backgroundColor = .clear
-        }
         
-        bankNameLabel.do {
-            if userDefault.string(forKey: "userBank") == "" {
-                $0.text = "은행을 선택해주세요"
-            } else {
-                $0.text = UserDefaults.standard.string(forKey: "userBank")
-            }
+        bankTextField.do {
+            $0.placeholder = "은행을 선택해주세요"
+            $0.applyStyle(.normal)
             $0.font = UIFont.KoreanCaption1
-            $0.textColor = .TextPrimary
+            $0.autocorrectionType = .no
+            $0.spellCheckingType = .no
+            
+            if userDefault.string(forKey: "userBank") == nil || userDefault.string(forKey: "userBank") == "" {
+                $0.textColor = .TextPrimary
+            } else {
+                $0.text = userDefault.string(forKey: "userBank")
+                $0.textColor = .TextPrimary
+            }
         }
-        
+
         bankArrowImage.do {
             $0.image = UIImage(named: "ArrowTriangleIconDown")
         }
@@ -604,28 +607,23 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         
         bankLabel.snp.makeConstraints {
             $0.top.equalTo(nickNameTextField.snp.bottom).offset(24)
-            $0.leading.equalTo(bankView.snp.leading).inset(6)
+            $0.leading.equalTo(bankTextField.snp.leading).inset(6)
         }
         
-        bankView.snp.makeConstraints {
+        
+        bankTextField.snp.makeConstraints {
             $0.height.equalTo(40)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.top.equalTo(bankLabel.snp.bottom).offset(4)
-            
         }
-        
-        bankNameLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(16)
-            $0.centerY.equalToSuperview()
-        }
-        
+
         bankArrowImage.snp.makeConstraints {
             $0.trailing.equalToSuperview().offset(-16)
             $0.centerY.equalToSuperview()
         }
         
         accountLabel.snp.makeConstraints {
-            $0.top.equalTo(bankView.snp.bottom).offset(24)
+            $0.top.equalTo(bankTextField.snp.bottom).offset(24)
             $0.leading.equalTo(accountTextField.snp.leading).inset(6)
             
         }
@@ -754,14 +752,14 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         scrollView.addSubview(contentView)
         
         [nickNameLabel, nickNameTextField,
-         bankLabel, bankView,
+         bankLabel, bankTextField,
          accountLabel,
          accountTextField, nameLabel, nameTextField,payLabel,
          payView, nickNameCountLabel, nameCountLabel, accountCountLabel].forEach {
             contentView.addSubview($0)
         }
-        [bankNameLabel, bankArrowImage].forEach {
-            bankView.addSubview($0)
+        [bankArrowImage].forEach {
+            bankTextField.addSubview($0)
         }
         [leftBar, rightBar, tossPayView, kakaoPayView, naverPayView].forEach {
             payView.addSubview($0)
