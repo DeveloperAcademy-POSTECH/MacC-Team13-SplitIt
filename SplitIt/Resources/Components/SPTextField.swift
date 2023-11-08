@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 extension SPTextField {
     enum Style {
@@ -23,15 +25,28 @@ extension SPTextField {
 final class SPTextField: UITextField {
     let currencyLabel = UILabel()
     
+    var disposeBag = DisposeBag()
+    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        setBinding()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    private func setBinding() {
+        // MARK: editingDidEnd일 때를 구독하여 공백을 제거합니다.
+        rx.controlEvent(.editingDidEnd)
+            .map{ self.text?.trimmingCharacters(in: .whitespaces) ?? "" }
+            .asDriver(onErrorJustReturn: "")
+            .drive(rx.text)
+            .disposed(by: disposeBag)
+    }
+    
     // MARK: - Style Configuration
     func applyStyle(_ style: Style) {
         
