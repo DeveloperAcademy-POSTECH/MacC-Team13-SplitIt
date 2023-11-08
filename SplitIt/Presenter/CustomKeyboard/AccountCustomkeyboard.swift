@@ -57,6 +57,8 @@ class AccountCustomKeyboard: UIInputViewController {
         setAddView()
         setKeyLayout()
         setBinding()
+        bindDeleteButtonLongPress()
+
         
     }
     
@@ -66,8 +68,8 @@ class AccountCustomKeyboard: UIInputViewController {
         inputView.backgroundColor = UIColor(hex: 0xFCFCFE)
         self.inputView = inputView
         
-        let btnWidth = Int((UIScreen.main.bounds.width - 24) / 3)
-        let btnHeight = Int(keyboardHeight - 50) / 4
+//        let btnWidth = Int((UIScreen.main.bounds.width - 24) / 3)
+//        let btnHeight = Int(keyboardHeight - 50) / 4
         
         keyboardView.backgroundColor = UIColor(hex: 0xCED0D5)
         inputView.addSubview(keyboardView)
@@ -142,7 +144,6 @@ class AccountCustomKeyboard: UIInputViewController {
         btn1.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(8)
             make.top.equalToSuperview().offset(6)
-
         }
         
         btn2.snp.makeConstraints { make in
@@ -153,55 +154,46 @@ class AccountCustomKeyboard: UIInputViewController {
         btn3.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(8)
             make.top.equalToSuperview().offset(6)
-            
         }
         
         btn4.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(8)
             make.top.equalTo(btn1.snp.bottom).offset(6)
-
         }
         
         btn5.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(btn1.snp.bottom).offset(6)
- 
         }
         
         btn6.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(8)
             make.top.equalTo(btn1.snp.bottom).offset(6)
-
         }
         
         btn7.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(8)
             make.top.equalTo(btn4.snp.bottom).offset(6)
- 
         }
         
         btn8.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(btn4.snp.bottom).offset(6)
- 
         }
         
         btn9.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(8)
             make.top.equalTo(btn4.snp.bottom).offset(6)
-
         }
         
         optionBtn.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(8)
             make.top.equalTo(btn7.snp.bottom).offset(6)
-            
         }
         
         btn0.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(btn7.snp.bottom).offset(6)
-
         }
         
         deleteButton.snp.makeConstraints { make in
@@ -231,6 +223,8 @@ class AccountCustomKeyboard: UIInputViewController {
             .map { value }
             .bind(to: customKeySubject)
             .disposed(by: disposeBag)
+        
+       
     }
     
     func changeBackgroundColor(_ button: UIButton, highlighted: Bool) {
@@ -251,4 +245,27 @@ class AccountCustomKeyboard: UIInputViewController {
         }
     }
     
+    func startDeletingCharacters() {
+        guard let textField = currentTextField, let text = textField.text, !text.isEmpty else { return }
+        Observable<Int>.interval(.milliseconds(200), scheduler: MainScheduler.instance)
+            .take(until: deleteButton.rx.controlEvent([.touchUpInside, .touchUpOutside, .touchCancel]).asObservable())
+            .subscribe(onNext: { [weak self] _ in
+                guard let text = textField.text, !text.isEmpty else { return }
+                var newText = text
+                newText.removeLast()
+                textField.text = newText
+                textField.sendActions(for: .editingChanged)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+
+    func bindDeleteButtonLongPress() {
+        deleteButton.rx.controlEvent(.touchDown)
+            .subscribe(onNext: { [weak self] in
+                self?.startDeletingCharacters()
+            })
+            .disposed(by: disposeBag)
+
+    }
 }
