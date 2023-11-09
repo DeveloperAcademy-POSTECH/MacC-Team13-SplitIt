@@ -34,8 +34,7 @@ class KeyboardButton: UIButton {
         let btnWidth = Int((UIScreen.main.bounds.width - 24) / 3)
         let btnHeight = Int(keyboardHeight - 50) / 4
         
-        let customFont = UIFont(name: "ONEMobileRegular", size: 30) ?? UIFont.systemFont(ofSize: 20)
-        let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: customFont]
+        let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.KoreanTitle1]
         let attributedString = NSAttributedString(string: btnTitle, attributes: attributes)
         setAttributedTitle(attributedString, for: .normal)
         
@@ -45,8 +44,8 @@ class KeyboardButton: UIButton {
         setTitleColor(.black, for: .normal)
       
         layer.cornerRadius = 8
-        layer.borderWidth = 1
-        layer.borderColor = UIColor.black.cgColor
+        //layer.borderWidth = 1
+        //layer.borderColor = UIColor.black.cgColor
         
         snp.makeConstraints { make in
             make.width.equalTo(btnWidth)
