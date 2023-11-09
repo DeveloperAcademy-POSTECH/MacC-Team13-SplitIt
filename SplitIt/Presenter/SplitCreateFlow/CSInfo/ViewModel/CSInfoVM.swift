@@ -13,7 +13,7 @@ class CSInfoVM {
     
     var disposeBag = DisposeBag()
     
-    let maxTextCount = 8
+    let maxTextCount = 12
     
     struct Input {
         let nextButtonTapped: ControlEvent<Void> // 다음 버튼
