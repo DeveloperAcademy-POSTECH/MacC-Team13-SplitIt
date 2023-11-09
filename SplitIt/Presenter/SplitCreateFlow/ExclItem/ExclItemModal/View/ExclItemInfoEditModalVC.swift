@@ -81,7 +81,6 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
     
     func setGestureRecognizer() {
         view.addGestureRecognizer(tapGesture)
-        tapGesture.cancelsTouchesInView = false
     }
     
     func setAttribute() {
@@ -434,9 +433,11 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
             .filter { [weak self] gesture in
                 guard let self = self else { return false }
                 if isTitleTextFieldActive.value || isPriceTextFieldActive.value {
+                    tapGesture.cancelsTouchesInView = true
                     return true
                 }
                 let location = gesture.location(in: self.tableView)
+                tapGesture.cancelsTouchesInView = false
                 return self.tableView.point(inside: location, with: nil) == false
             }
             .subscribe(onNext: { [weak self] gesture in
