@@ -85,6 +85,8 @@ class AccountCustomKeyboard: UIInputViewController {
             $0.contentMode = .scaleAspectFit
             $0.transform = CGAffineTransform(scaleX: 1.5, y: 1.4)
         }
+        
+        
     }
     
     func setCurrentTextField(_ textField: UITextField) {

@@ -16,7 +16,7 @@ class BankListModalVC: UIViewController, UIScrollViewDelegate {
     
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     var disposeBag = DisposeBag()
-    var selectedBankName: BehaviorRelay<String> = BehaviorRelay<String>(value: "은행을 선택해주세요")
+    var selectedBankName = BehaviorRelay<String>(value: UserDefaults.standard.string(forKey: "userBank") ?? "선택 안함")
 
     let topView = UIView()
     let selectedBankLabel = UILabel()
@@ -77,7 +77,6 @@ class BankListModalVC: UIViewController, UIScrollViewDelegate {
 
         collectionView.rx.modelSelected(Bank.self)
             .subscribe(onNext: { bank in
-               // UserDefaults.standard.set(bank.name, forKey: "userBank")
                 self.dismiss(animated: true, completion: nil)
                 self.selectedBankName.accept(bank.name)
             })
@@ -95,9 +94,9 @@ class BankListModalVC: UIViewController, UIScrollViewDelegate {
     
     func setAttribute() {
         
-        view.backgroundColor = .white
-        collectionView.backgroundColor = .white
-        topView.backgroundColor = .white
+        view.backgroundColor = .SurfaceBrandCalmshell
+        collectionView.backgroundColor = .SurfaceBrandCalmshell
+        topView.backgroundColor = .SurfaceBrandCalmshell
         
         selectedBankLabel.text = "정산받을 은행을 선택해주세요"
         selectedBankLabel.font = UIFont.systemFont(ofSize: 21)

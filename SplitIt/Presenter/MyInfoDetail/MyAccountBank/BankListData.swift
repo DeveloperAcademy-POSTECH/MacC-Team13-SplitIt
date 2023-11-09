@@ -12,6 +12,7 @@ import RxCocoa
 struct BankListData {
     var bankList: Observable<[Bank]> {
         return Observable.just([
+            Bank(backIdx: 0, name: "선택 안함"),
             Bank(backIdx: 1, name: "NH농협"),
             Bank(backIdx: 2,name: "카카오뱅크"),
             Bank(backIdx: 3,name: "KB국민은행"),

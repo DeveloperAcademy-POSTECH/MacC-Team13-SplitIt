@@ -207,7 +207,7 @@ class MyInfoVC: UIViewController {
             kakaoPayBtn.isHidden = true
             naverPayBtn.isHidden = true
             
-            backViewHeight = 188
+            backViewHeight = 202
             
             backView.snp.updateConstraints { make in
                 make.height.equalTo(backViewHeight)
@@ -323,7 +323,7 @@ class MyInfoVC: UIViewController {
         
         header.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(8)
             $0.leading.trailing.equalToSuperview()
         }
         
@@ -402,12 +402,12 @@ class MyInfoVC: UIViewController {
         }
         
         accountNameLabel.snp.makeConstraints {
-            $0.top.equalTo(accountInfoLabel.snp.bottom).offset(8)
-            $0.leading.equalTo(accountLabel.snp.trailing).offset(4)
+            $0.top.equalTo(accountBankLabel.snp.bottom).offset(4)
+            $0.leading.equalTo(accountView.snp.leading).offset(16)
         }
         
         socialPayLabel.snp.makeConstraints {
-            $0.top.equalTo(accountInfoLabel.snp.bottom).offset(41)
+            $0.top.equalTo(accountInfoLabel.snp.bottom).offset(55)
             $0.leading.equalTo(accountView.snp.leading).offset(16)
         }
         

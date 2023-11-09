@@ -56,7 +56,7 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
     func setLayout() {
         header.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(8)
             $0.leading.trailing.equalToSuperview()
         }
         
