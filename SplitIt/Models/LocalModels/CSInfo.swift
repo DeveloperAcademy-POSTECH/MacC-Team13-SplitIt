@@ -14,9 +14,9 @@ struct CSInfo {
     var totalAmount: Int
     var splitIdx: String
     
-    init(splitIdx: String) {
+    init(splitIdx: String, title: String) {
         self.csInfoIdx = ObjectId.generate().stringValue
-        self.title = ""
+        self.title = title
         self.totalAmount = 0
         self.splitIdx = splitIdx
     }

@@ -189,7 +189,10 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
                                    exitButtonTapped: header.rightButton.rx.tap,
                                    backButtonTapped: header.leftButton.rx.tap
         )
+        
         let output = viewModel.transform(input: input)
+        
+        titleTextFiled.text = output.titleInitialValue
         
         output.showCSMemberView
             .drive(onNext: { [weak self] _ in

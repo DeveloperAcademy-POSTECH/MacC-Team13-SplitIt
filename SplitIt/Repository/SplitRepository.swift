@@ -93,7 +93,7 @@ extension SplitRepository {
     /// 새로운 split, csInfo, csMember(default: 나) 생성 => MainView에서 split it 버튼 클릭시 호출되도록 설정
     func createDatasForCreateFlow() {
         let newSplit = Split()
-        let newCSInfo = CSInfo(splitIdx: newSplit.splitIdx)
+        let newCSInfo = CSInfo(splitIdx: newSplit.splitIdx, title: "1차")
         let name = UserDefaults.standard.string(forKey: "userNickName") == "" ? "정산자" : UserDefaults.standard.string(forKey: "userNickName") ?? "정산자"
         let newCSMember = CSMember(csInfoIdx: newCSInfo.csInfoIdx, name: name)
         
@@ -147,10 +147,12 @@ extension SplitRepository {
     
     /// 현재 splitIdx를 기준으로 CSInfo부터 아래 데이터들만 새로 생성
     func createNewCS() {
+        let currentCSInfoCount = getCurrentSplitCSInfoCount()
+        
         let splitIdx = splitArr.value.first!.splitIdx
         let preCSInfo = csInfoArr.value.last!.csInfoIdx
         let preCSMember = csMemberArr.value.filter { $0.csInfoIdx == preCSInfo }
-        let newCSInfo = CSInfo(splitIdx: splitIdx)
+        let newCSInfo = CSInfo(splitIdx: splitIdx, title: "\(currentCSInfoCount + 1)차")
         var newCSMembers: [CSMember] = []
         
         preCSMember.forEach {
@@ -181,6 +183,12 @@ extension SplitRepository {
         }
         
         exclMemberArr.accept(exclMembers)
+    }
+    
+    private func getCurrentSplitCSInfoCount() -> Int {
+        return RealmManager()
+            .bringCSInfoWithSplitIdxArr(splitIdxArr: [splitArr.value.first!.splitIdx])
+            .count
     }
 }
 
