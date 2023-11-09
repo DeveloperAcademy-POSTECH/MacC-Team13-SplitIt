@@ -86,7 +86,6 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
         }
         
         titleTextFiled.do {
-            $0.font = .KoreanCaption1
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
             $0.returnKeyType = .next
@@ -107,7 +106,6 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
         
         priceTextFiled.do {
             $0.applyStyle(.editingDidEndNumber)
-            $0.font = .KoreanSubtitle
             $0.textColor = .TextDeactivate
         }
 
@@ -177,7 +175,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
         }
         
         header.snp.makeConstraints {
-            $0.top.equalTo(view.snp.top).offset(30)
+            $0.top.equalTo(view.snp.top).offset(24)
             $0.height.equalTo(30)
             $0.leading.trailing.equalToSuperview()
         }

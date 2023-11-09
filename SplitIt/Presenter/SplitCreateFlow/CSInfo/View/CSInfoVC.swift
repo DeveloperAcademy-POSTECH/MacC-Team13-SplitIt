@@ -66,12 +66,11 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
         }
         
         titleTextFiled.do {
-            $0.font = .KoreanCaption1
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
             $0.returnKeyType = .next
             self.titleTextFiled.applyStyle(.editingDidEndNormal)
-            $0.placeholder = "ex) 광란의 곱창팟, 집들이 장보기, 노래방"
+            $0.placeholder = "ex) 회식, 노래방, 생일파티"
         }
 
         textFiledCounter.do {
@@ -87,7 +86,6 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
         
         totalAmountTextFiled.do {
             $0.applyStyle(.editingDidEndNumber)
-            $0.font = .KoreanSubtitle
             $0.textColor = .TextDeactivate
         }
         
@@ -118,7 +116,7 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
         header.snp.makeConstraints {
             $0.height.equalTo(30)
             $0.horizontalEdges.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(8)
         }
         
         scrollView.snp.makeConstraints {

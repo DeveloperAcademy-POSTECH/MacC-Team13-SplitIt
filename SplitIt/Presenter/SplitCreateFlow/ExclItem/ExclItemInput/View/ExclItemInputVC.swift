@@ -92,7 +92,7 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
         header.snp.makeConstraints {
             $0.height.equalTo(30)
             $0.horizontalEdges.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(8)
         }
         
         exclListLabel.snp.makeConstraints {
@@ -115,6 +115,7 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
         tableView.snp.makeConstraints {
             $0.top.equalTo(exclListLabel.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview().inset(30)
+            $0.bottom.equalTo(nextButton.snp.top).offset(-24)
         }
         
         emptyView.snp.makeConstraints {
@@ -124,7 +125,6 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
         }
         
         nextButton.snp.makeConstraints {
-            $0.top.equalTo(tableView.snp.bottom)
             $0.bottom.equalToSuperview().inset(40)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(48)
