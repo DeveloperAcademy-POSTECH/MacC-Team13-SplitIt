@@ -102,7 +102,6 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
         }
         
         titleTextFiled.do {
-            $0.font = .KoreanCaption1
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
             $0.returnKeyType = .next
@@ -123,7 +122,6 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
         
         priceTextFiled.do {
             $0.applyStyle(.editingDidEndNumber)
-            $0.font = .KoreanSubtitle
             $0.textColor = .TextDeactivate
         }
 

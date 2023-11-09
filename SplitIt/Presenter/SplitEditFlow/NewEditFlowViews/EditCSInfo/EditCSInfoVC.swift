@@ -63,7 +63,6 @@ class EditCSInfoVC: UIViewController {
         }
         
         titleTextFiled.do {
-            $0.font = .KoreanCaption1
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
             $0.returnKeyType = .next
@@ -84,7 +83,6 @@ class EditCSInfoVC: UIViewController {
         
         totalAmountTextFiled.do {
             $0.applyStyle(.editingDidEndNumber)
-            $0.font = .KoreanSubtitle
             $0.textColor = .TextDeactivate
         }
         

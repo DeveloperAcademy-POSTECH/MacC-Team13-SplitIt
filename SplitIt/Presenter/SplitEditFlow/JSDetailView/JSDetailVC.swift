@@ -59,7 +59,6 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate, SPAlertDelegate 
         }
         
         splitTitleTF.do {
-            $0.font = .KoreanCaption1
             $0.textColor = .TextPrimary
             $0.placeholder = "ex) 팀 회식, 생일파티, 집들이"
             $0.autocorrectionType = .no
