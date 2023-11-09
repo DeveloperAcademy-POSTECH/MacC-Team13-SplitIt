@@ -175,7 +175,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
         }
         
         header.snp.makeConstraints {
-            $0.top.equalTo(view.snp.top).offset(30)
+            $0.top.equalTo(view.snp.top).offset(24)
             $0.height.equalTo(30)
             $0.leading.trailing.equalToSuperview()
         }
