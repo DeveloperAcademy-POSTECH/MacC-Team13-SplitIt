@@ -33,7 +33,8 @@ final class SPTextField: UITextField {
         super.init(frame: frame)
         
         clearButtonMode = .whileEditing
-
+        font = .KoreanBody
+        
         setupTintColor()
         setBinding()
     }
@@ -117,7 +118,8 @@ final class SPTextField: UITextField {
 
     private func configureCommonProperties() {
         let attributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.TextSecondary,
+            .foregroundColor: UIColor.TextDeactivate,
+            .font: UIFont.KoreanCaption1
         ]
 
         let attributedPlaceholder = NSAttributedString(string: self.placeholder ?? "", attributes: attributes)
@@ -202,6 +204,9 @@ final class SPTextField: UITextField {
                     button.setImage(self.tintedClearImage, for: .normal)
                     button.setImage(self.tintedClearImage, for: .highlighted)
                 }
+                
+                // MARK: clearButton의 padding 조절
+                button.frame = CGRect(origin: CGPoint(x: button.frame.origin.x - 6, y: button.frame.origin.y), size: button.frame.size)
             }
         }
     }
