@@ -78,6 +78,7 @@ class SplitShareVC: UIViewController {
             $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
             $0.setTitle("정산자의 확인을 기다리고 있어요", for: .disabled)
             $0.setTitle("친구에게 영수증 공유하기", for: .normal)
+            $0.buttonState.accept(true)
         }
     }
     
@@ -88,7 +89,7 @@ class SplitShareVC: UIViewController {
         
         header.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(8)
             $0.leading.trailing.equalToSuperview()
         }
         
@@ -126,10 +127,7 @@ class SplitShareVC: UIViewController {
     
     private func setBind() {
         let input = SplitShareVM.Input(viewWillAppear: self.rx.viewWillAppear,
-                                       viewDidAppear: self.rx.viewDidAppear,
                                        shareButtonTapped: shareButton.rx.tap,
-                                       currentTableViewScrollState: tableView.rx.contentOffset,
-                                       tableView: tableView,
                                        csAddButtonTapped: csAddButton.rx.tap,
                                        editButtonTapped: editButton.rx.tap)
         let output = viewModel.transform(input: input)
@@ -167,27 +165,15 @@ class SplitShareVC: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        output.buttonState
-            .asDriver()
-            .drive(shareButton.buttonState)
-            .disposed(by: disposeBag)
-        
-        output.showShareView
-            .asDriver()
-            .drive(onNext: { [weak self] _ in
+        output.sendPayString
+            .drive(onNext: { [weak self] sendPayString in
                 guard let self = self else { return }
                 self.tableView.layer.borderColor = UIColor.clear.cgColor
                 let image = self.tableView.takeSnapshotOfFullContent()
-                var items: [Any] = [image as Any]
                 
-                let acount = UserDefaults.standard.string(forKey: "userAccount") ?? ""
-                let bank = UserDefaults.standard.string(forKey: "userBank") ?? ""
-                let name = UserDefaults.standard.string(forKey: "userName") ?? ""
-                
-                if acount != "" && bank != "" {
-                    let userInfo = "\(String(describing: bank)) \(String(describing: acount)) \(String(describing: name))"
-                    items.append(userInfo)
-                }
+                var items: [Any] = []
+                if sendPayString != "" { items.append(sendPayString) }
+                items.append(image as Any)
                 
                 let vc = UIActivityViewController(activityItems: items, applicationActivities: nil)
                 vc.excludedActivityTypes = [.saveToCameraRoll]

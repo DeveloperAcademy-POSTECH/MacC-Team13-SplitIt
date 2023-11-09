@@ -61,7 +61,7 @@ class SelectedCell: UICollectionViewCell, Reusable {
     func configure(item: MemberCheck) {
         nameLabel.text = item.name
         
-        if item.name != UserDefaults.standard.string(forKey: "userNickName") && item.name != "정산자" {
+        if item.name != "정산자" {
             contentView.addSubview(xMark)
             
             xMark.snp.makeConstraints {
@@ -89,7 +89,7 @@ class SelectedCell: UICollectionViewCell, Reusable {
         let text = item.name
         let textWidth = (text as NSString).size(withAttributes: [NSAttributedString.Key.font: UIFont.KoreanCaption1]).width
         
-        let plusWidth = item.name == UserDefaults.standard.string(forKey: "userNickName") || item.name == "정산자" ? 30 : 50.5
+        let plusWidth = item.name == "정산자" ? 30 : 50.5
         
         return textWidth + plusWidth
     }

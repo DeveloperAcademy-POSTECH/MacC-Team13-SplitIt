@@ -87,7 +87,7 @@ class HistoryVC: UIViewController {
         emptyView.addSubview(emptyLabel)
         
         header.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(8)
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(30)
         }
@@ -95,7 +95,7 @@ class HistoryVC: UIViewController {
         collectionView.snp.makeConstraints {
             $0.top.equalTo(header.snp.bottom).offset(18)
             $0.horizontalEdges.equalToSuperview().inset(30)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-40)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
         emptyView.snp.makeConstraints {

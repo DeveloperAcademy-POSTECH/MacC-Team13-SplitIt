@@ -29,17 +29,7 @@ final class SplitRepository {
     
     var isSmartSplit = true
     var isCreate = true
-}
 
-extension SplitRepository {
-    
-    /// DB에서 날짜를 기준으로 5개의 split만 필터링해서 하위 모든 Arr 패치 -> MainView
-    func fetchSplitArrFromDBForMainView() {
-        let realmManager = RealmManager()
-        splitArr.accept(realmManager.bringSplitWithCount(bringCount: 5))
-        fetchAllDataBaseSplit(false, realmManager: realmManager)
-    }
-    
     /// DB에서 날짜를 기준으로 20개(임시 - 그냥 다 불러와도 되긴 함)의 split만 필터링해서 하위 모든 Arr 패치
     func fetchSplitArrFromDBForHistoryView() {
         let realmManager = RealmManager()
@@ -86,16 +76,12 @@ extension SplitRepository {
         let exclItemIdxArr: [String] = exclItemArr.value.map { $0.exclItemIdx }
         exclMemberArr.accept(realmManager.bringExclMemberWithExclItemIdxArr(exclItemIdxArr: exclItemIdxArr))
     }
-}
 
-extension SplitRepository {
-    
     /// 새로운 split, csInfo, csMember(default: 나) 생성 => MainView에서 split it 버튼 클릭시 호출되도록 설정
     func createDatasForCreateFlow() {
         let newSplit = Split()
         let newCSInfo = CSInfo(splitIdx: newSplit.splitIdx, title: "1차")
-        let name = UserDefaults.standard.string(forKey: "userNickName") == "" ? "정산자" : UserDefaults.standard.string(forKey: "userNickName") ?? "정산자"
-        let newCSMember = CSMember(csInfoIdx: newCSInfo.csInfoIdx, name: name)
+        let newCSMember = CSMember(csInfoIdx: newCSInfo.csInfoIdx, name: "정산자")
         
         currentCSInfo = newCSInfo
         
@@ -184,16 +170,7 @@ extension SplitRepository {
         
         exclMemberArr.accept(exclMembers)
     }
-    
-    private func getCurrentSplitCSInfoCount() -> Int {
-        return RealmManager()
-            .bringCSInfoWithSplitIdxArr(splitIdxArr: [splitArr.value.first!.splitIdx])
-            .count
-    }
-}
 
-extension SplitRepository {
-    
     /// 현재 csInfo의 title 변경
     func inputCSInfoWithTitle(title: String) {
         currentCSInfo!.title = title
@@ -215,10 +192,7 @@ extension SplitRepository {
         
         createExclMember(exclItemIdx: newExclItem.exclItemIdx)
     }
-}
 
-extension SplitRepository {
-    
     /// 현재 split의 title을 수정
     func editSplitTitle(title: String) {
         let realmManager = RealmManager()
@@ -279,6 +253,7 @@ extension SplitRepository {
         exclItemArr.accept(exclItems)
     }
     
+    /// csMember를 바꿨을 때 exclMember에도 자동 반영
     func editCSMemberAndExclMember() {
         let realm = RealmManager()
         let currentCSInfoIdx = csMemberArr.value.first!.csInfoIdx
@@ -286,7 +261,6 @@ extension SplitRepository {
         let exclItemIdxArr = exclItemArr.value.map { $0.exclItemIdx }
         let realmCurrentExclMemberIdxArr = realm.bringExclMemberWithExclItemIdxArr(exclItemIdxArr: exclItemIdxArr).map { $0.exclMemberIdx }
         
-        let currentExclMemberNameArr = exclMemberArr.value.map { $0.name }
         var nameAndIsTargetHash: [String: Bool] = [:]
         
         exclMemberArr.value.forEach {
@@ -316,9 +290,6 @@ extension SplitRepository {
         split.createDate = Date.now
         splitArr.accept([split])
     }
-}
-
-extension SplitRepository {
     
     /// csMemberIdx를 기준으로 로컬에서 csMember를 삭제
     func deleteCSMemberOnLocal(csMemberIdx: String) {
@@ -526,9 +497,6 @@ extension SplitRepository {
         exclMemberArr.accept(newExclMembers)
         realmManager.deleteExclMember(exclMemberIdxArr: deleteExclMembers.map { $0.exclMemberIdx })
     }
-}
-
-extension SplitRepository {
     
     /// 각 ExclMember의 isTarget 토글
     func toggleExclMember(exclMemberIdx: String) {
@@ -541,6 +509,13 @@ extension SplitRepository {
         }
         
         exclMemberArr.accept(exclMembers)
+    }
+    
+    /// 현재 Split에 CSInfo가 몇 개 있는지 Count
+    private func getCurrentSplitCSInfoCount() -> Int {
+        return RealmManager()
+            .bringCSInfoWithSplitIdxArr(splitIdxArr: [splitArr.value.first!.splitIdx])
+            .count
     }
     
     /// Arr들을 DB에 업데이트
