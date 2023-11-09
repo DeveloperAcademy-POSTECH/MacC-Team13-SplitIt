@@ -24,6 +24,7 @@ extension SPTextField {
 
 final class SPTextField: UITextField {
     let currencyLabel = UILabel()
+    var tintedClearImage: UIImage?
     
     var disposeBag = DisposeBag()
     
@@ -31,11 +32,20 @@ final class SPTextField: UITextField {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        clearButtonMode = .whileEditing
+
+        setupTintColor()
         setBinding()
     }
 
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupTintColor()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.tintClearImage()
     }
 
     private func setBinding() {
@@ -181,4 +191,47 @@ final class SPTextField: UITextField {
         currencyLabel.font = UIFont.KoreanCaption1
     }
     
+    private func tintClearImage() {
+        for view in subviews {
+            if view is UIButton {
+                let button = view as! UIButton
+                if let image = button.image(for: .highlighted) {
+                    if self.tintedClearImage == nil {
+                        tintedClearImage = self.tintImage(image: image, color: .darkGray)
+                    }
+                    button.setImage(self.tintedClearImage, for: .normal)
+                    button.setImage(self.tintedClearImage, for: .highlighted)
+                }
+            }
+        }
+    }
+    
+    private func tintImage(image: UIImage, color: UIColor) -> UIImage {
+        let size = image.size
+        
+        UIGraphicsBeginImageContextWithOptions(size, false, image.scale)
+        let context = UIGraphicsGetCurrentContext()
+        image.draw(at: .zero, blendMode: CGBlendMode.normal, alpha: 1.0)
+        
+        context?.setFillColor(color.cgColor)
+        context?.setBlendMode(CGBlendMode.sourceIn)
+        context?.setAlpha(1.0)
+        
+        let rect = CGRect(x: CGPoint.zero.x, y: CGPoint.zero.y, width: image.size.width, height: image.size.height)
+        UIGraphicsGetCurrentContext()?.fill(rect)
+        let tintedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return tintedImage ?? UIImage()
+    }
+    
+    func setupTintColor() {
+        self.layer.cornerRadius = 8.0
+        self.layer.masksToBounds = true
+        self.layer.borderColor = self.tintColor.cgColor
+        self.layer.borderWidth = 1.5
+        self.backgroundColor = .clear
+        self.textColor = self.tintColor
+    }
 }
+
