@@ -28,6 +28,7 @@
 		1A4DB22B2ADE68E400616243 /* SplitRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB22A2ADE68E400616243 /* SplitRepository.swift */; };
 		1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */; };
 		1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2522ADEB24F00616243 /* MemberLog.swift */; };
+		1A7845062AFD1AB100E38403 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1A7845052AFD1AB100E38403 /* RealmSwift */; };
 		1A8B05DC2AF0E15A00CF5BC5 /* SPNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8B05DB2AF0E15A00CF5BC5 /* SPNavigationBar.swift */; };
 		1A8B05E12AF1466300CF5BC5 /* SplitMethodSelectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8B05E02AF1466300CF5BC5 /* SplitMethodSelectVC.swift */; };
 		1A8B05E32AF1540A00CF5BC5 /* SplitMethodSelectVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8B05E22AF1540A00CF5BC5 /* SplitMethodSelectVM.swift */; };
@@ -374,6 +375,7 @@
 				6078ACF22ADA757E00995811 /* RxDataSources in Frameworks */,
 				6078ACE72ADA752F00995811 /* Then in Frameworks */,
 				60115DFC2ADBF8860050D32C /* RxAppState in Frameworks */,
+				1A7845062AFD1AB100E38403 /* RealmSwift in Frameworks */,
 				6078ACE42ADA752600995811 /* Reusable in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1392,6 +1394,7 @@
 				6078ACF12ADA757E00995811 /* RxDataSources */,
 				60115DFB2ADBF8860050D32C /* RxAppState */,
 				1A1ACC522AF672F3004AC4CD /* SnapshotKit */,
+				1A7845052AFD1AB100E38403 /* RealmSwift */,
 			);
 			productName = SplitIt;
 			productReference = 6078ACC82ADA74AC00995811 /* SplitIt.app */;
@@ -1430,6 +1433,7 @@
 				6078ACF02ADA757E00995811 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				60115DFA2ADBF8860050D32C /* XCRemoteSwiftPackageReference "RxAppState" */,
 				1A1ACC512AF672F3004AC4CD /* XCRemoteSwiftPackageReference "SnapshotKit" */,
+				1A7845042AFD1AB100E38403 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = 6078ACC92ADA74AC00995811 /* Products */;
 			projectDirPath = "";
@@ -1763,7 +1767,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3NP4Z3WZ94;
+				DEVELOPMENT_TEAM = B9U954AWHU;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SplitIt/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1793,7 +1797,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3NP4Z3WZ94;
+				DEVELOPMENT_TEAM = B9U954AWHU;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SplitIt/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1845,6 +1849,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.3.2;
+			};
+		};
+		1A7845042AFD1AB100E38403 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift";
+			requirement = {
+				branch = master;
+				kind = branch;
 			};
 		};
 		60115DFA2ADBF8860050D32C /* XCRemoteSwiftPackageReference "RxAppState" */ = {
@@ -1910,6 +1922,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1A1ACC512AF672F3004AC4CD /* XCRemoteSwiftPackageReference "SnapshotKit" */;
 			productName = SnapshotKit;
+		};
+		1A7845052AFD1AB100E38403 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A7845042AFD1AB100E38403 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 		60115DFB2ADBF8860050D32C /* RxAppState */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -111,7 +111,7 @@ class CSMemberSearchVM {
         input.selectedCellTapped.asDriver()
             .drive(onNext: { indexPath in
                 let selectedMember = selectedMemberArr.value[indexPath.row]
-                if selectedMember.name == UserDefaults.standard.string(forKey: "userNickName") || selectedMember.name == "정산자" { return }
+                if selectedMember.name == "정산자" { return }
                 
                 var currentSelectedMemberArr = selectedMemberArr.value
                 
@@ -131,8 +131,7 @@ class CSMemberSearchVM {
         Driver.merge(input.addButtonTapped.asDriver(), input.textFieldEnterKeyTapped.asDriver())
             .withLatestFrom(input.textFieldValue.asDriver())
             .drive(onNext: { name in
-                if name == "" { return }
-                if name == UserDefaults.standard.string(forKey: "userNickName") || name == "정산자" { return }
+                if name == "" || name == "정산자" { return }
                 if selectedMemberArr.value.map({ $0.name }).contains(name) { return }
                 
                 var currentSelectedMemberArr = selectedMemberArr.value
@@ -161,7 +160,7 @@ class CSMemberSearchVM {
                 self.repo.createCSMemberArr(nameArr: selectedMemberNameArr)
                 
                 for name in selectedMemberNameArr {
-                    if !allMemberArr.value.map({ $0.name }).contains(name) && name != UserDefaults.standard.string(forKey: "userNickName") && name != "정산자" {
+                    if !allMemberArr.value.map({ $0.name }).contains(name) && name != "정산자" {
                         print(name)
                         self.repo.createMemberLog(name: name)
                     }

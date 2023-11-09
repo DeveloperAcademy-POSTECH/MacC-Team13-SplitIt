@@ -6,8 +6,8 @@
 //
 
 import UIKit
-import RxCocoa
 import RxSwift
+import RxCocoa
 
 class SplitShareVM {
     let disposeBag = DisposeBag()
@@ -15,10 +15,7 @@ class SplitShareVM {
     
     struct Input {
         let viewWillAppear: Observable<Bool>
-        let viewDidAppear: Observable<Bool>
         let shareButtonTapped: ControlEvent<Void>
-        let currentTableViewScrollState: ControlProperty<CGPoint>
-        let tableView: UITableView
         let csAddButtonTapped: ControlEvent<Void>
         let editButtonTapped: ControlEvent<Void>
     }
@@ -27,8 +24,7 @@ class SplitShareVM {
         let split: BehaviorRelay<[Split]>
         let csInfos: BehaviorRelay<[CSInfo]>
         let splitResult: BehaviorRelay<[SplitMemberResult]>
-        let buttonState: BehaviorRelay<Bool>
-        let showShareView: ControlEvent<Void>
+        let sendPayString: Driver<String>
         let showNewCSCreateFlow: ControlEvent<Void>
         let showCSEditView: ControlEvent<Void>
     }
@@ -40,8 +36,6 @@ class SplitShareVM {
         let split: BehaviorRelay<[Split]> = repo.splitArr
         let csInfos: BehaviorRelay<[CSInfo]> = repo.csInfoArr
         let splitResult: BehaviorRelay<[SplitMemberResult]> = BehaviorRelay(value: self.calcSplitResult())
-        let shareButtonState = BehaviorRelay(value: false)
-        let showShareView = input.shareButtonTapped
         let showNewCSCreateFlow = input.csAddButtonTapped
         let showCSEditView = input.editButtonTapped
         
@@ -53,29 +47,6 @@ class SplitShareVM {
                 splitResult.accept (self.calcSplitResult ())
             })
             .disposed(by: disposeBag)
-                
-        input.viewDidAppear
-            .asDriver(onErrorJustReturn: true)
-            .drive(onNext: { _ in
-                if input.tableView.contentSize.height < input.tableView.frame.height * 1.6 {
-                    shareButtonState.accept(true)
-                }
-            })
-            .disposed(by: disposeBag)
-        
-        input.currentTableViewScrollState
-            .asDriver()
-            .drive(onNext: { offset in
-                if input.tableView.contentSize.height / 3 < offset.y { shareButtonState.accept(true) }
-            })
-            .disposed(by: disposeBag)
-        
-        input.shareButtonTapped
-            .asDriver()
-            .drive(onNext: {
-                
-            })
-            .disposed(by: disposeBag)
         
         showNewCSCreateFlow
             .asDriver()
@@ -84,7 +55,14 @@ class SplitShareVM {
             })
             .disposed(by: disposeBag)
         
-        return Output(split: split, csInfos: csInfos, splitResult: splitResult, buttonState: shareButtonState, showShareView: showShareView, showNewCSCreateFlow: showNewCSCreateFlow, showCSEditView: showCSEditView)
+        let sendPayString: Driver<String> = input.shareButtonTapped
+            .map { [weak self] _ in
+                guard let self = self else { return "" }
+                return self.getPayString()
+            }
+            .asDriver(onErrorJustReturn: "")
+
+        return Output(split: split, csInfos: csInfos, splitResult: splitResult, sendPayString: sendPayString, showNewCSCreateFlow: showNewCSCreateFlow, showCSEditView: showCSEditView)
     }
     
     // 결과 계산 로직 메서드
@@ -170,5 +148,31 @@ class SplitShareVM {
         }
         
         return splitResultArr
+    }
+    
+    private func getPayString() -> String {
+        let acount = UserDefaults.standard.string(forKey: "userAccount") ?? ""
+        let bank = UserDefaults.standard.string(forKey: "userBank") ?? ""
+        let name = UserDefaults.standard.string(forKey: "userName") ?? ""
+        
+        let payArr = [UserDefaults.standard.bool(forKey: "tossPay") ? "토스" : "",
+                      UserDefaults.standard.bool(forKey: "kakaoPay") ? "카카오페이" : "",
+                      UserDefaults.standard.bool(forKey: "naverPay") ? "네이버페이" : ""]
+        
+        let payFilter = payArr.filter { $0 != "" }
+        
+        var userInfo = ""
+        
+        if acount != "" && bank != "" {
+            if payFilter.isEmpty {
+                userInfo = "\(String(describing: bank)) \(String(describing: acount)) \(String(describing: name))"
+            } else {
+                userInfo = "\(String(describing: bank)) \(String(describing: acount)) \(String(describing: name)) (\(payFilter.joined(separator: ", ")) 가능)"
+            }
+        } else if !payFilter.isEmpty {
+            userInfo = "\(payFilter.joined(separator: ", ")) 가능"
+        }
+        
+        return userInfo
     }
 }
