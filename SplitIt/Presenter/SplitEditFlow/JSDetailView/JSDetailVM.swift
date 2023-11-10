@@ -53,13 +53,11 @@ final class JSDetailVM {
     
     struct Input {
         let viewDidLoad: Observable<Bool>
-        let nextButtonTapped: ControlEvent<Void>
         let title: Driver<String>
         let csEditTapped: ControlEvent<IndexPath>
     }
     
     struct Output {
-        let pushNextView: Driver<Void>
         let titleCount: Driver<String>
         let textFieldIsValid: Driver<Bool>
         let textFieldIsEmpty: Driver<Bool>
@@ -69,7 +67,6 @@ final class JSDetailVM {
     
     func transform(input: Input) -> Output {
         let title = input.title
-        let showNextView = input.nextButtonTapped
         let textFieldCount = BehaviorRelay<String>(value: "")
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
         let textFieldCountIsEmpty: Driver<Bool>
@@ -108,14 +105,6 @@ final class JSDetailVM {
             .drive(displayString)
             .disposed(by: disposeBag)
         
-        showNextView
-            .withLatestFrom(displayString)
-            .asDriver(onErrorJustReturn: "")
-            .drive(onNext: {
-                SplitRepository.share.editSplitTitle(title: $0)
-            })
-            .disposed(by: disposeBag)
-        
         displayString.asDriver()
             .map { title in
                 let currentTextCount = title.count > self.maxTextCount ? title.count - 1 : title.count
@@ -143,7 +132,7 @@ final class JSDetailVM {
                 return data[indexPath.row].csInfoIdx
             }
         
-        return Output(pushNextView: showNextView.asDriver(),
+        return Output(
                       titleCount: textFieldCount.asDriver(),
                       textFieldIsValid: textFieldIsValid.asDriver(),
                       textFieldIsEmpty: textFieldCountIsEmpty,
