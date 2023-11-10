@@ -26,7 +26,7 @@ class CSInfoVM {
     }
     
     struct Output {
-        let titleInitialValue: String
+        let initialTitle: Driver<String>
         let showCSMemberView: Driver<Void>
         let titleCount: Driver<String>
         let totalAmount: Driver<String>
@@ -41,7 +41,7 @@ class CSInfoVM {
     
     func transform(input: Input) -> Output {
         let titleInitialValue = SplitRepository.share.csInfoArr.value.first!.title
-        
+        let initialTitleRelay = BehaviorRelay<String>(value: titleInitialValue)
         let title = input.title
         let showCSTotalAmountView = input.nextButtonTapped
         let textFieldCount = BehaviorRelay<String>(value: "")
@@ -126,7 +126,7 @@ class CSInfoVM {
             .drive(totalAmountIsValid)
             .disposed(by: disposeBag)
         
-        return Output(titleInitialValue: titleInitialValue,
+        return Output(initialTitle: initialTitleRelay.asDriver(),
                       showCSMemberView: showCSTotalAmountView.asDriver(),
                       titleCount: textFieldCount.asDriver(),
                       totalAmount: totalAmountString,
