@@ -13,7 +13,7 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
     
     let inputTextRelay = BehaviorRelay<Int?>(value: 0)
     let customKeyboard = CustomKeyboard()
-    let backAlert = SPAlertController()
+//    let backAlert = SPAlertController()
     let exitAlert = SPAlertController()
     
     var disposeBag = DisposeBag()
@@ -44,7 +44,8 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        titleTextFiled.becomeFirstResponder()
+        unfocusTitleTF()
+        focusTotalAmountTF()
     }
     
     func setAttribute() {
@@ -190,13 +191,12 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
         
         let output = viewModel.transform(input: input)
         
-        titleTextFiled.text = output.titleInitialValue
-        
-        output.showCSMemberView
-            .drive(onNext: { [weak self] _ in
+        // MARK: Title
+        output.initialTitle
+            .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                let vc = CSMemberVC()
-                self.navigationController?.pushViewController(vc, animated: true)
+                titleTextFiled.text = $0
+                titleTextFiled.sendActions(for: .valueChanged)
             })
             .disposed(by: disposeBag)
         
@@ -228,6 +228,7 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
             .drive(titleTextFiled.rx.text)
             .disposed(by: disposeBag)
 
+        // MARK: TotalAmount
         output.totalAmountTextFieldIsValid
             .drive(onNext: { [weak self] isValid in
                 guard let self = self else { return }
@@ -241,10 +242,7 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
             .drive(totalAmountTextFiled.rx.text)
             .disposed(by: disposeBag)
         
-        output.nextButtonIsEnable
-            .drive(nextButton.buttonState)
-            .disposed(by: disposeBag)
-        
+        // MARK: Animation
         output.titleTextFieldControlEvent
             .drive(onNext: { [weak self] event in
                 guard let self = self else { return }
@@ -261,30 +259,32 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
             })
             .disposed(by: disposeBag)
         
-        output.showBackAlert
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                showAlert(view: backAlert,
-                          type: .warnNormal,
-                          title: "정산 방법을 다시 선택하시겠어요?",
-                          descriptions: "지금까지 정산하신 내역이 사라져요",
-                          leftButtonTitle: "취 소",
-                          rightButtonTitle: "다시 선택")
-            })
-            .disposed(by: disposeBag)
+        // MARK: BackAlert
+//        output.showBackAlert
+//            .drive(onNext: { [weak self] _ in
+//                guard let self = self else { return }
+//                showAlert(view: backAlert,
+//                          type: .warnNormal,
+//                          title: "정산 방법을 다시 선택하시겠어요?",
+//                          descriptions: "지금까지 정산하신 내역이 사라져요",
+//                          leftButtonTitle: "취 소",
+//                          rightButtonTitle: "다시 선택")
+//            })
+//            .disposed(by: disposeBag)
         
+//        backAlert.rightButtonTapSubject
+//            .asDriver(onErrorJustReturn: ())
+//            .drive(onNext: { [weak self] _ in
+//                guard let self = self else { return }
+//                self.navigationController?.popViewController(animated: true)
+//            })
+//            .disposed(by: disposeBag)
+        
+        // MARK: ExitAlert
         output.showExitAlert
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 showExitAlert(view: exitAlert)
-            })
-            .disposed(by: disposeBag)
-        
-        backAlert.rightButtonTapSubject
-            .asDriver(onErrorJustReturn: ())
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.navigationController?.popViewController(animated: true)
             })
             .disposed(by: disposeBag)
         
@@ -293,6 +293,19 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.navigationController?.popToRootViewController(animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        // MARK: NextButton
+        output.nextButtonIsEnable
+            .drive(nextButton.buttonState)
+            .disposed(by: disposeBag)
+        
+        output.showCSMemberView
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                let vc = CSMemberVC()
+                self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
     }

@@ -77,7 +77,7 @@ final class SPNavigationBar: UIView {
             setLeftBackButton(action: .toRoot, vc: vc)
         case .csInfoCreate:
             setNaviImage(imageCase: 0)
-            setLeftBackButton(action: .none, vc: vc)
+            setLeftBackButton(action: .toBack, vc: vc)
             setExitButton(vc: vc, action: false)
         case .csMemberCreate:
             setNaviImage(imageCase: 1)
