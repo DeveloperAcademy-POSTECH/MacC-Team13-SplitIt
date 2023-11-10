@@ -84,7 +84,11 @@ class ExclItemInfoAddModalVM {
                 priceResult.accept(number)
                 return number
             }
-            .map { numberFormatter.formattedString(from: $0) }
+            .map {
+                let price = numberFormatter.formattedString(from: $0)
+                if price == "0" { return "" }
+                return price
+            }
             .asDriver(onErrorJustReturn: "0")
         
         let csInfoDriver = Driver.combineLatest(input.title, priceResult.asDriver())
