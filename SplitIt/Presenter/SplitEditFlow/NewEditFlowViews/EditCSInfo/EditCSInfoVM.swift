@@ -109,7 +109,11 @@ class EditCSInfoVM {
                 totalAmountResult.accept(number)
                 return number
             }
-            .map { numberFormatter.formattedString(from: $0) }
+            .map {
+                let totalAmount = numberFormatter.formattedString(from: $0)
+                if totalAmount == "0" { return "" }
+                return totalAmount
+            }
             .asDriver(onErrorJustReturn: "0")
         
         let csInfoDriver = Driver.combineLatest(title.asDriver(), totalAmountResult.asDriver())
