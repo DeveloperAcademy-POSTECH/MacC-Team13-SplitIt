@@ -261,6 +261,14 @@ class EditCSListVC: UIViewController, SPAlertDelegate {
             .drive(delButton.rx.isHidden)
             .disposed(by: disposeBag)
         
+        headerView.leftButton.rx.tap
+            .asDriver()
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                self.navigationController?.popViewController(animated: true)
+            })
+            .disposed(by: disposeBag)
+        
         alert.rightButtonTapSubject
             .asDriver(onErrorJustReturn: ())
             .drive(onNext: { [weak self] _ in

@@ -244,12 +244,15 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
             .asDriver()
             .drive { [weak self] _ in
                 guard let self = self else { return }
-                self.showAlert(view: self.alert,
-                               type: .warnNormal,
-                               title: "수정을 중단하시겠어요?",
-                               descriptions: "지금까지 수정하신 내역이 사라져요",
-                               leftButtonTitle: "취 소",
-                               rightButtonTitle: "중단하기")
+                print("@@@@@@@@\(self.viewModel.isEdit.value)")
+                if self.viewModel.isEdit.value {
+                    self.showAlert(view: self.alert,
+                                   type: .warnNormal,
+                                   title: "수정을 중단하시겠어요?",
+                                   descriptions: "지금까지 수정하신 내역이 사라져요",
+                                   leftButtonTitle: "취 소",
+                                   rightButtonTitle: "중단하기")
+                } else { self.navigationController?.popViewController(animated: true)}
             }
             .disposed(by: disposeBag)
         
