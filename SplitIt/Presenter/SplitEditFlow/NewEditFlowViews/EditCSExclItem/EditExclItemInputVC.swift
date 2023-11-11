@@ -180,5 +180,13 @@ class EditExclItemInputVC: UIViewController {
                 SplitRepository.share.updateDataToDB()
             })
             .disposed(by: disposeBag)
+        
+        header.leftButton.rx.tap
+            .asDriver()
+            .drive { [weak self] _ in
+                guard let self = self else { return }
+                self.navigationController?.popViewController(animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }

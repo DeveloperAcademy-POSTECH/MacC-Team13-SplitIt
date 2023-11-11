@@ -53,25 +53,14 @@ final class JSDetailVM {
     
     struct Input {
         let viewDidLoad: Observable<Bool>
-        let title: Driver<String>
         let csEditTapped: ControlEvent<IndexPath>
     }
     
     struct Output {
-        let titleCount: Driver<String>
-        let textFieldIsValid: Driver<Bool>
-        let textFieldIsEmpty: Driver<Bool>
-        let splitTitle: Driver<String>
         let pushCSEditView: Driver<String>
     }
     
     func transform(input: Input) -> Output {
-        let title = input.title
-        let textFieldCount = BehaviorRelay<String>(value: "")
-        let textFieldIsValid = BehaviorRelay<Bool>(value: true)
-        let textFieldCountIsEmpty: Driver<Bool>
-        let displayString = BehaviorRelay(value: "")
-        let splitTitle = split.map { $0.title }
         let csinfoIndex = input.csEditTapped.asDriver()
         
         input.viewDidLoad
@@ -81,63 +70,12 @@ final class JSDetailVM {
             })
             .disposed(by: disposeBag)
         
-        splitTitle
-            .map { [weak self] text -> String in
-                guard let self = self else { return text }
-                if text.count > self.maxTextCount {
-                    let index = text.index(text.startIndex, offsetBy: self.maxTextCount)
-                    return String(text[..<index])
-                }
-                return text
-            }
-            .drive(displayString)
-            .disposed(by: disposeBag)
-        
-        title
-            .map { [weak self] text -> String in
-                guard let self = self else { return text }
-                if text.count > self.maxTextCount {
-                    let index = text.index(text.startIndex, offsetBy: self.maxTextCount)
-                    return String(text[..<index])
-                }
-                return text
-            }
-            .drive(displayString)
-            .disposed(by: disposeBag)
-        
-        displayString.asDriver()
-            .map { title in
-                let currentTextCount = title.count > self.maxTextCount ? title.count - 1 : title.count
-                return "\(currentTextCount)/\(self.maxTextCount)"
-            }
-            .drive(textFieldCount)
-            .disposed(by: disposeBag)
-        
-        displayString.asDriver()
-            .map { [weak self] text -> Bool in
-                guard let self = self else { return false }
-                return text.count < self.maxTextCount
-            }
-            .drive(textFieldIsValid)
-            .disposed(by: disposeBag)
-    
-        textFieldCountIsEmpty = displayString.asDriver()
-            .map{ $0.count > 0 }
-            .asDriver()
-        
         let pushEditView: Driver<String> = csinfoIndex
             .withLatestFrom(self.csinfoList) { indexPath, data in
-                // MARK: 수정하기로 들어가도 SplitTitle이 저장되도록 수정
-                SplitRepository.share.editSplitTitle(title: displayString.value)
                 return data[indexPath.row].csInfoIdx
             }
         
-        return Output(
-                      titleCount: textFieldCount.asDriver(),
-                      textFieldIsValid: textFieldIsValid.asDriver(),
-                      textFieldIsEmpty: textFieldCountIsEmpty,
-                      splitTitle: displayString.asDriver(),
-                      pushCSEditView: pushEditView)
+        return Output(pushCSEditView: pushEditView)
     }
     
     func memberCount() -> [Int] {

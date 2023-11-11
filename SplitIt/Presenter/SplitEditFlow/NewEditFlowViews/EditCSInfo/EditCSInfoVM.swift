@@ -14,6 +14,7 @@ class EditCSInfoVM {
     var disposeBag = DisposeBag()
     
     let maxTextCount = 8
+    var isEdit = BehaviorRelay(value: false)
     
     let csinfo = SplitRepository.share.csInfoArr.value.first
     
@@ -47,13 +48,13 @@ class EditCSInfoVM {
         let totalAmountIsValid = BehaviorRelay<Bool>(value: true)
         let totalAmountMinIsValid = BehaviorRelay<Bool>(value: false)
         let numberFormatter = NumberFormatterHelper()
-
+        
         let maxCurrency = 10000000
         
         let confirmButtonIsEnable: Driver<Bool>
         
         let title = BehaviorRelay(value: "")
-        var totalAmount = Driver.merge(input.totalAmount)
+        var totalAmount = input.totalAmount.asDriver()
         
         inputTitle
             .map { [weak self] text -> String in
@@ -70,7 +71,14 @@ class EditCSInfoVM {
         if let csinfo = self.csinfo {
             let titleDriver = Driver<String>.just(csinfo.title)
             let totalAmountDriver = Driver<String>.just("\(csinfo.totalAmount)")
-            totalAmount = Driver.merge(input.totalAmount, totalAmountDriver)
+            
+            totalAmount = Driver.merge(totalAmount, totalAmountDriver)
+            
+            totalAmount
+                .map { Int($0) ?? 0 }
+                .asDriver()
+                .drive(totalAmountResult)
+                .disposed(by: disposeBag)
             
             titleDriver
                 .map { [weak self] text -> String in
@@ -83,16 +91,23 @@ class EditCSInfoVM {
                 }
                 .drive(title)
                 .disposed(by: disposeBag)
+            
+            totalAmountDriver
+                .asDriver()
+                .map { Int($0) ?? 0 }
+                .drive(totalAmountResult)
+                .disposed(by: disposeBag)
         }
         
         let titleTextFieldCountIsEmpty = title
             .map{ $0.count > 0 }
             .asDriver(onErrorJustReturn: false)
         
-        let totalAmountTextFieldCountIsEmpty = input.totalAmount
+        let totalAmountTextFieldCountIsEmpty = totalAmountResult
+            .map { "\($0) "}
             .map { numberFormatter.number(from: $0) ?? 0 }
             .map{ $0 != 0 }
-            .asDriver()
+            .asDriver(onErrorJustReturn: false)
         
         let totalAmountMinIsValidDriver = totalAmountResult
             .asDriver()
@@ -143,7 +158,7 @@ class EditCSInfoVM {
             .drive(titleTextFieldIsValid)
             .disposed(by: disposeBag)
         
-        confirmButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(), totalAmountTextFieldCountIsEmpty.asDriver(), totalAmountMinIsValidDriver.asDriver())
+        confirmButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(), totalAmountTextFieldCountIsEmpty.asDriver(), totalAmountMinIsValidDriver.asDriver() )
             .map{ $0 && $1 && $2 }
             .asDriver()
         
@@ -166,6 +181,19 @@ class EditCSInfoVM {
             .drive(totalAmountIsValid)
             .disposed(by: disposeBag)
         
+        let isEditTF = Driver.merge(input.title, input.totalAmount)
+        
+        isEditTF
+            .map { [weak self] _ in
+                guard let self = self else { return false }
+                if let csinfo = self.csinfo {
+                    return (totalAmountResult.value != csinfo.totalAmount) || (title.value != csinfo.title)
+                }
+                return false
+            }
+            .drive(isEdit)
+            .disposed(by: disposeBag)
+    
         return Output(titleString: title.asDriver(),
                       titleCount: textFieldCount.asDriver(),
                       totalAmount: totalAmountString,

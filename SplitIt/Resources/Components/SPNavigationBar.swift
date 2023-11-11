@@ -103,7 +103,7 @@ final class SPNavigationBar: UIView {
             setLeftBackButton(action: .toBack, vc: vc)
         case .csEdit:
             setNaviTitle(title: "차수 수정하기")
-            setLeftBackButton(action: .toBack, vc: vc)
+            setLeftBackButton(action: .toAlert, vc: vc)
             setRightBackButton(title: "확인", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
         case .print:
             if SplitRepository.share.isCreate {

@@ -12,7 +12,7 @@ import RxCocoa
 import RxSwift
 import Reusable
 
-class EditCSMemberVC: UIViewController, Reusable {
+class EditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     let disposeBag = DisposeBag()
     let viewModel = EditCSMemberVM()
     
@@ -23,6 +23,7 @@ class EditCSMemberVC: UIViewController, Reusable {
     let buttonImageView = UIImageView()
     let subTitleLabel = UILabel()
     let memberTableView = UITableView(frame: .zero)
+    let alert = SPAlertController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -168,5 +169,25 @@ class EditCSMemberVC: UIViewController, Reusable {
             })
             .disposed(by: disposeBag)
         
+        header.leftButton.rx.tap
+            .asDriver()
+            .drive { [weak self] _ in
+                guard let self = self else { return }
+                self.showAlert(view: self.alert,
+                               type: .warnNormal,
+                               title: "수정을 중단하시겠어요?",
+                               descriptions: "지금까지 수정하신 내역이 사라져요",
+                               leftButtonTitle: "취 소",
+                               rightButtonTitle: "중단하기")
+            }
+            .disposed(by: disposeBag)
+        
+        alert.rightButtonTapSubject
+            .asDriver(onErrorJustReturn: ())
+            .drive { [weak self] _ in
+                guard let self = self else { return }
+                self.navigationController?.popViewController(animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }
