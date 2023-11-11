@@ -83,17 +83,6 @@ class EditCSInfoVM {
                 }
                 .drive(title)
                 .disposed(by: disposeBag)
-        }
-        
-        input.totalAmount
-            .map { Int($0) ?? 0 }
-            .asDriver()
-            .drive(totalAmountResult)
-            .disposed(by: disposeBag)
-        
-        if let csinfo = self.csinfo {
-            let totalAmountDriver = Driver<String>.just("\(csinfo.totalAmount)")
-            totalAmount = Driver.merge(input.totalAmount, totalAmountDriver)
             
             totalAmount
                 .asDriver()
@@ -101,6 +90,12 @@ class EditCSInfoVM {
                 .drive(totalAmountResult)
                 .disposed(by: disposeBag)
         }
+        
+        input.totalAmount
+            .map { Int($0) ?? 0 }
+            .asDriver()
+            .drive(totalAmountResult)
+            .disposed(by: disposeBag)
         
         let titleTextFieldCountIsEmpty = title
             .map{ $0.count > 0 }
