@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 import RxAppState
 
-class EditExclItemInputVC: UIViewController {
+class EditExclItemInputVC: UIViewController, SPAlertDelegate {
     
     var disposeBag = DisposeBag()
     
@@ -24,6 +24,7 @@ class EditExclItemInputVC: UIViewController {
     let contentView = UIView()
     let emptyView = ExclItemInputEmptyView()
     let tableView = UITableView(frame: .zero)
+    let alert = SPAlertController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -179,6 +180,27 @@ class EditExclItemInputVC: UIViewController {
                 guard let self = self else { return }
                 SplitRepository.share.updateDataToDB()
             })
+            .disposed(by: disposeBag)
+        
+        header.leftButton.rx.tap
+            .asDriver()
+            .drive { [weak self] _ in
+                guard let self = self else { return }
+                self.showAlert(view: self.alert,
+                               type: .warnNormal,
+                               title: "수정을 중단하시겠어요?",
+                               descriptions: "지금까지 수정하신 내역이 사라져요",
+                               leftButtonTitle: "취 소",
+                               rightButtonTitle: "중단하기")
+            }
+            .disposed(by: disposeBag)
+        
+        alert.rightButtonTapSubject
+            .asDriver(onErrorJustReturn: ())
+            .drive { [weak self] _ in
+                guard let self = self else { return }
+                self.navigationController?.popViewController(animated: true)
+            }
             .disposed(by: disposeBag)
     }
 }
