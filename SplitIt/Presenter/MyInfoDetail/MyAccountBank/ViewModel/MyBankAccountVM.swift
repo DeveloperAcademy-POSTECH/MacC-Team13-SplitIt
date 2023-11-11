@@ -19,12 +19,10 @@ class MyBankAccountVM {
     var isKakaoPayToggled = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "kakaoPay"))
     var isNaverPayToggled = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "naverPay"))
     
-    var inputName: String = ""
     var inputRealName: String = ""
     var inputAccount: String = ""
     var inputBankName: String = ""
     
-    var checkInputName: Int = 0
     var checkAccount: Int = 0
     var checkRealName: Int = 0
     var checkBank: Int = 0
@@ -33,7 +31,6 @@ class MyBankAccountVM {
     
     
     struct Input {
-        let inputNameText: ControlEvent<String>
         let inputRealNameText: ControlEvent<String>
         let editDoneBtnTapped: Driver<Void>
         let selectBackTapped: Observable<Void>
@@ -60,7 +57,7 @@ class MyBankAccountVM {
     
     func transform(input: Input) -> Output {
         
-        let inputNameText = input.inputNameText
+       // let inputNameText = input.inputNameText
         let inputRealNameText = input.inputRealNameText
         let editDoneBtnTapped = input.editDoneBtnTapped
         let selectBackTapped = input.selectBackTapped
@@ -71,9 +68,6 @@ class MyBankAccountVM {
         let deleteBtnTapped = input.deleteBtnTapped
         let cancelBtnTapped = input.cancelBtnTapped
 
-        
-      
-        
         editDoneBtnTapped
             .drive(onNext: {
                 
@@ -87,12 +81,7 @@ class MyBankAccountVM {
                     self.checkAccount = 0
                 }
                 
-                if !self.inputName.isEmpty || self.checkInputName == 1 {
-                    UserDefaults.standard.set(self.inputName, forKey: "userNickName")
-                    self.checkInputName = 0
-                    
-                }
-                
+
                 if !self.inputRealName.isEmpty || self.checkRealName == 1 {
                     UserDefaults.standard.set(self.inputRealName, forKey: "userName")
                     self.checkRealName = 0
@@ -121,6 +110,8 @@ class MyBankAccountVM {
             })
             .disposed(by: disposeBag)
 
+        
+        
         tossTapped
             .subscribe(onNext: {
                 self.isTossPayToggled.accept(!self.isTossPayToggled.value)
@@ -138,20 +129,7 @@ class MyBankAccountVM {
                 self.isNaverPayToggled.accept(!self.isNaverPayToggled.value)
             })
             .disposed(by: disposeBag)
-     
-        inputNameText
-            .bind(onNext: { text in
-                if text.isEmpty {
-                    self.inputName = ""
-                    self.checkInputName = 1
-                } else {
-                    self.inputName = text
-                }
 
-            })
-            .disposed(by: disposeBag)
-
-        
         inputRealNameText
             .bind(onNext: { text in
                 if text.isEmpty {

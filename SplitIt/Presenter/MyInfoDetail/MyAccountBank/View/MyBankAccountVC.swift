@@ -26,21 +26,15 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     let userDefault = UserDefaults.standard
     
     var isBankSelected: Bool = false
-    var keyboardHeight: CGFloat = 291
     
     let header = SPNavigationBar()
     
     let scrollView = UIScrollView()
     let contentView = UIView()
-    
-    let nickNameLabel = UILabel()
-    let nickNameTextField = SPTextField()
-    let nickNameCountLabel = UILabel()
-    
-    let bankView = UIView()
-    var bankNameLabel = UILabel()
+    let bankSelectedView = UIView()
+
+    let bankTextField = SPTextField()
     let bankArrowImage = UIImageView()
-    
     let bankLabel = UILabel()
     
     let accountLabel = UILabel()
@@ -71,18 +65,22 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     
     let deleteBtn = UIButton()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         checkUserInfo()
         setAddView()
         setLayout()
+        selectedBankViewAttribute()
         setAttribute()
         setBinding()
         asapRxData()
         accountTextFieldCustomKeyboard()
         textFieldTextAttribute()
+       
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         
         let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
@@ -90,11 +88,9 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         view.addGestureRecognizer(tap)
         
     }
-    
+   
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
-    
          self.view.endEditing(true)
-    
    }
     
     func accountTextFieldCustomKeyboard() {
@@ -119,7 +115,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
                 leftButtonTitle: "취 소",
                 rightButtonTitle: "초기화")
         
-        
         alert.rightButtonTapSubject
               .asDriver(onErrorJustReturn: ())
               .drive(onNext: { [weak self] in
@@ -127,12 +122,9 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
                   print("ex. alert의 삭제 버튼 탭 시 무언가가 삭제되는 로직")
               })
               .disposed(by: disposeBag)
-        
-       
     }
     
     func setBackAlert() {
-        
         showAlert(view: backAlert,
                 type: .warnNormal,
                 title: "입력을 중단하시겠어요?",
@@ -147,28 +139,75 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
               })
               .disposed(by: disposeBag)
     }
+  
+    func updateViewLayout(text: String) {
+        
+        if text == "선택 안함" {
+            
+            self.bankSelectedView.isHidden = true
+            //self.header.buttonState.accept(true)
+
+            payLabel.snp.removeConstraints()
+            payLabel.snp.makeConstraints {
+                $0.top.equalTo(bankTextField.snp.bottom).offset(24)
+                $0.leading.equalTo(payView.snp.leading).inset(6)
+            }
+            
+        } else {
+            self.bankSelectedView.isHidden = false
+           // self.header.buttonState.accept(false)
+            
+            payLabel.snp.removeConstraints()
+            bankSelectedView.snp.updateConstraints { make in
+                make.height.equalTo(178)
+            }
+            payLabel.snp.makeConstraints {
+                $0.top.equalTo(bankSelectedView.snp.bottom).offset(24)
+                $0.leading.equalTo(payView.snp.leading).inset(6)
+            }
+            
+        }
+    }
     
+    func selectedBankViewAttribute() {
+        
+//        let accountRelay = BehaviorRelay<String>(value: self.userDefault.string(forKey: "userAccount") ?? "")
+//        let nameRelay = BehaviorRelay<String>(value: self.userDefault.string(forKey: "userName") ?? "")
+//        Observable.combineLatest(accountRelay.asObservable(),
+//                                 nameRelay.asObservable())
+//        .subscribe(onNext: { accountText, nameText in
+//
+//            if accountText.count == 0 || nameText.count == 0 {
+//                print("둘 중 하나 안됨")
+//                self.header.buttonState.accept(false)
+//            } else {
+//                self.header.buttonState.accept(true)
+//                print("됨")
+//            }
+//        })
+//        .disposed(by: disposeBag)
+        
+        if UserDefaults.standard.string(forKey: "userBank") == "" ||  UserDefaults.standard.string(forKey: "userBank") == "선택 안함" {
+            bankSelectedView.isHidden = true
+            payLabel.snp.makeConstraints {
+                $0.top.equalTo(bankTextField.snp.bottom).offset(24)
+                $0.leading.equalTo(payView.snp.leading).inset(6)
+            }
+            
+        } else {
+            bankSelectedView.isHidden = false
+            payLabel.snp.makeConstraints {
+                $0.top.equalTo(bankSelectedView.snp.bottom).offset(24)
+                $0.leading.equalTo(payView.snp.leading).inset(6)
+            }
+            
+        }
+        
+
+       
+    }
     //수정버튼 활성화 비활성화 선택해주는 함수
     func checkUserInfo() {
-        let nickNameRelay = BehaviorRelay<String>(value: self.userDefault.string(forKey: "userNickName") ?? "")
-        let accountRelay = BehaviorRelay<String>(value: self.userDefault.string(forKey: "userAccount") ?? "")
-        let bankRelay = BehaviorRelay<String>(value: self.userDefault.string(forKey: "userBank") ?? "은행을 선택해주세요")
-        Observable.combineLatest(nickNameRelay.asObservable(),
-                                 accountRelay.asObservable(),
-                                 bankRelay.asObservable())
-            .subscribe(onNext: { nickNameText, accountText, bankText in
-                
-                if accountText.count == 0 || bankText == "은행을 선택해주세요" {
-                    print("둘 중 하나 안됨")
-                    self.header.buttonState.accept(false)
-                } else {
-                    self.header.buttonState.accept(true)
-                    print("됨")
-                }
-            })
-            .disposed(by: disposeBag)
-
-        
         accountTextField.rx.text.orEmpty
             .subscribe(onNext: { [weak self] text in
                 let filtered = text.filter { $0.isNumber || $0 == "-" }
@@ -181,20 +220,18 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.nickNameTextField.becomeFirstResponder()
+        //self.nickNameTextField.becomeFirstResponder()
     }
     
     
     func setBinding() {
         
-        let selectedBankTap = addTapGesture(to: bankView)
+        let selectedBankTap = addTapGesture(to: bankTextField)
         let tossTap = addTapGesture(to: tossPayView)
         let kakaoTap = addTapGesture(to: kakaoPayView)
         let naverTap = addTapGesture(to: naverPayView)
         
-        
-        let input = MyBankAccountVM.Input(inputNameText: nickNameTextField.rx.text.orEmpty.changed,
-                                          inputRealNameText: nameTextField.rx.text.orEmpty.changed,
+        let input = MyBankAccountVM.Input(inputRealNameText: nameTextField.rx.text.orEmpty.changed,
                                           editDoneBtnTapped: header.rightButton.rx.tap.asDriver(),
                                           selectBackTapped: selectedBankTap.rx.event.asObservable().map{ _ in () },
                                           inputAccountText: accountTextField.rx.text.orEmpty.changed,
@@ -214,12 +251,14 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
                 modalVC.modalTransitionStyle = .coverVertical
                 modalVC.selectedBankName
                     .bind { bankName in
-                        if bankName != "은행을 선택해주세요" {
-                            self?.bankNameLabel.text = bankName
-                            self?.viewModel.inputBankName = self?.bankNameLabel.text ?? ""
+                        //일단 여기
+                        //if bankName != "선택 안함" {
+                            self?.bankTextField.text = bankName
+                            self?.updateViewLayout(text: bankName)
+                            self?.viewModel.inputBankName = bankName
                             self?.viewModel.checkBank = 1
                             print(bankName)
-                        }
+                        //}
                     }
                     .disposed(by: modalVC.disposeBag)
                 self?.present(modalVC, animated: true, completion: nil)
@@ -231,6 +270,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
                 self?.setAlert()
             })
             .disposed(by: disposeBag)
+        
         
         output.cancelBackToView
             .drive(onNext: { [weak self] in
@@ -246,7 +286,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         UserDefaults.standard.set(false, forKey: "kakaoPay")
         UserDefaults.standard.set(false, forKey: "naverPay")
         UserDefaults.standard.set("", forKey: "userAccount")
-        UserDefaults.standard.set("", forKey: "userNickName")
         UserDefaults.standard.set("", forKey: "userName")
         UserDefaults.standard.set("", forKey: "userBank")
         
@@ -255,12 +294,10 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     
     //페이류 변경되는 값에 따라 바로 UI 변경되도록 하는 함수
     func asapRxData() {
-        
         viewModel.isTossPayToggled
             .subscribe(onNext: { [weak self] isToggled in
                 let newImage = isToggled ? "TossPayIconChecked" : "TossPayIconUnchecked"
                 self?.tossPayBtn.image = UIImage(named: newImage)
-                
             })
             .disposed(by: disposeBag)
         
@@ -281,13 +318,11 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             })
             .disposed(by: disposeBag)
         
-  
         userDefault.rx
             .observe(String.self, "userBank")
             .subscribe(onNext: { value in
                 guard let value = value else { return }
-                self.bankNameLabel.text = value != "" ? value : "은행을 선택해주세요"
-                self.isBankSelected = true
+                self.bankTextField.text = value != "" ? value : "선택 안함"
             })
             .disposed(by: disposeBag)
         
@@ -301,29 +336,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     
     //textField의 글자수 제한, warn 등 에 대한 함수
     func textFieldTextAttribute() {
-        nickNameTextField.rx.text.orEmpty
-            .map { text -> String in
-                let cnt = min(text.count, 8)
-                return "(\(cnt)/8)"
-            }
-            .bind(to: nickNameCountLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        //이름 글자수 제한
-        nickNameTextField.rx.controlEvent(.editingChanged)
-            .subscribe(onNext: { [weak self] _ in
-                guard let text = self?.nickNameTextField.text else { return }
-                if text.count >= self?.maxCharacterCount ?? 0 {
-                    let endIndex = text.index(text.startIndex, offsetBy: self?.maxCharacterCount ?? 0)
-                    self?.nickNameTextField.text = String(text[..<endIndex])
-                    self?.nickNameCountLabel.textColor = .AppColorStatusWarnRed
-                } else {
-                    self?.nickNameCountLabel.textColor = .TextSecondary
-                
-                }
-            })
-            .disposed(by: disposeBag)
-        
         nameTextField.rx.text.orEmpty
             .map { text -> String in
                 let cnt = min(text.count, 8)
@@ -345,6 +357,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
                 }
             })
             .disposed(by: disposeBag)
+        
         accountTextField.rx.text.orEmpty
             .map { text -> String in
                 let cnt = min(text.count, 17)
@@ -367,6 +380,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
                 
             })
             .disposed(by: disposeBag)
+        
     }
     
     func setAttribute() {
@@ -376,40 +390,13 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         scrollView.backgroundColor = .SurfaceBrandCalmshell
         contentView.backgroundColor = .SurfaceBrandCalmshell
         
-        scrollView.isScrollEnabled = true
-        
-        
+        scrollView.isScrollEnabled = false
+        scrollView.contentSize = contentView.bounds.size
+         
         header.do {
             $0.applyStyle(style: .myInfo, vc: self)
             $0.buttonState.accept(true)
             $0.leftButton.removeTarget(nil, action: nil, for: .touchUpInside)
-        }
-        
-        nickNameLabel.do {
-            $0.text = "닉네임"
-            $0.font = UIFont.KoreanCaption2
-            $0.textColor = .TextPrimary
-        }
-        
-        nickNameCountLabel.do {
-            $0.font = UIFont.KoreanCaption2
-            $0.textColor = UIColor.TextSecondary
-        }
-        
-        
-        nickNameTextField.do {
-            $0.placeholder = "닉네임을 입력해주세요"
-            $0.applyStyle(.normal)
-            $0.font = UIFont.KoreanCaption1
-            $0.autocorrectionType = .no
-            $0.spellCheckingType = .no
-            
-            if userDefault.string(forKey: "userNickName") == nil || userDefault.string(forKey: "userNickName") == "" {
-                $0.textColor = .TextPrimary
-            } else {
-                $0.text = userDefault.string(forKey: "userNickName")
-                $0.textColor = .TextPrimary
-            }
         }
         
         bankLabel.do {
@@ -418,23 +405,21 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             $0.textColor = UIColor.TextPrimary
         }
         
-        bankView.do {
-            $0.layer.cornerRadius = 8
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
-            $0.backgroundColor = .clear
-        }
         
-        bankNameLabel.do {
-            if userDefault.string(forKey: "userBank") == "" {
-                $0.text = "은행을 선택해주세요"
+        bankTextField.do {
+            $0.placeholder = "선택 안 함"
+            $0.applyStyle(.normal)
+            $0.autocorrectionType = .no
+            $0.spellCheckingType = .no
+            
+            if userDefault.string(forKey: "userBank") == nil || userDefault.string(forKey: "userBank") == "" {
+                $0.textColor = .TextPrimary
             } else {
-                $0.text = UserDefaults.standard.string(forKey: "userBank")
+                $0.text = userDefault.string(forKey: "userBank")
+                $0.textColor = .TextPrimary
             }
-            $0.font = UIFont.KoreanCaption1
-            $0.textColor = .TextPrimary
         }
-        
+
         bankArrowImage.do {
             $0.image = UIImage(named: "ArrowTriangleIconDown")
         }
@@ -448,7 +433,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         accountTextField.do {
             $0.placeholder = "계좌번호를 입력해주세요"
             $0.applyStyle(.normal)
-            $0.font = UIFont.KoreanCaption1
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
             
@@ -482,9 +466,9 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         nameTextField.do {
             $0.placeholder = "성함을 입력해주세요"
             $0.applyStyle(.normal)
-            $0.font = UIFont.KoreanCaption1
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
+            $0.clearButtonMode = .whileEditing
             
             if userDefault.string(forKey: "userName") == nil || userDefault.string(forKey: "userName") == "" {
                 $0.textColor = .TextPrimary
@@ -566,66 +550,51 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     }
     
     func setLayout() {
+        
         header.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(8)
             $0.leading.trailing.equalToSuperview()
         }
         
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(10)
+            $0.top.equalTo(header.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
         
-        contentView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.width.equalTo(scrollView)
-            make.height.equalTo(500)
-            make.bottom.equalToSuperview()
+        contentView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.width.height.equalTo(scrollView)
+            $0.bottom.equalToSuperview()
         }
-        
-        
-        nickNameLabel.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(30)
-            $0.leading.equalTo(nickNameTextField.snp.leading).inset(6)
-        }
-        
-        nickNameTextField.snp.makeConstraints {
-            $0.top.equalTo(nickNameLabel.snp.bottom).offset(4)
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.height.equalTo(46)
-        }
-        
-        nickNameCountLabel.snp.makeConstraints {
-            $0.trailing.equalTo(nickNameTextField.snp.trailing).offset(-8)
-            $0.top.equalTo(nickNameTextField.snp.bottom).offset(4.5)
+                        
+        bankSelectedView.snp.makeConstraints {
+            $0.top.equalTo(bankTextField.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.height.equalTo(178)
         }
         
         bankLabel.snp.makeConstraints {
-            $0.top.equalTo(nickNameTextField.snp.bottom).offset(24)
-            $0.leading.equalTo(bankView.snp.leading).inset(6)
+            $0.top.equalToSuperview().offset(30)
+            $0.leading.equalTo(bankTextField.snp.leading).inset(6)
         }
         
-        bankView.snp.makeConstraints {
-            $0.height.equalTo(40)
+        bankTextField.snp.makeConstraints {
+            $0.height.equalTo(46)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.top.equalTo(bankLabel.snp.bottom).offset(4)
-            
         }
-        
-        bankNameLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(16)
-            $0.centerY.equalToSuperview()
-        }
-        
+
         bankArrowImage.snp.makeConstraints {
             $0.trailing.equalToSuperview().offset(-16)
             $0.centerY.equalToSuperview()
         }
         
         accountLabel.snp.makeConstraints {
-            $0.top.equalTo(bankView.snp.bottom).offset(24)
+            $0.top.equalTo(bankTextField.snp.bottom).offset(24)
             $0.leading.equalTo(accountTextField.snp.leading).inset(6)
             
         }
@@ -633,8 +602,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         accountTextField.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.top.equalTo(accountLabel.snp.bottom).offset(4)
-            $0.height.equalTo(40)
-           
+            $0.height.equalTo(46)
         }
         
         accountCountLabel.snp.makeConstraints {
@@ -650,7 +618,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         nameTextField.snp.makeConstraints {
             $0.top.equalTo(nameLabel.snp.bottom).offset(4)
             $0.leading.trailing.equalToSuperview().inset(30)
-            $0.height.equalTo(40)
+            $0.height.equalTo(46)
         }
         
         nameCountLabel.snp.makeConstraints {
@@ -658,11 +626,12 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             $0.top.equalTo(nameTextField.snp.bottom).offset(4.5)
         }
         
-        payLabel.snp.makeConstraints {
-            $0.top.equalTo(nameTextField.snp.bottom).offset(24)
-            $0.leading.equalTo(payView.snp.leading).inset(6)
-        }
-        
+//        payLabel.snp.makeConstraints {
+//            //$0.top.equalTo(bankSelectedView.snp.bottom).offset(24)
+//            $0.top.equalTo(bankTextField.snp.bottom).offset(24)
+//            $0.leading.equalTo(payView.snp.leading).inset(6)
+//        }
+
         payView.snp.makeConstraints {
             $0.height.equalTo(103)
             $0.leading.trailing.equalToSuperview().inset(30)
@@ -747,21 +716,25 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     
     func setAddView() {
         
-        [header, scrollView, deleteBtn].forEach {
+        [header, scrollView].forEach {
             view.addSubview($0)
         }
         
         scrollView.addSubview(contentView)
         
-        [nickNameLabel, nickNameTextField,
-         bankLabel, bankView,
-         accountLabel,
-         accountTextField, nameLabel, nameTextField,payLabel,
-         payView, nickNameCountLabel, nameCountLabel, accountCountLabel].forEach {
+        
+        [accountLabel,accountTextField, nameLabel, nameTextField, nameCountLabel, accountCountLabel].forEach {
+            bankSelectedView.addSubview($0)
+        }
+        
+        
+        [bankLabel, bankTextField,bankSelectedView, deleteBtn, payLabel,
+         payView].forEach {
             contentView.addSubview($0)
         }
-        [bankNameLabel, bankArrowImage].forEach {
-            bankView.addSubview($0)
+        
+        [bankArrowImage].forEach {
+            bankTextField.addSubview($0)
         }
         [leftBar, rightBar, tossPayView, kakaoPayView, naverPayView].forEach {
             payView.addSubview($0)
@@ -777,6 +750,22 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         }
     }
     
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
+            return
+        }
+        let keyboardHeight = keyboardFrame.cgRectValue.height
+        scrollView.contentInset.bottom = keyboardHeight
+        scrollView.verticalScrollIndicatorInsets.bottom = keyboardHeight
+        scrollView.isScrollEnabled = true
+        
+    }
     
+    @objc func keyboardWillHide(notification: NSNotification) {
+        scrollView.contentInset = .zero
+        scrollView.verticalScrollIndicatorInsets = .zero
+        scrollView.isScrollEnabled = false
+    }
 }
 
