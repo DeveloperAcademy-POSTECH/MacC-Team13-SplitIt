@@ -29,6 +29,11 @@
 		1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */; };
 		1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4DB2522ADEB24F00616243 /* MemberLog.swift */; };
 		1A7845062AFD1AB100E38403 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1A7845052AFD1AB100E38403 /* RealmSwift */; };
+		1A78450B2AFD28F300E38403 /* NewCSMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A78450A2AFD28F300E38403 /* NewCSMemberVM.swift */; };
+		1A78450D2AFD291C00E38403 /* NewCSMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A78450C2AFD291C00E38403 /* NewCSMemberVC.swift */; };
+		1A7845102AFD299000E38403 /* CSMemberSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A78450F2AFD299000E38403 /* CSMemberSearchCell.swift */; };
+		1A7845122AFD299D00E38403 /* CSMemberSelectedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7845112AFD299D00E38403 /* CSMemberSelectedCell.swift */; };
+		1A7845142AFD29BE00E38403 /* CSMemberEmptyBackGroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7845132AFD29BE00E38403 /* CSMemberEmptyBackGroundView.swift */; };
 		1A8B05DC2AF0E15A00CF5BC5 /* SPNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8B05DB2AF0E15A00CF5BC5 /* SPNavigationBar.swift */; };
 		1A8B05E12AF1466300CF5BC5 /* SplitMethodSelectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8B05E02AF1466300CF5BC5 /* SplitMethodSelectVC.swift */; };
 		1A8B05E32AF1540A00CF5BC5 /* SplitMethodSelectVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8B05E22AF1540A00CF5BC5 /* SplitMethodSelectVM.swift */; };
@@ -209,6 +214,11 @@
 		1A4DB22A2ADE68E400616243 /* SplitRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitRepository.swift; sourceTree = "<group>"; };
 		1A4DB2502ADEB24300616243 /* RealmMemberLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMemberLog.swift; sourceTree = "<group>"; };
 		1A4DB2522ADEB24F00616243 /* MemberLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberLog.swift; sourceTree = "<group>"; };
+		1A78450A2AFD28F300E38403 /* NewCSMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCSMemberVM.swift; sourceTree = "<group>"; };
+		1A78450C2AFD291C00E38403 /* NewCSMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCSMemberVC.swift; sourceTree = "<group>"; };
+		1A78450F2AFD299000E38403 /* CSMemberSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberSearchCell.swift; sourceTree = "<group>"; };
+		1A7845112AFD299D00E38403 /* CSMemberSelectedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberSelectedCell.swift; sourceTree = "<group>"; };
+		1A7845132AFD29BE00E38403 /* CSMemberEmptyBackGroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberEmptyBackGroundView.swift; sourceTree = "<group>"; };
 		1A8B05DB2AF0E15A00CF5BC5 /* SPNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPNavigationBar.swift; sourceTree = "<group>"; };
 		1A8B05E02AF1466300CF5BC5 /* SplitMethodSelectVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMethodSelectVC.swift; sourceTree = "<group>"; };
 		1A8B05E22AF1540A00CF5BC5 /* SplitMethodSelectVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMethodSelectVM.swift; sourceTree = "<group>"; };
@@ -434,6 +444,42 @@
 			path = Repository;
 			sourceTree = "<group>";
 		};
+		1A7845072AFD28A500E38403 /* NewCSMember */ = {
+			isa = PBXGroup;
+			children = (
+				1A7845092AFD28B900E38403 /* ViewModel */,
+				1A7845082AFD28B000E38403 /* View */,
+			);
+			path = NewCSMember;
+			sourceTree = "<group>";
+		};
+		1A7845082AFD28B000E38403 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1A78450E2AFD295D00E38403 /* Cell */,
+				1A78450C2AFD291C00E38403 /* NewCSMemberVC.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		1A7845092AFD28B900E38403 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				1A78450A2AFD28F300E38403 /* NewCSMemberVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		1A78450E2AFD295D00E38403 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				1A78450F2AFD299000E38403 /* CSMemberSearchCell.swift */,
+				1A7845112AFD299D00E38403 /* CSMemberSelectedCell.swift */,
+				1A7845132AFD29BE00E38403 /* CSMemberEmptyBackGroundView.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		1A8B05DD2AF145F000CF5BC5 /* SplitMethodSelect */ = {
 			isa = PBXGroup;
 			children = (
@@ -624,6 +670,7 @@
 		60115E042ADC18110050D32C /* SplitCreateFlow */ = {
 			isa = PBXGroup;
 			children = (
+				1A7845072AFD28A500E38403 /* NewCSMember */,
 				6032DCE72AEE538C004A6BFA /* ExclItem */,
 				1AB841872AEBF7A2006613A0 /* CSMemberSearch */,
 				60AD20DD2ADEC0BC00EFACCD /* ExclItemCycle */,
@@ -1500,6 +1547,7 @@
 				869D1ADC2AE52B8800D166B1 /* CSMemberEditCell.swift in Sources */,
 				C2A797A42AE278190049E709 /* HistoryVC.swift in Sources */,
 				60115E162ADCDB840050D32C /* CSTotalAmountInputVM.swift in Sources */,
+				1A7845122AFD299D00E38403 /* CSMemberSelectedCell.swift in Sources */,
 				604CDC7F2AF1527500416454 /* ExclItemInfoEditModalVM.swift in Sources */,
 				86C65FFE2AF0F6FB00A7942A /* DefaultEditButton.swift in Sources */,
 				C229F51A2AEA442E00F9E28D /* NewSPButton.swift in Sources */,
@@ -1527,6 +1575,7 @@
 				DE73D71D2AE6CCBC00ABF3EF /* AlertController.swift in Sources */,
 				6078ACD02ADA74AC00995811 /* HomeVC.swift in Sources */,
 				1A8B05DC2AF0E15A00CF5BC5 /* SPNavigationBar.swift in Sources */,
+				1A7845142AFD29BE00E38403 /* CSMemberEmptyBackGroundView.swift in Sources */,
 				86D1E0C52AE6B4C100FBF610 /* ExclEditPageController.swift in Sources */,
 				1A1ACC4D2AF3CAF6004AC4CD /* SplitShareSectionFooter.swift in Sources */,
 				DE73D6F72AE1983200ABF3EF /* MemberLogVC.swift in Sources */,
@@ -1578,8 +1627,10 @@
 				60115DF92ADBF2E10050D32C /* HomeVM.swift in Sources */,
 				60AD20F92ADF83DE00EFACCD /* ExclAddCell.swift in Sources */,
 				60115E0E2ADC19250050D32C /* CSTitleInputVM.swift in Sources */,
+				1A78450B2AFD28F300E38403 /* NewCSMemberVM.swift in Sources */,
 				1A3852FF2ADE5B1B00E9A20B /* RealmSplit.swift in Sources */,
 				60115E0C2ADC18F90050D32C /* CSTitleInputVC.swift in Sources */,
+				1A78450D2AFD291C00E38403 /* NewCSMemberVC.swift in Sources */,
 				1A3852F52ADE5A9F00E9A20B /* Split.swift in Sources */,
 				869D1AF22AE52C9B00D166B1 /* ExclMemberEditSectionModel.swift in Sources */,
 				DE73D7172AE65D1800ABF3EF /* AccountAlertVC.swift in Sources */,
@@ -1626,6 +1677,7 @@
 				60AD20F72ADF838300EFACCD /* ExclMemberCell.swift in Sources */,
 				C2A797A22AE277F90049E709 /* HistorySectionHeader.swift in Sources */,
 				86C65FF42AEF985A00A7942A /* JSDetailVM.swift in Sources */,
+				1A7845102AFD299000E38403 /* CSMemberSearchCell.swift in Sources */,
 				86C65FFC2AF0F4D000A7942A /* EditCSListVC.swift in Sources */,
 				60AD20FD2ADF846600EFACCD /* ExclMemberSectionBackground.swift in Sources */,
 			);
