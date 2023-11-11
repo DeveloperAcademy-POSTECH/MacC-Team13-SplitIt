@@ -85,14 +85,32 @@ class EditCSInfoVM {
                 .disposed(by: disposeBag)
         }
         
+        input.totalAmount
+            .map { Int($0) ?? 0 }
+            .asDriver()
+            .drive(totalAmountResult)
+            .disposed(by: disposeBag)
+        
+        if let csinfo = self.csinfo {
+            let totalAmountDriver = Driver<String>.just("\(csinfo.totalAmount)")
+            totalAmount = Driver.merge(input.totalAmount, totalAmountDriver)
+            
+            totalAmount
+                .asDriver()
+                .map { Int($0) ?? 0 }
+                .drive(totalAmountResult)
+                .disposed(by: disposeBag)
+        }
+        
         let titleTextFieldCountIsEmpty = title
             .map{ $0.count > 0 }
             .asDriver(onErrorJustReturn: false)
         
-        let totalAmountTextFieldCountIsEmpty = input.totalAmount
+        let totalAmountTextFieldCountIsEmpty = totalAmountResult
+            .map { "\($0) "}
             .map { numberFormatter.number(from: $0) ?? 0 }
             .map{ $0 != 0 }
-            .asDriver()
+            .asDriver(onErrorJustReturn: false)
         
         let totalAmountMinIsValidDriver = totalAmountResult
             .asDriver()
@@ -143,8 +161,8 @@ class EditCSInfoVM {
             .drive(titleTextFieldIsValid)
             .disposed(by: disposeBag)
         
-        confirmButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(), totalAmountTextFieldCountIsEmpty.asDriver(), totalAmountMinIsValidDriver.asDriver())
-            .map{ $0 && $1 && $2 }
+        confirmButtonIsEnable = Driver.combineLatest(titleTextFieldCountIsEmpty.asDriver(), totalAmountTextFieldCountIsEmpty.asDriver())
+            .map{ $0 && $1 }
             .asDriver()
         
         let titleTFControlEvent: Driver<UIControl.Event> = input.titleTextFieldControlEvent
