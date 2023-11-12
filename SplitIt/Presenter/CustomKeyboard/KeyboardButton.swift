@@ -11,6 +11,8 @@ import SnapKit
 
 class KeyboardButton: UIButton {
     var btnTitle: String = ""
+
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupButton()
@@ -24,7 +26,6 @@ class KeyboardButton: UIButton {
     convenience init(title: String) {
         self.init(type: .system)
         btnTitle = title
-        
         setupButton()
     }
     
@@ -40,17 +41,17 @@ class KeyboardButton: UIButton {
         
         setTitle(btnTitle, for: .normal)
         backgroundColor = UIColor(hex: 0xFCFCFE)
-  
         setTitleColor(.black, for: .normal)
-      
         layer.cornerRadius = 8
-        //layer.borderWidth = 1
-        //layer.borderColor = UIColor.black.cgColor
-        
+     
         snp.makeConstraints { make in
             make.width.equalTo(btnWidth)
             make.height.equalTo(btnHeight)
+
         }
+        
+     
+
     }
     
     static func getKeyboardHeightForCurrentDevice() -> CGFloat {
