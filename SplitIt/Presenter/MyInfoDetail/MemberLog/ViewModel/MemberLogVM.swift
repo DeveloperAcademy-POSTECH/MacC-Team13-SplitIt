@@ -43,7 +43,6 @@ class MemberLogVM {
 
         inputFriendName
             .bind(onNext: { [self] text in
-                //print(text)
                 inputFriend = text
             })
             .disposed(by: disposeBag)

@@ -20,7 +20,6 @@ class MyInfoVM: UIViewController {
     struct Input {
         let privacyBtnTapped: Driver<Void>
         let friendListViewTapped: Observable<Void>
-       // let exclItemViewTapped: Observable<Void>
         let editAccountViewTapped: Observable<Void>
         let emptyEditAccountViewTapped: Observable<Void>
         let madeByWCCTBtnTapped: Driver<Void>
@@ -29,7 +28,6 @@ class MyInfoVM: UIViewController {
     struct Output {
         let moveToPrivacyView: Driver<Void>
         let moveTofriendListView: Observable<Void>
-       // let moveToExclItemListView: Observable<Void>
         let moveToEditAccountView: Observable<Void>
         let moveToInitAccountView: Observable<Void>
         let moveToMadeByWCCT: Driver<Void>
@@ -38,25 +36,14 @@ class MyInfoVM: UIViewController {
     func transform(input: Input) -> Output {
         let privacyBtnTapped = input.privacyBtnTapped
         let friendListViewTapped = input.friendListViewTapped
-       // let exclItemViewTapped = input.exclItemViewTapped
         let editAccountViewTap = input.editAccountViewTapped
         let emptyEditAccountViewTapped = input.emptyEditAccountViewTapped
         let madeByWCCTBtnTapped = input.madeByWCCTBtnTapped
         repo.fetchMemberLog()
-//
-//        if userDefault.object(forKey: "tossPay") == nil ||
-//           userDefault.object(forKey: "kakaoPay") == nil ||
-//           userDefault.object(forKey: "naverPay") == nil {
-//            userDefault.set(false, forKey: "tossPay")
-//            userDefault.set(false, forKey: "kakaoPay")
-//            userDefault.set(false, forKey: "naverPay")
-//        }
-//
-        
+
         
         let output = Output(moveToPrivacyView: privacyBtnTapped,
                             moveTofriendListView: friendListViewTapped,
-                            //moveToExclItemListView: exclItemViewTapped,
                             moveToEditAccountView: editAccountViewTap,
                             moveToInitAccountView: emptyEditAccountViewTapped,
                             moveToMadeByWCCT: madeByWCCTBtnTapped

@@ -56,14 +56,21 @@ class MemberCell: UITableViewCell {
     
     func setAttribute() {
         contentView.backgroundColor = .SurfaceBrandCalmshell
-        nameLabel.font = UIFont.systemFont(ofSize: 18)
-        nameLabel.textColor = .black
         
-        deleteBtn.setImage(UIImage(systemName: "x.circle.fill"), for: .normal)
-        deleteBtn.tintColor = .gray
-        deleteBtn.clipsToBounds = true
-        deleteBtn.layer.cornerRadius = 12
-        deleteBtn.backgroundColor = .clear
+        nameLabel.do {
+            $0.font = .KoreanBody
+            $0.textColor = .TextPrimary
+        }
+       
+        
+        deleteBtn.do {
+            $0.setImage(UIImage(systemName: "x.circle.fill"), for: .normal)
+            $0.tintColor = .gray
+            $0.clipsToBounds = true
+            $0.layer.cornerRadius = 12
+            $0.backgroundColor = .clear
+        }
+        
         
     }
     
