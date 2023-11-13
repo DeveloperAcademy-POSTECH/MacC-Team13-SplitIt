@@ -76,7 +76,6 @@ class CustomKeyboard: UIInputViewController {
         deleteButton.do {
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 0
-            
         }
         
         deleteImage.do {
@@ -85,6 +84,15 @@ class CustomKeyboard: UIInputViewController {
             $0.contentMode = .scaleAspectFit
             $0.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
         }
+        
+        [btn0,btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,optionBtn].forEach {
+            $0.layer.masksToBounds = false
+            $0.layer.shadowRadius = 0
+            $0.layer.shadowOpacity = 1
+            $0.layer.shadowColor = UIColor(hex: 0x898A8D).cgColor
+            $0.layer.shadowOffset = CGSize(width: 0, height: 1)
+        }
+
     }
     
     func setCurrentTextField(_ textField: UITextField) {
