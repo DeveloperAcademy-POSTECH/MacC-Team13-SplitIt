@@ -28,7 +28,7 @@ class NewCSMemberVC: UIViewController, Reusable {
     let searchView = UIView()
     let searchLabel = UILabel()
     let searchTableView = UITableView(frame: .zero)
-    let nextButton = NewSPButton()
+    let nextButton = SPButton()
     
     let backgroundView = CSMemberEmptyBackGroundView()
     

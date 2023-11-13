@@ -29,7 +29,7 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
     let totalAmountTitleMessage = UILabel()
     let totalAmountTextFiled = SPTextField()
     let totalAmountTextFiledNotice = UILabel()
-    let nextButton = NewSPButton()
+    let nextButton = SPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()

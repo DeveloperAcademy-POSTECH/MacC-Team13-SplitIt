@@ -21,9 +21,9 @@ class SplitShareVC: UIViewController {
     let header = SPNavigationBar()
     let mainTitle = UILabel()
     let tableView = UITableView(frame: .zero, style: .grouped)
-    let csAddButton = NewSPButton()
-    let editButton = NewSPButton()
-    let shareButton = NewSPButton()
+    let csAddButton = SPButton()
+    let editButton = SPButton()
+    let shareButton = SPButton()
     
     var splitDate: Date = .now
     

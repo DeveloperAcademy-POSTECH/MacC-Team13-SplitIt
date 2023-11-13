@@ -19,7 +19,7 @@ class EditExclItemInputVC: UIViewController {
     let header = SPNavigationBar()
     let exclListLabel = UILabel()
     let exclItemCountLabel = UILabel()
-    let exclItemAddButton = NewSPButton()
+    let exclItemAddButton = SPButton()
     
     let contentView = UIView()
     let emptyView = ExclItemInputEmptyView()

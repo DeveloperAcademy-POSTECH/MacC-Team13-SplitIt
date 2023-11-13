@@ -90,7 +90,7 @@
 		86DACB132AF63A08008D7BAF /* EditCSMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB122AF63A08008D7BAF /* EditCSMemberVM.swift */; };
 		86DACB162AF63B99008D7BAF /* EditExclItemInputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB152AF63B99008D7BAF /* EditExclItemInputVC.swift */; };
 		86DACB182AF63BED008D7BAF /* EditExclItemInputVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB172AF63BED008D7BAF /* EditExclItemInputVM.swift */; };
-		C229F51A2AEA442E00F9E28D /* NewSPButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C229F5192AEA442E00F9E28D /* NewSPButton.swift */; };
+		C229F51A2AEA442E00F9E28D /* SPButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C229F5192AEA442E00F9E28D /* SPButton.swift */; };
 		C291BA132AF4DD6F009501F3 /* UIDevice+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C291BA122AF4DD6F009501F3 /* UIDevice+.swift */; };
 		C2A7978D2AE2740D0049E709 /* ONEMobileBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2A7978A2AE2740D0049E709 /* ONEMobileBold.ttf */; };
 		C2A7978E2AE2740D0049E709 /* ONEMobileLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2A7978B2AE2740D0049E709 /* ONEMobileLight.ttf */; };
@@ -196,7 +196,7 @@
 		86DACB122AF63A08008D7BAF /* EditCSMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSMemberVM.swift; sourceTree = "<group>"; };
 		86DACB152AF63B99008D7BAF /* EditExclItemInputVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExclItemInputVC.swift; sourceTree = "<group>"; };
 		86DACB172AF63BED008D7BAF /* EditExclItemInputVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExclItemInputVM.swift; sourceTree = "<group>"; };
-		C229F5192AEA442E00F9E28D /* NewSPButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSPButton.swift; sourceTree = "<group>"; };
+		C229F5192AEA442E00F9E28D /* SPButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPButton.swift; sourceTree = "<group>"; };
 		C291BA122AF4DD6F009501F3 /* UIDevice+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+.swift"; sourceTree = "<group>"; };
 		C2A7978A2AE2740D0049E709 /* ONEMobileBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileBold.ttf; sourceTree = "<group>"; };
 		C2A7978B2AE2740D0049E709 /* ONEMobileLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileLight.ttf; sourceTree = "<group>"; };
@@ -715,7 +715,7 @@
 			isa = PBXGroup;
 			children = (
 				C2A797932AE274F10049E709 /* SPTextField.swift */,
-				C229F5192AEA442E00F9E28D /* NewSPButton.swift */,
+				C229F5192AEA442E00F9E28D /* SPButton.swift */,
 				1A8B05DB2AF0E15A00CF5BC5 /* SPNavigationBar.swift */,
 				86C65FFD2AF0F6FB00A7942A /* DefaultEditButton.swift */,
 				60F496942AF753180077F6FB /* SPAlertController.swift */,
@@ -991,7 +991,7 @@
 				1A7845122AFD299D00E38403 /* CSMemberSelectedCell.swift in Sources */,
 				604CDC7F2AF1527500416454 /* ExclItemInfoEditModalVM.swift in Sources */,
 				86C65FFE2AF0F6FB00A7942A /* DefaultEditButton.swift in Sources */,
-				C229F51A2AEA442E00F9E28D /* NewSPButton.swift in Sources */,
+				C229F51A2AEA442E00F9E28D /* SPButton.swift in Sources */,
 				C2A797912AE2748E0049E709 /* UIFont+.swift in Sources */,
 				86DACB162AF63B99008D7BAF /* EditExclItemInputVC.swift in Sources */,
 				604CDC7D2AF1522C00416454 /* ExclItemInfoEditModalVC.swift in Sources */,

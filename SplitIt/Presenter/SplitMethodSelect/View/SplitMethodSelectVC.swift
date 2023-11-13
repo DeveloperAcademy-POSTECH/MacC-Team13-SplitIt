@@ -20,12 +20,12 @@ class SplitMethodSelectVC: UIViewController {
     let smartSplitBorderView = UIView()
     let smartSplitImageView = UIImageView()
     let smartSplitTextLabel = UILabel()
-    let smartSplitButton = NewSPButton()
+    let smartSplitButton = SPButton()
     
     let equalSplitBorderView = UIView()
     let equalSplitImageView = UIImageView()
     let equalSplitTextLabel = UILabel()
-    let equalSplitButton = NewSPButton()
+    let equalSplitButton = SPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()

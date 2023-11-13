@@ -33,8 +33,8 @@ final class SPAlertController: UIViewController {
     private let itemLabel = UILabel()
     private let alertTitleLabel = UILabel()
     private let alertDescriptionLabel = UILabel()
-    private let leftButton = NewSPButton()
-    private let rightButton = NewSPButton()
+    private let leftButton = SPButton()
+    private let rightButton = SPButton()
     
     fileprivate var item: String?
     fileprivate var alertTitle: String!

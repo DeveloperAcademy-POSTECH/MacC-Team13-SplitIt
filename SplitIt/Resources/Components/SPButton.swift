@@ -11,7 +11,7 @@ import RxCocoa
 import RxSwift
 
 //MARK: 토마토 Task
-final class NewSPButton: UIButton {
+final class SPButton: UIButton {
     let buttonState = BehaviorRelay<Bool>(value: false)
     let currencyIcon = UIImageView()
     let currencyLabel = UILabel()
@@ -322,7 +322,7 @@ final class NewSPButton: UIButton {
     }
     
     // 하프 버튼에 아이콘 추가
-    private func setCurrencyIcon(style: NewSPButton.Style) {
+    private func setCurrencyIcon(style: SPButton.Style) {
         self.addSubview(currencyIcon)
         
         currencyIcon.snp.makeConstraints {
@@ -357,7 +357,7 @@ final class NewSPButton: UIButton {
     }
     
     // 하프 버튼에 라벨 추가
-    private func setCurrencyLabel(style: NewSPButton.Style) {
+    private func setCurrencyLabel(style: SPButton.Style) {
         self.addSubview(currencyLabel)
         
         currencyLabel.snp.makeConstraints {
@@ -394,7 +394,7 @@ final class NewSPButton: UIButton {
 }
 
 
-extension NewSPButton {
+extension SPButton {
     enum Style {
         
         // MARK: Active Normal Button Styles

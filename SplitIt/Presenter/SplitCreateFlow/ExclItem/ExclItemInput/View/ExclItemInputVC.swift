@@ -23,13 +23,13 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
     let header = SPNavigationBar()
     let exclListLabel = UILabel()
     let exclItemCountLabel = UILabel()
-    let exclItemAddButton = NewSPButton()
+    let exclItemAddButton = SPButton()
     
     let contentView = UIView()
     let emptyView = ExclItemInputEmptyView()
     let tableView = UITableView(frame: .zero)
     
-    let nextButton = NewSPButton()
+    let nextButton = SPButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
