@@ -163,9 +163,9 @@ class EditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 
-                let vc = CSMemberSearchVC()
-                vc.modalPresentationStyle = UIModalPresentationStyle.fullScreen
-                self.present(vc, animated: true, completion: nil)
+//                let vc = CSMemberSearchVC()
+//                vc.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+//                self.present(vc, animated: true, completion: nil)
             })
             .disposed(by: disposeBag)
         
