@@ -245,7 +245,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             UserDefaults.standard.set("", forKey: "userName")
         }
         if UserDefaults.standard.object(forKey: "userBank") == nil {
-            UserDefaults.standard.set("선택 안함", forKey: "userBank")
+            UserDefaults.standard.set(nil, forKey: "userBank")
         }
     }
     
@@ -284,7 +284,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
                         self?.updateViewLayout(text: bankName)
                         self?.viewModel.inputBankName = bankName
                         self?.viewModel.checkBank = 1
-                        print(bankName)
                     }
                     .disposed(by: modalVC.disposeBag)
                 self?.present(modalVC, animated: true, completion: nil)

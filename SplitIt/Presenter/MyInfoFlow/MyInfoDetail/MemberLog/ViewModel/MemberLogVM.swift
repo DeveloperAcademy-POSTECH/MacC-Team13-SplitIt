@@ -30,13 +30,6 @@ class MemberLogVM {
         
     }
     
-    var filteredMemberList = BehaviorRelay<[MemberLog]>(value: [])
-    
-    func filterMembers(with text: String) {
-        let filteredMembers = memberList.value.filter { $0.name.contains(text) }
-        filteredMemberList.accept(filteredMembers)
-    }
-
     func transform(input: Input) -> Output {
         let inputFriendName = input.inputFriendName
         repo.fetchMemberLog()
