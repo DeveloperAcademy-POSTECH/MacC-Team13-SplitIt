@@ -1,5 +1,5 @@
 //
-//  JSDetailVC.swift
+//  EditCSListVC.swift
 //  SplitIt
 //
 //  Created by 주환 on 2023/10/30.
@@ -14,10 +14,10 @@ import RxCocoa
 import RxAppState
 import RealmSwift
 
-final class JSDetailVC: UIViewController, UIScrollViewDelegate {
+final class EditCSListVC: UIViewController, UIScrollViewDelegate {
     
     var disposeBag = DisposeBag()
-    var viewModel = JSDetailVM()
+    var viewModel = EditCSListVM()
     
     let headerView = SPNavigationBar()
     let tableView = UITableView(frame: .zero)
@@ -47,7 +47,7 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
         
         tableView.do {
             $0.backgroundColor = .SurfaceBrandCalmshell
-            $0.register(cellType: JSDetailCell.self)
+            $0.register(cellType: EditCSListCell.self)
             $0.rowHeight = 208
             let tapGesture = UITapGestureRecognizer()
             tapGesture.rx.event.bind { [weak self] _ in
@@ -85,12 +85,12 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
     }
     
     func setBinding() {
-        let input = JSDetailVM.Input(
+        let input = EditCSListVM.Input(
                                     viewDidLoad: self.rx.viewWillAppear,
                                      csEditTapped: tableView.rx.itemSelected)
         
         viewModel.csinfoList
-            .drive(tableView.rx.items(cellIdentifier: "JSDetailCell", cellType: JSDetailCell.self)) { [weak self] (idx, item, cell) in
+            .drive(tableView.rx.items(cellIdentifier: "JSDetailCell", cellType: EditCSListCell.self)) { [weak self] (idx, item, cell) in
                 guard let self = self else { return }
                 let memberCount = self.viewModel.memberCount()
                 let exclCount = self.viewModel.exclItemCount()
@@ -111,7 +111,7 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
     
 }
 
-extension JSDetailVC: UIGestureRecognizerDelegate {
+extension EditCSListVC: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         return (touch.view == self.tableView)
     }

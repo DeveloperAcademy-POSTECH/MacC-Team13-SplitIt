@@ -78,9 +78,9 @@
 		60AE3EC12AE77488009D9D18 /* CSMemberResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EC02AE77488009D9D18 /* CSMemberResult.swift */; };
 		60AE3EC32AE77491009D9D18 /* SplitResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EC22AE77491009D9D18 /* SplitResult.swift */; };
 		60F496952AF753180077F6FB /* SPAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F496942AF753180077F6FB /* SPAlertController.swift */; };
-		86C65FF22AEF970F00A7942A /* JSDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF12AEF970F00A7942A /* JSDetailVC.swift */; };
-		86C65FF42AEF985A00A7942A /* JSDetailVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF32AEF985A00A7942A /* JSDetailVM.swift */; };
-		86C65FF62AEF9ADF00A7942A /* JSDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF52AEF9ADF00A7942A /* JSDetailCell.swift */; };
+		86C65FF22AEF970F00A7942A /* EditCSListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF12AEF970F00A7942A /* EditCSListVC.swift */; };
+		86C65FF42AEF985A00A7942A /* EditCSListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF32AEF985A00A7942A /* EditCSListVM.swift */; };
+		86C65FF62AEF9ADF00A7942A /* EditCSListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF52AEF9ADF00A7942A /* EditCSListCell.swift */; };
 		86C65FFC2AF0F4D000A7942A /* EditCSDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FFB2AF0F4D000A7942A /* EditCSDetailVC.swift */; };
 		86C65FFE2AF0F6FB00A7942A /* DefaultEditButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FFD2AF0F6FB00A7942A /* DefaultEditButton.swift */; };
 		86C660002AF126DE00A7942A /* EditCSDetailVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FFF2AF126DE00A7942A /* EditCSDetailVM.swift */; };
@@ -184,9 +184,9 @@
 		60AE3EC02AE77488009D9D18 /* CSMemberResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberResult.swift; sourceTree = "<group>"; };
 		60AE3EC22AE77491009D9D18 /* SplitResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitResult.swift; sourceTree = "<group>"; };
 		60F496942AF753180077F6FB /* SPAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAlertController.swift; sourceTree = "<group>"; };
-		86C65FF12AEF970F00A7942A /* JSDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSDetailVC.swift; sourceTree = "<group>"; };
-		86C65FF32AEF985A00A7942A /* JSDetailVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSDetailVM.swift; sourceTree = "<group>"; };
-		86C65FF52AEF9ADF00A7942A /* JSDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSDetailCell.swift; sourceTree = "<group>"; };
+		86C65FF12AEF970F00A7942A /* EditCSListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVC.swift; sourceTree = "<group>"; };
+		86C65FF32AEF985A00A7942A /* EditCSListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVM.swift; sourceTree = "<group>"; };
+		86C65FF52AEF9ADF00A7942A /* EditCSListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListCell.swift; sourceTree = "<group>"; };
 		86C65FFB2AF0F4D000A7942A /* EditCSDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSDetailVC.swift; sourceTree = "<group>"; };
 		86C65FFD2AF0F6FB00A7942A /* DefaultEditButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultEditButton.swift; sourceTree = "<group>"; };
 		86C65FFF2AF126DE00A7942A /* EditCSDetailVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSDetailVM.swift; sourceTree = "<group>"; };
@@ -608,7 +608,7 @@
 			isa = PBXGroup;
 			children = (
 				60990AF42B01F73100202319 /* Cell */,
-				86C65FF12AEF970F00A7942A /* JSDetailVC.swift */,
+				86C65FF12AEF970F00A7942A /* EditCSListVC.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -616,7 +616,7 @@
 		60990AF32B01F72A00202319 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				86C65FF32AEF985A00A7942A /* JSDetailVM.swift */,
+				86C65FF32AEF985A00A7942A /* EditCSListVM.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -624,7 +624,7 @@
 		60990AF42B01F73100202319 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				86C65FF52AEF9ADF00A7942A /* JSDetailCell.swift */,
+				86C65FF52AEF9ADF00A7942A /* EditCSListCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -744,28 +744,28 @@
 			isa = PBXGroup;
 			children = (
 				86DACB092AF4EC4F008D7BAF /* NewEditFlowViews */,
-				86C65FFA2AF0F4B300A7942A /* EditCSListView */,
-				86C65FF02AEF96E700A7942A /* JSDetailView */,
+				86C65FFA2AF0F4B300A7942A /* EditCSDetail */,
+				86C65FF02AEF96E700A7942A /* EditCSList */,
 			);
 			path = SplitEditFlow;
 			sourceTree = "<group>";
 		};
-		86C65FF02AEF96E700A7942A /* JSDetailView */ = {
+		86C65FF02AEF96E700A7942A /* EditCSList */ = {
 			isa = PBXGroup;
 			children = (
 				60990AF32B01F72A00202319 /* ViewModel */,
 				60990AF22B01F72500202319 /* View */,
 			);
-			path = JSDetailView;
+			path = EditCSList;
 			sourceTree = "<group>";
 		};
-		86C65FFA2AF0F4B300A7942A /* EditCSListView */ = {
+		86C65FFA2AF0F4B300A7942A /* EditCSDetail */ = {
 			isa = PBXGroup;
 			children = (
 				60990AF62B01F73F00202319 /* ViewModel */,
 				60990AF52B01F73800202319 /* View */,
 			);
-			path = EditCSListView;
+			path = EditCSDetail;
 			sourceTree = "<group>";
 		};
 		86DACB092AF4EC4F008D7BAF /* NewEditFlowViews */ = {
@@ -1132,7 +1132,7 @@
 				DE73D6ED2AE0D2C300ABF3EF /* BankListModalVC.swift in Sources */,
 				60115DF72ADBF2980050D32C /* UIColor+.swift in Sources */,
 				1A3852F92ADE5AC200E9A20B /* CSMember.swift in Sources */,
-				86C65FF22AEF970F00A7942A /* JSDetailVC.swift in Sources */,
+				86C65FF22AEF970F00A7942A /* EditCSListVC.swift in Sources */,
 				C2A797942AE274F10049E709 /* SPTextField.swift in Sources */,
 				1A3852F72ADE5AB200E9A20B /* CSInfo.swift in Sources */,
 				6032DCF12AEE6FFC004A6BFA /* ExclItemInputVM.swift in Sources */,
@@ -1180,12 +1180,12 @@
 				607ED87E2AF0D06F00A82349 /* ExclItemInfo.swift in Sources */,
 				6032DCFA2AEF5F68004A6BFA /* ExclItemInfoAddModalVC.swift in Sources */,
 				DE73D6EF2AE0D2D500ABF3EF /* BankCell.swift in Sources */,
-				86C65FF62AEF9ADF00A7942A /* JSDetailCell.swift in Sources */,
+				86C65FF62AEF9ADF00A7942A /* EditCSListCell.swift in Sources */,
 				6032DCE62AECE4BC004A6BFA /* CSInfoVM.swift in Sources */,
 				1A8B05E12AF1466300CF5BC5 /* SplitMethodSelectVC.swift in Sources */,
 				60AE3EB82AE773F5009D9D18 /* SplitShareVM.swift in Sources */,
 				C2A797A22AE277F90049E709 /* HistorySectionHeader.swift in Sources */,
-				86C65FF42AEF985A00A7942A /* JSDetailVM.swift in Sources */,
+				86C65FF42AEF985A00A7942A /* EditCSListVM.swift in Sources */,
 				1A7845102AFD299000E38403 /* CSMemberSearchCell.swift in Sources */,
 				86C65FFC2AF0F4D000A7942A /* EditCSDetailVC.swift in Sources */,
 			);

@@ -1,5 +1,5 @@
 //
-//  JSDetailCell.swift
+//  EditCSListCell.swift
 //  SplitIt
 //
 //  Created by 주환 on 2023/10/30.
@@ -11,7 +11,7 @@ import SnapKit
 import Then
 import RxSwift
 
-final class JSDetailCell: UITableViewCell, Reusable {
+final class EditCSListCell: UITableViewCell, Reusable {
     
     var disposeBag = DisposeBag()
     

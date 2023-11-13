@@ -1,5 +1,5 @@
 //
-//  JSDetailVM.swift
+//  EditCSListVM.swift
 //  SplitIt
 //
 //  Created by 주환 on 2023/10/30.
@@ -10,7 +10,7 @@ import Foundation
 import RxCocoa
 import UIKit
 
-final class JSDetailVM {
+final class EditCSListVM {
     var disposeBag = DisposeBag()
     
     let dataModel = SplitRepository.share
