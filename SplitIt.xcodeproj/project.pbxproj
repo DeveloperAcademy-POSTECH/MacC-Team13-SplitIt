@@ -250,7 +250,9 @@
 		1A2DCC432AF771A000FB2FE2 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				1A2DCC442AF771C600FB2FE2 /* HapticManager.swift */,
+				60990AF02B01F52F00202319 /* TypeHelper */,
+				DEFE9D862AEF5C11009C693E /* CustomKeyboard */,
+				60990AEF2B01F51300202319 /* HapticManager */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -355,13 +357,10 @@
 		60115DF22ADBF0DD0050D32C /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
-				1A8B05DD2AF145F000CF5BC5 /* SplitMethodSelect */,
-				DEFE9D862AEF5C11009C693E /* CustomKeyboard */,
 				60AE3EB12AE77395009D9D18 /* SplitShare */,
 				869D1AC92AE5292A00D166B1 /* SplitEditFlow */,
-				C2A797972AE276B50049E709 /* History */,
-				DE73D6DE2AE0D0E700ABF3EF /* MyInfoDetail */,
-				DE1711BE2AE0BA750097850D /* MyInfo */,
+				C2A797972AE276B50049E709 /* HistoryFlow */,
+				DE1711BE2AE0BA750097850D /* MyInfoFlow */,
 				60115E042ADC18110050D32C /* SplitCreateFlow */,
 				60115DF32ADBF10B0050D32C /* Home */,
 			);
@@ -384,8 +383,6 @@
 				C2A797922AE274C30049E709 /* Components */,
 				C2A797872AE273E90049E709 /* Assets */,
 				60115DF52ADBF2580050D32C /* Extensions */,
-				60115E172ADD19CD0050D32C /* NumberFormatterHelper.swift */,
-				60AE3EA92AE6562E009D9D18 /* DateFormatterHelper.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -434,6 +431,7 @@
 				6032DCE72AEE538C004A6BFA /* ExclItem */,
 				1A7845072AFD28A500E38403 /* CSMember */,
 				6032DCE02AECE1EE004A6BFA /* CSInfo */,
+				1A8B05DD2AF145F000CF5BC5 /* SplitMethodSelect */,
 			);
 			path = SplitCreateFlow;
 			sourceTree = "<group>";
@@ -580,6 +578,130 @@
 			path = SplitIt;
 			sourceTree = "<group>";
 		};
+		60990AEF2B01F51300202319 /* HapticManager */ = {
+			isa = PBXGroup;
+			children = (
+				1A2DCC442AF771C600FB2FE2 /* HapticManager.swift */,
+			);
+			path = HapticManager;
+			sourceTree = "<group>";
+		};
+		60990AF02B01F52F00202319 /* TypeHelper */ = {
+			isa = PBXGroup;
+			children = (
+				60115E172ADD19CD0050D32C /* NumberFormatterHelper.swift */,
+				60AE3EA92AE6562E009D9D18 /* DateFormatterHelper.swift */,
+			);
+			path = TypeHelper;
+			sourceTree = "<group>";
+		};
+		60990AF12B01F59000202319 /* MyInfo */ = {
+			isa = PBXGroup;
+			children = (
+				DE1711C02AE0BA8C0097850D /* ViewModel */,
+				DE1711BF2AE0BA830097850D /* View */,
+			);
+			path = MyInfo;
+			sourceTree = "<group>";
+		};
+		60990AF22B01F72500202319 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				60990AF42B01F73100202319 /* Cell */,
+				86C65FF12AEF970F00A7942A /* JSDetailVC.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		60990AF32B01F72A00202319 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				86C65FF32AEF985A00A7942A /* JSDetailVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		60990AF42B01F73100202319 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				86C65FF52AEF9ADF00A7942A /* JSDetailCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		60990AF52B01F73800202319 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				86C65FFB2AF0F4D000A7942A /* EditCSListVC.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		60990AF62B01F73F00202319 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				86C65FFF2AF126DE00A7942A /* EditCSListVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		60990AF72B01F79600202319 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				86DACB0B2AF4ECC9008D7BAF /* EditCSInfoVC.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		60990AF82B01F79A00202319 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				86DACB0D2AF4ECE7008D7BAF /* EditCSInfoVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		60990AF92B01F7A200202319 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				60990AFB2B01F7AE00202319 /* Cell */,
+				86DACB102AF639E0008D7BAF /* EditCSMemberVC.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		60990AFA2B01F7A700202319 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				86DACB122AF63A08008D7BAF /* EditCSMemberVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		60990AFB2B01F7AE00202319 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				60990AED2B01F29200202319 /* CSMemberCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		60990AFC2B01F7BD00202319 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				86DACB152AF63B99008D7BAF /* EditExclItemInputVC.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		60990AFD2B01F7C300202319 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				86DACB172AF63BED008D7BAF /* EditExclItemInputVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		60AE3EB12AE77395009D9D18 /* SplitShare */ = {
 			isa = PBXGroup;
 			children = (
@@ -631,9 +753,8 @@
 		86C65FF02AEF96E700A7942A /* JSDetailView */ = {
 			isa = PBXGroup;
 			children = (
-				86C65FF12AEF970F00A7942A /* JSDetailVC.swift */,
-				86C65FF32AEF985A00A7942A /* JSDetailVM.swift */,
-				86C65FF52AEF9ADF00A7942A /* JSDetailCell.swift */,
+				60990AF32B01F72A00202319 /* ViewModel */,
+				60990AF22B01F72500202319 /* View */,
 			);
 			path = JSDetailView;
 			sourceTree = "<group>";
@@ -641,8 +762,8 @@
 		86C65FFA2AF0F4B300A7942A /* EditCSListView */ = {
 			isa = PBXGroup;
 			children = (
-				86C65FFB2AF0F4D000A7942A /* EditCSListVC.swift */,
-				86C65FFF2AF126DE00A7942A /* EditCSListVM.swift */,
+				60990AF62B01F73F00202319 /* ViewModel */,
+				60990AF52B01F73800202319 /* View */,
 			);
 			path = EditCSListView;
 			sourceTree = "<group>";
@@ -660,8 +781,8 @@
 		86DACB0A2AF4ECB8008D7BAF /* EditCSInfo */ = {
 			isa = PBXGroup;
 			children = (
-				86DACB0B2AF4ECC9008D7BAF /* EditCSInfoVC.swift */,
-				86DACB0D2AF4ECE7008D7BAF /* EditCSInfoVM.swift */,
+				60990AF82B01F79A00202319 /* ViewModel */,
+				60990AF72B01F79600202319 /* View */,
 			);
 			path = EditCSInfo;
 			sourceTree = "<group>";
@@ -669,9 +790,8 @@
 		86DACB0F2AF6393C008D7BAF /* EditCSMember */ = {
 			isa = PBXGroup;
 			children = (
-				86DACB102AF639E0008D7BAF /* EditCSMemberVC.swift */,
-				86DACB122AF63A08008D7BAF /* EditCSMemberVM.swift */,
-				60990AED2B01F29200202319 /* CSMemberCell.swift */,
+				60990AFA2B01F7A700202319 /* ViewModel */,
+				60990AF92B01F7A200202319 /* View */,
 			);
 			path = EditCSMember;
 			sourceTree = "<group>";
@@ -679,8 +799,8 @@
 		86DACB142AF63B01008D7BAF /* EditCSExclItem */ = {
 			isa = PBXGroup;
 			children = (
-				86DACB152AF63B99008D7BAF /* EditExclItemInputVC.swift */,
-				86DACB172AF63BED008D7BAF /* EditExclItemInputVM.swift */,
+				60990AFD2B01F7C300202319 /* ViewModel */,
+				60990AFC2B01F7BD00202319 /* View */,
 			);
 			path = EditCSExclItem;
 			sourceTree = "<group>";
@@ -723,14 +843,14 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		C2A797972AE276B50049E709 /* History */ = {
+		C2A797972AE276B50049E709 /* HistoryFlow */ = {
 			isa = PBXGroup;
 			children = (
 				C2A797992AE276C40049E709 /* View */,
 				C2A797982AE276BD0049E709 /* ViewModel */,
 				C2A7979F2AE277AF0049E709 /* CreateDateSection.swift */,
 			);
-			path = History;
+			path = HistoryFlow;
 			sourceTree = "<group>";
 		};
 		C2A797982AE276BD0049E709 /* ViewModel */ = {
@@ -760,13 +880,13 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
-		DE1711BE2AE0BA750097850D /* MyInfo */ = {
+		DE1711BE2AE0BA750097850D /* MyInfoFlow */ = {
 			isa = PBXGroup;
 			children = (
-				DE1711C02AE0BA8C0097850D /* ViewModel */,
-				DE1711BF2AE0BA830097850D /* View */,
+				DE73D6DE2AE0D0E700ABF3EF /* MyInfoDetail */,
+				60990AF12B01F59000202319 /* MyInfo */,
 			);
-			path = MyInfo;
+			path = MyInfoFlow;
 			sourceTree = "<group>";
 		};
 		DE1711BF2AE0BA830097850D /* View */ = {
