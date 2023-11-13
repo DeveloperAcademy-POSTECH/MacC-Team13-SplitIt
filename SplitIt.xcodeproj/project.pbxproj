@@ -78,6 +78,8 @@
 		60AE3EC12AE77488009D9D18 /* CSMemberResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EC02AE77488009D9D18 /* CSMemberResult.swift */; };
 		60AE3EC32AE77491009D9D18 /* SplitResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EC22AE77491009D9D18 /* SplitResult.swift */; };
 		60F496952AF753180077F6FB /* SPAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F496942AF753180077F6FB /* SPAlertController.swift */; };
+		8656D6D42B020C03003660A4 /* NewEditCSMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D32B020C03003660A4 /* NewEditCSMemberVC.swift */; };
+		8656D6D72B020C6D003660A4 /* NewEditCSMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D62B020C6D003660A4 /* NewEditCSMemberVM.swift */; };
 		86C65FF22AEF970F00A7942A /* EditCSListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF12AEF970F00A7942A /* EditCSListVC.swift */; };
 		86C65FF42AEF985A00A7942A /* EditCSListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF32AEF985A00A7942A /* EditCSListVM.swift */; };
 		86C65FF62AEF9ADF00A7942A /* EditCSListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF52AEF9ADF00A7942A /* EditCSListCell.swift */; };
@@ -184,6 +186,8 @@
 		60AE3EC02AE77488009D9D18 /* CSMemberResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberResult.swift; sourceTree = "<group>"; };
 		60AE3EC22AE77491009D9D18 /* SplitResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitResult.swift; sourceTree = "<group>"; };
 		60F496942AF753180077F6FB /* SPAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAlertController.swift; sourceTree = "<group>"; };
+		8656D6D32B020C03003660A4 /* NewEditCSMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditCSMemberVC.swift; sourceTree = "<group>"; };
+		8656D6D62B020C6D003660A4 /* NewEditCSMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditCSMemberVM.swift; sourceTree = "<group>"; };
 		86C65FF12AEF970F00A7942A /* EditCSListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVC.swift; sourceTree = "<group>"; };
 		86C65FF32AEF985A00A7942A /* EditCSListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVM.swift; sourceTree = "<group>"; };
 		86C65FF52AEF9ADF00A7942A /* EditCSListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListCell.swift; sourceTree = "<group>"; };
@@ -740,6 +744,31 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		8656D6D12B020BC2003660A4 /* NewEditCSMember */ = {
+			isa = PBXGroup;
+			children = (
+				8656D6D52B020C57003660A4 /* ViewModel */,
+				8656D6D22B020BEF003660A4 /* View */,
+			);
+			path = NewEditCSMember;
+			sourceTree = "<group>";
+		};
+		8656D6D22B020BEF003660A4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8656D6D32B020C03003660A4 /* NewEditCSMemberVC.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8656D6D52B020C57003660A4 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				8656D6D62B020C6D003660A4 /* NewEditCSMemberVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		869D1AC92AE5292A00D166B1 /* SplitEditFlow */ = {
 			isa = PBXGroup;
 			children = (
@@ -771,6 +800,7 @@
 		86DACB092AF4EC4F008D7BAF /* EditCSDetails */ = {
 			isa = PBXGroup;
 			children = (
+				8656D6D12B020BC2003660A4 /* NewEditCSMember */,
 				86DACB142AF63B01008D7BAF /* EditCSExclItem */,
 				86DACB0F2AF6393C008D7BAF /* EditCSMember */,
 				86DACB0A2AF4ECB8008D7BAF /* EditCSInfo */,
@@ -1151,6 +1181,7 @@
 				1A4DB2292ADE61E800616243 /* RealmManager.swift in Sources */,
 				1A3853032ADE5B4500E9A20B /* RealmCSMember.swift in Sources */,
 				1A3853012ADE5B3100E9A20B /* RealmCSInfo.swift in Sources */,
+				8656D6D72B020C6D003660A4 /* NewEditCSMemberVM.swift in Sources */,
 				60115E012ADC01150050D32C /* UITextField+.swift in Sources */,
 				60104CE92AEFF73800489AAD /* ExclItemInfoModalSection.swift in Sources */,
 				6032DCF82AEF4B5B004A6BFA /* ExclItemAddCell.swift in Sources */,
@@ -1171,6 +1202,7 @@
 				6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */,
 				DE73D6E52AE0D12C00ABF3EF /* MyBankAccountVM.swift in Sources */,
 				1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */,
+				8656D6D42B020C03003660A4 /* NewEditCSMemberVC.swift in Sources */,
 				1A4DB22B2ADE68E400616243 /* SplitRepository.swift in Sources */,
 				C291BA132AF4DD6F009501F3 /* UIDevice+.swift in Sources */,
 				1A3852FD2ADE5B0100E9A20B /* ExclMember.swift in Sources */,
@@ -1327,7 +1359,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B9U954AWHU;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SplitIt/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

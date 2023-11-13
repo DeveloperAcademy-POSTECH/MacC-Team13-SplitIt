@@ -46,7 +46,7 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
     }
     
     func setAttribute() {
-        view.backgroundColor = .SurfacePrimary
+        view.backgroundColor = .SurfaceBrandCalmshell
         
         scrollView.do {
             $0.showsVerticalScrollIndicator = false

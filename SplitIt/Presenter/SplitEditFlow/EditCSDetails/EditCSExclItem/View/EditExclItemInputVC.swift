@@ -34,7 +34,7 @@ class EditExclItemInputVC: UIViewController {
     }
     
     func setAttribute() {
-        view.backgroundColor = .SurfacePrimary
+        view.backgroundColor = .SurfaceBrandCalmshell
         
         header.do {
             $0.applyStyle(style: .csEdit, vc: self)
