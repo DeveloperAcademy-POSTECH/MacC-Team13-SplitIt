@@ -15,16 +15,9 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
 
     let bankValue = BehaviorRelay<String?>(value: UserDefaults.standard.string(forKey: "userBank"))
     let accountTextRelay = BehaviorRelay<String?>(value: UserDefaults.standard.string(forKey: "userAccount"))
-    
-//    let nameTextRelay = BehaviorRelay<String?>(value: UserDefaults.standard.string(forKey: "userName"))
-//    let bankTextRelay = BehaviorRelay<String?>(value: UserDefaults.standard.string(forKey: "userBank"))
-//    let tossRelay = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "tossPay"))
-//    let kakaoRelay = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "kakaoPay"))
-//    let naverRelay = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "naverPay"))
-//
-    
-    let isModifiedRelay = BehaviorRelay<Bool>(value: false)
-    var isModified = false
+    var changedToss = false
+    var changedKakao = false
+    var changedNaver = false
     
     let accountCustomKeyboard = AccountCustomKeyboard()
     
@@ -117,6 +110,24 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             .disposed(by: disposeBag)
     }
     
+    func changedData() -> Bool {
+           let preName = userDefault.string(forKey: "userName")
+           let preAccount = userDefault.string(forKey: "userAccount")
+           let preBank = userDefault.string(forKey: "userBank")
+           let preToss = userDefault.bool(forKey: "tossPay")
+           let preKakao = userDefault.bool(forKey: "kakaoPay")
+           let preNaver = userDefault.bool(forKey: "naverPay")
+           
+           let postName = nameTextField.text
+           let postAccount = accountTextField.text
+           let postBank = bankTextField.text
+           let postToss = changedToss
+           let postKakao = changedKakao
+           let postNaver = changedNaver
+       
+           return preName != postName || preAccount != postAccount || preBank != postBank || preToss != postToss || preKakao != postKakao || preNaver != postNaver
+       }
+    
     func setAlert() {
         showAlert(view: alert,
                 type: .warnNormal,
@@ -177,33 +188,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     }
     
     func selectedBankViewAttribute() {
-        
-        
-        
-        
-//        Observable.combineLatest(accountTextRelay, nameTextRelay, bankTextRelay, tossRelay, kakaoRelay, naverRelay)
-//            .subscribe(onNext: { [weak self] (accountText, nameText, bankText, toss, kakao, naver) in
-//                print(accountText, nameText, bankText, toss, kakao, naver)
-//                let isModified = (accountText != UserDefaults.standard.string(forKey: "userAccount")) ||
-//                                 (nameText != UserDefaults.standard.string(forKey: "userName")) ||
-//                                 (bankText != UserDefaults.standard.string(forKey: "userBank")) ||
-//                                 (toss != UserDefaults.standard.bool(forKey: "tossPay")) ||
-//                                 (kakao != UserDefaults.standard.bool(forKey: "kakaoPay")) ||
-//                                 (naver != UserDefaults.standard.bool(forKey: "naverPay"))
-//                self?.isModifiedRelay.accept(isModified)
-//                if isModified {
-//                    print("변화가 있었습니다.")
-//                    // 다른 뷰를 띄우는 로직을 구현하세요
-//                    // 예: self?.present(viewController, animated: true, completion: nil)
-//                } else {
-//                    print("변화가 없었습니다.")
-//                }
-//            })
-//            .disposed(by: disposeBag)
-//
-       
-        
-        
+    
         let nameObservable = nameTextField.rx.text.orEmpty.asDriver()
         let accountObservable = accountTextField.rx.text.orEmpty.asDriver()
         
@@ -313,11 +298,12 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         
         output.cancelBackToView
             .drive(onNext: { [weak self] in
-                if self?.isModified == true{
+                if self?.changedData() == true {
                     self?.setBackAlert()
                 } else {
                     self?.navigationController?.popViewController(animated: true)
                 }
+                
             })
             .disposed(by: disposeBag)
     }
@@ -338,6 +324,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         viewModel.isTossPayToggled
             .subscribe(onNext: { [weak self] isToggled in
                 let newImage = isToggled ? "TossPayIconChecked" : "TossPayIconUnchecked"
+                self?.changedToss = isToggled
                 self?.tossPayBtn.image = UIImage(named: newImage)
             })
             .disposed(by: disposeBag)
@@ -345,6 +332,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         viewModel.isKakaoPayToggled
             .subscribe(onNext: { [weak self] isToggled in
                 let newImage = isToggled ? "KakaoPayIconChecked" : "KakaoPayIconUnchecked"
+                self?.changedKakao = isToggled
                 self?.kakaoPayBtn.image = UIImage(named: newImage)
             })
             .disposed(by: disposeBag)
@@ -353,6 +341,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         viewModel.isNaverPayToggled
             .subscribe(onNext: { [weak self] isToggled in
                 let newImage = isToggled ? "NaverPayIconChecked" : "NaverPayIconUnchecked"
+                self?.changedNaver = isToggled
                 self?.naverPayBtn.image = UIImage(named: newImage)
             })
             .disposed(by: disposeBag)
