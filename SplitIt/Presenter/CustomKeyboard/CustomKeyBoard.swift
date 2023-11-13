@@ -70,9 +70,6 @@ class CustomKeyboard: UIInputViewController {
         inputView.backgroundColor = UIColor(hex: 0xFCFCFE)
         self.inputView = inputView
         
-        let btnWidth = Int((UIScreen.main.bounds.width - 24) / 3)
-        let btnHeight = Int(keyboardHeight - 50) / 4
-        
         keyboardView.backgroundColor = UIColor(hex: 0xCED0D5)
         inputView.addSubview(keyboardView)
         

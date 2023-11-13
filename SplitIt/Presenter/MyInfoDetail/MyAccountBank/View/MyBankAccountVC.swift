@@ -13,7 +13,19 @@ import Then
 
 class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertDelegate {
 
-    let accountTextRelay = BehaviorRelay<String?>(value: "")
+    let bankValue = BehaviorRelay<String?>(value: UserDefaults.standard.string(forKey: "userBank"))
+    let accountTextRelay = BehaviorRelay<String?>(value: UserDefaults.standard.string(forKey: "userAccount"))
+    
+//    let nameTextRelay = BehaviorRelay<String?>(value: UserDefaults.standard.string(forKey: "userName"))
+//    let bankTextRelay = BehaviorRelay<String?>(value: UserDefaults.standard.string(forKey: "userBank"))
+//    let tossRelay = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "tossPay"))
+//    let kakaoRelay = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "kakaoPay"))
+//    let naverRelay = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "naverPay"))
+//
+    
+    let isModifiedRelay = BehaviorRelay<Bool>(value: false)
+    var isModified = false
+    
     let accountCustomKeyboard = AccountCustomKeyboard()
     
     let alert = SPAlertController()
@@ -24,8 +36,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     let maxCharacterCount = 8
     let maxAccountCount = 17
     let userDefault = UserDefaults.standard
-    
-    var isBankSelected: Bool = false
     
     let header = SPNavigationBar()
     
@@ -65,10 +75,10 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     
     let deleteBtn = UIButton()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        checkUserInfo()
         setAddView()
         setLayout()
         selectedBankViewAttribute()
@@ -102,7 +112,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         accountCustomKeyboard.customKeyObservable
             .subscribe(onNext: { [weak self] value in
                 self?.accountCustomKeyboard.handleInputValue(value)
-                self?.accountTextRelay.accept(self?.accountTextField.text)
+                self?.accountTextRelay.accept((self?.accountTextField.text)!)
             })
             .disposed(by: disposeBag)
     }
@@ -119,7 +129,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
               .asDriver(onErrorJustReturn: ())
               .drive(onNext: { [weak self] in
                   self?.deleteAllInfo()
-                  print("ex. alert의 삭제 버튼 탭 시 무언가가 삭제되는 로직")
               })
               .disposed(by: disposeBag)
     }
@@ -145,7 +154,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         if text == "선택 안함" {
             
             self.bankSelectedView.isHidden = true
-            //self.header.buttonState.accept(true)
 
             payLabel.snp.removeConstraints()
             payLabel.snp.makeConstraints {
@@ -155,7 +163,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             
         } else {
             self.bankSelectedView.isHidden = false
-           // self.header.buttonState.accept(false)
             
             payLabel.snp.removeConstraints()
             bankSelectedView.snp.updateConstraints { make in
@@ -171,22 +178,50 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     
     func selectedBankViewAttribute() {
         
-//        let accountRelay = BehaviorRelay<String>(value: self.userDefault.string(forKey: "userAccount") ?? "")
-//        let nameRelay = BehaviorRelay<String>(value: self.userDefault.string(forKey: "userName") ?? "")
-//        Observable.combineLatest(accountRelay.asObservable(),
-//                                 nameRelay.asObservable())
-//        .subscribe(onNext: { accountText, nameText in
-//
-//            if accountText.count == 0 || nameText.count == 0 {
-//                print("둘 중 하나 안됨")
-//                self.header.buttonState.accept(false)
-//            } else {
-//                self.header.buttonState.accept(true)
-//                print("됨")
-//            }
-//        })
-//        .disposed(by: disposeBag)
         
+        
+        
+//        Observable.combineLatest(accountTextRelay, nameTextRelay, bankTextRelay, tossRelay, kakaoRelay, naverRelay)
+//            .subscribe(onNext: { [weak self] (accountText, nameText, bankText, toss, kakao, naver) in
+//                print(accountText, nameText, bankText, toss, kakao, naver)
+//                let isModified = (accountText != UserDefaults.standard.string(forKey: "userAccount")) ||
+//                                 (nameText != UserDefaults.standard.string(forKey: "userName")) ||
+//                                 (bankText != UserDefaults.standard.string(forKey: "userBank")) ||
+//                                 (toss != UserDefaults.standard.bool(forKey: "tossPay")) ||
+//                                 (kakao != UserDefaults.standard.bool(forKey: "kakaoPay")) ||
+//                                 (naver != UserDefaults.standard.bool(forKey: "naverPay"))
+//                self?.isModifiedRelay.accept(isModified)
+//                if isModified {
+//                    print("변화가 있었습니다.")
+//                    // 다른 뷰를 띄우는 로직을 구현하세요
+//                    // 예: self?.present(viewController, animated: true, completion: nil)
+//                } else {
+//                    print("변화가 없었습니다.")
+//                }
+//            })
+//            .disposed(by: disposeBag)
+//
+       
+        
+        
+        let nameObservable = nameTextField.rx.text.orEmpty.asDriver()
+        let accountObservable = accountTextField.rx.text.orEmpty.asDriver()
+        
+        let isTextEmptyObservable = Driver.combineLatest(nameObservable, accountObservable, bankValue.asDriver())
+            
+            .map { text1, text2, bankValue in
+                if bankValue != "선택 안함" {
+                    return !(text1.count == 0) && !(text2.count == 0)
+                } else {
+                    return true
+                }
+            }
+
+        isTextEmptyObservable
+            .drive(header.buttonState)
+            .disposed(by: disposeBag)
+        
+
         if UserDefaults.standard.string(forKey: "userBank") == "" ||  UserDefaults.standard.string(forKey: "userBank") == "선택 안함" {
             bankSelectedView.isHidden = true
             payLabel.snp.makeConstraints {
@@ -206,21 +241,27 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
 
        
     }
-    //수정버튼 활성화 비활성화 선택해주는 함수
-    func checkUserInfo() {
-        accountTextField.rx.text.orEmpty
-            .subscribe(onNext: { [weak self] text in
-                let filtered = text.filter { $0.isNumber || $0 == "-" }
-                if text != filtered {
-                    self?.accountTextField.text = filtered
-                }
-            })
-            .disposed(by: disposeBag)
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //self.nickNameTextField.becomeFirstResponder()
+        if UserDefaults.standard.object(forKey: "tossPay") == nil {
+            UserDefaults.standard.set(false, forKey: "tossPay")
+        }
+        if UserDefaults.standard.object(forKey: "kakaoPay") == nil {
+            UserDefaults.standard.set(false, forKey: "kakaoPay")
+        }
+        if UserDefaults.standard.object(forKey: "naverPay") == nil {
+            UserDefaults.standard.set(false, forKey: "naverPay")
+        }
+        if UserDefaults.standard.object(forKey: "userAccount") == nil {
+            UserDefaults.standard.set("", forKey: "userAccount")
+        }
+        if UserDefaults.standard.object(forKey: "userName") == nil {
+            UserDefaults.standard.set("", forKey: "userName")
+        }
+        if UserDefaults.standard.object(forKey: "userBank") == nil {
+            UserDefaults.standard.set("선택 안함", forKey: "userBank")
+        }
     }
     
     
@@ -251,14 +292,12 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
                 modalVC.modalTransitionStyle = .coverVertical
                 modalVC.selectedBankName
                     .bind { bankName in
-                        //일단 여기
-                        //if bankName != "선택 안함" {
-                            self?.bankTextField.text = bankName
-                            self?.updateViewLayout(text: bankName)
-                            self?.viewModel.inputBankName = bankName
-                            self?.viewModel.checkBank = 1
-                            print(bankName)
-                        //}
+                        self?.bankValue.accept(bankName)
+                        self?.bankTextField.text = bankName
+                        self?.updateViewLayout(text: bankName)
+                        self?.viewModel.inputBankName = bankName
+                        self?.viewModel.checkBank = 1
+                        print(bankName)
                     }
                     .disposed(by: modalVC.disposeBag)
                 self?.present(modalVC, animated: true, completion: nil)
@@ -274,11 +313,13 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         
         output.cancelBackToView
             .drive(onNext: { [weak self] in
-                self?.setBackAlert()
+                if self?.isModified == true{
+                    self?.setBackAlert()
+                } else {
+                    self?.navigationController?.popViewController(animated: true)
+                }
             })
             .disposed(by: disposeBag)
-        
-     
     }
     
     func deleteAllInfo() {
@@ -287,7 +328,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         UserDefaults.standard.set(false, forKey: "naverPay")
         UserDefaults.standard.set("", forKey: "userAccount")
         UserDefaults.standard.set("", forKey: "userName")
-        UserDefaults.standard.set("", forKey: "userBank")
+        UserDefaults.standard.set("선택 안함", forKey: "userBank")
         
         self.navigationController?.popViewController(animated: true)
     }
@@ -305,7 +346,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             .subscribe(onNext: { [weak self] isToggled in
                 let newImage = isToggled ? "KakaoPayIconChecked" : "KakaoPayIconUnchecked"
                 self?.kakaoPayBtn.image = UIImage(named: newImage)
-                
             })
             .disposed(by: disposeBag)
         
@@ -314,7 +354,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             .subscribe(onNext: { [weak self] isToggled in
                 let newImage = isToggled ? "NaverPayIconChecked" : "NaverPayIconUnchecked"
                 self?.naverPayBtn.image = UIImage(named: newImage)
-                
             })
             .disposed(by: disposeBag)
         
@@ -378,6 +417,15 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
                     self?.accountCountLabel.textColor = .TextSecondary
                 }
                 
+            })
+            .disposed(by: disposeBag)
+        
+        accountTextField.rx.text.orEmpty
+            .subscribe(onNext: { [weak self] text in
+                let filtered = text.filter { $0.isNumber || $0 == "-" }
+                if text != filtered {
+                    self?.accountTextField.text = filtered
+                }
             })
             .disposed(by: disposeBag)
         
@@ -719,15 +767,10 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         [header, scrollView].forEach {
             view.addSubview($0)
         }
-        
         scrollView.addSubview(contentView)
-        
-        
         [accountLabel,accountTextField, nameLabel, nameTextField, nameCountLabel, accountCountLabel].forEach {
             bankSelectedView.addSubview($0)
         }
-        
-        
         [bankLabel, bankTextField,bankSelectedView, deleteBtn, payLabel,
          payView].forEach {
             contentView.addSubview($0)

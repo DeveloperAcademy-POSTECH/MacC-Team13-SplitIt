@@ -23,16 +23,7 @@ struct BankListData {
             Bank(backIdx: 8,name: "하나은행"),
             Bank(backIdx: 9,name: "새마을금고"),
             Bank(backIdx: 10,name: "대구은행"),
-            Bank(backIdx: 11,name: "경남은행"),
-            Bank(backIdx: 12,name: "NH농협"),
-            Bank(backIdx: 13,name: "카카오뱅크"),
-            Bank(backIdx: 14,name: "KB국민은행"),
-            Bank(backIdx: 15,name: "신한은행"),
-            Bank(backIdx: 16,name: "토스뱅크"),
-            Bank(backIdx: 17,name: "우리은행"),
-            Bank(backIdx: 18,name: "IBK기업은행"),
-            Bank(backIdx: 19,name: "하나은행")
-            
+            Bank(backIdx: 11,name: "경남은행")
         ])
     }
     
