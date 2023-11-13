@@ -26,6 +26,10 @@ class SplitShareVC: UIViewController {
     let editButton = SPButton()
     let shareButton = SPButton()
     
+    let popUpBackGroundView = UIView()
+    let popUpView = SPPopUp()
+    let popUpTapGesture = UITapGestureRecognizer()
+    
     var splitDate: Date = .now
     
     var resultArr: [SplitMemberResult] = []
@@ -37,6 +41,9 @@ class SplitShareVC: UIViewController {
         setAttribute()
         setLayout()
         setBind()
+        
+        // TODO: - nil일때로 설정 바꿔주기
+        if UserDefaults.standard.string(forKey: "userBank")! == "선택 안함" { setPopUp() }
     }
     
     private func setAttribute() {
@@ -209,6 +216,43 @@ class SplitShareVC: UIViewController {
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
+        
+        popUpTapGesture.rx.event
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.removePopUp()
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func setPopUp() {
+        popUpBackGroundView.do {
+            $0.backgroundColor = .black
+            $0.layer.opacity = 0.6
+            $0.addGestureRecognizer(popUpTapGesture)
+        }
+        
+        popUpView.do {
+            $0.applyStyle(style: .goToMyInfo, vc: self)
+        }
+        
+        [popUpBackGroundView,popUpView].forEach {
+            view.addSubview($0)
+        }
+        
+        popUpBackGroundView.snp.makeConstraints {
+            $0.size.equalToSuperview()
+        }
+        
+        popUpView.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview().inset(35)
+        }
+    }
+    
+    private func removePopUp() {
+        popUpBackGroundView.removeFromSuperview()
+        popUpView.removeFromSuperview()
     }
 }
 
