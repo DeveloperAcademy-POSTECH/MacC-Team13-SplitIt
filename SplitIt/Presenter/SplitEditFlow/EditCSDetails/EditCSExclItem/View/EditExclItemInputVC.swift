@@ -177,7 +177,7 @@ class EditExclItemInputVC: UIViewController {
         output.showResultView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                SplitRepository.share.updateDataToDB()
+//                SplitRepository.share.updateDataToDB()
             })
             .disposed(by: disposeBag)
         
@@ -185,6 +185,7 @@ class EditExclItemInputVC: UIViewController {
             .asDriver()
             .drive { [weak self] _ in
                 guard let self = self else { return }
+                SplitRepository.share.updateDataToDB()
                 self.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)

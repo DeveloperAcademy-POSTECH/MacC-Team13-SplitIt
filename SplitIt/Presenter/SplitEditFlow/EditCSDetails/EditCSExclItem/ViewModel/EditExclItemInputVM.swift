@@ -39,7 +39,7 @@ class EditExclItemInputVM {
             ExclItemInfo(exclItem: ExclItem(csInfoIdx: "", name: "", price: 0), items: [])
         ])
         
-        exclItemRepository
+//        exclItemRepository
         
 //        input.viewDidDisAppear
 //            .asDriver(onErrorJustReturn: false)
