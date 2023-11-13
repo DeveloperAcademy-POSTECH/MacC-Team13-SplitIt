@@ -90,7 +90,7 @@ final class EditCSListVC: UIViewController, UIScrollViewDelegate {
                                      csEditTapped: tableView.rx.itemSelected)
         
         viewModel.csinfoList
-            .drive(tableView.rx.items(cellIdentifier: "JSDetailCell", cellType: EditCSListCell.self)) { [weak self] (idx, item, cell) in
+            .drive(tableView.rx.items(cellIdentifier: "EditCSListCell", cellType: EditCSListCell.self)) { [weak self] (idx, item, cell) in
                 guard let self = self else { return }
                 let memberCount = self.viewModel.memberCount()
                 let exclCount = self.viewModel.exclItemCount()
