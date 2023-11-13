@@ -12,11 +12,11 @@ import RxSwift
 import RxCocoa
 import Reusable
 
-class EditCSDetailVC: UIViewController, SPAlertDelegate {
+class EditCSItemVC: UIViewController, SPAlertDelegate {
     
     var disposeBag = DisposeBag()
     
-    let viewModel: EditCSDetailVM
+    let viewModel: EditCSItemVM
     
     let headerView = SPNavigationBar()
     let titleLabel = UILabel()
@@ -32,7 +32,7 @@ class EditCSDetailVC: UIViewController, SPAlertDelegate {
     
     init(csinfoIdx: String) {
         self.disposeBag = DisposeBag()
-        self.viewModel = EditCSDetailVM(csinfoIdx: csinfoIdx)
+        self.viewModel = EditCSItemVM(csinfoIdx: csinfoIdx)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -183,7 +183,7 @@ class EditCSDetailVC: UIViewController, SPAlertDelegate {
     }
     
     func setBinding() {
-        let input = EditCSDetailVM.Input(viewDidLoad: self.rx.viewWillAppear,
+        let input = EditCSItemVM.Input(viewDidLoad: self.rx.viewWillAppear,
                                        titlePriceEditTapped: titlePriceEditBtn.rx.tap,
                                        memberEditTapped: memberEditBtn.rx.tap,
                                        exclItemEditTapped: exclEditBtn.rx.tap,
@@ -281,7 +281,7 @@ class EditCSDetailVC: UIViewController, SPAlertDelegate {
 }
 
 // MARK: View Draw Function
-extension EditCSDetailVC {
+extension EditCSItemVC {
     private func setTitleView() -> UIView {
         let totalPriceStack = UIView().then {
             $0.addSubview(titleLabel)
