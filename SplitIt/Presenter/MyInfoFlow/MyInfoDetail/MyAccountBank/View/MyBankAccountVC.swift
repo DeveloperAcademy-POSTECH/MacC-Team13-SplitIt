@@ -11,22 +11,15 @@ import RxCocoa
 import SnapKit
 import Then
 
-class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertDelegate {
+class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate {
 
     let bankValue = BehaviorRelay<String?>(value: UserDefaults.standard.string(forKey: "userBank"))
     let accountTextRelay = BehaviorRelay<String?>(value: UserDefaults.standard.string(forKey: "userAccount"))
+    var changedToss = false
+    var changedKakao = false
+    var changedNaver = false
     
-//    let nameTextRelay = BehaviorRelay<String?>(value: UserDefaults.standard.string(forKey: "userName"))
-//    let bankTextRelay = BehaviorRelay<String?>(value: UserDefaults.standard.string(forKey: "userBank"))
-//    let tossRelay = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "tossPay"))
-//    let kakaoRelay = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "kakaoPay"))
-//    let naverRelay = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "naverPay"))
-//
-    
-    let isModifiedRelay = BehaviorRelay<Bool>(value: false)
-    var isModified = false
-    
-    let accountCustomKeyboard = AccountCustomKeyboard()
+    let accountCustomKeyboard = CustomKeyboard()
     
     let alert = SPAlertController()
     let backAlert = SPAlertController()
@@ -108,6 +101,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         accountTextField.inputView = accountCustomKeyboard.inputView
         accountCustomKeyboard.delegate = self
         accountCustomKeyboard.setCurrentTextField(accountTextField)
+        accountCustomKeyboard.applyOption(.account)
         
         accountCustomKeyboard.customKeyObservable
             .subscribe(onNext: { [weak self] value in
@@ -116,6 +110,24 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             })
             .disposed(by: disposeBag)
     }
+    
+    func changedData() -> Bool {
+           let preName = userDefault.string(forKey: "userName")
+           let preAccount = userDefault.string(forKey: "userAccount")
+           let preBank = userDefault.string(forKey: "userBank")
+           let preToss = userDefault.bool(forKey: "tossPay")
+           let preKakao = userDefault.bool(forKey: "kakaoPay")
+           let preNaver = userDefault.bool(forKey: "naverPay")
+           
+           let postName = nameTextField.text
+           let postAccount = accountTextField.text
+           let postBank = bankTextField.text
+           let postToss = changedToss
+           let postKakao = changedKakao
+           let postNaver = changedNaver
+       
+           return preName != postName || preAccount != postAccount || preBank != postBank || preToss != postToss || preKakao != postKakao || preNaver != postNaver
+       }
     
     func setAlert() {
         showAlert(view: alert,
@@ -152,18 +164,14 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     func updateViewLayout(text: String) {
         
         if text == "선택 안함" {
-            
             self.bankSelectedView.isHidden = true
-
             payLabel.snp.removeConstraints()
             payLabel.snp.makeConstraints {
                 $0.top.equalTo(bankTextField.snp.bottom).offset(24)
                 $0.leading.equalTo(payView.snp.leading).inset(6)
             }
-            
         } else {
             self.bankSelectedView.isHidden = false
-            
             payLabel.snp.removeConstraints()
             bankSelectedView.snp.updateConstraints { make in
                 make.height.equalTo(178)
@@ -177,33 +185,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     }
     
     func selectedBankViewAttribute() {
-        
-        
-        
-        
-//        Observable.combineLatest(accountTextRelay, nameTextRelay, bankTextRelay, tossRelay, kakaoRelay, naverRelay)
-//            .subscribe(onNext: { [weak self] (accountText, nameText, bankText, toss, kakao, naver) in
-//                print(accountText, nameText, bankText, toss, kakao, naver)
-//                let isModified = (accountText != UserDefaults.standard.string(forKey: "userAccount")) ||
-//                                 (nameText != UserDefaults.standard.string(forKey: "userName")) ||
-//                                 (bankText != UserDefaults.standard.string(forKey: "userBank")) ||
-//                                 (toss != UserDefaults.standard.bool(forKey: "tossPay")) ||
-//                                 (kakao != UserDefaults.standard.bool(forKey: "kakaoPay")) ||
-//                                 (naver != UserDefaults.standard.bool(forKey: "naverPay"))
-//                self?.isModifiedRelay.accept(isModified)
-//                if isModified {
-//                    print("변화가 있었습니다.")
-//                    // 다른 뷰를 띄우는 로직을 구현하세요
-//                    // 예: self?.present(viewController, animated: true, completion: nil)
-//                } else {
-//                    print("변화가 없었습니다.")
-//                }
-//            })
-//            .disposed(by: disposeBag)
-//
-       
-        
-        
+    
         let nameObservable = nameTextField.rx.text.orEmpty.asDriver()
         let accountObservable = accountTextField.rx.text.orEmpty.asDriver()
         
@@ -211,7 +193,11 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             
             .map { text1, text2, bankValue in
                 if bankValue != "선택 안함" {
-                    return !(text1.count == 0) && !(text2.count == 0)
+                    if self.nameTextField.text?.count != 0 && self.accountTextField.text?.count != 0 {
+                        return true
+                    } else {
+                        return !(text1.count == 0) && !(text2.count == 0)
+                    }
                 } else {
                     return true
                 }
@@ -260,7 +246,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             UserDefaults.standard.set("", forKey: "userName")
         }
         if UserDefaults.standard.object(forKey: "userBank") == nil {
-            UserDefaults.standard.set("선택 안함", forKey: "userBank")
+            UserDefaults.standard.set(nil, forKey: "userBank")
         }
     }
     
@@ -293,11 +279,12 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
                 modalVC.selectedBankName
                     .bind { bankName in
                         self?.bankValue.accept(bankName)
+                        self?.accountTextField.text = ""
+                        self?.nameTextField.text = ""
                         self?.bankTextField.text = bankName
                         self?.updateViewLayout(text: bankName)
                         self?.viewModel.inputBankName = bankName
                         self?.viewModel.checkBank = 1
-                        print(bankName)
                     }
                     .disposed(by: modalVC.disposeBag)
                 self?.present(modalVC, animated: true, completion: nil)
@@ -313,11 +300,12 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         
         output.cancelBackToView
             .drive(onNext: { [weak self] in
-                if self?.isModified == true{
+                if self?.changedData() == true {
                     self?.setBackAlert()
                 } else {
                     self?.navigationController?.popViewController(animated: true)
                 }
+                
             })
             .disposed(by: disposeBag)
     }
@@ -338,6 +326,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         viewModel.isTossPayToggled
             .subscribe(onNext: { [weak self] isToggled in
                 let newImage = isToggled ? "TossPayIconChecked" : "TossPayIconUnchecked"
+                self?.changedToss = isToggled
                 self?.tossPayBtn.image = UIImage(named: newImage)
             })
             .disposed(by: disposeBag)
@@ -345,6 +334,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         viewModel.isKakaoPayToggled
             .subscribe(onNext: { [weak self] isToggled in
                 let newImage = isToggled ? "KakaoPayIconChecked" : "KakaoPayIconUnchecked"
+                self?.changedKakao = isToggled
                 self?.kakaoPayBtn.image = UIImage(named: newImage)
             })
             .disposed(by: disposeBag)
@@ -353,6 +343,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         viewModel.isNaverPayToggled
             .subscribe(onNext: { [weak self] isToggled in
                 let newImage = isToggled ? "NaverPayIconChecked" : "NaverPayIconUnchecked"
+                self?.changedNaver = isToggled
                 self?.naverPayBtn.image = UIImage(named: newImage)
             })
             .disposed(by: disposeBag)
@@ -452,7 +443,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             $0.font = UIFont.KoreanCaption2
             $0.textColor = UIColor.TextPrimary
         }
-        
         
         bankTextField.do {
             $0.placeholder = "선택 안 함"
