@@ -163,18 +163,14 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     func updateViewLayout(text: String) {
         
         if text == "선택 안함" {
-            
             self.bankSelectedView.isHidden = true
-
             payLabel.snp.removeConstraints()
             payLabel.snp.makeConstraints {
                 $0.top.equalTo(bankTextField.snp.bottom).offset(24)
                 $0.leading.equalTo(payView.snp.leading).inset(6)
             }
-            
         } else {
             self.bankSelectedView.isHidden = false
-            
             payLabel.snp.removeConstraints()
             bankSelectedView.snp.updateConstraints { make in
                 make.height.equalTo(178)
@@ -196,7 +192,11 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             
             .map { text1, text2, bankValue in
                 if bankValue != "선택 안함" {
-                    return !(text1.count == 0) && !(text2.count == 0)
+                    if self.nameTextField.text?.count != 0 && self.accountTextField.text?.count != 0 {
+                        return true
+                    } else {
+                        return !(text1.count == 0) && !(text2.count == 0)
+                    }
                 } else {
                     return true
                 }
@@ -278,6 +278,8 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
                 modalVC.selectedBankName
                     .bind { bankName in
                         self?.bankValue.accept(bankName)
+                        self?.accountTextField.text = ""
+                        self?.nameTextField.text = ""
                         self?.bankTextField.text = bankName
                         self?.updateViewLayout(text: bankName)
                         self?.viewModel.inputBankName = bankName
@@ -441,7 +443,6 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
             $0.font = UIFont.KoreanCaption2
             $0.textColor = UIColor.TextPrimary
         }
-        
         
         bankTextField.do {
             $0.placeholder = "선택 안 함"
