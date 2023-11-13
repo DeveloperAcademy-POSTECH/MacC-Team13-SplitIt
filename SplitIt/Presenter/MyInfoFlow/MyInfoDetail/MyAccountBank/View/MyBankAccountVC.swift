@@ -11,7 +11,7 @@ import RxCocoa
 import SnapKit
 import Then
 
-class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertDelegate {
+class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate {
 
     let bankValue = BehaviorRelay<String?>(value: UserDefaults.standard.string(forKey: "userBank"))
     let accountTextRelay = BehaviorRelay<String?>(value: UserDefaults.standard.string(forKey: "userAccount"))
@@ -19,7 +19,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
     var changedKakao = false
     var changedNaver = false
     
-    let accountCustomKeyboard = AccountCustomKeyboard()
+    let accountCustomKeyboard = CustomKeyboard()
     
     let alert = SPAlertController()
     let backAlert = SPAlertController()
@@ -101,6 +101,7 @@ class MyBankAccountVC: UIViewController, AccountCustomKeyboardDelegate, SPAlertD
         accountTextField.inputView = accountCustomKeyboard.inputView
         accountCustomKeyboard.delegate = self
         accountCustomKeyboard.setCurrentTextField(accountTextField)
+        accountCustomKeyboard.applyOption(.account)
         
         accountCustomKeyboard.customKeyObservable
             .subscribe(onNext: { [weak self] value in

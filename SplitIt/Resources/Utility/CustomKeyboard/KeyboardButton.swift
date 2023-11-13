@@ -34,6 +34,7 @@ class KeyboardButton: UIButton {
         let btnWidth = Int((UIScreen.main.bounds.width - 24) / 3)
         let btnHeight = Int(keyboardHeight - 50) / 4
         
+        
         let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.KoreanTitle1]
         let attributedString = NSAttributedString(string: btnTitle, attributes: attributes)
         setAttributedTitle(attributedString, for: .normal)

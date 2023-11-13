@@ -17,6 +17,10 @@ protocol CustomKeyboardDelegate: AnyObject {
     
 }
 
+enum KeyboardOption: String {
+    case price = "00"
+    case account = "-"
+}
 
 class CustomKeyboard: UIInputViewController {
     
@@ -46,7 +50,7 @@ class CustomKeyboard: UIInputViewController {
     let btn8 = KeyboardButton(title: "8")
     let btn9 = KeyboardButton(title: "9")
     let btn0 = KeyboardButton(title: "0")
-    var optionBtn = KeyboardButton(title: "00")
+    var optionBtn = KeyboardButton(title: "")
     let deleteButton = KeyboardButton(title: " ")
     let deleteImage = UIImageView()
     
@@ -63,6 +67,14 @@ class CustomKeyboard: UIInputViewController {
         bindDeleteButtonLongPress()
         
     }
+    
+    func applyOption(_ option: KeyboardOption) {
+        //let font = UIFont(name: "YourFontName", size: 16.0) // 원하는 폰트 이름과 크기로 설정
+        optionBtn.titleLabel?.font = UIFont.KoreanTitle2
+        optionBtn.setTitle(option.rawValue, for: .normal)
+        bindButtonAction(optionBtn, value: option.rawValue)
+
+       }
     
     func setAttribute() {
         
@@ -126,7 +138,6 @@ class CustomKeyboard: UIInputViewController {
         deleteButton.addSubview(deleteImage)
     }
     
-    
     func setBinding() {
         
         bindButtonAction(btn1, value: "1")
@@ -138,13 +149,11 @@ class CustomKeyboard: UIInputViewController {
         bindButtonAction(btn7, value: "7")
         bindButtonAction(btn8, value: "8")
         bindButtonAction(btn9, value: "9")
-        bindButtonAction(optionBtn, value: "00")
         bindButtonAction(btn0, value: "0")
+       bindButtonAction(optionBtn, value: "")
         bindButtonAction(deleteButton, value: "del")
         
-        
     }
-    
     
     func setKeyLayout() {
         
@@ -161,10 +170,8 @@ class CustomKeyboard: UIInputViewController {
         btn3.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(8)
             make.top.equalToSuperview().offset(6)
-            
         }
-        
-        
+    
         btn4.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(8)
             make.top.equalTo(btn1.snp.bottom).offset(6)
@@ -178,25 +185,21 @@ class CustomKeyboard: UIInputViewController {
         btn6.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(8)
             make.top.equalTo(btn1.snp.bottom).offset(6)
-
         }
         
         btn7.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(8)
             make.top.equalTo(btn4.snp.bottom).offset(6)
-
         }
         
         btn8.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(btn4.snp.bottom).offset(6)
-     
         }
         
         btn9.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(8)
             make.top.equalTo(btn4.snp.bottom).offset(6)
- 
         }
         
         optionBtn.snp.makeConstraints { make in
@@ -219,9 +222,6 @@ class CustomKeyboard: UIInputViewController {
         }
     }
 
-        
-    
-    
     //RX로 button의 상태 전달 함수
     func bindButtonAction(_ button: UIButton, value: String) {
         button.rx.controlEvent(.touchDown)
@@ -242,7 +242,6 @@ class CustomKeyboard: UIInputViewController {
             .disposed(by: disposeBag)
     }
     
-    
     //button helighted될 때, 색깔 바뀌게 해주는 함수
     func changeBackgroundColor(_ button: UIButton, highlighted: Bool) {
         if highlighted {
@@ -251,7 +250,6 @@ class CustomKeyboard: UIInputViewController {
             } else {
                 button.backgroundColor = UIColor(hex: 0xB3C2D0)
             }
-            
         } else {
             if button == deleteButton {
                 deleteImage.image = UIImage(systemName: "delete.left")
@@ -262,11 +260,12 @@ class CustomKeyboard: UIInputViewController {
         }
     }
     
+    //delete 계속 누르고 있으면 지워지는 함수
     func startDeletingCharacters() {
         guard let textField = currentTextField, let text = textField.text, !text.isEmpty else { return }
         Observable<Int>.interval(.milliseconds(200), scheduler: MainScheduler.instance)
             .take(until: deleteButton.rx.controlEvent([.touchUpInside, .touchUpOutside, .touchCancel]).asObservable())
-            .subscribe(onNext: { [weak self] _ in
+            .subscribe(onNext: { _ in
                 guard let text = textField.text, !text.isEmpty else { return }
                 var newText = text
                 newText.removeLast()
@@ -276,7 +275,6 @@ class CustomKeyboard: UIInputViewController {
             .disposed(by: disposeBag)
     }
     
-
     func bindDeleteButtonLongPress() {
         deleteButton.rx.controlEvent(.touchDown)
             .subscribe(onNext: { [weak self] in
