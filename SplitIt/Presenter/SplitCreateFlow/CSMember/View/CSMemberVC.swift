@@ -1,5 +1,5 @@
 //
-//  NewCSMemberVC.swift
+//  CSMemberVC.swift
 //  SplitIt
 //
 //  Created by Zerom on 2023/11/09.
@@ -13,9 +13,9 @@ import RxCocoa
 import RxAppState
 import Reusable
 
-class NewCSMemberVC: UIViewController, Reusable {
+class CSMemberVC: UIViewController, Reusable {
     let disposeBag = DisposeBag()
-    let viewModel = NewCSMemberVM()
+    let viewModel = CSMemberVM()
     
     let header = SPNavigationBar()
     let addLabel = UILabel()
@@ -220,7 +220,7 @@ class NewCSMemberVC: UIViewController, Reusable {
     }
     
     private func setBinding() {
-        let input = NewCSMemberVM.Input(viewWillAppear: self.rx.viewWillAppear,
+        let input = CSMemberVM.Input(viewWillAppear: self.rx.viewWillAppear,
                                         textFieldValue: searchTextField.rx.text.orEmpty.asDriver(),
                                         textFieldReturnKeyTapped: searchTextFieldReturnKeyTapped,
                                         searchCellTapped: searchTableView.rx.itemSelected,
@@ -350,7 +350,7 @@ class NewCSMemberVC: UIViewController, Reusable {
     }
 }
 
-extension NewCSMemberVC: UICollectionViewDelegateFlowLayout {
+extension CSMemberVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let item = selectedMemberArr[indexPath.item]
         let dynamicWidth = CSMemberSelectedCell().calculateCellWidth(item: item)
@@ -358,7 +358,7 @@ extension NewCSMemberVC: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension NewCSMemberVC: UISearchTextFieldDelegate {
+extension CSMemberVC: UISearchTextFieldDelegate {
     // searchTextField에서 returnKey를 탭했을 때 인지해서 신호만 보내줌
     // 이때는 endEditing이 동작하지 않도록 하기 위함
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

@@ -9,7 +9,7 @@ import Foundation
 import RxCocoa
 import RxSwift
 
-class NewCSMemberVM {
+class CSMemberVM {
     let repo = SplitRepository.share
     let disposeBag = DisposeBag()
     
