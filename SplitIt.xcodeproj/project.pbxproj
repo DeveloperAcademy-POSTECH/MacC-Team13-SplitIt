@@ -34,6 +34,7 @@
 		1A8B05DC2AF0E15A00CF5BC5 /* SPNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8B05DB2AF0E15A00CF5BC5 /* SPNavigationBar.swift */; };
 		1A8B05E12AF1466300CF5BC5 /* SplitMethodSelectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8B05E02AF1466300CF5BC5 /* SplitMethodSelectVC.swift */; };
 		1A8B05E32AF1540A00CF5BC5 /* SplitMethodSelectVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8B05E22AF1540A00CF5BC5 /* SplitMethodSelectVM.swift */; };
+		1AC4115F2B020D03008A45BC /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 1AC4115E2B020D03008A45BC /* Toast */; };
 		60104CE52AEFF6F700489AAD /* ExclItemInfoModalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60104CE42AEFF6F700489AAD /* ExclItemInfoModalCell.swift */; };
 		60104CE72AEFF70D00489AAD /* ExclItemInfoDeactiveModalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60104CE62AEFF70D00489AAD /* ExclItemInfoDeactiveModalCell.swift */; };
 		60104CE92AEFF73800489AAD /* ExclItemInfoModalSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60104CE82AEFF73800489AAD /* ExclItemInfoModalSection.swift */; };
@@ -231,6 +232,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AC4115F2B020D03008A45BC /* Toast in Frameworks */,
 				6078ACEF2ADA756900995811 /* RxSwift in Frameworks */,
 				1A1ACC532AF672F3004AC4CD /* SnapshotKit in Frameworks */,
 				6078ACE12ADA751D00995811 /* RxRealm in Frameworks */,
@@ -295,9 +297,9 @@
 		1A7845072AFD28A500E38403 /* CSMember */ = {
 			isa = PBXGroup;
 			children = (
+				1AC411612B02120E008A45BC /* Model */,
 				1A7845092AFD28B900E38403 /* ViewModel */,
 				1A7845082AFD28B000E38403 /* View */,
-				60990AEB2B01F24100202319 /* MemberCheck.swift */,
 			);
 			path = CSMember;
 			sourceTree = "<group>";
@@ -352,6 +354,23 @@
 				1A8B05E22AF1540A00CF5BC5 /* SplitMethodSelectVM.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		1AC411602B020DC0008A45BC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				60AE3EC02AE77488009D9D18 /* CSMemberResult.swift */,
+				60AE3EC22AE77491009D9D18 /* SplitResult.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		1AC411612B02120E008A45BC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				60990AEB2B01F24100202319 /* MemberCheck.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		60115DF22ADBF0DD0050D32C /* Presenter */ = {
@@ -705,10 +724,9 @@
 		60AE3EB12AE77395009D9D18 /* SplitShare */ = {
 			isa = PBXGroup;
 			children = (
+				1AC411602B020DC0008A45BC /* Model */,
 				60AE3EB32AE773A3009D9D18 /* ViewModel */,
 				60AE3EB22AE7739E009D9D18 /* View */,
-				60AE3EC02AE77488009D9D18 /* CSMemberResult.swift */,
-				60AE3EC22AE77491009D9D18 /* SplitResult.swift */,
 			);
 			path = SplitShare;
 			sourceTree = "<group>";
@@ -1023,6 +1041,7 @@
 				60115DFB2ADBF8860050D32C /* RxAppState */,
 				1A1ACC522AF672F3004AC4CD /* SnapshotKit */,
 				1A7845052AFD1AB100E38403 /* RealmSwift */,
+				1AC4115E2B020D03008A45BC /* Toast */,
 			);
 			productName = SplitIt;
 			productReference = 6078ACC82ADA74AC00995811 /* SplitIt.app */;
@@ -1062,6 +1081,7 @@
 				60115DFA2ADBF8860050D32C /* XCRemoteSwiftPackageReference "RxAppState" */,
 				1A1ACC512AF672F3004AC4CD /* XCRemoteSwiftPackageReference "SnapshotKit" */,
 				1A7845042AFD1AB100E38403 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				1AC4115D2B020D02008A45BC /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 			);
 			productRefGroup = 6078ACC92ADA74AC00995811 /* Products */;
 			projectDirPath = "";
@@ -1419,6 +1439,14 @@
 				kind = branch;
 			};
 		};
+		1AC4115D2B020D02008A45BC /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		60115DFA2ADBF8860050D32C /* XCRemoteSwiftPackageReference "RxAppState" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pixeldock/RxAppState";
@@ -1487,6 +1515,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1A7845042AFD1AB100E38403 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
+		};
+		1AC4115E2B020D03008A45BC /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1AC4115D2B020D02008A45BC /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
 		};
 		60115DFB2ADBF8860050D32C /* RxAppState */ = {
 			isa = XCSwiftPackageProductDependency;

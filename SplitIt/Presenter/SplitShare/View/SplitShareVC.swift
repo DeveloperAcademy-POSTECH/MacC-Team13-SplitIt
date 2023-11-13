@@ -13,6 +13,7 @@ import Then
 import SnapKit
 import Reusable
 import SnapshotKit
+import Toast
 
 class SplitShareVC: UIViewController {
     let disposeBag = DisposeBag()
@@ -172,6 +173,7 @@ class SplitShareVC: UIViewController {
                 let image = self.tableView.takeSnapshotOfFullContent()
                 
                 var items: [Any] = []
+                
                 if sendPayString != "" { items.append(sendPayString) }
                 items.append(image as Any)
                 
@@ -180,6 +182,14 @@ class SplitShareVC: UIViewController {
                 self.present(vc, animated: true)
                 
                 self.tableView.layer.borderColor = UIColor.BorderPrimary.cgColor
+                
+                vc.completionWithItemsHandler = { activity, success, items, error in
+                    if success {
+                        var style = ToastStyle()
+                        style.messageFont = .KoreanCaption1
+                        self.view.makeToast("  ✓  공유가 완료되었습니다!  ", duration: 3.0, position: .top, style: style)
+                    }
+                }
             })
             .disposed(by: disposeBag)
         
