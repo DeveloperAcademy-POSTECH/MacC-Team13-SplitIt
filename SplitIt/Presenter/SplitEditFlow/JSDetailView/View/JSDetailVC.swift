@@ -103,7 +103,7 @@ final class JSDetailVC: UIViewController, UIScrollViewDelegate {
         output.pushCSEditView
             .drive(onNext: { [weak self] csinfoIdx in
                 guard let self = self else { return }
-                let vc = EditCSListVC(csinfoIdx: csinfoIdx)
+                let vc = EditCSDetailVC(csinfoIdx: csinfoIdx)
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)

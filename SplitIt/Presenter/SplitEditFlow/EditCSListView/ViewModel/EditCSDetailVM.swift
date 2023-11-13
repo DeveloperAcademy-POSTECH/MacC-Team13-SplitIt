@@ -10,7 +10,7 @@ import Foundation
 import RxCocoa
 import UIKit
 
-final class EditCSListVM {
+final class EditCSDetailVM {
     var disposeBag = DisposeBag()
     
     let dataModel = SplitRepository.share

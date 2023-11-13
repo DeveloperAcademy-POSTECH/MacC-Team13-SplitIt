@@ -81,9 +81,9 @@
 		86C65FF22AEF970F00A7942A /* JSDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF12AEF970F00A7942A /* JSDetailVC.swift */; };
 		86C65FF42AEF985A00A7942A /* JSDetailVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF32AEF985A00A7942A /* JSDetailVM.swift */; };
 		86C65FF62AEF9ADF00A7942A /* JSDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF52AEF9ADF00A7942A /* JSDetailCell.swift */; };
-		86C65FFC2AF0F4D000A7942A /* EditCSListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FFB2AF0F4D000A7942A /* EditCSListVC.swift */; };
+		86C65FFC2AF0F4D000A7942A /* EditCSDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FFB2AF0F4D000A7942A /* EditCSDetailVC.swift */; };
 		86C65FFE2AF0F6FB00A7942A /* DefaultEditButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FFD2AF0F6FB00A7942A /* DefaultEditButton.swift */; };
-		86C660002AF126DE00A7942A /* EditCSListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FFF2AF126DE00A7942A /* EditCSListVM.swift */; };
+		86C660002AF126DE00A7942A /* EditCSDetailVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FFF2AF126DE00A7942A /* EditCSDetailVM.swift */; };
 		86DACB0C2AF4ECC9008D7BAF /* EditCSInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB0B2AF4ECC9008D7BAF /* EditCSInfoVC.swift */; };
 		86DACB0E2AF4ECE7008D7BAF /* EditCSInfoVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB0D2AF4ECE7008D7BAF /* EditCSInfoVM.swift */; };
 		86DACB112AF639E0008D7BAF /* EditCSMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB102AF639E0008D7BAF /* EditCSMemberVC.swift */; };
@@ -187,9 +187,9 @@
 		86C65FF12AEF970F00A7942A /* JSDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSDetailVC.swift; sourceTree = "<group>"; };
 		86C65FF32AEF985A00A7942A /* JSDetailVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSDetailVM.swift; sourceTree = "<group>"; };
 		86C65FF52AEF9ADF00A7942A /* JSDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSDetailCell.swift; sourceTree = "<group>"; };
-		86C65FFB2AF0F4D000A7942A /* EditCSListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVC.swift; sourceTree = "<group>"; };
+		86C65FFB2AF0F4D000A7942A /* EditCSDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSDetailVC.swift; sourceTree = "<group>"; };
 		86C65FFD2AF0F6FB00A7942A /* DefaultEditButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultEditButton.swift; sourceTree = "<group>"; };
-		86C65FFF2AF126DE00A7942A /* EditCSListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVM.swift; sourceTree = "<group>"; };
+		86C65FFF2AF126DE00A7942A /* EditCSDetailVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSDetailVM.swift; sourceTree = "<group>"; };
 		86DACB0B2AF4ECC9008D7BAF /* EditCSInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSInfoVC.swift; sourceTree = "<group>"; };
 		86DACB0D2AF4ECE7008D7BAF /* EditCSInfoVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSInfoVM.swift; sourceTree = "<group>"; };
 		86DACB102AF639E0008D7BAF /* EditCSMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSMemberVC.swift; sourceTree = "<group>"; };
@@ -632,7 +632,7 @@
 		60990AF52B01F73800202319 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				86C65FFB2AF0F4D000A7942A /* EditCSListVC.swift */,
+				86C65FFB2AF0F4D000A7942A /* EditCSDetailVC.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -640,7 +640,7 @@
 		60990AF62B01F73F00202319 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				86C65FFF2AF126DE00A7942A /* EditCSListVM.swift */,
+				86C65FFF2AF126DE00A7942A /* EditCSDetailVM.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1127,7 +1127,7 @@
 				1A1ACC4D2AF3CAF6004AC4CD /* SplitShareSectionFooter.swift in Sources */,
 				DE73D6F72AE1983200ABF3EF /* MemberLogVC.swift in Sources */,
 				60990AEE2B01F29200202319 /* CSMemberCell.swift in Sources */,
-				86C660002AF126DE00A7942A /* EditCSListVM.swift in Sources */,
+				86C660002AF126DE00A7942A /* EditCSDetailVM.swift in Sources */,
 				C2A7979C2AE276E90049E709 /* HistorySplitCell.swift in Sources */,
 				DE73D6ED2AE0D2C300ABF3EF /* BankListModalVC.swift in Sources */,
 				60115DF72ADBF2980050D32C /* UIColor+.swift in Sources */,
@@ -1187,7 +1187,7 @@
 				C2A797A22AE277F90049E709 /* HistorySectionHeader.swift in Sources */,
 				86C65FF42AEF985A00A7942A /* JSDetailVM.swift in Sources */,
 				1A7845102AFD299000E38403 /* CSMemberSearchCell.swift in Sources */,
-				86C65FFC2AF0F4D000A7942A /* EditCSListVC.swift in Sources */,
+				86C65FFC2AF0F4D000A7942A /* EditCSDetailVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
