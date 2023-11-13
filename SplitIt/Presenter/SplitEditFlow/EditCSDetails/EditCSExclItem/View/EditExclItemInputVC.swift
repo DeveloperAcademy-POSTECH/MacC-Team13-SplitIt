@@ -1,8 +1,8 @@
 //
-//  ExclItemInputVC.swift
+//  EditCSExclItemVC.swift
 //  SplitIt
 //
-//  Created by 홍승완 on 2023/10/29.
+//  Created by 주환 on 2023/11/04.
 //
 
 import UIKit
@@ -10,15 +10,11 @@ import RxSwift
 import RxCocoa
 import RxAppState
 
-class ExclItemInputVC: UIViewController, SPAlertDelegate {
+class EditExclItemInputVC: UIViewController {
     
     var disposeBag = DisposeBag()
     
-    let viewModel = ExclItemInputVM()
-    
-    var backAlert = SPAlertController()
-    var exitAlert = SPAlertController()
-    var isExit: Bool? = nil
+    let viewModel = EditExclItemInputVM()
     
     let header = SPNavigationBar()
     let exclListLabel = UILabel()
@@ -29,8 +25,6 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
     let emptyView = ExclItemInputEmptyView()
     let tableView = UITableView(frame: .zero)
     
-    let nextButton = SPButton()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,7 +37,7 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
         view.backgroundColor = .SurfacePrimary
         
         header.do {
-            $0.applyStyle(style: .exclItemCreate, vc: self)
+            $0.applyStyle(style: .csEdit, vc: self)
         }
         
         exclListLabel.do {
@@ -65,11 +59,6 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
             $0.titleLabel?.font = .KoreanSmallButtonText
         }
         
-        nextButton.do {
-            $0.setTitle("정산 결과 확인하기", for: .normal)
-            $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
-        }
-        
         setTableView()
     }
     
@@ -85,14 +74,14 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
     }
     
     func setLayout() {
-        [header, exclListLabel, exclItemCountLabel, exclItemAddButton, tableView, emptyView, nextButton].forEach {
+        [header, exclListLabel, exclItemCountLabel, exclItemAddButton, tableView, emptyView].forEach {
             view.addSubview($0)
         }
         
         header.snp.makeConstraints {
             $0.height.equalTo(30)
             $0.horizontalEdges.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(8)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
         }
         
         exclListLabel.snp.makeConstraints {
@@ -115,7 +104,7 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
         tableView.snp.makeConstraints {
             $0.top.equalTo(exclListLabel.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview().inset(30)
-            $0.bottom.equalTo(nextButton.snp.top).offset(-24)
+            $0.bottom.equalToSuperview()
         }
         
         emptyView.snp.makeConstraints {
@@ -123,20 +112,16 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
             $0.leading.trailing.equalTo(tableView)
             $0.height.equalTo(emptyView.snp.width).dividedBy(3)
         }
-        
-        nextButton.snp.makeConstraints {
-            $0.bottom.equalToSuperview().inset(40)
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.height.equalTo(48)
-        }
     }
     
     func setBinding() {
-        let input = ExclItemInputVM.Input(viewDidDisAppear: self.rx.viewDidDisappear,
-                                          nextButtonTapped: nextButton.rx.tap,
-                                          exclItemAddButtonTapped: exclItemAddButton.rx.tap,
-                                          exitButtonTapped: header.rightButton.rx.tap,
-                                          backButtonTapped: header.leftButton.rx.tap)
+        let input = EditExclItemInputVM.Input(viewDidDisAppear: self.rx.viewDidDisappear,
+                                              nextButtonTapped: header.rightButton.rx.tap,
+                                          exclItemAddButtonTapped: exclItemAddButton.rx.tap)
+        Driver.just(true)
+            .drive(header.buttonState)
+            .disposed(by: disposeBag)
+        
         let output = viewModel.transform(input: input)
         
         output.exclItemsRelay
@@ -152,9 +137,9 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
             }
             .disposed(by: disposeBag)
         
-        output.nextButtonIsEnable
-            .drive(nextButton.buttonState)
-            .disposed(by: disposeBag)
+//        output.nextButtonIsEnable
+//            .drive(nextButton.buttonState)
+//            .disposed(by: disposeBag)
         
         output.showExclItemInfoModal
             .drive(onNext: { [weak self] in
@@ -190,52 +175,18 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
             .disposed(by: disposeBag)
         
         output.showResultView
-            .drive(onNext: { [weak self] indexPath in
+            .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 SplitRepository.share.updateDataToDB()
-                let vc = SplitShareVC()
-                self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
         
-        output.showBackAlert
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                let itemCount = output.exclItemsRelay.value.count
-                if itemCount > 0 {
-                    self.showAlert(view: backAlert,
-                              type: .warnNormal,
-                              title: "정산 멤버를 다시 선택하시겠어요?",
-                              descriptions: "추가한 따로 정산 목록 \(itemCount)개가 사라져요",
-                              leftButtonTitle: "취 소",
-                              rightButtonTitle: "다시 선택")
-                } else {
-                    self.navigationController?.popViewController(animated: true)
-                }
-            })
-            .disposed(by: disposeBag)
-        
-        output.showExitAlert
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.showExitAlert(view: exitAlert)
-            })
-            .disposed(by: disposeBag)
-        
-        backAlert.rightButtonTapSubject
-            .asDriver(onErrorJustReturn: ())
-            .drive(onNext: { [weak self] _ in
+        header.leftButton.rx.tap
+            .asDriver()
+            .drive { [weak self] _ in
                 guard let self = self else { return }
                 self.navigationController?.popViewController(animated: true)
-            })
-            .disposed(by: disposeBag)
-        
-        exitAlert.rightButtonTapSubject
-            .asDriver(onErrorJustReturn: ())
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.navigationController?.popToRootViewController(animated: true)
-            })
+            }
             .disposed(by: disposeBag)
     }
 }

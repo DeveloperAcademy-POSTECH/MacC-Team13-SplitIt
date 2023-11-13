@@ -30,8 +30,8 @@ class ExcltemInfoModalAlertVC: UIViewController {
     let titleLabel = UILabel()
     let warningLabel = UILabel()
     
-    let cancelButton = NewSPButton()
-    let deleteBtn = NewSPButton()
+    let cancelButton = SPButton()
+    let deleteBtn = SPButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()

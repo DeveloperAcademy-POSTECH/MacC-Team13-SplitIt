@@ -25,7 +25,7 @@ class HomeVC: UIViewController {
     let logoImage: UIImageView = UIImageView()
     let mainTextLabel: UILabel = UILabel()
     
-    let splitItButton: NewSPButton = NewSPButton()
+    let splitItButton: SPButton = SPButton()
 
     
     override func viewDidLoad() {

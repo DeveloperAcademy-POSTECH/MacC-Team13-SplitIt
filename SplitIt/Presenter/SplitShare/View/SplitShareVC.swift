@@ -21,9 +21,9 @@ class SplitShareVC: UIViewController {
     let header = SPNavigationBar()
     let mainTitle = UILabel()
     let tableView = UITableView(frame: .zero, style: .grouped)
-    let csAddButton = NewSPButton()
-    let editButton = NewSPButton()
-    let shareButton = NewSPButton()
+    let csAddButton = SPButton()
+    let editButton = SPButton()
+    let shareButton = SPButton()
     
     var splitDate: Date = .now
     
@@ -195,7 +195,7 @@ class SplitShareVC: UIViewController {
             .asDriver()
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let vc = JSDetailVC()
+                let vc = EditCSListVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
