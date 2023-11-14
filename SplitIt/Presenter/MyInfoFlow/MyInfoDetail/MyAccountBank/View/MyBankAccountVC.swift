@@ -81,6 +81,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         accountTextFieldCustomKeyboard()
         textFieldTextAttribute()
        
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
@@ -110,22 +111,22 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
     }
     
     func changedData() -> Bool {
-           let preName = userDefault.string(forKey: "userName")
-           let preAccount = userDefault.string(forKey: "userAccount")
-           let preBank = userDefault.string(forKey: "userBank")
-           let preToss = userDefault.bool(forKey: "tossPay")
-           let preKakao = userDefault.bool(forKey: "kakaoPay")
-           let preNaver = userDefault.bool(forKey: "naverPay")
-           
-           let postName = nameTextField.text
-           let postAccount = accountTextField.text
-           let postBank = bankTextField.text
-           let postToss = changedToss
-           let postKakao = changedKakao
-           let postNaver = changedNaver
-       
-           return preName != postName || preAccount != postAccount || preBank != postBank || preToss != postToss || preKakao != postKakao || preNaver != postNaver
-       }
+        let preName = userDefault.string(forKey: "userName")
+        let preAccount = userDefault.string(forKey: "userAccount")
+        let preBank = userDefault.string(forKey: "userBank") != Optional("") ? userDefault.string(forKey: "userBank") : "선택해주세요"
+        let preToss = userDefault.bool(forKey: "tossPay")
+        let preKakao = userDefault.bool(forKey: "kakaoPay")
+        let preNaver = userDefault.bool(forKey: "naverPay")
+        
+        let postName = nameTextField.text
+        let postAccount = accountTextField.text
+        let postBank = bankTextField.text
+        let postToss = changedToss
+        let postKakao = changedKakao
+        let postNaver = changedNaver
+  
+        return preName != postName || preAccount != postAccount || preBank != postBank || preToss != postToss || preKakao != postKakao || preNaver != postNaver
+    }
     
     func setAlert() {
         showAlert(view: alert,
@@ -186,19 +187,24 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
     
         let nameObservable = nameTextField.rx.text.orEmpty.asDriver()
         let accountObservable = accountTextField.rx.text.orEmpty.asDriver()
+        let bankValueDriver = bankValue.asDriver()
         
-        let isTextEmptyObservable = Driver.combineLatest(nameObservable, accountObservable, bankValue.asDriver())
-            
+        let isTextEmptyObservable = Driver.combineLatest(nameObservable, accountObservable, bankValueDriver)
+        
             .map { text1, text2, bankValue in
-                if bankValue == Optional("") {
+                if let bankValue = bankValue, bankValue.isEmpty {
+                    print(1)
                     return false
                 } else if bankValue != "선택 안함" {
                     if self.nameTextField.text?.count != 0 && self.accountTextField.text?.count != 0 {
+                        print(2)
                         return true
                     } else {
+                        print(3)
                         return !(text1.count == 0) && !(text2.count == 0)
                     }
                 } else {
+                    print(4)
                     return true
                 }
             }
@@ -246,7 +252,6 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
             UserDefaults.standard.set(nil, forKey: "userBank")
         }
     }
-    
     
     func setBinding() {
         
@@ -431,7 +436,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
          
         header.do {
             $0.applyStyle(style: .myInfo, vc: self)
-            $0.buttonState.accept(false)
+            //$0.buttonState.accept(true)
             $0.leftButton.removeTarget(nil, action: nil, for: .touchUpInside)
         }
         

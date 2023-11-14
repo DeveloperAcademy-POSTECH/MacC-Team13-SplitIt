@@ -133,8 +133,6 @@ class MyInfoVC: UIViewController {
                 make.height.equalTo(backViewHeight)
             }
         } else if userDefault.string(forKey: "userBank") == "선택 안함" && !checkPay {
-            print(123123)
-            
             backViewHeight = 140
             
             accountView.isHidden = false
