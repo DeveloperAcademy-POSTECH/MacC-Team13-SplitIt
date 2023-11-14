@@ -43,7 +43,7 @@ class SplitShareVC: UIViewController {
         setBind()
         
         // TODO: - nil일때로 설정 바꿔주기
-        if UserDefaults.standard.string(forKey: "userBank")! == "선택 안함" { setPopUp() }
+//        if UserDefaults.standard.string(forKey: "userBank")! == "선택 안함" { setPopUp() }
     }
     
     private func setAttribute() {

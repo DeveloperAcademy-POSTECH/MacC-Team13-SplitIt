@@ -101,7 +101,7 @@ class NewEditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         addButton.do {
             $0.setImage(UIImage(named: "PlusIconDefault"), for: .normal)
             $0.imageView?.contentScaleFactor = 2.0
-            $0.backgroundColor = .SurfaceBrandPear
+            $0.backgroundColor = .SurfaceBrandWatermelon
             $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 8
@@ -224,6 +224,10 @@ class NewEditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             .bind(to: searchTableView.rx.items(cellIdentifier: "CSMemberSearchCell")) { _, item, cell in
                 if let cell = cell as? CSMemberSearchCell {
                     cell.configure(item: item)
+                    if item.isCheck {
+                        cell.contentView.backgroundColor = .SurfaceBrandWatermelon
+                    }
+                    
                 }
             }
             .disposed(by: disposeBag)
@@ -271,6 +275,9 @@ class NewEditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             .bind(to: addCollectionView.rx.items(cellIdentifier: "CSMemberSelectedCell")) { _, item, cell in
                 if let cell = cell as? CSMemberSelectedCell {
                     cell.configure(item: item)
+                    cell.xMark.image = UIImage(named: "DeleteIconTypeB")
+                    cell.xMark.backgroundColor = .SurfaceBrandWatermelon
+                    cell.xMark.layer.cornerRadius = 9
                 }
             }
             .disposed(by: disposeBag)
