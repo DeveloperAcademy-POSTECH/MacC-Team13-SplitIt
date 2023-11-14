@@ -43,8 +43,6 @@ extension SPNavigationBar {
         ///  멤버 추가 내역 View
         case memberSearchHistory
         
-        case splitEditToAlert
-        /// Split수정 View
         case editCSInfo
         /// csInfo 타이틀, 총금액 수정 View
         case editCSMember
@@ -56,7 +54,6 @@ extension SPNavigationBar {
     enum ActionType {
         case toBack
         case toRoot
-        case toAlert
         case none
     }
 }
@@ -109,8 +106,8 @@ final class SPNavigationBar: UIView {
             setLeftBackButton(action: .toBack, vc: vc)
         case .csEdit:
             setNaviTitle(title: "차수 수정")
-            setLeftBackButton(action: .toAlert, vc: vc)
-            setRightBackButton(title: "영수증", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
+            setLeftBackButton(action: .none, vc: vc)
+            setReceiptsButton(vc: vc, action: false)
         case .print:
             if SplitRepository.share.isCreate {
                 setNaviTitle(title: "정산 결과")
@@ -132,21 +129,18 @@ final class SPNavigationBar: UIView {
         case .memberSearchHistory:
             setNaviTitle(title: "멤버 추가 내역")
             setLeftBackButton(action: .toBack, vc: vc)
-        case .splitEditToAlert:
-            setNaviTitle(title: "정산 수정")
-            setLeftBackButton(action: .toAlert, vc: vc)
         case .editCSInfo:
             setNaviTitle(title: "이름 및 총액")
-            setLeftBackButton(action: .toAlert, vc: vc)
+            setLeftBackButton(action: .none, vc: vc)
             setRightBackButton(title: "저장", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
         case .editCSMember:
             setNaviTitle(title: "함께한 멤버")
-            setLeftBackButton(action: .toAlert, vc: vc)
+            setLeftBackButton(action: .none, vc: vc)
             setRightBackButton(title: "저장", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
         case .editExclItemList:
             setNaviTitle(title: "따로 정산")
-            setLeftBackButton(action: .toAlert, vc: vc)
-            setRightBackButton(title: "영수증", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
+            setLeftBackButton(action: .none, vc: vc)
+            setReceiptsButton(vc: vc, action: false)
         }
     }
     
@@ -257,10 +251,6 @@ final class SPNavigationBar: UIView {
                 vc.navigationController?.popToRootViewController(animated: true)
             }
             leftButton.addAction(backAction, for: .touchUpInside)
-        case .toAlert:
-            let backAction = UIAction {_ in
-
-            }
         case .none:
             break
         }
@@ -369,6 +359,22 @@ final class SPNavigationBar: UIView {
                 vc.navigationController?.popToRootViewController(animated: true)
             }
             rightButton.addAction(exitAction, for: .touchUpInside)
+        }
+    }
+    
+    func setReceiptsButton(vc: UIViewController, action: Bool) {
+        rightButton.do {
+            $0.setImage(UIImage(systemName: "newspaper"), for: .normal)
+            $0.imageView?.tintColor = UIColor.TextPrimary
+            $0.sizeToFit()
+        }
+        
+        self.addSubview(rightButton)
+        
+        rightButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(30)
+            $0.width.height.equalTo(26)
         }
     }
 }

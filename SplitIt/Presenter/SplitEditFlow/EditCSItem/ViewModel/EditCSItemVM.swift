@@ -14,6 +14,7 @@ final class EditCSItemVM {
     var disposeBag = DisposeBag()
     
     let dataModel = SplitRepository.share
+    let isEdit = BehaviorRelay(value: false)
     let maxTextCount = 8
     let csInfoIdx: String
     let csCount: Bool
