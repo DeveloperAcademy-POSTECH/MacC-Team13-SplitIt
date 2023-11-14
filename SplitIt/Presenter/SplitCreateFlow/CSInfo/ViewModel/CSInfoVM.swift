@@ -84,8 +84,7 @@ class CSInfoVM {
             .asDriver()
             .withLatestFrom(csInfoDriver)
             .drive(onNext: { title, totalAmount in
-                SplitRepository.share.inputCSInfoWithTitle(title: title)
-                SplitRepository.share.inputCSInfoWithTotalAmount(totalAmount: totalAmount)
+                SplitRepository.share.inputCSInfoDatas(title: title, totalAmount: totalAmount)
                 
                 SplitRepository.share.isCreate = true
             })

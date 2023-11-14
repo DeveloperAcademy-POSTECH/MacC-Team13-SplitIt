@@ -12,17 +12,18 @@ import RxCocoa
 
 final class RealmManager {
     
-    /// Realm에 Split 업데이트
-    func updateData(splitArr: [Split]) {
+    // Realm에 Data 저장 및 업데이트
+    func updateData<T: RealmRepresentable>(arr: [T]) {
         do {
             let realm = try Realm()
             
-            splitArr.forEach { split in
-                let realmSplit = RealmSplit()
-                realmSplit.update(withSplit: split)
+            arr.forEach { object in
+                let rmObject = object.asRealm() as! Object
+                
+                print(rmObject)
                 
                 try! realm.write {
-                    realm.add(realmSplit, update: .all)
+                    realm.add(rmObject, update: .all)
                 }
             }
         } catch {
@@ -30,110 +31,37 @@ final class RealmManager {
         }
     }
     
-    /// Realm에 CSInfo 업데이트
-    func updateData(csInfoArr: [CSInfo]) {
+    // Realm에서 Data 삭제
+    func deleteDatas<T: Object & LocalConvertibleType>(deleteType: T.Type, idxArr: [String]) {
         do {
             let realm = try Realm()
+            let idxArr = idxArr.map { try! ObjectId(string: $0) }
             
-            csInfoArr.forEach { csInfo in
-                let realmCSInfo = RealmCSInfo()
-                realmCSInfo.update(withCSInfo: csInfo)
-                
-                try! realm.write {
-                    realm.add(realmCSInfo, update: .all)
+            idxArr.forEach { idx in
+                if let deleteData = realm.object(ofType: T.self, forPrimaryKey: idx) {
+                    try! realm.write {
+                        realm.delete(deleteData)
+                    }
                 }
             }
         } catch {
-            print("UpdateDate To Realm Error")
+            print("DeleteDate To Realm Error")
         }
     }
-    
-    /// Realm에 CSMember 업데이트
-    func updateData(csMemberArr: [CSMember]) {
-        do {
-            let realm = try Realm()
-            
-            csMemberArr.forEach { csMember in
-                let realmCSMember = RealmCSMember()
-                realmCSMember.update(withCSMember: csMember)
-                
-                try! realm.write {
-                    realm.add(realmCSMember, update: .all)
-                }
-            }
-        } catch {
-            print("UpdateDate To Realm Error")
-        }
-    }
-    
-    /// Realm에 ExclItem 업데이트
-    func updateData(exclItemArr: [ExclItem]) {
-        do {
-            let realm = try Realm()
-            
-            exclItemArr.forEach { exclItem in
-                let realmExclItem = RealmExclItem()
-                realmExclItem.update(withExclItem: exclItem)
-                
-                try! realm.write {
-                    realm.add(realmExclItem, update: .all)
-                }
-            }
-        } catch {
-            print("UpdateDate To Realm Error")
-        }
-    }
-    
-    /// Realm에 ExclMember 업데이트
-    func updateData(exclMemberArr: [ExclMember]) {
-        do {
-            let realm = try Realm()
-            
-            exclMemberArr.forEach { exclMember in
-                let realmExclMember = RealmExclMember()
-                realmExclMember.update(withExclMember: exclMember)
-                
-                try! realm.write {
-                    realm.add(realmExclMember, update: .all)
-                }
-            }
-        } catch {
-            print("UpdateDate To Realm Error")
-        }
-    }
-    
-    /// Realm에 MemberLog 업데이트
-    func updateData(memberLog: MemberLog) {
-        do {
-            let realm = try Realm()
-            let realmMemberLog = RealmMemberLog()
-            realmMemberLog.update(withMemerLog: memberLog)
-            
-            try! realm.write {
-                realm.add(realmMemberLog)
-            }
-        } catch {
-            print("UpdateDate To Realm Error")
-        }
-    }
-}
 
-extension RealmManager {
-    
     /// Realm에서 최근 날짜 기준으로 갯수만큼 Split 가져오기
     func bringSplitWithCount(bringCount: Int) -> [Split] {
         do {
             let realm = try Realm()
-            let realmSplitArr = realm.objects(RealmSplit.self)
+            let realmSplitArr = realm.objects(RMSplit.self)
             
-            if realmSplitArr.count == 0 {
+            if realmSplitArr.isEmpty {
                 return []
             } else {
                 let count = realmSplitArr.count >= bringCount ? bringCount-1 : realmSplitArr.count-1
                 let realmSplitSorted = realmSplitArr.sorted(byKeyPath: "createDate", ascending: false)[0...count]
-                let transformSplits: [Split] = realmSplitSorted.map { Split(withRealmSplit: $0) }
+                let transformSplits: [Split] = realmSplitSorted.map { $0.asLocal() }
                 
-                print("Split fetch 완료")
                 return transformSplits
             }
         } catch {
@@ -146,16 +74,10 @@ extension RealmManager {
     func bringCSInfoWithSplitIdxArr(splitIdxArr: [String]) -> [CSInfo] {
         do {
             let realm = try Realm()
-            let realmCSInfoArr = realm.objects(RealmCSInfo.self).where { $0.splitIdx.in(splitIdxArr) }
+            let realmCSInfoArr = realm.objects(RMCSInfo.self).where { $0.splitIdx.in(splitIdxArr) }
+            let transformCSInfos: [CSInfo] = realmCSInfoArr.map { $0.asLocal() }
             
-            if realmCSInfoArr.count == 0 {
-                return []
-            } else {
-                let transformCSInfos: [CSInfo] = realmCSInfoArr.map { CSInfo(withRealmCSInfo: $0) }
-                
-                print("CSInfo fetch 완료")
-                return transformCSInfos
-            }
+            return transformCSInfos
         } catch {
             print("UpdateDate To Realm Error")
             return []
@@ -166,16 +88,10 @@ extension RealmManager {
     func bringCSMemberWithCSInfoIdxArr(csInfoIdxArr: [String]) -> [CSMember] {
         do {
             let realm = try Realm()
-            let realmCSMemberArr = realm.objects(RealmCSMember.self).where { $0.csInfoIdx.in(csInfoIdxArr) }
+            let realmCSMemberArr = realm.objects(RMCSMember.self).where { $0.csInfoIdx.in(csInfoIdxArr) }
+            let transformCSMembers: [CSMember] = realmCSMemberArr.map { $0.asLocal() }
             
-            if realmCSMemberArr.count == 0 {
-                return []
-            } else {
-                let transformCSMembers: [CSMember] = realmCSMemberArr.map { CSMember(withRealmCSMember: $0) }
-                
-                print("CSInfo fetch 완료")
-                return transformCSMembers
-            }
+            return transformCSMembers
         } catch {
             print("UpdateDate To Realm Error")
             return []
@@ -186,16 +102,10 @@ extension RealmManager {
     func bringExclItemWithCSInfoIdxArr(csInfoIdxArr: [String]) -> [ExclItem] {
         do {
             let realm = try Realm()
-            let realmExclItemArr = realm.objects(RealmExclItem.self).where { $0.csInfoIdx.in(csInfoIdxArr) }
+            let realmExclItemArr = realm.objects(RMExclItem.self).where { $0.csInfoIdx.in(csInfoIdxArr) }
+            let transformExclItems: [ExclItem] = realmExclItemArr.map { $0.asLocal() }
             
-            if realmExclItemArr.count == 0 {
-                return []
-            } else {
-                let transformExclItems: [ExclItem] = realmExclItemArr.map { ExclItem(withRealmExclItem: $0) }
-                
-                print("CSInfo fetch 완료")
-                return transformExclItems
-            }
+            return transformExclItems
         } catch {
             print("UpdateDate To Realm Error")
             return []
@@ -206,16 +116,10 @@ extension RealmManager {
     func bringExclMemberWithExclItemIdxArr(exclItemIdxArr: [String]) -> [ExclMember] {
         do {
             let realm = try Realm()
-            let realmExclMemberArr = realm.objects(RealmExclMember.self).where { $0.exclItemIdx.in(exclItemIdxArr) }
+            let realmExclMemberArr = realm.objects(RMExclMember.self).where { $0.exclItemIdx.in(exclItemIdxArr) }
+            let transformExclMembers: [ExclMember] = realmExclMemberArr.map { $0.asLocal() }
             
-            if realmExclMemberArr.count == 0 {
-                return []
-            } else {
-                let transformExclMembers: [ExclMember] = realmExclMemberArr.map { ExclMember(withRealmExclMember: $0) }
-                
-                print("CSInfo fetch 완료")
-                return transformExclMembers
-            }
+            return transformExclMembers
         } catch {
             print("UpdateDate To Realm Error")
             return []
@@ -227,10 +131,10 @@ extension RealmManager {
         do {
             let realm = try Realm()
             let idx = try! ObjectId(string: splitIdx)
-            let realmSplitArr = realm.objects(RealmSplit.self).where { $0.splitIdx == idx }
+            let realmSplitArr = realm.objects(RMSplit.self).where { $0.splitIdx == idx }
             
             if realmSplitArr.count == 1 {
-                let transformSplits: [Split] = realmSplitArr.map { Split(withRealmSplit: $0) }
+                let transformSplits: [Split] = realmSplitArr.map { $0.asLocal() }
                 return transformSplits
             }
             
@@ -246,10 +150,10 @@ extension RealmManager {
         do {
             let realm = try Realm()
             let idx = try! ObjectId(string: csInfoIdx)
-            let realmCSInfoArr = realm.objects(RealmCSInfo.self).where { $0.csInfoIdx == idx }
+            let realmCSInfoArr = realm.objects(RMCSInfo.self).where { $0.csInfoIdx == idx }
             
             if realmCSInfoArr.count == 1 {
-                let transformCSInfos: [CSInfo] = realmCSInfoArr.map { CSInfo(withRealmCSInfo: $0) }
+                let transformCSInfos: [CSInfo] = realmCSInfoArr.map { $0.asLocal() }
                 return transformCSInfos
             }
             
@@ -264,137 +168,11 @@ extension RealmManager {
     func bringMemberLogAll() -> [MemberLog] {
         do {
             let realm = try Realm()
-            let realmMemberLogArr = realm.objects(RealmMemberLog.self)
-            
-            return realmMemberLogArr.map { MemberLog(withRealmMemberLog: $0) }
+            let realmMemberLogArr = realm.objects(RMMemberLog.self)
+            return realmMemberLogArr.map { $0.asLocal() }
         } catch {
             print("UpdateDate To Realm Error")
             return []
-        }
-    }
-}
-
-extension RealmManager {
-    
-    /// splitIdx를 기준으로 split을 삭제하는 메서드
-    func deleteSplit(splitIdx: String) {
-        do {
-            let realm = try Realm()
-            
-            let idx = try! ObjectId(string: splitIdx)
-            let deleteSplit = realm.objects(RealmSplit.self).where { $0.splitIdx == idx }
-            
-            try! realm.write {
-                realm.delete(deleteSplit)
-            }
-
-        } catch {
-            print("DeleteDate To Realm Error")
-        }
-    }
-    
-    /// [csInfo]를 기준으로 csInfo를 삭제하는 메서드
-    func deleteCSInfo(csInfoIdxArr: [String]) {
-        do {
-            let realm = try Realm()
-            
-            let idxArr = csInfoIdxArr.map { try! ObjectId(string: $0) }
-            let deleteCSInfoArr = realm.objects(RealmCSInfo.self).where { $0.csInfoIdx.in(idxArr) }
-
-            deleteCSInfoArr.forEach { csInfo in
-                try! realm.write {
-                    realm.delete(csInfo)
-                }
-            }
-        } catch {
-            print("DeleteDate To Realm Error")
-        }
-    }
-    
-    /// [csMemberIdx]를 기준으로 csMember를 삭제하는 메서드
-    func deleteCSMember(csMemberIdxArr: [String]) {
-        do {
-            let realm = try Realm()
-            
-            let idxArr = csMemberIdxArr.map { try! ObjectId(string: $0) }
-            let deleteCSMemberArr = realm.objects(RealmCSMember.self).where { $0.csMemberIdx.in(idxArr) }
-
-            deleteCSMemberArr.forEach { csMember in
-                try! realm.write {
-                    realm.delete(csMember)
-                }
-            }
-        } catch {
-            print("DeleteDate To Realm Error")
-        }
-    }
-    
-    /// [exclItemIdx]를 기준으로 exclItem을 삭제하는 메서드
-    func deleteExclItem(exclItemIdxArr: [String]) {
-        do {
-            let realm = try Realm()
-            
-            let idxArr = exclItemIdxArr.map { try! ObjectId(string: $0) }
-            let deleteExclItemArr = realm.objects(RealmExclItem.self).where { $0.exclItemIdx.in(idxArr) }
-
-            deleteExclItemArr.forEach { exclItem in
-                try! realm.write {
-                    realm.delete(exclItem)
-                }
-            }
-        } catch {
-            print("DeleteDate To Realm Error")
-        }
-    }
-    
-    /// [exclMemberIdx]를 기준으로 exclMember를 삭제하는 메서드
-    func deleteExclMember(exclMemberIdxArr: [String]) {
-        do {
-            let realm = try Realm()
-            
-            let idxArr = exclMemberIdxArr.map { try! ObjectId(string: $0) }
-            let deleteExclMemberArr = realm.objects(RealmExclMember.self).where { $0.exclMemberIdx.in(idxArr) }
-
-            deleteExclMemberArr.forEach { exclMember in
-                try! realm.write {
-                    realm.delete(exclMember)
-                }
-            }
-        } catch {
-            print("DeleteDate To Realm Error")
-        }
-    }
-    
-    /// memberLog name을 기준으로 memberLog를 삭제하는 메서드
-    func deleteMemberLog(memberLogIdx: String) {
-        do {
-            let realm = try Realm()
-            
-            let memberLogIdx = try! ObjectId(string: memberLogIdx)
-            let deleteMemberLog = realm.objects(RealmMemberLog.self).where { $0.memberLogIdx == memberLogIdx }
-            
-            try! realm.write {
-                realm.delete(deleteMemberLog)
-            }
-
-        } catch {
-            print("DeleteDate To Realm Error")
-        }
-    }
-    
-    /// 전체 realmData 삭제 -> 테스트용
-    func deleteAllData() {
-        do {
-            let realm = try Realm()
-            
-            try! realm.write {
-                realm.deleteAll()
-            }
-            
-            print("Realm fetch 완료")
-            
-        } catch {
-            print("UpdateDate To Realm Error")
         }
     }
 }

@@ -22,15 +22,12 @@ final class SplitRepository {
     private(set) var csMemberArr = BehaviorRelay<[CSMember]>(value: [])
     private(set) var memberLogArr = BehaviorRelay<[MemberLog]>(value: [])
     
-    private var currentCSInfo: CSInfo?
-    private var newExclItem: ExclItem?
-    
     private init() { }
     
     var isSmartSplit = true
     var isCreate = true
 
-    /// DB에서 날짜를 기준으로 20개(임시 - 그냥 다 불러와도 되긴 함)의 split만 필터링해서 하위 모든 Arr 패치
+    /// DB에서 날짜를 기준으로 20개의 split만 필터링해서 하위 모든 Arr 패치
     func fetchSplitArrFromDBForHistoryView() {
         let realmManager = RealmManager()
         splitArr.accept(realmManager.bringSplitWithCount(bringCount: 20))
@@ -53,7 +50,6 @@ final class SplitRepository {
     func fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: String) {
         let realmManager = RealmManager()
         csInfoArr.accept(realmManager.bringCSInfoWithCSInfoIdx(csInfoIdx: csInfoIdx))
-        self.currentCSInfo = csInfoArr.value.filter { $0.csInfoIdx == csInfoIdx }.first
         
         guard let split = csInfoArr.value.first else { return }
         let splitIdx = split.splitIdx
@@ -80,10 +76,8 @@ final class SplitRepository {
     /// 새로운 split, csInfo, csMember(default: 나) 생성 => MainView에서 split it 버튼 클릭시 호출되도록 설정
     func createDatasForCreateFlow() {
         let newSplit = Split()
-        let newCSInfo = CSInfo(splitIdx: newSplit.splitIdx, title: "1차")
-        let newCSMember = CSMember(csInfoIdx: newCSInfo.csInfoIdx, name: "정산자")
-        
-        currentCSInfo = newCSInfo
+        let newCSInfo = CSInfo(title: "1차", splitIdx: newSplit.splitIdx)
+        let newCSMember = CSMember(name: "정산자", csInfoIdx: newCSInfo.csInfoIdx)
         
         splitArr.accept([newSplit])
         csInfoArr.accept([newCSInfo])
@@ -92,38 +86,25 @@ final class SplitRepository {
         exclMemberArr.accept([])
     }
     
-    // TODO: - 쓰는 곳이 없다면 삭제할 것 => 현재 csInfoIdx를 기준으로 원하는 값을 이름으로 가지는 csMember 생성
-    func createCSMember(name: String) {
-        var csMembers: [CSMember] = csMemberArr.value
-        let newCSMember: CSMember = CSMember(csInfoIdx: currentCSInfo!.csInfoIdx, name: name)
-        csMembers.append(newCSMember)
-        csMemberArr.accept(csMembers)
-    }
-    
     /// 이름 배열을 받아와서 csMember 생성
     func createCSMemberArr(nameArr: [String]) {
-        let newCSMembers = nameArr.map { CSMember(csInfoIdx: currentCSInfo!.csInfoIdx, name: $0)}
+        let currentCSInfoIdx = csInfoArr.value.first!.csInfoIdx
+        let newCSMembers = nameArr.map { CSMember(name: $0, csInfoIdx: currentCSInfoIdx)}
         csMemberArr.accept(newCSMembers)
     }
     
     /// CSInfoIdx, name으로 ExclItem 생성
-    func createExclItemWithName(name: String) {
-        let newExclItem: ExclItem = ExclItem(csInfoIdx: currentCSInfo!.csInfoIdx, name: name, price: 0)
-        self.newExclItem = newExclItem
-    }
-    
-    /// CSInfoIdx, name으로 ExclItem 생성
     func createExclItem(name: String, price: Int, exclMember: [ExclItemTable]) {
-        // ExclItem Create
-        let newExclItem: ExclItem = ExclItem(csInfoIdx: currentCSInfo!.csInfoIdx, name: name, price: price)
+        let currentCSInfoIdx = csInfoArr.value.first!.csInfoIdx
+        let newExclItem: ExclItem = ExclItem(name: name, price: price, csInfoIdx: currentCSInfoIdx)
         var preExclItemArr: [ExclItem] = exclItemArr.value
         preExclItemArr.append(newExclItem)
         exclItemArr.accept(preExclItemArr)
         
         var currentExclMemberArr = exclMemberArr.value
-        // ExclMember Create
+       
         for item in exclMember {
-            let newExclMember = ExclMember(exclItemIdx: newExclItem.exclItemIdx, name: item.name, isTarget: item.isTarget)
+            let newExclMember = ExclMember(name: item.name, isTarget: item.isTarget, exclItemIdx: newExclItem.exclItemIdx)
             
             currentExclMemberArr.append(newExclMember)
         }
@@ -138,15 +119,14 @@ final class SplitRepository {
         let splitIdx = splitArr.value.first!.splitIdx
         let preCSInfo = csInfoArr.value.last!.csInfoIdx
         let preCSMember = csMemberArr.value.filter { $0.csInfoIdx == preCSInfo }
-        let newCSInfo = CSInfo(splitIdx: splitIdx, title: "\(currentCSInfoCount + 1)차")
+        let newCSInfo = CSInfo(title: "\(currentCSInfoCount + 1)차", splitIdx: splitIdx)
         var newCSMembers: [CSMember] = []
         
         preCSMember.forEach {
-            let newCSMember = CSMember(csInfoIdx: newCSInfo.csInfoIdx, name: $0.name)
+            let newCSMember = CSMember(name: $0.name, csInfoIdx: newCSInfo.csInfoIdx)
             newCSMembers.append(newCSMember)
         }
         
-        currentCSInfo = newCSInfo
         csInfoArr.accept([newCSInfo])
         csMemberArr.accept(newCSMembers)
         exclItemArr.accept([])
@@ -155,45 +135,18 @@ final class SplitRepository {
     
     /// name을 받아서 memberLogArr, realm에 새로 생성
     func createMemberLog(name: String) {
-        RealmManager().updateData(memberLog: MemberLog(name: name))
-    }
-    
-    /// ExclItem 및 CSMember에 따라 ExclMember 생성
-    private func createExclMember(exclItemIdx: String) {
-        let csMemberNames: [String] = csMemberArr.value.map { $0.name }
-        var exclMembers: [ExclMember] = exclMemberArr.value
-        
-        for name in csMemberNames {
-            let newExclMember: ExclMember = ExclMember(exclItemIdx: exclItemIdx, name: name, isTarget: false)
-            exclMembers.append(newExclMember)
-        }
-        
-        exclMemberArr.accept(exclMembers)
+        RealmManager().updateData(arr: [MemberLog(name: name)])
     }
 
-    /// 현재 csInfo의 title 변경
-    func inputCSInfoWithTitle(title: String) {
-        currentCSInfo!.title = title
-    }
-    
-    /// 현재 csInfo의 totalAmount 변경
-    func inputCSInfoWithTotalAmount(totalAmount: Int) {
-        currentCSInfo!.totalAmount = totalAmount
-        csInfoArr.accept([currentCSInfo!])
-    }
-    
-    /// 만든 ExclItem에 price 넣고 exclItemArr 업뎅이트
-    func inputExclItemPrice(price: Int) {
-        var exclItems: [ExclItem] = exclItemArr.value
-        var newExclItem: ExclItem = self.newExclItem!
-        newExclItem.price = price
-        exclItems.append(newExclItem)
-        exclItemArr.accept(exclItems)
-        
-        createExclMember(exclItemIdx: newExclItem.exclItemIdx)
+    /// 현재 csInfo의 정보 변경하기
+    func inputCSInfoDatas(title: String, totalAmount: Int) {
+        var currentCSInfo = csInfoArr.value.first!
+        currentCSInfo.title = title
+        currentCSInfo.totalAmount = totalAmount
+        csInfoArr.accept([currentCSInfo])
     }
 
-    /// 현재 split의 title을 수정
+    // TODO: - 현재 split의 title을 수정 => 지금은 사용하는데 없는데 디자인이랑 말해서 정산 이름 바꾸는 뷰 안만들거면 삭제할 것
     func editSplitTitle(title: String) {
         let realmManager = RealmManager()
         
@@ -202,9 +155,24 @@ final class SplitRepository {
         split.title = title
         split.createDate = Date.now
         splitArr.accept([split])
-        realmManager.updateData(splitArr: [split])
+        realmManager.updateData(arr: [split])
     }
     
+    // TODO: - EditCSInfo에서 이 메서드로 바꿀 것
+    func editCSInfo(title: String, totalAmount: Int) {
+        let realmManager = RealmManager()
+        
+        let csInfos: [CSInfo] = csInfoArr.value
+        var csInfo: CSInfo = csInfos.first!
+        csInfo.title = title
+        csInfo.totalAmount = totalAmount
+        csInfoArr.accept([csInfo])
+        editSplitCreateDate()
+        
+        realmManager.updateData(arr: [csInfo])
+    }
+    
+    // TODO: - 아래 2개 EditCSInfo에서 빼고 삭제할 것
     /// csInfo 이름 수정 - 수정 시 바로 realm에도 반영
     func editCSInfoTitle(title: String) {
         let realmManager = RealmManager()
@@ -213,7 +181,8 @@ final class SplitRepository {
         var csInfo: CSInfo = csInfos.first!
         csInfo.title = title
         csInfoArr.accept([csInfo])
-        realmManager.updateData(csInfoArr: [csInfo])
+        
+        realmManager.updateData(arr: [csInfo])
     }
     
     /// csInfo 가격 수정 - 수정 시 바로 realm에도 반영
@@ -224,9 +193,24 @@ final class SplitRepository {
         var csInfo: CSInfo = csInfos.first!
         csInfo.totalAmount = totalAcount
         csInfoArr.accept([csInfo])
-        realmManager.updateData(csInfoArr: [csInfo])
+        
+        realmManager.updateData(arr: [csInfo])
     }
     
+    // TODO: - EditExclItem에서 이 메서드로 바꿀 것
+    func editExclItem(exclItemIdx: String, name: String, price: Int) {
+        var exclItems: [ExclItem] = exclItemArr.value
+        let exclItemIdxArr: [String] = exclItems.map { $0.exclItemIdx }
+        
+        if let index = exclItemIdxArr.firstIndex(of: exclItemIdx) {
+            exclItems[index].name = name
+            exclItems[index].price = price
+        }
+        
+        exclItemArr.accept(exclItems)
+    }
+    
+    // TODO: - 아래 2개 합쳐서 EditExclItem에서 바꿀 것
     /// exclItemIdx를 기준으로 exclItem 이름 수정 - realm에는 수정 안됨 플로우 확인 후 각각 해주거나 한번에 해주기
     func editExclItemName(exclItemIdx: String, name: String) {
         var exclItems: [ExclItem] = exclItemArr.value
@@ -267,20 +251,20 @@ final class SplitRepository {
             nameAndIsTargetHash.updateValue($0.isTarget, forKey: $0.name)
         }
         
-        realm.deleteCSMember(csMemberIdxArr: realmCurrentCSMemberIdxArr)
-        realm.deleteExclMember(exclMemberIdxArr: realmCurrentExclMemberIdxArr)
+        realm.deleteDatas(deleteType: RMCSMember.self, idxArr: realmCurrentCSMemberIdxArr)
+        realm.deleteDatas(deleteType: RMExclMember.self, idxArr: realmCurrentExclMemberIdxArr)
         
-        realm.updateData(csMemberArr: csMemberArr.value)
+        realm.updateData(arr: csMemberArr.value)
         
         var newExclMembers: [ExclMember] = []
         
         for itemIdx in exclItemIdxArr {
             for csMember in csMemberArr.value {
-                newExclMembers.append(ExclMember(exclItemIdx: itemIdx, name: csMember.name, isTarget: nameAndIsTargetHash[csMember.name] ?? false))
+                newExclMembers.append(ExclMember(name: csMember.name, isTarget: nameAndIsTargetHash[csMember.name] ?? false, exclItemIdx: itemIdx))
             }
         }
         
-        realm.updateData(exclMemberArr: newExclMembers)
+        realm.updateData(arr: newExclMembers)
     }
     
     /// split의 createDate를 현재시간으로 수정
@@ -291,98 +275,12 @@ final class SplitRepository {
         splitArr.accept([split])
     }
     
-    /// csMemberIdx를 기준으로 로컬에서 csMember를 삭제
-    func deleteCSMemberOnLocal(csMemberIdx: String) {
-        let csMembers: [CSMember] = csMemberArr.value
-        var newCSMembers: [CSMember] = []
-        
-        for member in csMembers {
-            if member.csMemberIdx != csMemberIdx {
-                newCSMembers.append(member)
-            }
-        }
-        
-        csMemberArr.accept(newCSMembers)
-    }
-    
-    /// splitIdx를 기준으로 split 삭제 및 연관 데이터 전체 삭제
-    func deleteSplitAndRelatedData(splitIdx: String) {
-        let realmManager = RealmManager()
-        let splits: [Split] = splitArr.value
-        var deleteSplit: Split?
-        var newSplits: [Split] = []
-        
-        for split in splits {
-            if split.splitIdx == splitIdx {
-                deleteSplit = split
-            } else {
-                newSplits.append(split)
-            }
-        }
-        
-        splitArr.accept(newSplits)
-        realmManager.deleteSplit(splitIdx: deleteSplit!.splitIdx)
-        
-        // csInfo 삭제
-        let csInfoIdxArr = deleteCSInfo(splitIdx: splitIdx, realmManager: realmManager)
-        
-        // csMember 삭제
-        deleteCSMember(csInfoIdxArr: csInfoIdxArr, realmManager: realmManager)
-        
-        // exclItem 및 exclMember 삭제
-        deleteExclItem(csInfoIdxArr: csInfoIdxArr, realmManager: realmManager)
-    }
-    
     /// csInfoIdx를 기준으로 csInfo 삭제 및 연관 데이터 전체 삭제
     func deleteCSInfoAndRelatedData(csInfoIdx: String) {
         let realmManager = RealmManager()
         let deleteCSInfo: [CSInfo] = csInfoArr.value
         
-        realmManager.deleteCSInfo(csInfoIdxArr: [deleteCSInfo.first!.csInfoIdx])
-    }
-    
-    /// csMemberIdx를 기준으로 csMember 삭제 및 연관 데이터 전체 삭제
-    func deleteCSMemberAndRelatedData(csMemberIdx: String) {
-        let realmManager = RealmManager()
-        let csMembers: [CSMember] = csMemberArr.value
-        var deleteCSMember: CSMember?
-        var newCSMembers: [CSMember] = []
-        
-        for member in csMembers {
-            if member.csMemberIdx == csMemberIdx {
-                deleteCSMember = member
-            } else {
-                newCSMembers.append(member)
-            }
-        }
-        
-        csMemberArr.accept(newCSMembers)
-        realmManager.deleteCSMember(csMemberIdxArr: [deleteCSMember!.csMemberIdx])
-        
-        // 만약 csMember가 하나도 없다면 해당 csInfo 아래 모든 데이터 삭제
-        if newCSMembers.isEmpty {
-            deleteCSInfoAndRelatedData(csInfoIdx: deleteCSMember!.csInfoIdx)
-        
-        // 아니라면 해당 csMember와 이름이 같은 해당 차수의 exclMember만 삭제
-        } else {
-            let csMemberName = deleteCSMember!.name
-            let csInfoIdx = deleteCSMember!.csInfoIdx
-            let exclMembers: [ExclMember] = exclMemberArr.value
-            var deleteExclMembers: [ExclMember] = []
-            var newExclMembers: [ExclMember] = []
-            let exclItemIdxArr: [String] = exclItemArr.value.filter { $0.csInfoIdx == csInfoIdx }.map { $0.exclItemIdx }
-            
-            for member in exclMembers {
-                if member.name == csMemberName && exclItemIdxArr.contains(member.exclItemIdx) {
-                    deleteExclMembers.append(member)
-                } else {
-                    newExclMembers.append(member)
-                }
-            }
-            
-            exclMemberArr.accept(newExclMembers)
-            realmManager.deleteExclMember(exclMemberIdxArr: deleteExclMembers.map { $0.exclMemberIdx })
-        }
+        realmManager.deleteDatas(deleteType: RMCSInfo.self, idxArr: [deleteCSInfo.first!.csInfoIdx])
     }
     
     /// exclItemIdx를 기준으로 exclItem 삭제 및 연관 데이터 전체 삭제
@@ -401,7 +299,7 @@ final class SplitRepository {
         }
         
         exclItemArr.accept(newExclItems)
-        realmManager.deleteExclItem(exclItemIdxArr: [deleteExclItem!.exclItemIdx])
+        realmManager.deleteDatas(deleteType: RMExclItem.self, idxArr: [deleteExclItem!.exclItemIdx])
         deleteExclMember(exclItemIdx: deleteExclItem!.exclItemIdx, realmManager: realmManager)
     }
     
@@ -413,71 +311,8 @@ final class SplitRepository {
     
     /// memberLogIdx로 memberLog 삭제
     func deleteMemberLog(memberLogIdx: String) {
-        RealmManager().deleteMemberLog(memberLogIdx: memberLogIdx)
+        RealmManager().deleteDatas(deleteType: RMMemberLog.self, idxArr: [memberLogIdx])
         self.fetchMemberLog()
-    }
-    
-    /// 모든 realm의 데이터를 삭제 - Test 용
-    func deleteAllDataToDB() {
-        let realmManager = RealmManager()
-        realmManager.deleteAllData()
-    }
-    
-    /// splitIdx를 기준으로 csInfo 삭제
-    private func deleteCSInfo(splitIdx: String, realmManager: RealmManager) -> [String] {
-        let csInfos: [CSInfo] = csInfoArr.value
-        var deleteCSInfos: [CSInfo] = []
-        var newCSInfos: [CSInfo] = []
-        
-        for info in csInfos {
-            if info.splitIdx == splitIdx {
-                deleteCSInfos.append(info)
-            } else {
-                newCSInfos.append(info)
-            }
-        }
-        
-        csInfoArr.accept(newCSInfos)
-        realmManager.deleteCSInfo(csInfoIdxArr: deleteCSInfos.map { $0.csInfoIdx })
-        
-        return deleteCSInfos.map { $0.csInfoIdx }
-    }
-    
-    /// csInfoIdx를 기준으로 csMember 삭제
-    private func deleteCSMember(csInfoIdxArr: [String], realmManager: RealmManager) {
-        let csMembers: [CSMember] = csMemberArr.value
-        var deleteCSMembers: [CSMember] = []
-        var newCSMembers: [CSMember] = []
-        
-        for member in csMembers {
-            if csInfoIdxArr.contains(member.csInfoIdx) {
-                deleteCSMembers.append(member)
-            } else {
-                newCSMembers.append(member)
-            }
-        }
-        
-        csMemberArr.accept(newCSMembers)
-        realmManager.deleteCSMember(csMemberIdxArr: deleteCSMembers.map { $0.csMemberIdx })
-    }
-    
-    /// csInfoIdx를 기준으로 exclItem 삭제
-    private func deleteExclItem(csInfoIdxArr: [String], realmManager: RealmManager) {
-        let exclItems: [ExclItem] = exclItemArr.value
-        var deleteExclItems: [ExclItem] = []
-        var newExclItems: [ExclItem] = []
-        
-        for item in exclItems {
-            if csInfoIdxArr.contains(item.csInfoIdx) {
-                deleteExclItems.append(item)
-                deleteExclMember(exclItemIdx: item.exclItemIdx, realmManager: realmManager)
-            } else {
-                newExclItems.append(item)
-            }
-        }
-        
-        exclItemArr.accept(newExclItems)
-        realmManager.deleteExclItem(exclItemIdxArr: deleteExclItems.map { $0.exclItemIdx })
     }
     
     /// exclItem을 기준으로 exclMember 삭제
@@ -485,7 +320,7 @@ final class SplitRepository {
         let exclMembers: [ExclMember] = exclMemberArr.value
         var deleteExclMembers: [ExclMember] = []
         var newExclMembers: [ExclMember] = []
-        
+
         for member in exclMembers {
             if member.exclItemIdx == exclItemIdx {
                 deleteExclMembers.append(member)
@@ -493,9 +328,9 @@ final class SplitRepository {
                 newExclMembers.append(member)
             }
         }
-        
+
         exclMemberArr.accept(newExclMembers)
-        realmManager.deleteExclMember(exclMemberIdxArr: deleteExclMembers.map { $0.exclMemberIdx })
+        realmManager.deleteDatas(deleteType: RMExclMember.self, idxArr: deleteExclMembers.map { $0.exclMemberIdx })
     }
     
     /// 각 ExclMember의 isTarget 토글
@@ -513,9 +348,7 @@ final class SplitRepository {
     
     /// 현재 Split에 CSInfo가 몇 개 있는지 Count
     private func getCurrentSplitCSInfoCount() -> Int {
-        return RealmManager()
-            .bringCSInfoWithSplitIdxArr(splitIdxArr: [splitArr.value.first!.splitIdx])
-            .count
+        return RealmManager().bringCSInfoWithSplitIdxArr(splitIdxArr: [splitArr.value.first!.splitIdx]).count
     }
     
     /// Arr들을 DB에 업데이트
@@ -523,20 +356,10 @@ final class SplitRepository {
         let realmManager = RealmManager()
         
         editSplitCreateDate()
-        
-        let splitArr = splitArr.value
-        realmManager.updateData(splitArr: splitArr)
-        
-        let csInfoArr = csInfoArr.value
-        realmManager.updateData(csInfoArr: csInfoArr)
-        
-        let csMemberArr = csMemberArr.value
-        realmManager.updateData(csMemberArr: csMemberArr)
-        
-        let exclItemArr = exclItemArr.value
-        realmManager.updateData(exclItemArr: exclItemArr)
-        
-        let exclMemberArr = exclMemberArr.value
-        realmManager.updateData(exclMemberArr: exclMemberArr)
+        realmManager.updateData(arr: splitArr.value)
+        realmManager.updateData(arr: csInfoArr.value)
+        realmManager.updateData(arr: csMemberArr.value)
+        realmManager.updateData(arr: exclItemArr.value)
+        realmManager.updateData(arr: exclMemberArr.value)
     }
 }
