@@ -275,9 +275,11 @@ class NewEditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             .bind(to: addCollectionView.rx.items(cellIdentifier: "CSMemberSelectedCell")) { _, item, cell in
                 if let cell = cell as? CSMemberSelectedCell {
                     cell.configure(item: item)
-                    cell.xMark.image = UIImage(named: "DeleteIconTypeB")
-                    cell.xMark.backgroundColor = .SurfaceBrandWatermelon
-                    cell.xMark.layer.cornerRadius = 9
+                    cell.xMark.do {
+                        $0.image = UIImage(named: "DeleteIconTypeB")
+                        $0.backgroundColor = .SurfaceBrandWatermelon
+                        $0.layer.cornerRadius = 9
+                    }
                 }
             }
             .disposed(by: disposeBag)
