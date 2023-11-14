@@ -190,20 +190,15 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         let isTextEmptyObservable = Driver.combineLatest(nameObservable, accountObservable, bankValue.asDriver())
             
             .map { text1, text2, bankValue in
-                print(bankValue,2222)
                 if bankValue == Optional("") {
-                    print(1)
                     return false
                 } else if bankValue != "선택 안함" {
                     if self.nameTextField.text?.count != 0 && self.accountTextField.text?.count != 0 {
-                        print(2)
                         return true
                     } else {
-                        print(3)
                         return !(text1.count == 0) && !(text2.count == 0)
                     }
                 } else {
-                    print(4)
                     return true
                 }
             }

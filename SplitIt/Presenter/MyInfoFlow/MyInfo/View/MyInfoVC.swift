@@ -90,6 +90,7 @@ class MyInfoVC: UIViewController {
         setLayout()
         setBinding()
         
+       
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -100,19 +101,29 @@ class MyInfoVC: UIViewController {
     
     func userNewInfo() {
         
+        
         let tossValue = UserDefaults.standard.bool(forKey: "tossPay")
         let kakaoValue = UserDefaults.standard.bool(forKey: "kakaoPay")
         let naverValue = UserDefaults.standard.bool(forKey: "naverPay")
-
-        let bank: Bool = userDefault.string(forKey: "userBank") == "" || userDefault.string(forKey: "userBank") == "선택 안함" ? false : true
+        
+//        let bank: Bool = userDefault.string(forKey: "userBank") == "" || userDefault.string(forKey: "userBank") == "선택 안함" ? false : true
+        let bank: Bool = userDefault.string(forKey: "userBank") == "선택 안함" ? false : true
         let checkPay = tossValue || kakaoValue || naverValue //하나라도 참이면 checkPay는 참
+        let firstCheck: Bool = UserDefaults.standard.string(forKey: "userBank") == Optional("") //아예 처음이면 nil, 뭐라도 저장되면 nil이 아님
+//
+//        if firstCheck {
+//            view.backgroundColor = .red
+//        } else {
+//            view.backgroundColor = .blue
+//        }
         
         self.accountBankLabel.text = userDefault.string(forKey: "userBank") != "선택 안함" ? userDefault.string(forKey: "userBank") : "계좌를 사용하지 않아요"
         self.accountLabel.text = userDefault.string(forKey: "userAccount")
         self.userName.text = userDefault.string(forKey: "userName")
         
         //모든 정보가 없을 때,
-        if !bank && !checkPay {
+       // if !bank && !checkPay {
+        if firstCheck {
             backViewHeight = 104
             
             accountView.isHidden = true
@@ -121,7 +132,34 @@ class MyInfoVC: UIViewController {
             backView.snp.updateConstraints { make in
                 make.height.equalTo(backViewHeight)
             }
+        } else if userDefault.string(forKey: "userBank") == "선택 안함" && !checkPay {
+            print(123123)
             
+            backViewHeight = 140
+            
+            accountView.isHidden = false
+            emptyView.isHidden = true
+            
+            nameInfoLabel.isHidden = true
+            notUsedPay.isHidden = false
+            tossPayBtn.isHidden = !tossValue
+            kakaoPayBtn.isHidden = !kakaoValue
+            naverPayBtn.isHidden = !naverValue
+            
+            backView.snp.updateConstraints { make in
+                make.height.equalTo(backViewHeight)
+            }
+            
+            accountInfoLabel.snp.removeConstraints()
+            
+            accountInfoLabel.snp.makeConstraints {
+                $0.top.equalToSuperview().offset(20)
+                $0.leading.equalTo(accountView.snp.leading).offset(16)
+            }
+            
+            accountView.snp.updateConstraints { make in
+                make.height.equalTo(backViewHeight)
+            }
         }
         //페이만 참, 계좌는 선택안함
         else if !bank && checkPay {
@@ -131,7 +169,6 @@ class MyInfoVC: UIViewController {
             
             nameInfoLabel.isHidden = true
             userName.isHidden = true
-//            notUsedPay.isHidden = checkPay
             notUsedPay.isHidden = true
             tossPayBtn.isHidden = !tossValue
             kakaoPayBtn.isHidden = !kakaoValue
@@ -191,9 +228,6 @@ class MyInfoVC: UIViewController {
                 make.leading.equalTo(accountView.snp.leading).offset(naverPos)
                 make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
             }
-            
-            
-            
         }
         
         //페이류 없고, 계좌만 있을 때
@@ -233,7 +267,6 @@ class MyInfoVC: UIViewController {
         else {
             accountView.isHidden = false
             emptyView.isHidden = true
-            
             
             nameInfoLabel.isHidden = false
             userName.isHidden = false
@@ -304,7 +337,6 @@ class MyInfoVC: UIViewController {
         self.view.setNeedsLayout()
         self.view.layoutIfNeeded()
     }
-    
     
     func setBinding() {
         
@@ -723,17 +755,7 @@ class MyInfoVC: UIViewController {
             $0.layer.borderColor = UIColor.BorderDeactivate.cgColor
             $0.layer.borderWidth = 1
         }
-        
-//        friendListView.do {
-//            $0.layer.cornerRadius = 8
-//            $0.backgroundColor = .clear
-//            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
-//            $0.layer.borderWidth = 1
-//            $0.backgroundColor = .clear
-//
-//        }
-        
-        
+    
         historyImage.do {
             $0.image = UIImage(named: "SplitIconSmall")
         }
@@ -748,8 +770,6 @@ class MyInfoVC: UIViewController {
             $0.textColor = .TextPrimary
         }
         
-        
-        
         friendImage.do {
             $0.image = UIImage(named: "MemberIcon")
         }
@@ -763,8 +783,6 @@ class MyInfoVC: UIViewController {
             $0.font = UIFont.KoreanCaption1
             $0.textColor = .TextPrimary
         }
-        
-        
         
         privacyBtn.do {
             $0.titleLabel?.font = UIFont.KoreanCaption1
