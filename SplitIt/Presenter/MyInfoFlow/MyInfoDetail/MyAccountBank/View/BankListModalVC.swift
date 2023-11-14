@@ -16,7 +16,7 @@ class BankListModalVC: UIViewController, UIScrollViewDelegate {
     
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     var disposeBag = DisposeBag()
-    var selectedBankName = BehaviorRelay<String>(value: UserDefaults.standard.string(forKey: "userBank") ?? "선택 안함")
+    var selectedBankName = BehaviorRelay<String>(value: UserDefaults.standard.string(forKey: "userBank") ?? "선택해주세요")
 
     let topView = UIView()
     let selectedBankLabel = UILabel()

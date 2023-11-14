@@ -420,7 +420,7 @@ class MyInfoVC: UIViewController {
         backView.snp.makeConstraints {
             $0.height.equalTo(104)
             $0.leading.trailing.equalToSuperview().inset(30)
-            $0.top.equalTo(myInfoLabel.snp.bottom).offset(8)
+            $0.top.equalTo(myInfoLabel.snp.bottom).offset(4)
         }
         
         //backView
@@ -625,8 +625,8 @@ class MyInfoVC: UIViewController {
         
         
         myInfoLabel.do {
-            $0.text = "설정"
-            $0.font = .KoreanCaption1
+            $0.text = "계좌 설정"
+            $0.font = .KoreanCaption2
             $0.textColor = .TextSecondary
         }
         
@@ -704,9 +704,9 @@ class MyInfoVC: UIViewController {
         }
         
         
-        myInfoLabel.do {
+        historyLabel.do {
             $0.text = "기록"
-            $0.font = .KoreanCaption1
+            $0.font = .KoreanCaption2
             $0.textColor = .TextSecondary
         }
         
