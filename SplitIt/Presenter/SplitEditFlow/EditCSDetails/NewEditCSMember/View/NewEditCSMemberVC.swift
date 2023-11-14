@@ -54,7 +54,7 @@ class NewEditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         view.backgroundColor = .SurfacePrimary
         
         header.do {
-            $0.applyStyle(style: .csEdit, vc: self)
+            $0.applyStyle(style: .editCSMember, vc: self)
         }
         
         addLabel.do {
@@ -101,7 +101,7 @@ class NewEditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         addButton.do {
             $0.setImage(UIImage(named: "PlusIconDefault"), for: .normal)
             $0.imageView?.contentScaleFactor = 2.0
-            $0.backgroundColor = .SurfaceBrandPear
+            $0.backgroundColor = .SurfaceBrandWatermelon
             $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 8
@@ -224,6 +224,10 @@ class NewEditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             .bind(to: searchTableView.rx.items(cellIdentifier: "CSMemberSearchCell")) { _, item, cell in
                 if let cell = cell as? CSMemberSearchCell {
                     cell.configure(item: item)
+                    if item.isCheck {
+                        cell.contentView.backgroundColor = .SurfaceBrandWatermelon
+                    }
+                    
                 }
             }
             .disposed(by: disposeBag)
@@ -271,6 +275,11 @@ class NewEditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             .bind(to: addCollectionView.rx.items(cellIdentifier: "CSMemberSelectedCell")) { _, item, cell in
                 if let cell = cell as? CSMemberSelectedCell {
                     cell.configure(item: item)
+                    cell.xMark.do {
+                        $0.image = UIImage(named: "DeleteIconTypeB")
+                        $0.backgroundColor = .SurfaceBrandWatermelon
+                        $0.layer.cornerRadius = 9
+                    }
                 }
             }
             .disposed(by: disposeBag)
@@ -356,6 +365,17 @@ class NewEditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.navigationController?.popViewController(animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        header.rightButton.rx.tap.asDriver()
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                if let vc = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 1] as? EditCSItemVC {
+                    Observable.just(self.viewModel.isEdit.value)
+                        .bind(to: vc.viewModel.isEdit)
+                        .disposed(by: disposeBag)
+                }
             })
             .disposed(by: disposeBag)
     }
