@@ -45,6 +45,12 @@ extension SPNavigationBar {
         
         case splitEditToAlert
         /// Split수정 View
+        case editCSInfo
+        /// csInfo 타이틀, 총금액 수정 View
+        case editCSMember
+        /// csMember 수정 View
+        case editExclItemList
+        /// exclItemList 수정 View
     }
     
     enum ActionType {
@@ -99,12 +105,12 @@ final class SPNavigationBar: UIView {
             setLeftDismissButton(title: "취소", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
             setRightDismissButton(title: "저장", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
         case .splitEdit:
-            setNaviTitle(title: "정산 수정하기")
+            setNaviTitle(title: "차수 선택")
             setLeftBackButton(action: .toBack, vc: vc)
         case .csEdit:
-            setNaviTitle(title: "차수 수정하기")
+            setNaviTitle(title: "차수 수정")
             setLeftBackButton(action: .toAlert, vc: vc)
-            setRightBackButton(title: "확인", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
+            setRightBackButton(title: "영수증", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
         case .print:
             if SplitRepository.share.isCreate {
                 setNaviTitle(title: "정산 결과")
@@ -129,6 +135,18 @@ final class SPNavigationBar: UIView {
         case .splitEditToAlert:
             setNaviTitle(title: "정산 수정")
             setLeftBackButton(action: .toAlert, vc: vc)
+        case .editCSInfo:
+            setNaviTitle(title: "이름 및 총액")
+            setLeftBackButton(action: .toAlert, vc: vc)
+            setRightBackButton(title: "저장", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
+        case .editCSMember:
+            setNaviTitle(title: "함께한 멤버")
+            setLeftBackButton(action: .toAlert, vc: vc)
+            setRightBackButton(title: "저장", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
+        case .editExclItemList:
+            setNaviTitle(title: "따로 정산")
+            setLeftBackButton(action: .toAlert, vc: vc)
+            setRightBackButton(title: "영수증", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
         }
     }
     

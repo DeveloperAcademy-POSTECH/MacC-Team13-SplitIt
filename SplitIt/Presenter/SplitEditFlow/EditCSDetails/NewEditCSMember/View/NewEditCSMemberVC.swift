@@ -54,7 +54,7 @@ class NewEditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         view.backgroundColor = .SurfacePrimary
         
         header.do {
-            $0.applyStyle(style: .csEdit, vc: self)
+            $0.applyStyle(style: .editCSMember, vc: self)
         }
         
         addLabel.do {

@@ -54,7 +54,7 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
         }
         
         header.do {
-            $0.applyStyle(style: .csEdit, vc: self)
+            $0.applyStyle(style: .editCSInfo, vc: self)
         }
         
         titleMessage.do {

@@ -37,7 +37,7 @@ class EditExclItemInputVC: UIViewController {
         view.backgroundColor = .SurfaceBrandCalmshell
         
         header.do {
-            $0.applyStyle(style: .csEdit, vc: self)
+            $0.applyStyle(style: .editExclItemList, vc: self)
         }
         
         exclListLabel.do {
