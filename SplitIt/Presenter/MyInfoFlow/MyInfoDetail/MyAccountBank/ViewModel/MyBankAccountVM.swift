@@ -57,7 +57,6 @@ class MyBankAccountVM {
     
     func transform(input: Input) -> Output {
         
-       // let inputNameText = input.inputNameText
         let inputRealNameText = input.inputRealNameText
         let editDoneBtnTapped = input.editDoneBtnTapped
         let selectBackTapped = input.selectBackTapped

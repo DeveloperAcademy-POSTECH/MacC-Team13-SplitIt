@@ -89,7 +89,7 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
         
         allDeleteBtn.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(34)
-            $0.top.equalTo(header.snp.bottom).offset(24)
+            $0.top.equalTo(header.snp.bottom).offset(20)
         }
         
         tableView.snp.makeConstraints {

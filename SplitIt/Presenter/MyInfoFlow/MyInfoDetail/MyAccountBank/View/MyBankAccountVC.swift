@@ -45,7 +45,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
     let accountCountLabel = UILabel()
     
     var nameLabel = UILabel()
-    var nameTextField = SPTextField() //예금주
+    var nameTextField = SPTextField()
     var nameCountLabel = UILabel()
     
     let payLabel = UILabel()
@@ -80,6 +80,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         asapRxData()
         accountTextFieldCustomKeyboard()
         textFieldTextAttribute()
+        headerButtonState()
        
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -192,10 +193,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         let isTextEmptyObservable = Driver.combineLatest(nameObservable, accountObservable, bankValueDriver)
         
             .map { text1, text2, bankValue in
-                if let bankValue = bankValue, bankValue.isEmpty {
-                    print(1)
-                    return false
-                } else if bankValue != "선택 안함" {
+                if bankValue != "선택 안함" {
                     if self.nameTextField.text?.count != 0 && self.accountTextField.text?.count != 0 {
                         print(2)
                         return true
@@ -424,6 +422,17 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         
     }
     
+    func headerButtonState() {
+        print(userDefault.string(forKey: "userBank"))
+        if userDefault.string(forKey: "userBank") != "" {
+            print(111)
+            header.buttonState.accept(true)
+        } else {
+            print(222)
+            header.buttonState.accept(false)
+        }
+    }
+    
     func setAttribute() {
         
         view.backgroundColor = .SurfaceBrandCalmshell
@@ -436,7 +445,6 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
          
         header.do {
             $0.applyStyle(style: .myInfo, vc: self)
-            //$0.buttonState.accept(true)
             $0.leftButton.removeTarget(nil, action: nil, for: .touchUpInside)
         }
         
