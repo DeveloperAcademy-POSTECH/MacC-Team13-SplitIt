@@ -107,7 +107,7 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         addButton.do {
             $0.setImage(UIImage(named: "PlusIconDefault"), for: .normal)
             $0.imageView?.contentScaleFactor = 2.0
-            $0.backgroundColor = .SurfaceBrandPear
+            $0.backgroundColor = .SurfaceBrandCherry
             $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 8
@@ -137,7 +137,7 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         }
         
         nextButton.do {
-            $0.applyStyle(style: .primaryPear, shape: .rounded)
+            $0.applyStyle(style: .primaryCherry, shape: .rounded)
             self.nextButton.setTitle("2명부터 정산할 수 있어요", for: .normal)
         }
     }

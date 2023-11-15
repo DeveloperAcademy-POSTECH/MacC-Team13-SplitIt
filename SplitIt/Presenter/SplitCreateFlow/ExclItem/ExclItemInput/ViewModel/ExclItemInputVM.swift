@@ -41,7 +41,7 @@ class ExclItemInputVM {
         let exclItemRepository = SplitRepository.share.exclItemArr
         let exclMemberRepository = SplitRepository.share.exclMemberArr
         let exclItemsRelay = BehaviorRelay<[ExclItemInfo]>(value: [
-            ExclItemInfo(exclItem: ExclItem(csInfoIdx: "", name: "", price: 0), items: [])
+            ExclItemInfo(exclItem: ExclItem(name: "", price: 0, csInfoIdx: ""), items: [])
         ])
         
         input.viewDidDisappear

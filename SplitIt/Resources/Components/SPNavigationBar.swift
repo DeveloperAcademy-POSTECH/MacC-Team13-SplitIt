@@ -32,8 +32,10 @@ extension SPNavigationBar {
         case splitEdit
         /// 차수 수정하기 Flow
         case csEdit
-        /// 영수증 공유 View
-        case print
+        /// Create Flow 영수증 공유 View
+        case createToShare
+        /// History Flow 영수증 공유 View
+        case historyToShare
         /// 스플릿 내역 View
         case history
         /// 설정 View
@@ -42,13 +44,12 @@ extension SPNavigationBar {
         case myInfo
         ///  멤버 추가 내역 View
         case memberSearchHistory
-        
-        case editCSInfo
         /// csInfo 타이틀, 총금액 수정 View
-        case editCSMember
+        case editCSInfo
         /// csMember 수정 View
-        case editExclItemList
+        case editCSMember
         /// exclItemList 수정 View
+        case editExclItemList
     }
     
     enum ActionType {
@@ -108,14 +109,12 @@ final class SPNavigationBar: UIView {
             setNaviTitle(title: "차수 수정")
             setLeftBackButton(action: .none, vc: vc)
             setReceiptsButton(vc: vc, action: false)
-        case .print:
-            if SplitRepository.share.isCreate {
-                setNaviTitle(title: "정산 결과")
-                setExitButton(vc: vc, action: true)
-            } else {
-                setNaviTitle(title: "정산 결과")
-                setLeftBackButton(action: .toBack, vc: vc)
-            }
+        case .createToShare:
+            setNaviTitle(title: "정산 결과")
+            setExitButton(vc: vc, action: true)
+        case .historyToShare:
+            setNaviTitle(title: "정산 결과")
+            setLeftBackButton(action: .toBack, vc: vc)
         case .history:
             setNaviTitle(title: "과거 정산 내역")
             setLeftBackButton(action: .toBack, vc: vc)

@@ -18,7 +18,7 @@ class ExclItemInfoEditModalVM {
     let maxTextCount = 8
     
     let sections = BehaviorRelay<[ExclItemInfoModalSection]>(value: [])
-    let exclInfo = BehaviorRelay<ExclItem>(value: ExclItem(csInfoIdx: "", name: "", price: 0))
+    let exclInfo = BehaviorRelay<ExclItem>(value: ExclItem(name: "", price: 0, csInfoIdx: ""))
     
     struct Input {
         let viewWillAppear: Observable<Bool>
