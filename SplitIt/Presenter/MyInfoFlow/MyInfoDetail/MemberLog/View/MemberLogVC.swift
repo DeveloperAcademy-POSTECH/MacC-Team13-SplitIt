@@ -12,15 +12,18 @@ import RxDataSources
 import SnapKit
 import Then
 
-class MemberLogVC: UIViewController, UIScrollViewDelegate {
+class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
+    
     let repo = SplitRepository.share
+    let alert = SPAlertController()
     
     let header = SPNavigationBar()
-    var searchImage = UIImageView()
     var tableView = UITableView()
-    var searchBarTextField = UITextField()
     let emptyLabel = UILabel()
-    let deleteBtn = UIButton()
+    
+    let friendLabel = UILabel()
+    let friendCount = UILabel()
+    let allDeleteBtn = UIButton()
     
     var viewModel = MemberLogVM()
     var disposeBag = DisposeBag()
@@ -45,13 +48,27 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
     }
     
     func setAddView() {
-        [header,tableView, searchBarTextField, emptyLabel, deleteBtn].forEach {
+        [header,tableView, emptyLabel, friendLabel, friendCount, allDeleteBtn].forEach {
             view.addSubview($0)
         }
-        searchBarTextField.addSubview(searchImage)
         
     }
     
+    func setAlert() {
+        showAlert(view: alert,
+                type: .warnNormal,
+                title: "내역을 모두 지우시겠어요?",
+                descriptions: "지금까지 추가하신 내역들이 사라져요",
+                leftButtonTitle: "취 소",
+                rightButtonTitle: "모두 지우기")
+        
+        alert.rightButtonTapSubject
+              .asDriver(onErrorJustReturn: ())
+              .drive(onNext: {
+                  print("제롬이 만들어줄거임")
+              })
+              .disposed(by: disposeBag)
+    }
   
     func setLayout() {
         
@@ -60,37 +77,34 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(8)
             $0.leading.trailing.equalToSuperview()
         }
-        
-        searchBarTextField.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(108)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(330)
-            make.height.equalTo(30)
-            
+        friendLabel.snp.makeConstraints {
+            $0.top.equalTo(header.snp.bottom).offset(24)
+            $0.leading.equalToSuperview().offset(34)
         }
         
-        tableView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.top.equalTo(searchBarTextField.snp.bottom).offset(8)
-            make.bottom.equalToSuperview().inset(30)
+        friendCount.snp.makeConstraints {
+            $0.leading.equalTo(friendLabel.snp.trailing).offset(8)
+            $0.top.equalTo(header.snp.bottom).offset(24)
         }
         
-        searchImage.snp.makeConstraints { make in
-            make.height.equalTo(22)
-            make.width.equalTo(22)
-            make.leading.equalToSuperview().offset(10)
-            make.centerY.equalToSuperview()
+        allDeleteBtn.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(34)
+            $0.top.equalTo(header.snp.bottom).offset(20)
         }
+        
+        tableView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.top.equalTo(friendLabel.snp.bottom).offset(16)
+            $0.bottom.equalToSuperview().inset(30)
+        }
+        
         
         emptyLabel.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(77)
             $0.centerY.equalToSuperview()
         }
         
-//        deleteBtn.snp.makeConstraints {
-//            $0.leading.trailing.equalToSuperview().inset(20)
-//            $0.bottom.equalToSuperview().inset(20)
-//        }
+
         
     }
     
@@ -102,26 +116,15 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
             $0.applyStyle(style: .memberSearchHistory, vc: self)
         }
         
-        searchBarTextField.do {
-            $0.clipsToBounds = true
-            $0.layer.borderColor = UIColor.black.cgColor
-            $0.layer.cornerRadius = 16
-            $0.layer.borderWidth = 1
-            $0.placeholder = "친구 이름을 입력하세요"
-            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 38, height: $0.frame.height))
-            $0.leftViewMode = .always
-            $0.autocapitalizationType = .none
-            $0.autocorrectionType = .no
-            $0.spellCheckingType = .no
-            $0.layer.cornerRadius = 10
-            $0.layer.masksToBounds = true
-        
+        friendLabel.do {
+            $0.text = "함께한 멤버 |"
+            $0.font = .KoreanBody
+            $0.textColor = .TextPrimary
         }
-
-       
-        searchImage.do {
-            $0.image = UIImage(systemName: "magnifyingglass")
-            $0.tintColor = UIColor.gray
+        
+        friendCount.do {
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextSecondary
         }
         
         emptyLabel.do {
@@ -131,36 +134,37 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
             $0.isHidden = false
         }
         
-//        let attributedString = NSMutableAttributedString(string: "전체 삭제하기")
-//        attributedString.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: attributedString.length))
-//
-//        deleteBtn.do {
-//            $0.titleLabel?.font = UIFont.KoreanCaption1
-//            $0.titleLabel?.textColor = .SurfaceWarnRed
-//            $0.clipsToBounds = true
-//            $0.backgroundColor = .clear
-//            $0.layer.borderWidth = 0
-//            $0.setAttributedTitle(attributedString, for: .normal)
-//        }
-        
+        allDeleteBtn.do {
+            let string = NSAttributedString(string: "모두 지우기", attributes: [
+                NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
+            ])
+            
+            $0.titleLabel?.font = .KoreanCaption1
+            $0.titleLabel?.textColor = .TextPrimary
+            $0.clipsToBounds = true
+            $0.backgroundColor = .clear
+            $0.layer.borderWidth = 0
+            $0.setAttributedTitle(string, for: .normal)
+            
+            
+        }
     }
     
     func setBinding() {
+    
+        let input = MemberLogVM.Input(deleteBtnTapped: allDeleteBtn.rx.tap.asDriver())
         
-        searchBarTextField.rx.text.orEmpty
-            .distinctUntilChanged()
-            .bind { [weak self] text in
-                guard let self = self else { return }
-                
-                if text.isEmpty {
-                    self.viewModel.filteredMemberList.accept(SplitRepository.share.memberLogArr.value.sorted { $0.name < $1.name })
-                } else {
-                    self.viewModel.filterMembers(with: text)
-                }
-            }
+        let output = viewModel.transform(input: input)
+        
+        output.showAlertAllDelete
+            .drive(onNext: { [weak self] in
+                self?.setAlert()
+            })
             .disposed(by: disposeBag)
         
-        viewModel.filteredMemberList
+            
+        
+        viewModel.memberList
             .bind(to: tableView.rx.items(cellIdentifier: "MemberCell", cellType: MemberCell.self)) { (row, member, cell) in
                 cell.nameLabel.text = member.name
                 //삭제버튼 눌렀을 때
@@ -168,16 +172,21 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
                     .observe(on: MainScheduler.asyncInstance)
                     .subscribe(onNext: { [self] in
                         repo.deleteMemberLog(memberLogIdx: member.memberLogIdx)
-                        self.viewModel.filteredMemberList.accept(self.repo.memberLogArr.value.sorted { $0.name < $1.name })
+                        self.viewModel.memberList.accept(self.repo.memberLogArr.value.sorted { $0.name < $1.name })
                     })
                     .disposed(by: cell.disposeBag)
                 
             }
             .disposed(by: disposeBag)
         
-        viewModel.filteredMemberList
+        viewModel.memberList
             .map { !$0.isEmpty }
             .bind(to: emptyLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        viewModel.memberList
+            .map { "\($0.count)명" }
+            .bind(to: friendCount.rx.text)
             .disposed(by: disposeBag)
 
     }

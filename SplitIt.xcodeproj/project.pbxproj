@@ -34,6 +34,8 @@
 		1A8B05DC2AF0E15A00CF5BC5 /* SPNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8B05DB2AF0E15A00CF5BC5 /* SPNavigationBar.swift */; };
 		1A8B05E12AF1466300CF5BC5 /* SplitMethodSelectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8B05E02AF1466300CF5BC5 /* SplitMethodSelectVC.swift */; };
 		1A8B05E32AF1540A00CF5BC5 /* SplitMethodSelectVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8B05E22AF1540A00CF5BC5 /* SplitMethodSelectVM.swift */; };
+		1AC4115F2B020D03008A45BC /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 1AC4115E2B020D03008A45BC /* Toast */; };
+		1AC411632B0231BD008A45BC /* SPPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC411622B0231BD008A45BC /* SPPopUp.swift */; };
 		60104CE52AEFF6F700489AAD /* ExclItemInfoModalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60104CE42AEFF6F700489AAD /* ExclItemInfoModalCell.swift */; };
 		60104CE72AEFF70D00489AAD /* ExclItemInfoDeactiveModalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60104CE62AEFF70D00489AAD /* ExclItemInfoDeactiveModalCell.swift */; };
 		60104CE92AEFF73800489AAD /* ExclItemInfoModalSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60104CE82AEFF73800489AAD /* ExclItemInfoModalSection.swift */; };
@@ -79,6 +81,8 @@
 		60AE3EC12AE77488009D9D18 /* CSMemberResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EC02AE77488009D9D18 /* CSMemberResult.swift */; };
 		60AE3EC32AE77491009D9D18 /* SplitResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EC22AE77491009D9D18 /* SplitResult.swift */; };
 		60F496952AF753180077F6FB /* SPAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F496942AF753180077F6FB /* SPAlertController.swift */; };
+		8656D6D42B020C03003660A4 /* NewEditCSMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D32B020C03003660A4 /* NewEditCSMemberVC.swift */; };
+		8656D6D72B020C6D003660A4 /* NewEditCSMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D62B020C6D003660A4 /* NewEditCSMemberVM.swift */; };
 		86C65FF22AEF970F00A7942A /* EditCSListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF12AEF970F00A7942A /* EditCSListVC.swift */; };
 		86C65FF42AEF985A00A7942A /* EditCSListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF32AEF985A00A7942A /* EditCSListVM.swift */; };
 		86C65FF62AEF9ADF00A7942A /* EditCSListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF52AEF9ADF00A7942A /* EditCSListCell.swift */; };
@@ -118,7 +122,6 @@
 		DE73D6FC2AE1993F00ABF3EF /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE73D6FB2AE1993F00ABF3EF /* MemberCell.swift */; };
 		DEFE9D812AEAAD91009C693E /* CustomKeyBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFE9D802AEAAD91009C693E /* CustomKeyBoard.swift */; };
 		DEFE9D832AEAB80A009C693E /* KeyboardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFE9D822AEAB80A009C693E /* KeyboardButton.swift */; };
-		DEFE9D982AEFC33B009C693E /* AccountCustomkeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFE9D972AEFC33B009C693E /* AccountCustomkeyboard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -147,6 +150,7 @@
 		1A8B05DB2AF0E15A00CF5BC5 /* SPNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPNavigationBar.swift; sourceTree = "<group>"; };
 		1A8B05E02AF1466300CF5BC5 /* SplitMethodSelectVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMethodSelectVC.swift; sourceTree = "<group>"; };
 		1A8B05E22AF1540A00CF5BC5 /* SplitMethodSelectVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMethodSelectVM.swift; sourceTree = "<group>"; };
+		1AC411622B0231BD008A45BC /* SPPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPPopUp.swift; sourceTree = "<group>"; };
 		60104CE42AEFF6F700489AAD /* ExclItemInfoModalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInfoModalCell.swift; sourceTree = "<group>"; };
 		60104CE62AEFF70D00489AAD /* ExclItemInfoDeactiveModalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInfoDeactiveModalCell.swift; sourceTree = "<group>"; };
 		60104CE82AEFF73800489AAD /* ExclItemInfoModalSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInfoModalSection.swift; sourceTree = "<group>"; };
@@ -185,6 +189,8 @@
 		60AE3EC02AE77488009D9D18 /* CSMemberResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberResult.swift; sourceTree = "<group>"; };
 		60AE3EC22AE77491009D9D18 /* SplitResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitResult.swift; sourceTree = "<group>"; };
 		60F496942AF753180077F6FB /* SPAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAlertController.swift; sourceTree = "<group>"; };
+		8656D6D32B020C03003660A4 /* NewEditCSMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditCSMemberVC.swift; sourceTree = "<group>"; };
+		8656D6D62B020C6D003660A4 /* NewEditCSMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditCSMemberVM.swift; sourceTree = "<group>"; };
 		86C65FF12AEF970F00A7942A /* EditCSListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVC.swift; sourceTree = "<group>"; };
 		86C65FF32AEF985A00A7942A /* EditCSListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVM.swift; sourceTree = "<group>"; };
 		86C65FF52AEF9ADF00A7942A /* EditCSListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListCell.swift; sourceTree = "<group>"; };
@@ -224,7 +230,6 @@
 		DE73D6FB2AE1993F00ABF3EF /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		DEFE9D802AEAAD91009C693E /* CustomKeyBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyBoard.swift; sourceTree = "<group>"; };
 		DEFE9D822AEAB80A009C693E /* KeyboardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardButton.swift; sourceTree = "<group>"; };
-		DEFE9D972AEFC33B009C693E /* AccountCustomkeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCustomkeyboard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,6 +237,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AC4115F2B020D03008A45BC /* Toast in Frameworks */,
 				6078ACEF2ADA756900995811 /* RxSwift in Frameworks */,
 				1A1ACC532AF672F3004AC4CD /* SnapshotKit in Frameworks */,
 				6078ACE12ADA751D00995811 /* RxRealm in Frameworks */,
@@ -297,9 +303,9 @@
 		1A7845072AFD28A500E38403 /* CSMember */ = {
 			isa = PBXGroup;
 			children = (
+				1AC411612B02120E008A45BC /* Model */,
 				1A7845092AFD28B900E38403 /* ViewModel */,
 				1A7845082AFD28B000E38403 /* View */,
-				60990AEB2B01F24100202319 /* MemberCheck.swift */,
 			);
 			path = CSMember;
 			sourceTree = "<group>";
@@ -354,6 +360,23 @@
 				1A8B05E22AF1540A00CF5BC5 /* SplitMethodSelectVM.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		1AC411602B020DC0008A45BC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				60AE3EC02AE77488009D9D18 /* CSMemberResult.swift */,
+				60AE3EC22AE77491009D9D18 /* SplitResult.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		1AC411612B02120E008A45BC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				60990AEB2B01F24100202319 /* MemberCheck.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		60115DF22ADBF0DD0050D32C /* Presenter */ = {
@@ -707,10 +730,9 @@
 		60AE3EB12AE77395009D9D18 /* SplitShare */ = {
 			isa = PBXGroup;
 			children = (
+				1AC411602B020DC0008A45BC /* Model */,
 				60AE3EB32AE773A3009D9D18 /* ViewModel */,
 				60AE3EB22AE7739E009D9D18 /* View */,
-				60AE3EC02AE77488009D9D18 /* CSMemberResult.swift */,
-				60AE3EC22AE77491009D9D18 /* SplitResult.swift */,
 			);
 			path = SplitShare;
 			sourceTree = "<group>";
@@ -740,6 +762,31 @@
 				60AE3EB92AE77417009D9D18 /* SplitShareTableCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		8656D6D12B020BC2003660A4 /* NewEditCSMember */ = {
+			isa = PBXGroup;
+			children = (
+				8656D6D52B020C57003660A4 /* ViewModel */,
+				8656D6D22B020BEF003660A4 /* View */,
+			);
+			path = NewEditCSMember;
+			sourceTree = "<group>";
+		};
+		8656D6D22B020BEF003660A4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8656D6D32B020C03003660A4 /* NewEditCSMemberVC.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8656D6D52B020C57003660A4 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				8656D6D62B020C6D003660A4 /* NewEditCSMemberVM.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		869D1AC92AE5292A00D166B1 /* SplitEditFlow */ = {
@@ -773,6 +820,7 @@
 		86DACB092AF4EC4F008D7BAF /* EditCSDetails */ = {
 			isa = PBXGroup;
 			children = (
+				8656D6D12B020BC2003660A4 /* NewEditCSMember */,
 				86DACB142AF63B01008D7BAF /* EditCSExclItem */,
 				86DACB0F2AF6393C008D7BAF /* EditCSMember */,
 				86DACB0A2AF4ECB8008D7BAF /* EditCSInfo */,
@@ -841,6 +889,7 @@
 				1A8B05DB2AF0E15A00CF5BC5 /* SPNavigationBar.swift */,
 				86C65FFD2AF0F6FB00A7942A /* DefaultEditButton.swift */,
 				60F496942AF753180077F6FB /* SPAlertController.swift */,
+				1AC411622B0231BD008A45BC /* SPPopUp.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -993,7 +1042,6 @@
 			children = (
 				DEFE9D802AEAAD91009C693E /* CustomKeyBoard.swift */,
 				DEFE9D822AEAB80A009C693E /* KeyboardButton.swift */,
-				DEFE9D972AEFC33B009C693E /* AccountCustomkeyboard.swift */,
 			);
 			path = CustomKeyboard;
 			sourceTree = "<group>";
@@ -1026,6 +1074,7 @@
 				1A1ACC522AF672F3004AC4CD /* SnapshotKit */,
 				1A7845052AFD1AB100E38403 /* RealmSwift */,
 				604B5FBE2B035D6D00EDD5DA /* RxGesture */,
+				1AC4115E2B020D03008A45BC /* Toast */,
 			);
 			productName = SplitIt;
 			productReference = 6078ACC82ADA74AC00995811 /* SplitIt.app */;
@@ -1066,6 +1115,7 @@
 				1A1ACC512AF672F3004AC4CD /* XCRemoteSwiftPackageReference "SnapshotKit" */,
 				1A7845042AFD1AB100E38403 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				604B5FBD2B035D6D00EDD5DA /* XCRemoteSwiftPackageReference "RxGesture" */,
+				1AC4115D2B020D02008A45BC /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 			);
 			productRefGroup = 6078ACC92ADA74AC00995811 /* Products */;
 			projectDirPath = "";
@@ -1099,6 +1149,7 @@
 				60AE3EAA2AE6562E009D9D18 /* DateFormatterHelper.swift in Sources */,
 				60104CE52AEFF6F700489AAD /* ExclItemInfoModalCell.swift in Sources */,
 				604CDC7B2AF14A8200416454 /* ExclItemInputEmptyView.swift in Sources */,
+				1AC411632B0231BD008A45BC /* SPPopUp.swift in Sources */,
 				6032DCF62AEE8126004A6BFA /* ExclItemCell.swift in Sources */,
 				DE1711C42AE0BAB30097850D /* MyInfoVC.swift in Sources */,
 				60AE3EBC2AE7743E009D9D18 /* UITableView+.swift in Sources */,
@@ -1148,13 +1199,13 @@
 				60AE3EC12AE77488009D9D18 /* CSMemberResult.swift in Sources */,
 				60AE3EBA2AE77417009D9D18 /* SplitShareTableCell.swift in Sources */,
 				6078ACCC2ADA74AC00995811 /* AppDelegate.swift in Sources */,
-				DEFE9D982AEFC33B009C693E /* AccountCustomkeyboard.swift in Sources */,
 				DE73D6EB2AE0D29000ABF3EF /* BankManager.swift in Sources */,
 				60990AEC2B01F24100202319 /* MemberCheck.swift in Sources */,
 				86DACB0E2AF4ECE7008D7BAF /* EditCSInfoVM.swift in Sources */,
 				1A4DB2292ADE61E800616243 /* RealmManager.swift in Sources */,
 				1A3853032ADE5B4500E9A20B /* RealmCSMember.swift in Sources */,
 				1A3853012ADE5B3100E9A20B /* RealmCSInfo.swift in Sources */,
+				8656D6D72B020C6D003660A4 /* NewEditCSMemberVM.swift in Sources */,
 				60115E012ADC01150050D32C /* UITextField+.swift in Sources */,
 				60104CE92AEFF73800489AAD /* ExclItemInfoModalSection.swift in Sources */,
 				6032DCF82AEF4B5B004A6BFA /* ExclItemAddCell.swift in Sources */,
@@ -1175,6 +1226,7 @@
 				6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */,
 				DE73D6E52AE0D12C00ABF3EF /* MyBankAccountVM.swift in Sources */,
 				1A4DB2512ADEB24300616243 /* RealmMemberLog.swift in Sources */,
+				8656D6D42B020C03003660A4 /* NewEditCSMemberVC.swift in Sources */,
 				1A4DB22B2ADE68E400616243 /* SplitRepository.swift in Sources */,
 				C291BA132AF4DD6F009501F3 /* UIDevice+.swift in Sources */,
 				1A3852FD2ADE5B0100E9A20B /* ExclMember.swift in Sources */,
@@ -1331,7 +1383,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B9U954AWHU;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SplitIt/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1423,6 +1475,14 @@
 				kind = branch;
 			};
 		};
+		1AC4115D2B020D02008A45BC /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		60115DFA2ADBF8860050D32C /* XCRemoteSwiftPackageReference "RxAppState" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pixeldock/RxAppState";
@@ -1499,6 +1559,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1A7845042AFD1AB100E38403 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
+		};
+		1AC4115E2B020D03008A45BC /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1AC4115D2B020D02008A45BC /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
 		};
 		60115DFB2ADBF8860050D32C /* RxAppState */ = {
 			isa = XCSwiftPackageProductDependency;

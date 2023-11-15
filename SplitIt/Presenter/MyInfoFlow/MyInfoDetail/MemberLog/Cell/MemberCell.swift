@@ -65,7 +65,7 @@ class MemberCell: UITableViewCell {
         
         deleteBtn.do {
             $0.setImage(UIImage(systemName: "x.circle.fill"), for: .normal)
-            $0.tintColor = .gray
+            $0.tintColor = .AppColorGrayscale200
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 12
             $0.backgroundColor = .clear

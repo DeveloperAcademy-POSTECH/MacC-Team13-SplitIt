@@ -13,6 +13,7 @@ import Then
 import SnapKit
 import Reusable
 import SnapshotKit
+import Toast
 
 class SplitShareVC: UIViewController {
     let disposeBag = DisposeBag()
@@ -25,6 +26,10 @@ class SplitShareVC: UIViewController {
     let editButton = SPButton()
     let shareButton = SPButton()
     
+    let popUpBackGroundView = UIView()
+    let popUpView = SPPopUp()
+    let popUpTapGesture = UITapGestureRecognizer()
+    
     var splitDate: Date = .now
     
     var resultArr: [SplitMemberResult] = []
@@ -36,6 +41,9 @@ class SplitShareVC: UIViewController {
         setAttribute()
         setLayout()
         setBind()
+        
+        // TODO: - nil일때로 설정 바꿔주기
+        if UserDefaults.standard.string(forKey: "userBank")! == "선택 안함" { setPopUp() }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -177,6 +185,7 @@ class SplitShareVC: UIViewController {
                 let image = self.tableView.takeSnapshotOfFullContent()
                 
                 var items: [Any] = []
+                
                 if sendPayString != "" { items.append(sendPayString) }
                 items.append(image as Any)
                 
@@ -185,6 +194,14 @@ class SplitShareVC: UIViewController {
                 self.present(vc, animated: true)
                 
                 self.tableView.layer.borderColor = UIColor.BorderPrimary.cgColor
+                
+                vc.completionWithItemsHandler = { activity, success, items, error in
+                    if success {
+                        var style = ToastStyle()
+                        style.messageFont = .KoreanCaption1
+                        self.view.makeToast("  ✓  공유가 완료되었습니다!  ", duration: 3.0, position: .top, style: style)
+                    }
+                }
             })
             .disposed(by: disposeBag)
         
@@ -204,6 +221,43 @@ class SplitShareVC: UIViewController {
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
+        
+        popUpTapGesture.rx.event
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.removePopUp()
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func setPopUp() {
+        popUpBackGroundView.do {
+            $0.backgroundColor = .black
+            $0.layer.opacity = 0.6
+            $0.addGestureRecognizer(popUpTapGesture)
+        }
+        
+        popUpView.do {
+            $0.applyStyle(style: .goToMyInfo, vc: self)
+        }
+        
+        [popUpBackGroundView,popUpView].forEach {
+            view.addSubview($0)
+        }
+        
+        popUpBackGroundView.snp.makeConstraints {
+            $0.size.equalToSuperview()
+        }
+        
+        popUpView.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview().inset(35)
+        }
+    }
+    
+    private func removePopUp() {
+        popUpBackGroundView.removeFromSuperview()
+        popUpView.removeFromSuperview()
     }
 }
 

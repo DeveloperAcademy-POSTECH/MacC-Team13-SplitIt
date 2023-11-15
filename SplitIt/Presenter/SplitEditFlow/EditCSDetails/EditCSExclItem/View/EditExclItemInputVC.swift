@@ -34,10 +34,10 @@ class EditExclItemInputVC: UIViewController {
     }
     
     func setAttribute() {
-        view.backgroundColor = .SurfacePrimary
+        view.backgroundColor = .SurfaceBrandCalmshell
         
         header.do {
-            $0.applyStyle(style: .csEdit, vc: self)
+            $0.applyStyle(style: .editExclItemList, vc: self)
         }
         
         exclListLabel.do {
@@ -177,7 +177,7 @@ class EditExclItemInputVC: UIViewController {
         output.showResultView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                SplitRepository.share.updateDataToDB()
+//                SplitRepository.share.updateDataToDB()
             })
             .disposed(by: disposeBag)
         
@@ -185,6 +185,7 @@ class EditExclItemInputVC: UIViewController {
             .asDriver()
             .drive { [weak self] _ in
                 guard let self = self else { return }
+                SplitRepository.share.updateDataToDB()
                 self.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)

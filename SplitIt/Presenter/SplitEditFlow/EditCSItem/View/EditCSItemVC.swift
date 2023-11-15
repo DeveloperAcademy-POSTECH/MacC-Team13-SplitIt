@@ -11,6 +11,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import Reusable
+import Toast
 
 class EditCSItemVC: UIViewController, SPAlertDelegate {
     
@@ -232,7 +233,7 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
         output.pushCSMemberEditView
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                let vc = EditCSMemberVC()
+                let vc = NewEditCSMemberVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
@@ -277,6 +278,18 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
                 self.navigationController?.popViewController(animated: true)
             })
             .disposed(by: disposeBag)
+        
+        viewModel.isEdit.asDriver()
+            .drive(onNext: {[weak self] bool in
+                guard let self = self else { return }
+                if bool {
+                    var style = ToastStyle()
+                    style.messageFont = .KoreanCaption1
+                    self.view.makeToast("  ✓  수정 완료되었습니다!  ", duration: 3.0, position: .bottom, style: style)
+                }
+            })
+            .disposed(by: disposeBag)
+        
     }
 }
 

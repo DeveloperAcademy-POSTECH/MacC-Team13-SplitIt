@@ -15,39 +15,29 @@ class MemberLogVM {
     var memberList: BehaviorRelay<[MemberLog]>
     var disposeBag = DisposeBag()
     
-    var inputFriend = ""
 
     init() {
         memberList = BehaviorRelay<[MemberLog]>(value: SplitRepository.share.memberLogArr.value.sorted { $0.name < $1.name })
     }
 
     struct Input {
-        let inputFriendName: Observable<String>
+        let deleteBtnTapped: Driver<Void>
+        
     }
     
     
     struct Output {
-        
+        let showAlertAllDelete: Driver<Void>
     }
     
-    var filteredMemberList = BehaviorRelay<[MemberLog]>(value: [])
-    
-    func filterMembers(with text: String) {
-        let filteredMembers = memberList.value.filter { $0.name.contains(text) }
-        filteredMemberList.accept(filteredMembers)
-    }
-
     func transform(input: Input) -> Output {
-        let inputFriendName = input.inputFriendName
+        let deleteBtnTapped = input.deleteBtnTapped
+
         repo.fetchMemberLog()
 
-        inputFriendName
-            .bind(onNext: { [self] text in
-                inputFriend = text
-            })
-            .disposed(by: disposeBag)
         
-        let output = Output()
+        
+        let output = Output(showAlertAllDelete: deleteBtnTapped)
         return output
     }
 

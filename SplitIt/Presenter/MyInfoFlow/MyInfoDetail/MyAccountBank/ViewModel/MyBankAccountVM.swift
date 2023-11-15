@@ -57,7 +57,6 @@ class MyBankAccountVM {
     
     func transform(input: Input) -> Output {
         
-       // let inputNameText = input.inputNameText
         let inputRealNameText = input.inputRealNameText
         let editDoneBtnTapped = input.editDoneBtnTapped
         let selectBackTapped = input.selectBackTapped
@@ -76,9 +75,7 @@ class MyBankAccountVM {
                     UserDefaults.standard.set("선택 안함", forKey: "userBank")
                     UserDefaults.standard.set("", forKey: "userAccount")
                     UserDefaults.standard.set("", forKey: "userName")
-                    print(1)
                 } else {
-                    print(2)
                     if !self.inputBankName.isEmpty || self.checkBank == 1 {
                         UserDefaults.standard.set(self.inputBankName, forKey: "userBank")
                         self.checkBank = 0

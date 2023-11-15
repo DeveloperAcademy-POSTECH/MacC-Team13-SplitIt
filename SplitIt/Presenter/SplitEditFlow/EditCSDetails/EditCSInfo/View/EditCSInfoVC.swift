@@ -46,7 +46,7 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
     }
     
     func setAttribute() {
-        view.backgroundColor = .SurfacePrimary
+        view.backgroundColor = .SurfaceBrandCalmshell
         
         scrollView.do {
             $0.showsVerticalScrollIndicator = false
@@ -54,7 +54,7 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
         }
         
         header.do {
-            $0.applyStyle(style: .csEdit, vc: self)
+            $0.applyStyle(style: .editCSInfo, vc: self)
         }
         
         titleMessage.do {
@@ -263,6 +263,20 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
                 self.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
+        
+        header.rightButton.rx.tap.asDriver()
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                if let vc = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 1] as? EditCSItemVC {
+                    Observable.just(self.viewModel.isEdit.value)
+                        .bind(to: vc.viewModel.isEdit)
+                        .disposed(by: disposeBag)
+                }
+            })
+            .disposed(by: disposeBag)
+                
+                
+        
     }
 }
 
