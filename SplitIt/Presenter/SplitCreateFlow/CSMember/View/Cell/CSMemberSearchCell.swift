@@ -81,7 +81,7 @@ class CSMemberSearchCell: UITableViewCell, Reusable {
         nameLabel.text = item.name
         
         if item.isCheck {
-            contentView.backgroundColor = .SurfaceBrandPear
+            contentView.backgroundColor = .SurfaceBrandCherry
             checkMark.tintColor = .TextPrimary
             contentView.layer.borderColor = UIColor.BorderPrimary.cgColor
             contentView.layer.borderWidth = 1

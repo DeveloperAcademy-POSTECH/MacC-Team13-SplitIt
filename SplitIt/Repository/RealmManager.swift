@@ -12,7 +12,7 @@ import RxCocoa
 
 final class RealmManager {
     
-    // Realm에 Data 저장 및 업데이트
+    /// Realm에 Data 저장 및 업데이트
     func updateData<T: RealmRepresentable>(arr: [T]) {
         do {
             let realm = try Realm()
@@ -31,7 +31,7 @@ final class RealmManager {
         }
     }
     
-    // Realm에서 Data 삭제
+    /// Realm에서 Data 삭제
     func deleteDatas<T: Object & LocalConvertibleType>(deleteType: T.Type, idxArr: [String]) {
         do {
             let realm = try Realm()
@@ -46,6 +46,22 @@ final class RealmManager {
             }
         } catch {
             print("DeleteDate To Realm Error")
+        }
+    }
+    
+    /// Realm에서 모든 memberLog를 삭제
+    func deleteAllMemberLog() {
+        do {
+            let realm = try Realm()
+            
+            let memberLogs = realm.objects(RMMemberLog.self)
+            
+            try! realm.write {
+                realm.delete(memberLogs)
+            }
+            
+        } catch {
+            print("DeleteAllMemberLog To Realm Error")
         }
     }
 

@@ -55,7 +55,7 @@ class SplitShareVC: UIViewController {
         view.backgroundColor = .SurfacePrimary
         
         header.do {
-            $0.applyStyle(style: .print, vc: self)
+            $0.applyStyle(style: .createToShare, vc: self)
         }
         
         mainTitle.do {

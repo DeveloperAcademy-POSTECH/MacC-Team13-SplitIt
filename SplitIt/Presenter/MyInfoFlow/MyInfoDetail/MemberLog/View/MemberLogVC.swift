@@ -65,7 +65,7 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
         alert.rightButtonTapSubject
               .asDriver(onErrorJustReturn: ())
               .drive(onNext: {
-                  print("제롬이 만들어줄거임")
+                  SplitRepository.share.deleteAllMemberLog()
               })
               .disposed(by: disposeBag)
     }

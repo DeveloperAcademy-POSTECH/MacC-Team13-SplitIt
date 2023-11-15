@@ -315,6 +315,11 @@ final class SplitRepository {
         self.fetchMemberLog()
     }
     
+    func deleteAllMemberLog() {
+        RealmManager().deleteAllMemberLog()
+        self.memberLogArr.accept([])
+    }
+    
     /// exclItem을 기준으로 exclMember 삭제
     private func deleteExclMember(exclItemIdx: String, realmManager: RealmManager) {
         let exclMembers: [ExclMember] = exclMemberArr.value
