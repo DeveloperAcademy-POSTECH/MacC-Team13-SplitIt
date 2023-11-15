@@ -290,6 +290,17 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
             })
             .disposed(by: disposeBag)
         
+        headerView.rightButton.rx.tap.asDriver()
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.navigationController?.viewControllers.forEach {
+                    if let vc = $0 as? SplitShareVC {
+                        self.navigationController?.popToViewController(vc, animated: true)
+                    }
+                }
+            })
+            .disposed(by: disposeBag)
+        
     }
 }
 
