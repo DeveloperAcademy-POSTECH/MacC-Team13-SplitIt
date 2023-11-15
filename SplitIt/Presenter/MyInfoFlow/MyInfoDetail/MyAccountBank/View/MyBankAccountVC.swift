@@ -45,7 +45,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
     let accountCountLabel = UILabel()
     
     var nameLabel = UILabel()
-    var nameTextField = SPTextField() //예금주
+    var nameTextField = SPTextField()
     var nameCountLabel = UILabel()
     
     let payLabel = UILabel()
@@ -80,11 +80,11 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         asapRxData()
         accountTextFieldCustomKeyboard()
         textFieldTextAttribute()
+        headerButtonState()
        
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
         
         let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
         tap.cancelsTouchesInView = false
@@ -112,22 +112,22 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
     }
     
     func changedData() -> Bool {
-           let preName = userDefault.string(forKey: "userName")
-           let preAccount = userDefault.string(forKey: "userAccount")
-           let preBank = userDefault.string(forKey: "userBank")
-           let preToss = userDefault.bool(forKey: "tossPay")
-           let preKakao = userDefault.bool(forKey: "kakaoPay")
-           let preNaver = userDefault.bool(forKey: "naverPay")
-           
-           let postName = nameTextField.text
-           let postAccount = accountTextField.text
-           let postBank = bankTextField.text
-           let postToss = changedToss
-           let postKakao = changedKakao
-           let postNaver = changedNaver
-       
-           return preName != postName || preAccount != postAccount || preBank != postBank || preToss != postToss || preKakao != postKakao || preNaver != postNaver
-       }
+        let preName = userDefault.string(forKey: "userName")
+        let preAccount = userDefault.string(forKey: "userAccount")
+        let preBank = userDefault.string(forKey: "userBank") != Optional("") ? userDefault.string(forKey: "userBank") : "선택해주세요"
+        let preToss = userDefault.bool(forKey: "tossPay")
+        let preKakao = userDefault.bool(forKey: "kakaoPay")
+        let preNaver = userDefault.bool(forKey: "naverPay")
+        
+        let postName = nameTextField.text
+        let postAccount = accountTextField.text
+        let postBank = bankTextField.text
+        let postToss = changedToss
+        let postKakao = changedKakao
+        let postNaver = changedNaver
+  
+        return preName != postName || preAccount != postAccount || preBank != postBank || preToss != postToss || preKakao != postKakao || preNaver != postNaver
+    }
     
     func setAlert() {
         showAlert(view: alert,
@@ -163,7 +163,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
   
     func updateViewLayout(text: String) {
         
-        if text == "선택 안함" {
+        if text == "선택 안함" || text == ""{
             self.bankSelectedView.isHidden = true
             payLabel.snp.removeConstraints()
             payLabel.snp.makeConstraints {
@@ -188,17 +188,21 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
     
         let nameObservable = nameTextField.rx.text.orEmpty.asDriver()
         let accountObservable = accountTextField.rx.text.orEmpty.asDriver()
+        let bankValueDriver = bankValue.asDriver()
         
-        let isTextEmptyObservable = Driver.combineLatest(nameObservable, accountObservable, bankValue.asDriver())
-            
+        let isTextEmptyObservable = Driver.combineLatest(nameObservable, accountObservable, bankValueDriver)
+        
             .map { text1, text2, bankValue in
                 if bankValue != "선택 안함" {
                     if self.nameTextField.text?.count != 0 && self.accountTextField.text?.count != 0 {
+                        print(2)
                         return true
                     } else {
+                        print(3)
                         return !(text1.count == 0) && !(text2.count == 0)
                     }
                 } else {
+                    print(4)
                     return true
                 }
             }
@@ -206,9 +210,8 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         isTextEmptyObservable
             .drive(header.buttonState)
             .disposed(by: disposeBag)
-        
 
-        if UserDefaults.standard.string(forKey: "userBank") == "" ||  UserDefaults.standard.string(forKey: "userBank") == "선택 안함" {
+        if UserDefaults.standard.string(forKey: "userBank") == "" ||  UserDefaults.standard.string(forKey: "userBank") == "선택 안함" || self.bankTextField.text == "선택해주세요"{
             bankSelectedView.isHidden = true
             payLabel.snp.makeConstraints {
                 $0.top.equalTo(bankTextField.snp.bottom).offset(24)
@@ -223,9 +226,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
             }
             
         }
-        
 
-       
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -249,7 +250,6 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
             UserDefaults.standard.set(nil, forKey: "userBank")
         }
     }
-    
     
     func setBinding() {
         
@@ -281,7 +281,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
                         self?.bankValue.accept(bankName)
                         self?.accountTextField.text = ""
                         self?.nameTextField.text = ""
-                        self?.bankTextField.text = bankName
+                        self?.bankTextField.text = bankName != "" ? bankName : "선택해주세요"
                         self?.updateViewLayout(text: bankName)
                         self?.viewModel.inputBankName = bankName
                         self?.viewModel.checkBank = 1
@@ -316,7 +316,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         UserDefaults.standard.set(false, forKey: "naverPay")
         UserDefaults.standard.set("", forKey: "userAccount")
         UserDefaults.standard.set("", forKey: "userName")
-        UserDefaults.standard.set("선택 안함", forKey: "userBank")
+        UserDefaults.standard.set("", forKey: "userBank")
         
         self.navigationController?.popViewController(animated: true)
     }
@@ -352,7 +352,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
             .observe(String.self, "userBank")
             .subscribe(onNext: { value in
                 guard let value = value else { return }
-                self.bankTextField.text = value != "" ? value : "선택 안함"
+                self.bankTextField.text = value != "" ? value : "선택해주세요"
             })
             .disposed(by: disposeBag)
         
@@ -422,6 +422,17 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         
     }
     
+    func headerButtonState() {
+        print(userDefault.string(forKey: "userBank"))
+        if userDefault.string(forKey: "userBank") != "" {
+            print(111)
+            header.buttonState.accept(true)
+        } else {
+            print(222)
+            header.buttonState.accept(false)
+        }
+    }
+    
     func setAttribute() {
         
         view.backgroundColor = .SurfaceBrandCalmshell
@@ -434,7 +445,6 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
          
         header.do {
             $0.applyStyle(style: .myInfo, vc: self)
-            $0.buttonState.accept(true)
             $0.leftButton.removeTarget(nil, action: nil, for: .touchUpInside)
         }
         
@@ -445,7 +455,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         }
         
         bankTextField.do {
-            $0.placeholder = "선택 안 함"
+            $0.placeholder = "선택해주세요"
             $0.applyStyle(.normal)
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no

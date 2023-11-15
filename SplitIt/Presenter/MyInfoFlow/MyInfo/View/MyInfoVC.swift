@@ -30,7 +30,8 @@ class MyInfoVC: UIViewController {
     //>>>backView위에 그려지는 뷰
     //>>>accountView 시작
     
-    let myInfoLabel = UILabel()//나의 정보
+    let myInfoLabel = UILabel() //나의 정보
+    let historyLabel = UILabel() //기록
     
     let accountView = UIView() //userDefault에 정보있을 때 나타나는 뷰
     
@@ -62,13 +63,20 @@ class MyInfoVC: UIViewController {
     let emptyAccountEditChevron = UIImageView()
     
     //>>>emptyView 끝
-    
     let notUsedPay = UILabel() //간편페이를 사용하지 않아요
+    
+    let listView = UIView()
+    let listBar = UIView()
     
     let friendListView = UIView()
     let friendListLabel = UILabel()
     let friendImage = UIImageView()
     let friendChevron = UIImageView()
+    
+    let historyListView = UIView()
+    let historyListLabel = UILabel()
+    let historyImage = UIImageView()
+    let historyChevron = UIImageView()
     
     let privacyBtn = UIButton()
     let madeByWCCTBtn = UIButton()
@@ -82,6 +90,7 @@ class MyInfoVC: UIViewController {
         setLayout()
         setBinding()
         
+       
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -92,19 +101,29 @@ class MyInfoVC: UIViewController {
     
     func userNewInfo() {
         
+        
         let tossValue = UserDefaults.standard.bool(forKey: "tossPay")
         let kakaoValue = UserDefaults.standard.bool(forKey: "kakaoPay")
         let naverValue = UserDefaults.standard.bool(forKey: "naverPay")
-
-        let bank: Bool = userDefault.string(forKey: "userBank") == "" || userDefault.string(forKey: "userBank") == "선택 안함" ? false : true
+        
+//        let bank: Bool = userDefault.string(forKey: "userBank") == "" || userDefault.string(forKey: "userBank") == "선택 안함" ? false : true
+        let bank: Bool = userDefault.string(forKey: "userBank") == "선택 안함" ? false : true
         let checkPay = tossValue || kakaoValue || naverValue //하나라도 참이면 checkPay는 참
+        let firstCheck: Bool = UserDefaults.standard.string(forKey: "userBank") == Optional("") //아예 처음이면 nil, 뭐라도 저장되면 nil이 아님
+//
+//        if firstCheck {
+//            view.backgroundColor = .red
+//        } else {
+//            view.backgroundColor = .blue
+//        }
         
         self.accountBankLabel.text = userDefault.string(forKey: "userBank") != "선택 안함" ? userDefault.string(forKey: "userBank") : "계좌를 사용하지 않아요"
         self.accountLabel.text = userDefault.string(forKey: "userAccount")
         self.userName.text = userDefault.string(forKey: "userName")
         
         //모든 정보가 없을 때,
-        if !bank && !checkPay {
+       // if !bank && !checkPay {
+        if firstCheck {
             backViewHeight = 104
             
             accountView.isHidden = true
@@ -113,7 +132,32 @@ class MyInfoVC: UIViewController {
             backView.snp.updateConstraints { make in
                 make.height.equalTo(backViewHeight)
             }
+        } else if userDefault.string(forKey: "userBank") == "선택 안함" && !checkPay {
+            backViewHeight = 140
             
+            accountView.isHidden = false
+            emptyView.isHidden = true
+            
+            nameInfoLabel.isHidden = true
+            notUsedPay.isHidden = false
+            tossPayBtn.isHidden = !tossValue
+            kakaoPayBtn.isHidden = !kakaoValue
+            naverPayBtn.isHidden = !naverValue
+            
+            backView.snp.updateConstraints { make in
+                make.height.equalTo(backViewHeight)
+            }
+            
+            accountInfoLabel.snp.removeConstraints()
+            
+            accountInfoLabel.snp.makeConstraints {
+                $0.top.equalToSuperview().offset(20)
+                $0.leading.equalTo(accountView.snp.leading).offset(16)
+            }
+            
+            accountView.snp.updateConstraints { make in
+                make.height.equalTo(backViewHeight)
+            }
         }
         //페이만 참, 계좌는 선택안함
         else if !bank && checkPay {
@@ -123,7 +167,6 @@ class MyInfoVC: UIViewController {
             
             nameInfoLabel.isHidden = true
             userName.isHidden = true
-//            notUsedPay.isHidden = checkPay
             notUsedPay.isHidden = true
             tossPayBtn.isHidden = !tossValue
             kakaoPayBtn.isHidden = !kakaoValue
@@ -183,9 +226,6 @@ class MyInfoVC: UIViewController {
                 make.leading.equalTo(accountView.snp.leading).offset(naverPos)
                 make.top.equalTo(socialPayLabel.snp.bottom).offset(8)
             }
-            
-            
-            
         }
         
         //페이류 없고, 계좌만 있을 때
@@ -225,7 +265,6 @@ class MyInfoVC: UIViewController {
         else {
             accountView.isHidden = false
             emptyView.isHidden = true
-            
             
             nameInfoLabel.isHidden = false
             userName.isHidden = false
@@ -297,22 +336,22 @@ class MyInfoVC: UIViewController {
         self.view.layoutIfNeeded()
     }
     
-    
     func setBinding() {
         
         let friendListTap = addTapGesture(to: friendListView)
+        let historyListTap = addTapGesture(to: historyListView)
         let editBtnTap = addTapGesture(to: accountView)
         let startBtnTap = addTapGesture(to: emptyView)
         
         let input = MyInfoVM.Input(privacyBtnTapped: privacyBtn.rx.tap.asDriver(),
                                    friendListViewTapped: friendListTap.rx.event.asObservable().map { _ in () },
+                                   historyListViewTapped: historyListTap.rx.event.asObservable().map { _ in () },
                                    editAccountViewTapped: editBtnTap.rx.event.asObservable().map{ _ in () },
                                    emptyEditAccountViewTapped: startBtnTap.rx.event.asObservable().map{ _ in () },
                                    madeByWCCTBtnTapped: madeByWCCTBtn.rx.tap.asDriver()
         )
         
         let output = viewModel.transform(input: input)
-        
         
         output.moveToPrivacyView
             .drive(onNext:{
@@ -333,6 +372,13 @@ class MyInfoVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
+        output.moveToHistoryListView
+            .subscribe(onNext: {
+                let historyVC = HistoryVC()
+                self.navigationController?.pushViewController(historyVC, animated: true)
+
+            })
+            .disposed(by: disposeBag)
         
         output.moveToEditAccountView
             .subscribe(onNext: {
@@ -364,11 +410,14 @@ class MyInfoVC: UIViewController {
     
     func setAddView() {
         
-        [header, backView, friendListView, privacyBtn, madeByWCCTBtn, myInfoLabel].forEach {
+        [header, backView, listView, privacyBtn, madeByWCCTBtn, myInfoLabel, historyLabel].forEach {
             view.addSubview($0)
         }
         [emptyView, accountView].forEach {
             backView.addSubview($0)
+        }
+        [friendListView, historyListView, listBar].forEach {
+            listView.addSubview($0)
         }
         
         [userName, accountInfoLabel, accountBankLabel, accountLabel,socialPayLabel,nameInfoLabel,
@@ -378,6 +427,10 @@ class MyInfoVC: UIViewController {
         
         [friendImage, friendChevron, friendListLabel].forEach {
             friendListView.addSubview($0)
+        }
+        
+        [historyImage, historyListLabel, historyChevron].forEach {
+            historyListView.addSubview($0)
         }
         
         [mainLabel, subLabel, emptyAccountEditLabel, emptyAccountEditChevron].forEach{
@@ -397,7 +450,7 @@ class MyInfoVC: UIViewController {
         backView.snp.makeConstraints {
             $0.height.equalTo(104)
             $0.leading.trailing.equalToSuperview().inset(30)
-            $0.top.equalTo(myInfoLabel.snp.bottom).offset(8)
+            $0.top.equalTo(myInfoLabel.snp.bottom).offset(4)
         }
         
         //backView
@@ -461,28 +514,73 @@ class MyInfoVC: UIViewController {
             $0.leading.equalTo(accountView.snp.leading).offset(16)
         }
         
-        friendListView.snp.makeConstraints {
-            $0.height.equalTo(56)
-            $0.leading.trailing.equalToSuperview().inset(30)
+        historyLabel.snp.makeConstraints {
             $0.top.equalTo(backView.snp.bottom).offset(16)
+            $0.leading.equalToSuperview().offset(38)
+        }
+        
+        listView.snp.makeConstraints {
+            $0.top.equalTo(historyLabel.snp.bottom).offset(4)
+            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.height.equalTo(110)
+        }
+        
+        listBar.snp.makeConstraints {
+            $0.height.equalTo(1)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.centerY.equalToSuperview()
+        }
+        
+        friendListView.snp.makeConstraints {
+            $0.height.equalTo(55)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.top.equalTo(listBar.snp.bottom)
         }
         
         friendImage.snp.makeConstraints {
-            $0.width.equalTo(25)
-            $0.height.equalTo(25)
-            $0.leading.equalToSuperview().offset(16)
-            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview()
+            $0.top.equalToSuperview().offset(14)
+            $0.bottom.equalToSuperview().inset(18)
         }
         
         friendListLabel.snp.makeConstraints {
             $0.leading.equalTo(friendImage.snp.trailing).offset(20)
-            $0.top.bottom.equalToSuperview().inset(20)
+            $0.top.equalToSuperview().offset(16)
+            $0.bottom.equalToSuperview().inset(20)
         }
         
         friendChevron.snp.makeConstraints {
             $0.width.equalTo(8)
             $0.height.equalTo(16)
-            $0.top.bottom.equalToSuperview().inset(20)
+            $0.top.equalToSuperview().offset(16)
+            $0.bottom.equalToSuperview().inset(20)
+            $0.trailing.equalToSuperview().inset(16)
+        }
+        
+        historyListView.snp.makeConstraints {
+            $0.height.equalTo(55)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.top.equalToSuperview()
+        }
+        
+        historyImage.snp.makeConstraints {
+            $0.leading.equalToSuperview()
+            $0.top.equalToSuperview().offset(20)
+            $0.bottom.equalToSuperview().inset(14)
+        }
+        
+        historyListLabel.snp.makeConstraints {
+            $0.leading.equalTo(friendImage.snp.trailing).offset(20)
+            $0.top.equalToSuperview().inset(20)
+            $0.bottom.equalToSuperview().inset(16)
+
+        }
+        
+        historyChevron.snp.makeConstraints {
+            $0.width.equalTo(8)
+            $0.height.equalTo(16)
+            $0.top.equalToSuperview().inset(20)
+            $0.bottom.equalToSuperview().inset(16)
             $0.trailing.equalToSuperview().inset(16)
         }
         
@@ -557,8 +655,8 @@ class MyInfoVC: UIViewController {
         
         
         myInfoLabel.do {
-            $0.text = "나의 정보"
-            $0.font = .KoreanCaption1
+            $0.text = "계좌 설정"
+            $0.font = .KoreanCaption2
             $0.textColor = .TextSecondary
         }
         
@@ -635,13 +733,39 @@ class MyInfoVC: UIViewController {
             $0.image = UIImage(named: "NaverPayIconDefault")
         }
         
-        friendListView.do {
+        
+        historyLabel.do {
+            $0.text = "기록"
+            $0.font = .KoreanCaption2
+            $0.textColor = .TextSecondary
+        }
+        
+        listView.do {
             $0.layer.cornerRadius = 8
             $0.backgroundColor = .clear
             $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
             $0.backgroundColor = .clear
-            
+        }
+        
+        listBar.do {
+            $0.backgroundColor = .BorderDeactivate
+            $0.layer.borderColor = UIColor.BorderDeactivate.cgColor
+            $0.layer.borderWidth = 1
+        }
+    
+        historyImage.do {
+            $0.image = UIImage(named: "SplitIconSmall")
+        }
+        
+        historyChevron.do {
+            $0.image = UIImage(named: "ChevronRightIconDefault")
+        }
+        
+        historyListLabel.do {
+            $0.text = "정산 기록"
+            $0.font = UIFont.KoreanCaption1
+            $0.textColor = .TextPrimary
         }
         
         friendImage.do {

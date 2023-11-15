@@ -12,15 +12,18 @@ import RxDataSources
 import SnapKit
 import Then
 
-class MemberLogVC: UIViewController, UIScrollViewDelegate {
+class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
+    
     let repo = SplitRepository.share
+    let alert = SPAlertController()
     
     let header = SPNavigationBar()
-   // var searchImage = UIImageView()
     var tableView = UITableView()
-   // var searchBarTextField = UITextField()
     let emptyLabel = UILabel()
-    let deleteBtn = UIButton()
+    
+    let friendLabel = UILabel()
+    let friendCount = UILabel()
+    let allDeleteBtn = UIButton()
     
     var viewModel = MemberLogVM()
     var disposeBag = DisposeBag()
@@ -45,12 +48,27 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
     }
     
     func setAddView() {
-        [header,tableView, emptyLabel, deleteBtn].forEach {
+        [header,tableView, emptyLabel, friendLabel, friendCount, allDeleteBtn].forEach {
             view.addSubview($0)
         }
         
     }
     
+    func setAlert() {
+        showAlert(view: alert,
+                type: .warnNormal,
+                title: "내역을 모두 지우시겠어요?",
+                descriptions: "지금까지 추가하신 내역들이 사라져요",
+                leftButtonTitle: "취 소",
+                rightButtonTitle: "모두 지우기")
+        
+        alert.rightButtonTapSubject
+              .asDriver(onErrorJustReturn: ())
+              .drive(onNext: {
+                  print("제롬이 만들어줄거임")
+              })
+              .disposed(by: disposeBag)
+    }
   
     func setLayout() {
         
@@ -59,12 +77,25 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(8)
             $0.leading.trailing.equalToSuperview()
         }
+        friendLabel.snp.makeConstraints {
+            $0.top.equalTo(header.snp.bottom).offset(24)
+            $0.leading.equalToSuperview().offset(34)
+        }
         
-       
-        tableView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.top.equalTo(header.snp.bottom).offset(20)
-            make.bottom.equalToSuperview().inset(30)
+        friendCount.snp.makeConstraints {
+            $0.leading.equalTo(friendLabel.snp.trailing).offset(8)
+            $0.top.equalTo(header.snp.bottom).offset(24)
+        }
+        
+        allDeleteBtn.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(34)
+            $0.top.equalTo(header.snp.bottom).offset(20)
+        }
+        
+        tableView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.top.equalTo(friendLabel.snp.bottom).offset(16)
+            $0.bottom.equalToSuperview().inset(30)
         }
         
         
@@ -85,6 +116,16 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
             $0.applyStyle(style: .memberSearchHistory, vc: self)
         }
         
+        friendLabel.do {
+            $0.text = "함께한 멤버 |"
+            $0.font = .KoreanBody
+            $0.textColor = .TextPrimary
+        }
+        
+        friendCount.do {
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextSecondary
+        }
         
         emptyLabel.do {
             $0.text = "아직 친구 검색 내역이 없습니다"
@@ -93,10 +134,36 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
             $0.isHidden = false
         }
         
+        allDeleteBtn.do {
+            let string = NSAttributedString(string: "모두 지우기", attributes: [
+                NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
+            ])
+            
+            $0.titleLabel?.font = .KoreanCaption1
+            $0.titleLabel?.textColor = .TextPrimary
+            $0.clipsToBounds = true
+            $0.backgroundColor = .clear
+            $0.layer.borderWidth = 0
+            $0.setAttributedTitle(string, for: .normal)
+            
+            
+        }
     }
     
     func setBinding() {
     
+        let input = MemberLogVM.Input(deleteBtnTapped: allDeleteBtn.rx.tap.asDriver())
+        
+        let output = viewModel.transform(input: input)
+        
+        output.showAlertAllDelete
+            .drive(onNext: { [weak self] in
+                self?.setAlert()
+            })
+            .disposed(by: disposeBag)
+        
+            
+        
         viewModel.memberList
             .bind(to: tableView.rx.items(cellIdentifier: "MemberCell", cellType: MemberCell.self)) { (row, member, cell) in
                 cell.nameLabel.text = member.name
@@ -115,6 +182,11 @@ class MemberLogVC: UIViewController, UIScrollViewDelegate {
         viewModel.memberList
             .map { !$0.isEmpty }
             .bind(to: emptyLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        viewModel.memberList
+            .map { "\($0.count)명" }
+            .bind(to: friendCount.rx.text)
             .disposed(by: disposeBag)
 
     }
