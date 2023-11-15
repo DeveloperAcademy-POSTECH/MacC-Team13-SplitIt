@@ -350,6 +350,7 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 
+                if !SplitRepository.share.isSmartSplit { SplitRepository.share.updateDataToDB() }
                 let vc = SplitRepository.share.isSmartSplit ? ExclItemInputVC() : SplitShareVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
