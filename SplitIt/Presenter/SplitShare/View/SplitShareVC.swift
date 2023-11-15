@@ -38,6 +38,11 @@ class SplitShareVC: UIViewController {
         setBind()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+    }
+    
     private func setAttribute() {
         view.backgroundColor = .SurfacePrimary
         
@@ -126,7 +131,7 @@ class SplitShareVC: UIViewController {
     }
     
     private func setBind() {
-        let input = SplitShareVM.Input(viewWillAppear: self.rx.viewWillAppear,
+        let input = SplitShareVM.Input(viewDidAppear: self.rx.viewDidAppear,
                                        shareButtonTapped: shareButton.rx.tap,
                                        csAddButtonTapped: csAddButton.rx.tap,
                                        editButtonTapped: editButton.rx.tap)
