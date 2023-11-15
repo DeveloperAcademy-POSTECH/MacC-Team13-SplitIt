@@ -12,7 +12,7 @@ import UIKit
 class EditExclItemInputVM {
     
     var disposeBag = DisposeBag()
-    let isEdit = BehaviorRelay(value: false)
+    var isEdit = BehaviorRelay(value: false)
     
     struct Input {
         let viewDidDisAppear: Observable<Bool>
@@ -26,6 +26,7 @@ class EditExclItemInputVM {
         let nextButtonIsEnable: Driver<Bool>
         let showExclItemInfoModal: Driver<Void>
         let showEmptyView: Driver<Bool>
+        let showToastMessage: BehaviorRelay<Bool>
     }
     
     func transform(input: Input) -> Output {
@@ -36,9 +37,9 @@ class EditExclItemInputVM {
 
         let exclItemRepository = SplitRepository.share.exclItemArr
         let exclMemberRepository = SplitRepository.share.exclMemberArr
-        let exclItemsRelay = BehaviorRelay<[ExclItemInfo]>(value: [
-            ExclItemInfo(exclItem: ExclItem(csInfoIdx: "", name: "", price: 0), items: [])
-        ])
+        let exclItemsRelay = BehaviorRelay<[ExclItemInfo]>(value: [])
+        
+        let showToastMessage = BehaviorRelay<Bool>(value: false)
         
 //        exclItemRepository
         
@@ -76,7 +77,8 @@ class EditExclItemInputVM {
                       exclItemsRelay: exclItemsRelay,
                       nextButtonIsEnable: nextButtonIsEnable,
                       showExclItemInfoModal: showExclItemInfoModal.asDriver(),
-                      showEmptyView: showEmptyView.asDriver(onErrorJustReturn: false))
+                      showEmptyView: showEmptyView.asDriver(onErrorJustReturn: false),
+                      showToastMessage: showToastMessage)
     }
 
 }
