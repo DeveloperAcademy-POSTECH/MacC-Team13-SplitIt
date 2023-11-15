@@ -36,6 +36,11 @@ class HomeVC: UIViewController {
         setBinding()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+    }
+    
     func setBinding() {
         let input = HomeVM.Input(splitItButtonTapped: splitItButton.rx.tap,
                                  myInfoButtonTapped: myInfoButton.rx.tap,
@@ -70,7 +75,7 @@ class HomeVC: UIViewController {
     
     func setAttribute() {
         view.backgroundColor = .SurfaceBrandCalmshell
-
+        
         myInfoButton.do {
 
             $0.setImage(

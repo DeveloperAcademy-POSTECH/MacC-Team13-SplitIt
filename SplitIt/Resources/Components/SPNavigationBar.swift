@@ -77,7 +77,7 @@ final class SPNavigationBar: UIView {
         switch style {
         case .selectSplitMethod:
             setNaviTitle(title: "정산 방식 선택하기")
-            setLeftBackButton(action: .toRoot, vc: vc)
+            setLeftBackButton(action: .toBack, vc: vc)
         case .csInfoCreate:
             setNaviImage(imageCase: 0)
             setLeftBackButton(action: .toBack, vc: vc)

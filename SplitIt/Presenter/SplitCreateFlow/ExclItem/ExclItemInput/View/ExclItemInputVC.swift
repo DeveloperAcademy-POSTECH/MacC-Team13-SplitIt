@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxAppState
+import RxGesture
 
 class ExclItemInputVC: UIViewController, SPAlertDelegate {
     
@@ -37,6 +38,11 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
         setLayout()
         setAttribute()
         setBinding()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
     }
     
     func setAttribute() {
@@ -132,11 +138,21 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
     }
     
     func setBinding() {
-        let input = ExclItemInputVM.Input(viewDidDisAppear: self.rx.viewDidDisappear,
+        // MARK: Alert가 존재할 때 Swipe Back Left Side 감지
+        let swipeBackLeftSideObservable = self.view.rx.panGesture()
+            .when(.began)
+            .filter { gesture in
+                let location = gesture.location(in: self.view)
+                return location.x < 20
+            }
+
+        let input = ExclItemInputVM.Input(viewDidDisappear: self.rx.viewDidDisappear,
                                           nextButtonTapped: nextButton.rx.tap,
                                           exclItemAddButtonTapped: exclItemAddButton.rx.tap,
                                           exitButtonTapped: header.rightButton.rx.tap,
-                                          backButtonTapped: header.leftButton.rx.tap)
+                                          backButtonTapped: header.leftButton.rx.tap,
+                                          swipeBack: swipeBackLeftSideObservable)
+        //MARK: swipeBack을 하면 Alert가 뜨도록!
         let output = viewModel.transform(input: input)
         
         output.exclItemsRelay
@@ -189,6 +205,14 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
             })
             .disposed(by: disposeBag)
         
+        output.exclItemsRelay
+            .asDriver()
+            .map { $0.count == 0 }
+            .drive(onNext: { [weak navigationController] shouldPop in
+                navigationController?.interactivePopGestureRecognizer?.isEnabled = shouldPop
+            })
+            .disposed(by: disposeBag)
+
         output.showResultView
             .drive(onNext: { [weak self] indexPath in
                 guard let self = self else { return }
@@ -199,7 +223,8 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
             .disposed(by: disposeBag)
         
         output.showBackAlert
-            .drive(onNext: { [weak self] _ in
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 let itemCount = output.exclItemsRelay.value.count
                 if itemCount > 0 {
@@ -234,8 +259,18 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
             .asDriver(onErrorJustReturn: ())
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.navigationController?.popToRootViewController(animated: true)
+                self.handleExitAlertButtonTap()
             })
             .disposed(by: disposeBag)
+    }
+    
+    private func handleExitAlertButtonTap() {
+        guard let navigationController = navigationController else { return }
+
+        if let splitShareVC = navigationController.viewControllers.first(where: { $0 is SplitShareVC }) as? SplitShareVC {
+            navigationController.popToViewController(splitShareVC, animated: true)
+        } else {
+            navigationController.popToRootViewController(animated: true)
+        }
     }
 }

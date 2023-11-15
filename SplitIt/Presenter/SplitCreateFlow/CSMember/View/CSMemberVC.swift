@@ -13,9 +13,10 @@ import RxCocoa
 import RxAppState
 import Reusable
 
-class CSMemberVC: UIViewController, Reusable {
+class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     let disposeBag = DisposeBag()
     let viewModel = CSMemberVM()
+    let exitAlert = SPAlertController()
     
     let header = SPNavigationBar()
     let addLabel = UILabel()
@@ -44,6 +45,11 @@ class CSMemberVC: UIViewController, Reusable {
         setAttribute()
         setLayout()
         setBinding()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -226,7 +232,8 @@ class CSMemberVC: UIViewController, Reusable {
                                         searchCellTapped: searchTableView.rx.itemSelected,
                                         selectedCellTapped: addCollectionView.rx.itemSelected,
                                         addButtonTapped: addButton.rx.tap,
-                                        nextButtonTapped: nextButton.rx.tap)
+                                     nextButtonTapped: nextButton.rx.tap,
+                                     exitButtonTapped: header.rightButton.rx.tap)
         let output = viewModel.transform(input: input)
         
         output.searchMemberArr
@@ -347,6 +354,32 @@ class CSMemberVC: UIViewController, Reusable {
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
+        
+        // MARK: ExitAlert
+        output.showExitAlert
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                showExitAlert(view: exitAlert)
+            })
+            .disposed(by: disposeBag)
+        
+        exitAlert.rightButtonTapSubject
+            .asDriver(onErrorJustReturn: ())
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.handleExitAlertButtonTap()
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func handleExitAlertButtonTap() {
+        guard let navigationController = navigationController else { return }
+
+        if let splitShareVC = navigationController.viewControllers.first(where: { $0 is SplitShareVC }) as? SplitShareVC {
+            navigationController.popToViewController(splitShareVC, animated: true)
+        } else {
+            navigationController.popToRootViewController(animated: true)
+        }
     }
 }
 

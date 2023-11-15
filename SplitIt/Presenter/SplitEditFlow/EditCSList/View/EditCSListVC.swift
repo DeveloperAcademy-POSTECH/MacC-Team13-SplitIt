@@ -111,7 +111,7 @@ final class EditCSListVC: UIViewController, UIScrollViewDelegate {
     
 }
 
-extension EditCSListVC: UIGestureRecognizerDelegate {
+extension EditCSListVC {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         return (touch.view == self.tableView)
     }

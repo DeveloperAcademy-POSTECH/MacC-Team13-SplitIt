@@ -23,6 +23,7 @@ class CSMemberVM {
         let selectedCellTapped: ControlEvent<IndexPath>
         let addButtonTapped: ControlEvent<Void>
         let nextButtonTapped: ControlEvent<Void>
+        let exitButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
@@ -33,6 +34,7 @@ class CSMemberVM {
         let textFieldIsValid: BehaviorRelay<Bool>
         let textFieldValue: BehaviorRelay<String>
         let showExclItemVC: ControlEvent<Void>
+        let showExitAlert: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -181,7 +183,14 @@ class CSMemberVM {
             })
             .disposed(by: disposeBag)
         
-        return Output(searchMemberArr: searchMemberArr, selectedMemberArr: selectedMemberArr, isCellAppear: isCellAppearRelay, deleteIndex: deleteIndexRelay, textFieldIsValid: textFieldIsValid, textFieldValue: textFieldValue, showExclItemVC: showExclItemVC)
+        return Output(searchMemberArr: searchMemberArr,
+                      selectedMemberArr: selectedMemberArr,
+                      isCellAppear: isCellAppearRelay,
+                      deleteIndex: deleteIndexRelay,
+                      textFieldIsValid: textFieldIsValid,
+                      textFieldValue: textFieldValue,
+                      showExclItemVC: showExclItemVC,
+                      showExitAlert: input.exitButtonTapped.asDriver())
     }
     
     private func tranformIsCheckInSelectMemberArr(allMemberArrValue: [MemberCheck], name: String) -> [MemberCheck] {

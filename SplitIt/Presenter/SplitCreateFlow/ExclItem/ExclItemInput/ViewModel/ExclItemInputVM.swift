@@ -14,11 +14,12 @@ class ExclItemInputVM {
     var disposeBag = DisposeBag()
     
     struct Input {
-        let viewDidDisAppear: Observable<Bool>
+        let viewDidDisappear: Observable<Bool>
         let nextButtonTapped: ControlEvent<Void> // 다음 버튼
         let exclItemAddButtonTapped: ControlEvent<Void>
         let exitButtonTapped: ControlEvent<Void>
         let backButtonTapped: ControlEvent<Void>
+        let swipeBack: Observable<UIPanGestureRecognizer>
     }
     
     struct Output {
@@ -28,7 +29,7 @@ class ExclItemInputVM {
         let showExclItemInfoModal: Driver<Void>
         let showEmptyView: Driver<Bool>
         let showExitAlert: Driver<Void>
-        let showBackAlert: Driver<Void>
+        let showBackAlert: Observable<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -43,7 +44,7 @@ class ExclItemInputVM {
             ExclItemInfo(exclItem: ExclItem(csInfoIdx: "", name: "", price: 0), items: [])
         ])
         
-        input.viewDidDisAppear
+        input.viewDidDisappear
             .asDriver(onErrorJustReturn: false)
             .drive(onNext: { _ in 
                 SplitRepository.share.deleteCurrentExclItemAndExclMember()
@@ -73,13 +74,16 @@ class ExclItemInputVM {
             .map{ $0.count > 0 }
             .asDriver(onErrorJustReturn: false)
         
+        let showBackAlert = Observable.merge(input.backButtonTapped.asObservable(),
+                                             input.swipeBack.map{ _ in }.asObservable())
+        
         return Output(showResultView: showResultView.asDriver(),
                       exclItemsRelay: exclItemsRelay,
                       nextButtonIsEnable: nextButtonIsEnable,
                       showExclItemInfoModal: showExclItemInfoModal.asDriver(),
                       showEmptyView: showEmptyView.asDriver(onErrorJustReturn: false),
                       showExitAlert: input.exitButtonTapped.asDriver(),
-                      showBackAlert: input.backButtonTapped.asDriver())
+                      showBackAlert: showBackAlert)
     }
 
 }

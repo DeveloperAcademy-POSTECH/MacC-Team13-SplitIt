@@ -13,7 +13,6 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
     
     let inputTextRelay = BehaviorRelay<Int?>(value: 0)
     let customKeyboard = CustomKeyboard()
-//    let backAlert = SPAlertController()
     let exitAlert = SPAlertController()
     
     var disposeBag = DisposeBag()
@@ -46,6 +45,11 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
         
         unfocusTitleTF()
         focusTotalAmountTF()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     func setAttribute() {
@@ -258,28 +262,7 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
                 }
             })
             .disposed(by: disposeBag)
-        
-        // MARK: BackAlert
-//        output.showBackAlert
-//            .drive(onNext: { [weak self] _ in
-//                guard let self = self else { return }
-//                showAlert(view: backAlert,
-//                          type: .warnNormal,
-//                          title: "정산 방법을 다시 선택하시겠어요?",
-//                          descriptions: "지금까지 정산하신 내역이 사라져요",
-//                          leftButtonTitle: "취 소",
-//                          rightButtonTitle: "다시 선택")
-//            })
-//            .disposed(by: disposeBag)
-        
-//        backAlert.rightButtonTapSubject
-//            .asDriver(onErrorJustReturn: ())
-//            .drive(onNext: { [weak self] _ in
-//                guard let self = self else { return }
-//                self.navigationController?.popViewController(animated: true)
-//            })
-//            .disposed(by: disposeBag)
-        
+
         // MARK: ExitAlert
         output.showExitAlert
             .drive(onNext: { [weak self] _ in
@@ -292,7 +275,7 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
             .asDriver(onErrorJustReturn: ())
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.navigationController?.popToRootViewController(animated: true)
+                self.handleExitAlertButtonTap()
             })
             .disposed(by: disposeBag)
         
@@ -308,6 +291,16 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
+    }
+    
+    private func handleExitAlertButtonTap() {
+        guard let navigationController = navigationController else { return }
+
+        if let splitShareVC = navigationController.viewControllers.first(where: { $0 is SplitShareVC }) as? SplitShareVC {
+            navigationController.popToViewController(splitShareVC, animated: true)
+        } else {
+            navigationController.popToRootViewController(animated: true)
+        }
     }
 }
 

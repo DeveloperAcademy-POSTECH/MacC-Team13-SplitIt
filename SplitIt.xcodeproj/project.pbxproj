@@ -52,6 +52,7 @@
 		6032DCF82AEF4B5B004A6BFA /* ExclItemAddCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCF72AEF4B5B004A6BFA /* ExclItemAddCell.swift */; };
 		6032DCFA2AEF5F68004A6BFA /* ExclItemInfoAddModalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCF92AEF5F68004A6BFA /* ExclItemInfoAddModalVC.swift */; };
 		6032DCFC2AEF5FBE004A6BFA /* ExclItemInfoAddModalVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCFB2AEF5FBE004A6BFA /* ExclItemInfoAddModalVM.swift */; };
+		604B5FBF2B035D6D00EDD5DA /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = 604B5FBE2B035D6D00EDD5DA /* RxGesture */; };
 		604CDC7B2AF14A8200416454 /* ExclItemInputEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604CDC7A2AF14A8100416454 /* ExclItemInputEmptyView.swift */; };
 		604CDC7D2AF1522C00416454 /* ExclItemInfoEditModalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604CDC7C2AF1522C00416454 /* ExclItemInfoEditModalVC.swift */; };
 		604CDC7F2AF1527500416454 /* ExclItemInfoEditModalVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604CDC7E2AF1527500416454 /* ExclItemInfoEditModalVM.swift */; };
@@ -245,6 +246,7 @@
 				6078ACF22ADA757E00995811 /* RxDataSources in Frameworks */,
 				6078ACE72ADA752F00995811 /* Then in Frameworks */,
 				60115DFC2ADBF8860050D32C /* RxAppState in Frameworks */,
+				604B5FBF2B035D6D00EDD5DA /* RxGesture in Frameworks */,
 				1A7845062AFD1AB100E38403 /* RealmSwift in Frameworks */,
 				6078ACE42ADA752600995811 /* Reusable in Frameworks */,
 			);
@@ -1071,6 +1073,7 @@
 				60115DFB2ADBF8860050D32C /* RxAppState */,
 				1A1ACC522AF672F3004AC4CD /* SnapshotKit */,
 				1A7845052AFD1AB100E38403 /* RealmSwift */,
+				604B5FBE2B035D6D00EDD5DA /* RxGesture */,
 				1AC4115E2B020D03008A45BC /* Toast */,
 			);
 			productName = SplitIt;
@@ -1111,6 +1114,7 @@
 				60115DFA2ADBF8860050D32C /* XCRemoteSwiftPackageReference "RxAppState" */,
 				1A1ACC512AF672F3004AC4CD /* XCRemoteSwiftPackageReference "SnapshotKit" */,
 				1A7845042AFD1AB100E38403 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				604B5FBD2B035D6D00EDD5DA /* XCRemoteSwiftPackageReference "RxGesture" */,
 				1AC4115D2B020D02008A45BC /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 			);
 			productRefGroup = 6078ACC92ADA74AC00995811 /* Products */;
@@ -1487,6 +1491,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		604B5FBD2B035D6D00EDD5DA /* XCRemoteSwiftPackageReference "RxGesture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxGesture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 		6078ACDF2ADA751D00995811 /* XCRemoteSwiftPackageReference "RxRealm" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxRealm";
@@ -1557,6 +1569,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 60115DFA2ADBF8860050D32C /* XCRemoteSwiftPackageReference "RxAppState" */;
 			productName = RxAppState;
+		};
+		604B5FBE2B035D6D00EDD5DA /* RxGesture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 604B5FBD2B035D6D00EDD5DA /* XCRemoteSwiftPackageReference "RxGesture" */;
+			productName = RxGesture;
 		};
 		6078ACE02ADA751D00995811 /* RxRealm */ = {
 			isa = XCSwiftPackageProductDependency;
