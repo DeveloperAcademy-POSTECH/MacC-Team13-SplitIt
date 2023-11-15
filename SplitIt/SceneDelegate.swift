@@ -18,6 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let rootVC = HomeVC()
         let navigationController = UINavigationController(rootViewController: rootVC)
         rootVC.navigationController?.isNavigationBarHidden = true
+        navigationController.interactivePopGestureRecognizer?.delegate = rootVC
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
@@ -53,3 +54,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 }
 
+extension UIViewController: UIGestureRecognizerDelegate {
+    
+}
