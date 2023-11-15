@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxAppState
+import Toast
 
 class EditExclItemInputVC: UIViewController {
     
@@ -115,7 +116,7 @@ class EditExclItemInputVC: UIViewController {
     }
     
     func setBinding() {
-        let input = EditExclItemInputVM.Input(viewDidDisAppear: self.rx.viewDidDisappear,
+        let input = EditExclItemInputVM.Input(viewDidDisAppear: self.rx.viewDidAppear,
                                               nextButtonTapped: header.rightButton.rx.tap,
                                           exclItemAddButtonTapped: exclItemAddButton.rx.tap)
         Driver.just(true)
@@ -136,6 +137,36 @@ class EditExclItemInputVC: UIViewController {
                 cell.configure(item: item)
             }
             .disposed(by: disposeBag)
+        
+        output.exclItemsRelay
+            .asDriver()
+            .distinctUntilChanged{ (prev, cur) in
+                print("1")
+                print("prev: \(prev)")
+                print("cur: \(cur)")
+                if output.showToastMessage.value {
+                    print("2")
+                    self.processChanges(previousItems: prev, currentItems: cur)
+                }
+                output.showToastMessage.accept(true)
+                return false
+            }
+        
+//            .scan([ExclItemInfo]()){ (prev, cur) in
+//                print("1")
+//                print("prev: \(prev)")
+//                print("cur: \(cur)")
+//                if output.showToastMessage.value {
+//                    print("2")
+//                    self.processChanges(previousItems: prev, currentItems: cur)
+//                }
+//                output.showToastMessage.accept(true)
+//                return cur
+//            }
+            .drive()
+            .disposed(by: disposeBag)
+           
+            
         
 //        output.nextButtonIsEnable
 //            .drive(nextButton.buttonState)
@@ -177,7 +208,11 @@ class EditExclItemInputVC: UIViewController {
         output.showResultView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-//                SplitRepository.share.updateDataToDB()
+                self.navigationController?.viewControllers.forEach {
+                    if let vc = $0 as? SplitShareVC {
+                        self.navigationController?.popToViewController(vc, animated: true)
+                    }
+                }
             })
             .disposed(by: disposeBag)
         
@@ -189,5 +224,38 @@ class EditExclItemInputVC: UIViewController {
                 self.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
+        
+//        viewModel.isEdit.asDriver()
+//            .drive(onNext: {[weak self] bool in
+//                guard let self = self else { return }
+//                if bool {
+//                    var style = ToastStyle()
+//                    style.messageFont = .KoreanCaption1
+//                    self.view.makeToast("  ✓  수정 완료되었습니다!  ", duration: 3.0, position: .bottom, style: style)
+//                }
+//            })
+//            .disposed(by: disposeBag)
+    }
+    
+    func processChanges(previousItems: [ExclItemInfo], currentItems: [ExclItemInfo]) {
+        if previousItems.count == currentItems.count {
+            print("11111111")
+            // 리스트의 크기가 동일하면 수정된 것으로 간주합니다.
+            var style = ToastStyle()
+            style.messageFont = .KoreanCaption1
+            self.view.makeToast("  ✓  수정 완료되었습니다!  ", duration: 3.0, position: .bottom, style: style)
+        } else if previousItems.count > currentItems.count {
+            // 이전 항목이 더 많으면 삭제된 것으로 간주합니다.
+            print("22222222")
+            var style = ToastStyle()
+            style.messageFont = .KoreanCaption1
+            self.view.makeToast("  ✓  삭제 완료되었습니다!  ", duration: 3.0, position: .bottom, style: style)
+        } else {
+            print("3333333")
+            // 이전 항목이 더 적으면 추가된 것으로 간주합니다.
+            var style = ToastStyle()
+            style.messageFont = .KoreanCaption1
+            self.view.makeToast("  ✓  추가 완료되었습니다!  ", duration: 3.0, position: .bottom, style: style)
+        }
     }
 }
