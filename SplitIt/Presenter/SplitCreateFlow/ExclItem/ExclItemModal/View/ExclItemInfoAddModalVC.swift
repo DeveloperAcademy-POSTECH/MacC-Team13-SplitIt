@@ -131,7 +131,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
         tableView.do {
             $0.register(cellType: ExclItemInfoModalCell.self)
             $0.register(cellType: ExclItemInfoDeactiveModalCell.self)
-            $0.backgroundColor = .SurfaceSelected
+            $0.backgroundColor = .SurfaceDeactivate
             $0.showsVerticalScrollIndicator = false
             $0.showsHorizontalScrollIndicator = false
             $0.rowHeight = rowHeight
