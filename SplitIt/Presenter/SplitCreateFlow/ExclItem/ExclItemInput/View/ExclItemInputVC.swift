@@ -23,6 +23,7 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
     
     let header = SPNavigationBar()
     let exclListLabel = UILabel()
+    let textDivider = UILabel()
     let exclItemCountLabel = UILabel()
     let exclItemAddButton = SPButton()
     
@@ -58,10 +59,15 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
             $0.textColor = .TextPrimary
         }
         
+        textDivider.do {
+            $0.text = "|"
+            $0.font = .KoreanSubtitle
+            $0.textColor = .TextSecondary
+        }
+        
         exclItemCountLabel.do {
             $0.font = .KoreanCaption1
-            $0.textColor = .TextPrimary
-            $0.textAlignment = .justified
+            $0.textColor = .TextSecondary
         }
         
         exclItemAddButton.do {
@@ -91,7 +97,7 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
     }
     
     func setLayout() {
-        [header, exclListLabel, exclItemCountLabel, exclItemAddButton, tableView, emptyView, nextButton].forEach {
+        [header, exclListLabel, textDivider, exclItemCountLabel, exclItemAddButton, tableView, emptyView, nextButton].forEach {
             view.addSubview($0)
         }
         
@@ -106,9 +112,14 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
             $0.leading.equalToSuperview().inset(34)
         }
         
+        textDivider.snp.makeConstraints {
+            $0.centerY.equalTo(exclListLabel)
+            $0.leading.equalTo(exclListLabel.snp.trailing).offset(4)
+        }
+        
         exclItemCountLabel.snp.makeConstraints {
-            $0.bottom.equalTo(exclListLabel.snp.bottom)
-            $0.leading.equalTo(exclListLabel.snp.trailing).offset(8)
+            $0.centerY.equalTo(exclListLabel)
+            $0.leading.equalTo(textDivider.snp.trailing).offset(4)
         }
         
         exclItemAddButton.snp.makeConstraints {
