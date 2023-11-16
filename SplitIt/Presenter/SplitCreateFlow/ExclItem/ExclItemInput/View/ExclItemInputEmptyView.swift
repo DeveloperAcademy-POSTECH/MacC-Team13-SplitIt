@@ -40,6 +40,7 @@ class ExclItemInputEmptyView: UIView {
             $0.font = .KoreanCaption1
             $0.textColor = .TextSecondary
             $0.numberOfLines = 2
+            $0.setLineSpacing(4.0)
         }
     }
     

@@ -84,6 +84,7 @@
 		60AE3EC12AE77488009D9D18 /* CSMemberResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EC02AE77488009D9D18 /* CSMemberResult.swift */; };
 		60AE3EC32AE77491009D9D18 /* SplitResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EC22AE77491009D9D18 /* SplitResult.swift */; };
 		60F496952AF753180077F6FB /* SPAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F496942AF753180077F6FB /* SPAlertController.swift */; };
+		60F793432B05C5D800D55ADD /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F793422B05C5D800D55ADD /* UILabel+.swift */; };
 		8656D6D42B020C03003660A4 /* NewEditCSMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D32B020C03003660A4 /* NewEditCSMemberVC.swift */; };
 		8656D6D72B020C6D003660A4 /* NewEditCSMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D62B020C6D003660A4 /* NewEditCSMemberVM.swift */; };
 		86C65FF22AEF970F00A7942A /* EditCSListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF12AEF970F00A7942A /* EditCSListVC.swift */; };
@@ -195,6 +196,7 @@
 		60AE3EC02AE77488009D9D18 /* CSMemberResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberResult.swift; sourceTree = "<group>"; };
 		60AE3EC22AE77491009D9D18 /* SplitResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitResult.swift; sourceTree = "<group>"; };
 		60F496942AF753180077F6FB /* SPAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAlertController.swift; sourceTree = "<group>"; };
+		60F793422B05C5D800D55ADD /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		8656D6D32B020C03003660A4 /* NewEditCSMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditCSMemberVC.swift; sourceTree = "<group>"; };
 		8656D6D62B020C6D003660A4 /* NewEditCSMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditCSMemberVM.swift; sourceTree = "<group>"; };
 		86C65FF12AEF970F00A7942A /* EditCSListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVC.swift; sourceTree = "<group>"; };
@@ -433,6 +435,7 @@
 				1A07DF0A2AE569660081E543 /* UIButton+.swift */,
 				60AE3EBB2AE7743E009D9D18 /* UITableView+.swift */,
 				C291BA122AF4DD6F009501F3 /* UIDevice+.swift */,
+				60F793422B05C5D800D55ADD /* UILabel+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1169,6 +1172,7 @@
 				1AC411632B0231BD008A45BC /* SPPopUp.swift in Sources */,
 				6032DCF62AEE8126004A6BFA /* ExclItemCell.swift in Sources */,
 				DE1711C42AE0BAB30097850D /* MyInfoVC.swift in Sources */,
+				60F793432B05C5D800D55ADD /* UILabel+.swift in Sources */,
 				60AE3EBC2AE7743E009D9D18 /* UITableView+.swift in Sources */,
 				1AC411772B028B78008A45BC /* LocalConvertibleType.swift in Sources */,
 				60AE3EB52AE773BF009D9D18 /* SplitShareVC.swift in Sources */,
