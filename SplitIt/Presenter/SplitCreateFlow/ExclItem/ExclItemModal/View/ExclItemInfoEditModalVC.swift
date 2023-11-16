@@ -44,7 +44,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
     
     var dataSource: RxTableViewSectionedReloadDataSource<ExclItemInfoModalSection>!
     
-    let cellHeight: CGFloat = 32.0
+    let cellHeight: CGFloat = 40.0
     let tableInset: CGFloat = 12.0
     
     init(viewModel: ExclItemInfoEditModalVM!) {
@@ -496,8 +496,8 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
                     
                     let items = viewModel.sections.value
 
-                    let tapArea = 204.0
-                    let bottomArea = 139.0
+                    let topArea = tableView.frame.minY
+                    let bottomArea = CGFloat(24.0 + 48.0 + 33.0) // top_offset + deleteBtnHeight + bottom_offset
                     let tableInset = self.tableInset
                     let cellHeight = self.cellHeight
                     let tableViewHeight = CGFloat(items[0].items.count) * (cellHeight + 8.0) + (tableInset * 2.0)
@@ -505,7 +505,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
                     self.contentView.snp.remakeConstraints {
                         $0.top.bottom.leading.trailing.equalTo(self.scrollView)
                         $0.width.equalTo(self.scrollView)
-                        $0.height.equalTo(tableViewHeight + tapArea + bottomArea + keyboardHeight)
+                        $0.height.equalTo(tableViewHeight + topArea + bottomArea + keyboardHeight)
                     }
                     
                     self.tableView.snp.remakeConstraints {
@@ -521,8 +521,8 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
             .asDriver()
             .drive(onNext: { [weak self] items in
                 guard let self = self else { return }
-                let tapArea = 204.0
-                let bottomArea = 139.0 + 12.0
+                let topArea = tableView.frame.minY
+                let bottomArea = CGFloat(24.0 + 48.0 + 33.0) // top_offset + deleteBtnHeight + bottom_offset
                 let tableInset = self.tableInset
                 let cellHeight = self.cellHeight
                 let tableViewHeight = CGFloat(items[0].items.count) * (cellHeight + 8.0) + (tableInset * 2.0)
@@ -530,7 +530,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
                 self.contentView.snp.remakeConstraints {
                     $0.top.bottom.leading.trailing.equalTo(self.scrollView)
                     $0.width.equalTo(self.scrollView)
-                    $0.height.equalTo(tableViewHeight + tapArea + bottomArea)
+                    $0.height.equalTo(tableViewHeight + topArea + bottomArea)
                 }
                 
                 self.tableView.snp.remakeConstraints {

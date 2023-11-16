@@ -40,7 +40,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
     
     var dataSource: RxTableViewSectionedReloadDataSource<ExclItemInfoModalSection>!
     
-    let cellHeight: CGFloat = 32.0
+    let cellHeight: CGFloat = 40.0
     let tableInset: CGFloat = 12.0
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -354,8 +354,8 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
                     
                     let items = viewModel.sections.value
 
-                    let tapArea = 204.0
-                    let bottomArea = 24.0
+                    let topArea = tableView.frame.minY
+                    let bottomArea = CGFloat(33.0) // bottom_offset
                     let tableInset = self.tableInset
                     let cellHeight = self.cellHeight
                     let tableViewHeight = CGFloat(items[0].items.count) * (cellHeight + 8.0) + (tableInset * 2.0)
@@ -363,7 +363,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
                     self.contentView.snp.remakeConstraints {
                         $0.top.bottom.leading.trailing.equalTo(self.scrollView)
                         $0.width.equalTo(self.scrollView)
-                        $0.height.equalTo(tableViewHeight + tapArea + bottomArea + keyboardHeight)
+                        $0.height.equalTo(tableViewHeight + topArea + bottomArea + keyboardHeight)
                     }
                     
                     self.tableView.snp.remakeConstraints {
@@ -379,8 +379,8 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
             .asDriver()
             .drive(onNext: { [weak self] items in
                 guard let self = self else { return }
-                let tapArea = 204.0
-                let bottomArea = 24.0 + 12.0
+                let topArea = tableView.frame.minY
+                let bottomArea = CGFloat(33.0) // bottom_offset
                 let tableInset = self.tableInset
                 let cellHeight = self.cellHeight
                 let tableViewHeight = CGFloat(items[0].items.count) * (cellHeight + 8.0) + (tableInset * 2.0)
@@ -388,7 +388,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
                 self.contentView.snp.remakeConstraints {
                     $0.top.bottom.leading.trailing.equalTo(self.scrollView)
                     $0.width.equalTo(self.scrollView)
-                    $0.height.equalTo(tableViewHeight + tapArea + bottomArea)
+                    $0.height.equalTo(tableViewHeight + topArea + bottomArea)
                 }
                 
                 self.tableView.snp.remakeConstraints {
