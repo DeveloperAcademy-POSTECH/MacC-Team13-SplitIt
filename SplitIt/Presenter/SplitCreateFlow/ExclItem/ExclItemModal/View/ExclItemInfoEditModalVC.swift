@@ -247,7 +247,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
         
         priceTitleMessage.snp.makeConstraints {
             $0.top.equalTo(titleTextFiled.snp.bottom).offset(24)
-            $0.leading.equalTo(titleMessage.snp.leading).inset(8)
+            $0.leading.equalTo(titleMessage.snp.leading)
         }
         
         priceTextFiled.snp.makeConstraints {
@@ -263,7 +263,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
         
         exclMemberMessage.snp.makeConstraints {
             $0.top.equalTo(priceTextFiled.snp.bottom).offset(48)
-            $0.leading.equalTo(titleMessage.snp.leading).inset(8)
+            $0.leading.equalTo(titleMessage.snp.leading)
         }
         
         tableView.snp.makeConstraints {
