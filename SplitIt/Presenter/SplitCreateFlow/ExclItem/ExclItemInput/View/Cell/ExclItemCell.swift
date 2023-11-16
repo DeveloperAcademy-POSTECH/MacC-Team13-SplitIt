@@ -67,12 +67,12 @@ class ExclItemCell: UITableViewCell, Reusable {
         }
         
         exclMemberCountLabel.do {
-            $0.textColor = .TextPrimary.withAlphaComponent(0.8)
+            $0.textColor = .TextPrimary
             $0.font = .KoreanCaption2
         }
         
         exclMembers.do {
-            $0.textColor = .TextPrimary
+            $0.textColor = .TextSecondary
             $0.font = .KoreanCaption1
         }
         
