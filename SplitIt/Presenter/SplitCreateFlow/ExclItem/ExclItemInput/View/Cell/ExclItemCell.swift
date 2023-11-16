@@ -45,7 +45,7 @@ class ExclItemCell: UITableViewCell, Reusable {
             $0.layer.cornerRadius = 4
             $0.layer.borderColor = UIColor.BorderTertiary.cgColor
             $0.layer.borderWidth = 1
-            $0.frame = $0.frame.inset(by: UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0))
+            $0.frame = $0.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0))
         }
         
         exclItemName.do {
