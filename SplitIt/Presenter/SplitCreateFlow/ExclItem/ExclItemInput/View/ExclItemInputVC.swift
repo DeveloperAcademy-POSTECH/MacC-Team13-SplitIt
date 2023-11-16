@@ -23,6 +23,7 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
     
     let header = SPNavigationBar()
     let exclListLabel = UILabel()
+    let textDivider = UILabel()
     let exclItemCountLabel = UILabel()
     let exclItemAddButton = SPButton()
     
@@ -42,7 +43,7 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     func setAttribute() {
@@ -58,10 +59,15 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
             $0.textColor = .TextPrimary
         }
         
+        textDivider.do {
+            $0.text = "|"
+            $0.font = .KoreanSubtitle
+            $0.textColor = .TextSecondary
+        }
+        
         exclItemCountLabel.do {
             $0.font = .KoreanCaption1
-            $0.textColor = .TextPrimary
-            $0.textAlignment = .justified
+            $0.textColor = .TextSecondary
         }
         
         exclItemAddButton.do {
@@ -91,7 +97,7 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
     }
     
     func setLayout() {
-        [header, exclListLabel, exclItemCountLabel, exclItemAddButton, tableView, emptyView, nextButton].forEach {
+        [header, exclListLabel, textDivider, exclItemCountLabel, exclItemAddButton, tableView, emptyView, nextButton].forEach {
             view.addSubview($0)
         }
         
@@ -106,9 +112,14 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
             $0.leading.equalToSuperview().inset(34)
         }
         
+        textDivider.snp.makeConstraints {
+            $0.centerY.equalTo(exclListLabel)
+            $0.leading.equalTo(exclListLabel.snp.trailing).offset(4)
+        }
+        
         exclItemCountLabel.snp.makeConstraints {
-            $0.bottom.equalTo(exclListLabel.snp.bottom)
-            $0.leading.equalTo(exclListLabel.snp.trailing).offset(8)
+            $0.centerY.equalTo(exclListLabel)
+            $0.leading.equalTo(textDivider.snp.trailing).offset(4)
         }
         
         exclItemAddButton.snp.makeConstraints {
@@ -119,7 +130,7 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
         }
         
         tableView.snp.makeConstraints {
-            $0.top.equalTo(exclListLabel.snp.bottom).offset(12)
+            $0.top.equalTo(exclListLabel.snp.bottom).offset(18)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.bottom.equalTo(nextButton.snp.top).offset(-24)
         }
@@ -144,6 +155,7 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
             .filter { gesture in
                 let location = gesture.location(in: self.view)
                 return location.x < 20
+                && !(self.navigationController?.interactivePopGestureRecognizer!.isEnabled)!
             }
 
         let input = ExclItemInputVM.Input(viewDidDisappear: self.rx.viewDidDisappear,

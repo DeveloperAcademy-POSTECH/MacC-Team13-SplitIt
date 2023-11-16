@@ -250,9 +250,9 @@ extension UIColor {
 
     // MARK: Grayscale Colors
     class var AppColorGrayscaleBase: UIColor { return UIColor(hex: 0xFFFFFF) }
-    class var AppColorGrayscale25K: UIColor { return UIColor(hex: 0xE5E4E0) }
+    class var AppColorGrayscale25K: UIColor { return UIColor(hex: 0xEEEDE8) }
     class var AppColorGrayscale50: UIColor { return UIColor(hex: 0xF1F1F1) }
-    class var AppColorGrayscale50K: UIColor { return UIColor(hex: 0xEEEDE8) }
+    class var AppColorGrayscale50K: UIColor { return UIColor(hex: 0xE5E4E0) }
     class var AppColorGrayscale200: UIColor { return UIColor(hex: 0xD3D3D3) }
     class var AppColorGrayscale400: UIColor { return UIColor(hex: 0xAFAFAF) }
     class var AppColorGrayscale600: UIColor { return UIColor(hex: 0x7C7C7C) }

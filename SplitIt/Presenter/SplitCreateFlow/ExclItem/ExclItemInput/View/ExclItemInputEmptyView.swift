@@ -38,8 +38,9 @@ class ExclItemInputEmptyView: UIView {
             $0.text = "우측 상단의 '항목 추가' 버튼을 탭하여\n따로 정산하실 항목을 추가하세요"
             $0.textAlignment = .center
             $0.font = .KoreanCaption1
-            $0.textColor = .TextPrimary
+            $0.textColor = .TextSecondary
             $0.numberOfLines = 2
+            $0.setLineSpacing(4.0)
         }
     }
     

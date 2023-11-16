@@ -13,6 +13,7 @@ import SnapKit
 class ExclItemInfoModalCell: UITableViewCell, Reusable {
 
     let name = UILabel()
+    let checkMark = UIImageView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -47,24 +48,44 @@ class ExclItemInfoModalCell: UITableViewCell, Reusable {
         
         name.do {
             $0.font = .KoreanBody
+            $0.textColor = .TextPrimary
+        }
+        
+        checkMark.do {
+            $0.image = UIImage(systemName: "checkmark")
         }
     }
     
     func setLayout() {
-        contentView.addSubview(name)
+        [name,checkMark].forEach {
+            contentView.addSubview($0)
+        }
         
         name.snp.makeConstraints {
             $0.top.bottom.equalToSuperview().inset(4)
             $0.leading.equalToSuperview().inset(12)
+        }
+        
+        checkMark.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().offset(-12)
         }
     }
 
     func configure(item: ExclItemTable) {
         name.text = item.name
 
-        self.name.textColor = item.isTarget ? .SurfaceBrandCalmshell : .TextPrimary
-        self.contentView.layer.borderColor = item.isTarget ? UIColor.SurfaceBrandWatermelonPressed.cgColor : UIColor.SurfaceBrandCalmshell.cgColor
-        self.contentView.backgroundColor = item.isTarget ? .SurfaceBrandWatermelon : .SurfaceBrandCalmshell
+        self.contentView.layer.borderColor = item.isTarget
+        ? UIColor.AppColorGrayscale1000.cgColor
+        : UIColor.SurfaceBrandCalmshell.cgColor
+        
+        self.contentView.backgroundColor = item.isTarget
+        ? .SurfaceBrandWatermelon
+        : .SurfaceBrandCalmshell
+        
+        self.checkMark.tintColor = item.isTarget
+        ? .TextPrimary
+        : .TextDeactivate
     }
 }
 

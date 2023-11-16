@@ -52,7 +52,6 @@
 		6032DCEF2AEE5452004A6BFA /* ExclItemInputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCEE2AEE5452004A6BFA /* ExclItemInputVC.swift */; };
 		6032DCF12AEE6FFC004A6BFA /* ExclItemInputVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCF02AEE6FFC004A6BFA /* ExclItemInputVM.swift */; };
 		6032DCF62AEE8126004A6BFA /* ExclItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCF52AEE8126004A6BFA /* ExclItemCell.swift */; };
-		6032DCF82AEF4B5B004A6BFA /* ExclItemAddCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCF72AEF4B5B004A6BFA /* ExclItemAddCell.swift */; };
 		6032DCFA2AEF5F68004A6BFA /* ExclItemInfoAddModalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCF92AEF5F68004A6BFA /* ExclItemInfoAddModalVC.swift */; };
 		6032DCFC2AEF5FBE004A6BFA /* ExclItemInfoAddModalVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCFB2AEF5FBE004A6BFA /* ExclItemInfoAddModalVM.swift */; };
 		604B5FBF2B035D6D00EDD5DA /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = 604B5FBE2B035D6D00EDD5DA /* RxGesture */; };
@@ -84,6 +83,7 @@
 		60AE3EC12AE77488009D9D18 /* CSMemberResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EC02AE77488009D9D18 /* CSMemberResult.swift */; };
 		60AE3EC32AE77491009D9D18 /* SplitResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EC22AE77491009D9D18 /* SplitResult.swift */; };
 		60F496952AF753180077F6FB /* SPAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F496942AF753180077F6FB /* SPAlertController.swift */; };
+		60F793432B05C5D800D55ADD /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F793422B05C5D800D55ADD /* UILabel+.swift */; };
 		8656D6D42B020C03003660A4 /* NewEditCSMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D32B020C03003660A4 /* NewEditCSMemberVC.swift */; };
 		8656D6D72B020C6D003660A4 /* NewEditCSMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D62B020C6D003660A4 /* NewEditCSMemberVM.swift */; };
 		86C65FF22AEF970F00A7942A /* EditCSListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF12AEF970F00A7942A /* EditCSListVC.swift */; };
@@ -169,7 +169,6 @@
 		6032DCEE2AEE5452004A6BFA /* ExclItemInputVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInputVC.swift; sourceTree = "<group>"; };
 		6032DCF02AEE6FFC004A6BFA /* ExclItemInputVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInputVM.swift; sourceTree = "<group>"; };
 		6032DCF52AEE8126004A6BFA /* ExclItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemCell.swift; sourceTree = "<group>"; };
-		6032DCF72AEF4B5B004A6BFA /* ExclItemAddCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemAddCell.swift; sourceTree = "<group>"; };
 		6032DCF92AEF5F68004A6BFA /* ExclItemInfoAddModalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInfoAddModalVC.swift; sourceTree = "<group>"; };
 		6032DCFB2AEF5FBE004A6BFA /* ExclItemInfoAddModalVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInfoAddModalVM.swift; sourceTree = "<group>"; };
 		604CDC7A2AF14A8100416454 /* ExclItemInputEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInputEmptyView.swift; sourceTree = "<group>"; };
@@ -195,6 +194,7 @@
 		60AE3EC02AE77488009D9D18 /* CSMemberResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberResult.swift; sourceTree = "<group>"; };
 		60AE3EC22AE77491009D9D18 /* SplitResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitResult.swift; sourceTree = "<group>"; };
 		60F496942AF753180077F6FB /* SPAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAlertController.swift; sourceTree = "<group>"; };
+		60F793422B05C5D800D55ADD /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		8656D6D32B020C03003660A4 /* NewEditCSMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditCSMemberVC.swift; sourceTree = "<group>"; };
 		8656D6D62B020C6D003660A4 /* NewEditCSMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditCSMemberVM.swift; sourceTree = "<group>"; };
 		86C65FF12AEF970F00A7942A /* EditCSListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVC.swift; sourceTree = "<group>"; };
@@ -433,6 +433,7 @@
 				1A07DF0A2AE569660081E543 /* UIButton+.swift */,
 				60AE3EBB2AE7743E009D9D18 /* UITableView+.swift */,
 				C291BA122AF4DD6F009501F3 /* UIDevice+.swift */,
+				60F793422B05C5D800D55ADD /* UILabel+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -552,7 +553,6 @@
 			isa = PBXGroup;
 			children = (
 				6032DCF52AEE8126004A6BFA /* ExclItemCell.swift */,
-				6032DCF72AEF4B5B004A6BFA /* ExclItemAddCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1169,6 +1169,7 @@
 				1AC411632B0231BD008A45BC /* SPPopUp.swift in Sources */,
 				6032DCF62AEE8126004A6BFA /* ExclItemCell.swift in Sources */,
 				DE1711C42AE0BAB30097850D /* MyInfoVC.swift in Sources */,
+				60F793432B05C5D800D55ADD /* UILabel+.swift in Sources */,
 				60AE3EBC2AE7743E009D9D18 /* UITableView+.swift in Sources */,
 				1AC411772B028B78008A45BC /* LocalConvertibleType.swift in Sources */,
 				60AE3EB52AE773BF009D9D18 /* SplitShareVC.swift in Sources */,
@@ -1225,7 +1226,6 @@
 				8656D6D72B020C6D003660A4 /* NewEditCSMemberVM.swift in Sources */,
 				60115E012ADC01150050D32C /* UITextField+.swift in Sources */,
 				60104CE92AEFF73800489AAD /* ExclItemInfoModalSection.swift in Sources */,
-				6032DCF82AEF4B5B004A6BFA /* ExclItemAddCell.swift in Sources */,
 				1AC411792B028B8B008A45BC /* RealmRepresentable.swift in Sources */,
 				86DACB112AF639E0008D7BAF /* EditCSMemberVC.swift in Sources */,
 				604CDC862AF2396300416454 /* ExcltemInfoModalAlertVC.swift in Sources */,

@@ -13,6 +13,7 @@ import SnapKit
 class ExclItemInfoDeactiveModalCell: UITableViewCell, Reusable {
 
     let name = UILabel()
+    let checkMark = UIImageView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -47,24 +48,41 @@ class ExclItemInfoDeactiveModalCell: UITableViewCell, Reusable {
         
         name.do {
             $0.font = .KoreanBody
+            $0.textColor = .TextDeactivate
+        }
+        
+        checkMark.do {
+            $0.image = UIImage(systemName: "checkmark")
+            $0.tintColor = .TextDeactivate
         }
     }
     
     func setLayout() {
-        contentView.addSubview(name)
+        [name,checkMark].forEach {
+            contentView.addSubview($0)
+        }
         
         name.snp.makeConstraints {
             $0.top.bottom.equalToSuperview().inset(4)
             $0.leading.equalToSuperview().inset(12)
+        }
+        
+        checkMark.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().offset(-12)
         }
     }
 
     func configure(item: ExclItemTable) {
         self.name.text = item.name
         
-        self.name.textColor = item.isTarget ? .SurfaceBrandCalmshell : .TextDeactivate
-        self.contentView.backgroundColor = item.isTarget ? .AppColorGrayscale200 : .SurfaceBrandCalmshell
-        self.contentView.layer.borderColor = item.isTarget ? UIColor.AppColorGrayscale200.cgColor : UIColor.SurfaceBrandCalmshell.cgColor
+        self.contentView.backgroundColor = item.isTarget
+        ? .SurfaceSelected
+        : .SurfaceBrandCalmshell
+        
+        self.contentView.layer.borderColor = item.isTarget
+        ? UIColor.BorderDeactivate.cgColor
+        : UIColor.SurfaceBrandCalmshell.cgColor
     }
 }
 

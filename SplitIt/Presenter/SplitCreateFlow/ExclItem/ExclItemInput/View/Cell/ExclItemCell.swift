@@ -14,7 +14,7 @@ class ExclItemCell: UITableViewCell, Reusable {
 
     let exclItemName = UILabel()
     let modifyLabel = UILabel()
-    let modifyChevron = UIImageView(image: UIImage(systemName: "chevron.right"))
+    let modifyChevron = UIImageView()
     let exclMemberCountLabel = UILabel()
     let exclMembers = UILabel()
     let currencyLabel = UILabel()
@@ -45,7 +45,7 @@ class ExclItemCell: UITableViewCell, Reusable {
             $0.layer.cornerRadius = 4
             $0.layer.borderColor = UIColor.BorderTertiary.cgColor
             $0.layer.borderWidth = 1
-            $0.frame = $0.frame.inset(by: UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0))
+            $0.frame = $0.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0))
         }
         
         exclItemName.do {
@@ -61,16 +61,18 @@ class ExclItemCell: UITableViewCell, Reusable {
         }
         
         modifyChevron.do {
+            $0.image = UIImage(named: "ChevronRightIconGray")
+            $0.contentMode = .scaleAspectFill
             $0.tintColor = .SurfaceTertiary
         }
         
         exclMemberCountLabel.do {
-            $0.textColor = .TextPrimary.withAlphaComponent(0.8)
+            $0.textColor = .TextPrimary
             $0.font = .KoreanCaption2
         }
         
         exclMembers.do {
-            $0.textColor = .TextPrimary
+            $0.textColor = .TextSecondary
             $0.font = .KoreanCaption1
         }
         
@@ -104,7 +106,7 @@ class ExclItemCell: UITableViewCell, Reusable {
         
         modifyChevron.snp.makeConstraints {
             $0.centerY.equalTo(exclItemName)
-            $0.trailing.equalToSuperview().inset(13)
+            $0.trailing.equalToSuperview().inset(12)
             $0.width.equalTo(8)
             $0.height.equalTo(14)
         }
