@@ -43,7 +43,7 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     func setAttribute() {
@@ -155,6 +155,7 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
             .filter { gesture in
                 let location = gesture.location(in: self.view)
                 return location.x < 20
+                && !(self.navigationController?.interactivePopGestureRecognizer!.isEnabled)!
             }
 
         let input = ExclItemInputVM.Input(viewDidDisappear: self.rx.viewDidDisappear,
