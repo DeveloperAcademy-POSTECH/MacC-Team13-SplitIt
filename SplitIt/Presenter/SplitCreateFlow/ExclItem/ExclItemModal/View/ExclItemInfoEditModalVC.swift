@@ -96,7 +96,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
         }
         
         titleMessage.do {
-            $0.text = "어떤 정산에서 제외해야하나요?"
+            $0.text = "어떤 항목을 제외해야하나요?"
             $0.font = .KoreanBody
             $0.textColor = .TextDeactivate
         }
@@ -133,7 +133,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
         }
         
         exclMemberMessage.do {
-            $0.text = "제외할 분들을 선택하세요"
+            $0.text = "정산에서 제외할 멤버를 선택하세요"
             $0.font = .KoreanBody
             $0.textColor = .TextDeactivate
         }
