@@ -15,16 +15,12 @@ class HomeVC: UIViewController {
     var disposeBag = DisposeBag()
     let viewModel = HomeVM()
     
-    let myInfoButton: UIButton = UIButton()
-    
-    let mainView: UIView = UIView()
-    let mainImage: UIImageView = UIImageView()
-    
-    let mainTextView: UIView = UIView()
-    let logoImage: UIImageView = UIImageView()
-    let mainTextLabel: UILabel = UILabel()
-    
-    let splitItButton: SPButton = SPButton()
+    let contentView = UIView()
+    let splitTitleLogo = UIImageView()
+    let titleDescriptionLabel = UILabel()
+    let splitImageLogo = UIImageView()
+    let myInfoButton = SPButton()
+    let splitItButton = SPButton()
 
     
     override func viewDidLoad() {
@@ -38,6 +34,81 @@ class HomeVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+    }
+   
+    func setAttribute() {
+        view.backgroundColor = .SurfaceBrandCalmshell
+        
+        splitTitleLogo.do {
+            $0.image = UIImage(named: "SplitTitleLogo")
+            $0.contentMode = .scaleAspectFit
+        }
+        
+        titleDescriptionLabel.do {
+            $0.text = "더 쉽고 편한 정산"
+            $0.textColor = .TextPrimary
+            $0.font = .KoreanSubtitle
+        }
+        
+        splitImageLogo.do {
+            $0.image = UIImage(named: "SplitImageLogo")
+            $0.contentMode = .scaleAspectFit
+        }
+        
+        myInfoButton.do {
+            $0.setImage(UIImage(named: "SettingIcon"), for: .normal)
+            $0.applyStyle(style: .primaryCalmshell, shape: .square)
+            $0.buttonState.accept(true)
+        }
+
+        splitItButton.do {
+            $0.setImage(UIImage(named: "SplitBeginArrow"), for: .normal)
+            $0.applyStyle(style: .primaryWatermelon, shape: .square)
+            $0.buttonState.accept(true)
+        }
+    }
+
+    func setLayout() {
+        view.addSubview(contentView)
+        [splitTitleLogo, titleDescriptionLabel, splitImageLogo, myInfoButton, splitItButton].forEach {
+            contentView.addSubview($0)
+        }
+      
+        contentView.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.width.equalTo(340)
+            $0.height.equalTo(520)
+        }
+        
+        splitTitleLogo.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.centerX.equalToSuperview()
+        }
+        
+        titleDescriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(splitTitleLogo.snp.bottom).offset(16)
+            $0.centerX.equalToSuperview()
+        }
+        
+        splitImageLogo.snp.makeConstraints {
+            $0.top.equalTo(titleDescriptionLabel.snp.bottom).offset(80)
+            $0.centerX.equalToSuperview()
+        }
+        
+        myInfoButton.snp.makeConstraints {
+            $0.top.equalTo(splitImageLogo.snp.bottom).offset(80)
+            $0.leading.equalToSuperview().inset(36)
+            $0.height.equalTo(72)
+            $0.width.equalTo(100)
+            $0.trailing.equalTo(splitItButton.snp.leading).offset(-24)
+        }
+
+        splitItButton.snp.makeConstraints {
+            $0.top.equalTo(myInfoButton)
+            $0.height.equalTo(72)
+            $0.width.equalTo(144)
+            $0.trailing.equalToSuperview().inset(36)
+        }
     }
     
     func setBinding() {
@@ -58,120 +129,6 @@ class HomeVC: UIViewController {
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
-    }
-
-    
-    func setAttribute() {
-        view.backgroundColor = .SurfaceBrandCalmshell
-        
-        myInfoButton.do {
-
-            $0.setImage(
-                UIImage(systemName: "person.fill")?
-                    .applyingSymbolConfiguration(.init(pointSize: 26)), for: .normal)
-            $0.tintColor = .black
-            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
-            $0.layer.borderWidth = 1
-            $0.layer.cornerRadius = 8
-            $0.clipsToBounds = true
-        }
-       
-        mainView.do {
-            $0.backgroundColor = .AppColorBrandWatermelon
-            $0.clipsToBounds = true
-            $0.layer.cornerRadius = 50
-            $0.layer.maskedCorners = CACornerMask(arrayLiteral: .layerMinXMinYCorner, .layerMaxXMinYCorner)
-            $0.layer.cornerRadius = 8
-            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
-            $0.layer.borderWidth = 1
-        }
-        
-        mainImage.do {
-            $0.image = UIImage(named: "SmartSplitIconWhite")
-        }
-        
-        mainTextView.do {
-            $0.backgroundColor = .white
-            $0.clipsToBounds = true
-            $0.layer.cornerRadius = 50
-            $0.layer.maskedCorners = CACornerMask(arrayLiteral: .layerMinXMaxYCorner, .layerMaxXMaxYCorner)
-            $0.layer.cornerRadius = 8
-            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
-            $0.layer.borderWidth = 1
-            
-        }
-        
-        logoImage.do {
-            $0.image = UIImage(named: "SplitItLogo")
-        }
-        
-        mainTextLabel.do {
-            $0.text = "각자 먹고 쓴 만큼,\n똑똑하게 나누어 낼 수 있어요!"
-            $0.font = .KoreanCaption1
-            $0.textColor = .TextPrimary
-            $0.numberOfLines = 0
-            $0.textAlignment = .right
-        }
-
-        splitItButton.do {
-            $0.setTitle("정산 시작하기", for: .normal)
-            $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
-            $0.buttonState.accept(true)
-        }
-    }
-
-    func setLayout() {
-        [mainView, mainTextView, splitItButton, myInfoButton].forEach {
-            view.addSubview($0)
-        }
-        
-        [mainTextLabel, logoImage].forEach {
-            mainTextView.addSubview($0)
-        }
-        
-        mainView.addSubview(mainImage)
-        
-        myInfoButton.snp.makeConstraints {
-            $0.bottom.equalTo(mainView.snp.top).offset(-8)
-            $0.width.height.equalTo(40)
-            $0.trailing.equalToSuperview().offset(-63)
-        }
-      
-        mainView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(104)
-            $0.horizontalEdges.equalToSuperview().inset(55)
-            $0.bottom.equalToSuperview().offset(-406)
-        }
-        
-        mainImage.snp.makeConstraints { 
-            $0.center.equalToSuperview()
-            $0.size.equalTo(90)
-        }
-        
-        mainTextView.snp.makeConstraints {
-            $0.top.equalTo(mainView.snp.bottom).offset(-1)
-            $0.horizontalEdges.equalToSuperview().inset(55)
-            $0.bottom.equalToSuperview().offset(-206)
-        }
-        
-        logoImage.snp.makeConstraints {
-            $0.width.equalTo(130)
-            $0.height.equalTo(92)
-            $0.top.equalToSuperview().offset(20)
-            $0.leading.equalToSuperview().offset(20)
-        }
-        
-        mainTextLabel.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-20)
-            $0.bottom.equalToSuperview().offset(-20)
-        }
-
-        splitItButton.snp.makeConstraints {
-            $0.top.equalTo(mainTextView.snp.bottom).offset(24)
-            $0.height.equalTo(48)
-            $0.width.equalTo(220)
-            $0.centerX.equalToSuperview()
-        }
     }
 }
 
