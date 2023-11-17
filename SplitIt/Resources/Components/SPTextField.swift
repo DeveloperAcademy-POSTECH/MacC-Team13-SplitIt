@@ -142,6 +142,7 @@ final class SPTextField: UITextField {
 
     private func configureActiveProperties() {
         self.autocorrectionType = .no
+        self.spellCheckingType = .no
         self.autocapitalizationType = .none
         self.layer.borderColor = UIColor.BorderPrimary.cgColor
     }

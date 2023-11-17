@@ -44,14 +44,12 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
         tableView.register(MemberCell.self, forCellReuseIdentifier: "MemberCell")
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
-        
     }
     
     func setAddView() {
         [header,tableView, emptyLabel, friendLabel, friendCount, allDeleteBtn].forEach {
             view.addSubview($0)
         }
-        
     }
     
     func setAlert() {
@@ -66,6 +64,7 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
               .asDriver(onErrorJustReturn: ())
               .drive(onNext: {
                   SplitRepository.share.deleteAllMemberLog()
+                  self.viewModel.memberList.accept(self.repo.memberLogArr.value)
               })
               .disposed(by: disposeBag)
     }
@@ -84,12 +83,12 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
         
         friendCount.snp.makeConstraints {
             $0.leading.equalTo(friendLabel.snp.trailing).offset(8)
-            $0.top.equalTo(header.snp.bottom).offset(24)
+            $0.top.equalTo(header.snp.bottom).offset(26)
         }
         
         allDeleteBtn.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(34)
-            $0.top.equalTo(header.snp.bottom).offset(20)
+            $0.top.equalTo(header.snp.bottom).offset(18)
         }
         
         tableView.snp.makeConstraints {
@@ -155,6 +154,21 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
         let input = MemberLogVM.Input(deleteBtnTapped: allDeleteBtn.rx.tap.asDriver())
         
         let output = viewModel.transform(input: input)
+        
+        
+        allDeleteBtn.rx.controlEvent([.touchDown])
+            .subscribe(onNext: {
+                self.allDeleteBtn.backgroundColor = UIColor.AppColorGrayscale50K
+                                                                    
+            })
+            .disposed(by: disposeBag)
+        
+        allDeleteBtn.rx.controlEvent(.touchUpInside)
+            .subscribe(onNext: {
+                self.allDeleteBtn.backgroundColor = .clear
+            })
+            .disposed(by: disposeBag)
+        
         
         output.showAlertAllDelete
             .drive(onNext: { [weak self] in

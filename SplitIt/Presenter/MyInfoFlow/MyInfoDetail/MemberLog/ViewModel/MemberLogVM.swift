@@ -25,17 +25,14 @@ class MemberLogVM {
         
     }
     
-    
     struct Output {
         let showAlertAllDelete: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let deleteBtnTapped = input.deleteBtnTapped
-
         repo.fetchMemberLog()
 
-        
         
         let output = Output(showAlertAllDelete: deleteBtnTapped)
         return output

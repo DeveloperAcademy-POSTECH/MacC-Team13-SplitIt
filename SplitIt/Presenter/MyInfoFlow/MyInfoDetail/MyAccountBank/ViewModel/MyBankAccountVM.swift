@@ -39,7 +39,7 @@ class MyBankAccountVM {
         let kakaoTapeed: Observable<Void>
         let naverTapped: Observable<Void>
         let deleteBtnTapped: Driver<Void>
-        let cancelBtnTapped: Driver<Void>
+        let cancelBtnTapped: Observable<Void>
         
     }
     
@@ -51,7 +51,7 @@ class MyBankAccountVM {
         let toggleKakaoPay: Observable<Void>
         let togglenaverPay: Observable<Void>
         let showAlertView: Driver<Void>
-        let cancelBackToView: Driver<Void>
+        let cancelBackToView: Observable<Void>
 
     }
     
@@ -66,6 +66,7 @@ class MyBankAccountVM {
         let naverTapped = input.naverTapped
         let deleteBtnTapped = input.deleteBtnTapped
         let cancelBtnTapped = input.cancelBtnTapped
+        
 
         editDoneBtnTapped
             .drive(onNext: {
@@ -161,16 +162,14 @@ class MyBankAccountVM {
                 }
             })
             .disposed(by: disposeBag)
-
-       
-     
-    let output = Output(popToMyInfoView: editDoneBtnTapped,
+      
+        let output = Output(popToMyInfoView: editDoneBtnTapped,
                             showBankModel: selectBackTapped,
                             toggleTossPay: tossTapped,
                             toggleKakaoPay: kakaoTapped,
                             togglenaverPay: naverTapped,
                             showAlertView: deleteBtnTapped,
-                        cancelBackToView: cancelBtnTapped
+                            cancelBackToView: cancelBtnTapped
         )
         
         return output

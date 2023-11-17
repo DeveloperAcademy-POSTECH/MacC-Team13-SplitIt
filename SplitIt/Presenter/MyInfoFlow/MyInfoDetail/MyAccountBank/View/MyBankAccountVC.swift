@@ -91,6 +91,9 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         view.addGestureRecognizer(tap)
         
     }
+    
+   
+       
    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
          self.view.endEditing(true)
@@ -195,14 +198,11 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
             .map { text1, text2, bankValue in
                 if bankValue != "선택 안함" {
                     if self.nameTextField.text?.count != 0 && self.accountTextField.text?.count != 0 {
-                        print(2)
                         return true
                     } else {
-                        print(3)
                         return !(text1.count == 0) && !(text2.count == 0)
                     }
                 } else {
-                    print(4)
                     return true
                 }
             }
@@ -253,6 +253,13 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
     
     func setBinding() {
         
+        let swipeBackLeftSideObservable = self.view.rx.panGesture()
+            .when(.began)
+            .filter { gesture in
+                let location = gesture.location(in: self.view)
+                return location.x < 20
+            }
+        
         let selectedBankTap = addTapGesture(to: bankTextField)
         let tossTap = addTapGesture(to: tossPayView)
         let kakaoTap = addTapGesture(to: kakaoPayView)
@@ -266,10 +273,32 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
                                           kakaoTapeed: kakaoTap.rx.event.asObservable().map { _ in () },
                                           naverTapped: naverTap.rx.event.asObservable().map { _ in () },
                                           deleteBtnTapped: deleteBtn.rx.tap.asDriver(),
-                                          cancelBtnTapped: header.leftButton.rx.tap.asDriver()
+                                          cancelBtnTapped: header.leftButton.rx.tap.asObservable()
+                                          
         )
         
         let output = viewModel.transform(input: input)
+        
+        deleteBtn.rx.controlEvent([.touchDown])
+            .subscribe(onNext: {
+                self.deleteBtn.backgroundColor = UIColor(hex: 0xF8F0ED)
+                                                                    
+            })
+            .disposed(by: disposeBag)
+        
+        deleteBtn.rx.controlEvent(.touchUpInside)
+            .subscribe(onNext: {
+                self.deleteBtn.backgroundColor = .clear
+            })
+            .disposed(by: disposeBag)
+        
+        UserDefaults.standard.rx.observe(String.self, "userBank")
+            .subscribe(onNext: { [weak self] userBank in
+                let isHidden = userBank == nil || userBank?.isEmpty == true
+                self?.deleteBtn.isHidden = isHidden
+            })
+            .disposed(by: disposeBag)
+        
         
         output.showBankModel
             .subscribe(onNext: { [weak self] in
@@ -291,21 +320,39 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
             })
             .disposed(by: disposeBag)
         
+        
+        
         output.showAlertView
             .drive(onNext: { [weak self] in
                 self?.setAlert()
             })
             .disposed(by: disposeBag)
         
+        let setBackAlertObservable = swipeBackLeftSideObservable
+            .flatMap { [weak self] _ -> Observable<Void> in
+                guard let self = self else { return Observable.empty() }
+                
+                if self.changedData() {
+                    self.setBackAlert()
+                    self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+                } else {
+                    self.navigationController?.popViewController(animated: true)
+                }
+                
+                return Observable.just(())
+            }
+
+        Observable.merge(output.cancelBackToView, setBackAlertObservable)
+            .subscribe()
+            .disposed(by: disposeBag)
         
         output.cancelBackToView
-            .drive(onNext: { [weak self] in
+            .subscribe(onNext: { [weak self] in
                 if self?.changedData() == true {
                     self?.setBackAlert()
                 } else {
                     self?.navigationController?.popViewController(animated: true)
                 }
-                
             })
             .disposed(by: disposeBag)
     }
@@ -321,8 +368,10 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         self.navigationController?.popViewController(animated: true)
     }
     
+    
     //페이류 변경되는 값에 따라 바로 UI 변경되도록 하는 함수
     func asapRxData() {
+        
         viewModel.isTossPayToggled
             .subscribe(onNext: { [weak self] isToggled in
                 let newImage = isToggled ? "TossPayIconChecked" : "TossPayIconUnchecked"
@@ -423,12 +472,9 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
     }
     
     func headerButtonState() {
-        print(userDefault.string(forKey: "userBank"))
         if userDefault.string(forKey: "userBank") != "" {
-            print(111)
             header.buttonState.accept(true)
         } else {
-            print(222)
             header.buttonState.accept(false)
         }
     }
@@ -436,12 +482,13 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
     func setAttribute() {
         
         view.backgroundColor = .SurfaceBrandCalmshell
-        
-        scrollView.backgroundColor = .SurfaceBrandCalmshell
         contentView.backgroundColor = .SurfaceBrandCalmshell
         
-        scrollView.isScrollEnabled = false
-        scrollView.contentSize = contentView.bounds.size
+        scrollView.do {
+            $0.isScrollEnabled = false
+            $0.contentSize = $0.bounds.size
+            $0.backgroundColor = .SurfaceBrandCalmshell
+        }
          
         header.do {
             $0.applyStyle(style: .myInfo, vc: self)
@@ -457,14 +504,9 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         bankTextField.do {
             $0.placeholder = "선택해주세요"
             $0.applyStyle(.normal)
-            $0.autocorrectionType = .no
-            $0.spellCheckingType = .no
-            
-            if userDefault.string(forKey: "userBank") == nil || userDefault.string(forKey: "userBank") == "" {
-                $0.textColor = .TextPrimary
-            } else {
+            $0.textColor = .TextPrimary
+            if userDefault.string(forKey: "userBank") != nil || userDefault.string(forKey: "userBank") != "" {
                 $0.text = userDefault.string(forKey: "userBank")
-                $0.textColor = .TextPrimary
             }
         }
 
@@ -481,8 +523,6 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         accountTextField.do {
             $0.placeholder = "계좌번호를 입력해주세요"
             $0.applyStyle(.normal)
-            $0.autocorrectionType = .no
-            $0.spellCheckingType = .no
             
             if userDefault.string(forKey: "userAccount") == nil || userDefault.string(forKey: "userAccount") == "" {
                 $0.textColor = .TextPrimary
@@ -514,8 +554,6 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         nameTextField.do {
             $0.placeholder = "성함을 입력해주세요"
             $0.applyStyle(.normal)
-            $0.autocorrectionType = .no
-            $0.spellCheckingType = .no
             $0.clearButtonMode = .whileEditing
             
             if userDefault.string(forKey: "userName") == nil || userDefault.string(forKey: "userName") == "" {
@@ -524,15 +562,12 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
                 $0.text = userDefault.string(forKey: "userName")
                 $0.textColor = .TextPrimary
             }
-        
         }
-        
         payLabel.do {
             $0.text = "간편페이 사용여부"
             $0.font = UIFont.KoreanCaption2
             $0.textColor = UIColor.TextPrimary
         }
-        
         
         leftBar.do {
             $0.backgroundColor = .gray
@@ -673,12 +708,6 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
             $0.trailing.equalTo(nameTextField.snp.trailing).inset(8)
             $0.top.equalTo(nameTextField.snp.bottom).offset(4.5)
         }
-        
-//        payLabel.snp.makeConstraints {
-//            //$0.top.equalTo(bankSelectedView.snp.bottom).offset(24)
-//            $0.top.equalTo(bankTextField.snp.bottom).offset(24)
-//            $0.leading.equalTo(payView.snp.leading).inset(6)
-//        }
 
         payView.snp.makeConstraints {
             $0.height.equalTo(103)
@@ -686,78 +715,80 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
             $0.top.equalTo(payLabel.snp.bottom).offset(4)
         }
         
-        leftBar.snp.makeConstraints { make in
-            make.height.equalTo(60)
-            make.width.equalTo(1)
-            make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(110)
+        leftBar.snp.makeConstraints {
+            $0.height.equalTo(60)
+            $0.width.equalTo(1)
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(tossPayView.snp.trailing)
         }
         
-        rightBar.snp.makeConstraints { make in
-            make.height.equalTo(60)
-            make.width.equalTo(1)
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-110)
+        rightBar.snp.makeConstraints {
+            $0.height.equalTo(60)
+            $0.width.equalTo(1)
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(kakaoPayView.snp.trailing)
+        }
+        tossPayView.snp.makeConstraints {
+            $0.height.equalTo(80)
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview()
+            $0.width.equalTo(payView).multipliedBy(1.0 / 3.0)
+    
         }
         
-        tossPayView.snp.makeConstraints { make in
-            make.height.equalTo(80)
-            make.width.equalTo(56)
-            make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(32)
+        tossPayBtn.snp.makeConstraints {
+            $0.width.height.equalTo(56)
+            $0.top.equalToSuperview()
+            $0.centerX.equalToSuperview()
         }
         
-        tossPayBtn.snp.makeConstraints { make in
-            make.width.height.equalTo(56)
-            make.top.equalToSuperview()
-            make.centerX.equalToSuperview()
+        tossLabel.snp.makeConstraints {
+            $0.top.equalTo(tossPayBtn.snp.bottom).offset(6)
+            $0.centerX.equalToSuperview()
         }
         
-        tossLabel.snp.makeConstraints { make in
-            make.top.equalTo(tossPayBtn.snp.bottom).offset(6)
-            make.centerX.equalToSuperview()
+        kakaoPayView.snp.makeConstraints {
+            $0.height.equalTo(80)
+            $0.width.equalTo(payView).multipliedBy(1.0 / 3.0)
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(tossPayView.snp.trailing)
         }
         
-        kakaoPayView.snp.makeConstraints { make in
-            make.height.equalTo(80)
-            make.width.equalTo(56)
-            make.center.equalToSuperview()
+        kakaoPayBtn.snp.makeConstraints {
+            $0.width.height.equalTo(56)
+            $0.top.equalToSuperview()
+            $0.centerX.equalToSuperview()
         }
         
-        kakaoPayBtn.snp.makeConstraints { make in
-            make.width.height.equalTo(56)
-            make.top.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
-        
-        kakaoLabel.snp.makeConstraints { make in
-            make.top.equalTo(kakaoPayBtn.snp.bottom).offset(6)
-            make.centerX.equalToSuperview()
-        }
-        
-        
-        naverPayView.snp.makeConstraints { make in
-            make.height.equalTo(80)
-            make.width.equalTo(56)
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-32)
-        }
-        
-        naverPayBtn.snp.makeConstraints { make in
-            make.width.height.equalTo(56)
-            make.top.equalToSuperview()
-            make.centerX.equalToSuperview()
+        kakaoLabel.snp.makeConstraints {
+            $0.top.equalTo(kakaoPayBtn.snp.bottom).offset(6)
+            $0.centerX.equalToSuperview()
         }
         
         
-        naverLabel.snp.makeConstraints { make in
-            make.top.equalTo(naverPayBtn.snp.bottom).offset(6)
-            make.centerX.equalToSuperview()
+        naverPayView.snp.makeConstraints {
+            $0.height.equalTo(80)
+            $0.width.equalTo(payView).multipliedBy(1.0 / 3.0)
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview()
         }
         
-        deleteBtn.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-53)
-            make.centerX.equalToSuperview()
+        naverPayBtn.snp.makeConstraints {
+            $0.width.height.equalTo(56)
+            $0.top.equalToSuperview()
+            $0.centerX.equalToSuperview()
+        }
+        
+        naverLabel.snp.makeConstraints {
+            $0.top.equalTo(naverPayBtn.snp.bottom).offset(6)
+            $0.centerX.equalToSuperview()
+        }
+        
+        deleteBtn.snp.makeConstraints {
+            $0.bottom.equalToSuperview().offset(-53)
+            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.height.equalTo(48)
+            
         }
         
     }
