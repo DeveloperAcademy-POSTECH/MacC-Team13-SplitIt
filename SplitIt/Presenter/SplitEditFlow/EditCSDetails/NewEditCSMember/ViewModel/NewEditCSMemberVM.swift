@@ -8,13 +8,14 @@
 import Foundation
 import RxCocoa
 import RxSwift
+import UIKit
 
 class NewEditCSMemberVM {
     let repo = SplitRepository.share
     let disposeBag = DisposeBag()
     
     let maxTextCount = 8
-    var isEdited = BehaviorRelay(value: true)
+    var isEdited = BehaviorRelay<Bool>(value: false)
     
     struct Input {
         let viewWillAppear: Observable<Bool>
@@ -24,7 +25,8 @@ class NewEditCSMemberVM {
         let selectedCellTapped: ControlEvent<IndexPath>
         let backButtonTapped: ControlEvent<Void>
         let addButtonTapped: ControlEvent<Void>
-        let nextButtonTapped: ControlEvent<Void>
+        let saveButtonTapped: ControlEvent<Void>
+        let swipeBack: Observable<UIPanGestureRecognizer>
     }
     
     struct Output {
@@ -35,6 +37,7 @@ class NewEditCSMemberVM {
         let textFieldIsValid: BehaviorRelay<Bool>
         let textFieldValue: BehaviorRelay<String>
         let showExclItemVC: ControlEvent<Void>
+        let showBackAlert: Observable<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -48,7 +51,7 @@ class NewEditCSMemberVM {
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
         let textFieldValue = BehaviorRelay(value: "")
         
-        let showExclItemVC = input.nextButtonTapped
+        let showExclItemVC = input.saveButtonTapped
         
         let hapticManager = HapticManager()
         
@@ -161,7 +164,7 @@ class NewEditCSMemberVM {
             .disposed(by: disposeBag)
         
         // 버튼 탭 시 repo에 있는 csMemberArr를 업데이트하고 기존 검색기록에 없던 이름은 검색기록에 추가
-        input.nextButtonTapped
+        input.saveButtonTapped
             .asDriver()
             .drive(onNext: {
                 var selectedMemberNameArr = selectedMemberArr.value.map { $0.name }
@@ -184,19 +187,28 @@ class NewEditCSMemberVM {
             })
             .disposed(by: disposeBag)
         
-        input.backButtonTapped.asDriver()
-            .map { [weak self]_ in
+        input.searchCellTapped
+            .asDriver()
+            .map { [weak self] _ in
                 guard let self = self else { return false }
-                let before = selectedMemberBefore.value
-                let after = selectedMemberArr.value
-                print("before\(before)")
-                print("after\(after)")
-                return areArraysEqual(before, after)
+                let beforeMember = selectedMemberBefore.value
+                let afterMember = selectedMemberArr.value
+                return checkMemberIsEdited(beforeMember, afterMember)
             }
             .drive(isEdited)
             .disposed(by: disposeBag)
         
-        return Output(searchMemberArr: searchMemberArr, selectedMemberArr: selectedMemberArr, isCellAppear: isCellAppearRelay, deleteIndex: deleteIndexRelay, textFieldIsValid: textFieldIsValid, textFieldValue: textFieldValue, showExclItemVC: showExclItemVC)
+        let showBackAlert = Observable.merge(input.backButtonTapped.asObservable(),
+                                             input.swipeBack.map{ _ in }.asObservable())
+        
+        return Output(searchMemberArr: searchMemberArr,
+                      selectedMemberArr: selectedMemberArr,
+                      isCellAppear: isCellAppearRelay,
+                      deleteIndex: deleteIndexRelay,
+                      textFieldIsValid: textFieldIsValid,
+                      textFieldValue: textFieldValue,
+                      showExclItemVC: showExclItemVC,
+                      showBackAlert: showBackAlert)
     }
     
     private func tranformIsCheckInSelectMemberArr(allMemberArrValue: [MemberCheck], name: String) -> [MemberCheck] {
@@ -212,18 +224,22 @@ class NewEditCSMemberVM {
         return allmembers
     }
     
-    private func areArraysEqual<T: Equatable>(_ array1: [T], _ array2: [T]) -> Bool {
-        if array1.count != array2.count {
-            return false
+    private func checkMemberIsEdited(_ before: [MemberCheck],
+                                     _ after: [MemberCheck]) -> Bool {
+        let beforeSorted = before.sorted { $0.name < $1.name }
+        let afterSorted = after.sorted { $0.name < $1.name }
+        
+        if beforeSorted.count != afterSorted.count {
+            return true
         }
 
-        for (element1, element2) in zip(array1, array2) {
-            if element1 != element2 {
-                return false
+        for (beforeElem, afterElem) in zip(beforeSorted, afterSorted) {
+            if beforeElem.name != afterElem.name {
+                return true
             }
         }
 
-        return true
+        return false
     }
 }
  
