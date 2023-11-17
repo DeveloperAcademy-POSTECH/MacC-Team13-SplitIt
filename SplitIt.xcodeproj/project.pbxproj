@@ -86,6 +86,7 @@
 		60F793432B05C5D800D55ADD /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F793422B05C5D800D55ADD /* UILabel+.swift */; };
 		60F793462B07053800D55ADD /* SplitMethodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F793452B07053800D55ADD /* SplitMethodCell.swift */; };
 		60F793482B070A2200D55ADD /* SplitMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F793472B070A2200D55ADD /* SplitMethod.swift */; };
+		60F7934A2B07AD8000D55ADD /* Notification+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F793492B07AD8000D55ADD /* Notification+.swift */; };
 		8656D6D42B020C03003660A4 /* NewEditCSMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D32B020C03003660A4 /* NewEditCSMemberVC.swift */; };
 		8656D6D72B020C6D003660A4 /* NewEditCSMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D62B020C6D003660A4 /* NewEditCSMemberVM.swift */; };
 		86C65FF22AEF970F00A7942A /* EditCSListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF12AEF970F00A7942A /* EditCSListVC.swift */; };
@@ -201,6 +202,7 @@
 		60F793422B05C5D800D55ADD /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		60F793452B07053800D55ADD /* SplitMethodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMethodCell.swift; sourceTree = "<group>"; };
 		60F793472B070A2200D55ADD /* SplitMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMethod.swift; sourceTree = "<group>"; };
+		60F793492B07AD8000D55ADD /* Notification+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+.swift"; sourceTree = "<group>"; };
 		8656D6D32B020C03003660A4 /* NewEditCSMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditCSMemberVC.swift; sourceTree = "<group>"; };
 		8656D6D62B020C6D003660A4 /* NewEditCSMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditCSMemberVM.swift; sourceTree = "<group>"; };
 		86C65FF12AEF970F00A7942A /* EditCSListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVC.swift; sourceTree = "<group>"; };
@@ -444,6 +446,7 @@
 				60AE3EBB2AE7743E009D9D18 /* UITableView+.swift */,
 				C291BA122AF4DD6F009501F3 /* UIDevice+.swift */,
 				60F793422B05C5D800D55ADD /* UILabel+.swift */,
+				60F793492B07AD8000D55ADD /* Notification+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1233,6 +1236,7 @@
 				60F793462B07053800D55ADD /* SplitMethodCell.swift in Sources */,
 				DE73D6F72AE1983200ABF3EF /* MemberLogVC.swift in Sources */,
 				60990AEE2B01F29200202319 /* CSMemberCell.swift in Sources */,
+				60F7934A2B07AD8000D55ADD /* Notification+.swift in Sources */,
 				86C660002AF126DE00A7942A /* EditCSItemVM.swift in Sources */,
 				C2A7979C2AE276E90049E709 /* HistorySplitCell.swift in Sources */,
 				DE73D6ED2AE0D2C300ABF3EF /* BankListModalVC.swift in Sources */,
