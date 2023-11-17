@@ -72,7 +72,7 @@ final class EditCSListVC: UIViewController, UIScrollViewDelegate {
         
         headerView.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(4)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(8)
             $0.leading.trailing.equalToSuperview()
         }
         
