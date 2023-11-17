@@ -14,7 +14,7 @@ class NewEditCSMemberVM {
     let disposeBag = DisposeBag()
     
     let maxTextCount = 8
-    var isEdit = BehaviorRelay(value: true)
+    var isEdited = BehaviorRelay(value: true)
     
     struct Input {
         let viewWillAppear: Observable<Bool>
@@ -193,7 +193,7 @@ class NewEditCSMemberVM {
                 print("after\(after)")
                 return areArraysEqual(before, after)
             }
-            .drive(isEdit)
+            .drive(isEdited)
             .disposed(by: disposeBag)
         
         return Output(searchMemberArr: searchMemberArr, selectedMemberArr: selectedMemberArr, isCellAppear: isCellAppearRelay, deleteIndex: deleteIndexRelay, textFieldIsValid: textFieldIsValid, textFieldValue: textFieldValue, showExclItemVC: showExclItemVC)
