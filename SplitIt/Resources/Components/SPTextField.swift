@@ -12,9 +12,7 @@ import RxCocoa
 extension SPTextField {
     enum Style {
         case normal
-        case elseValue
         case number
-        case deactivate
         case editingDidEndNormal
         case editingDidBeginNormal
         case editingDidEndNumber
@@ -72,21 +70,11 @@ final class SPTextField: UITextField {
             self.configureCommonProperties()
             self.configureActiveProperties()
             
-            // 따로 계산용 키보드
-        case .elseValue:
-            self.keyboardType = .default
-            self.configureCommonProperties()
-            self.configureActiveProperties()
-            
             // 숫자 키보드
         case .number:
             self.keyboardType = .numberPad
             self.configureCommonProperties()
             self.configureActiveProperties()
-            
-            // 비활성 키보드
-        case .deactivate:
-            self.configureDeactiveProperties()
             
             // 편집중이지 않은 키보드
         case .editingDidEndNormal:
@@ -103,14 +91,14 @@ final class SPTextField: UITextField {
             // 편집중이지 않은 키보드 (숫자)
         case .editingDidEndNumber:
             self.keyboardType = .numberPad
-            self.configureCommonProperties()
+            self.configureNumProperties()
             self.configureDidEndProperties()
             self.addPaddingLeft(40)
             
             // 편집중인 키보드 (숫자)
         case .editingDidBeginNumber:
             self.keyboardType = .numberPad
-            self.configureCommonProperties()
+            self.configureNumProperties()
             self.configureDidBeginProperties()
             self.addPaddingLeft(40)
         }
@@ -119,9 +107,25 @@ final class SPTextField: UITextField {
     private func configureCommonProperties() {
         let attributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: UIColor.TextDeactivate,
-            .font: UIFont.KoreanCaption1
+            .font: UIFont.KoreanBody
         ]
 
+        let attributedPlaceholder = NSAttributedString(string: self.placeholder ?? "", attributes: attributes)
+
+        self.attributedPlaceholder = attributedPlaceholder
+
+        self.backgroundColor = UIColor.SurfacePrimary
+        self.layer.cornerRadius = 8
+        self.layer.borderWidth = 1
+        self.addPaddingLeft(16)
+    }
+    
+    private func configureNumProperties() {
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.TextDeactivate,
+            .font: UIFont.NumCaption1
+        ]
+        
         let attributedPlaceholder = NSAttributedString(string: self.placeholder ?? "", attributes: attributes)
 
         self.attributedPlaceholder = attributedPlaceholder
@@ -157,41 +161,29 @@ final class SPTextField: UITextField {
         
         currencyLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview().inset(15)
+            $0.leading.equalToSuperview().inset(16)
         }
         
         switch style {
         case .normal:
             break
-        case .elseValue:
-//            currencyLabel.text = "값"
-            self.configureCurrencyLabelFontProperties()
-            
         case .number:
-//            currencyLabel.text = "KRW"
-            self.configureCurrencyLabelFontProperties()
-            
-        case .deactivate:
-            break
-            
-        case .editingDidEndNormal:
-            self.configureCurrencyLabelFontProperties()
-            
-        case .editingDidBeginNormal:
-            self.configureCurrencyLabelFontProperties()
-            
-        case .editingDidEndNumber:
             currencyLabel.text = "₩"
             self.configureCurrencyLabelFontProperties()
             
-        case .editingDidBeginNumber:
+        case .editingDidEndNormal,
+                .editingDidBeginNormal:
+            break
+            
+        case .editingDidEndNumber,
+                .editingDidBeginNumber:
             currencyLabel.text = "₩"
             self.configureCurrencyLabelFontProperties()
         }
     }
     
     private func configureCurrencyLabelFontProperties() {
-        currencyLabel.font = UIFont.KoreanCaption1
+        currencyLabel.font = .NumCaption1
     }
     
     private func tintClearImage() {

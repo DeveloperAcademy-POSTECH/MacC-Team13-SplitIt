@@ -64,7 +64,7 @@ class SplitMethodCell: UICollectionViewCell, Reusable {
         }
         
         titleLabel.do {
-            $0.font = .KoreanSubtitle
+            $0.font = .KoreanBoldSubtitle
             $0.textColor = .AppColorGrayscale1000
             $0.textAlignment = .center
         }

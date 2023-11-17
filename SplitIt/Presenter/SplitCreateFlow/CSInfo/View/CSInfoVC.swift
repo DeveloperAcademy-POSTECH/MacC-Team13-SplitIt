@@ -70,15 +70,13 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
         }
         
         titleTextFiled.do {
-            $0.autocorrectionType = .no
-            $0.spellCheckingType = .no
             $0.returnKeyType = .next
             self.titleTextFiled.applyStyle(.editingDidEndNormal)
             $0.placeholder = "ex) 회식, 노래방, 생일파티"
         }
-
+        
         textFiledCounter.do {
-            $0.font = .KoreanCaption1
+            $0.font = .NumCaption1
             $0.textColor = .TextDeactivate
         }
         

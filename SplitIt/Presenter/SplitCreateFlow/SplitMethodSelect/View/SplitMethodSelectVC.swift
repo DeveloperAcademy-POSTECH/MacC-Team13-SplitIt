@@ -42,15 +42,15 @@ class SplitMethodSelectVC: UIViewController, Reusable {
         header.do {
             $0.applyStyle(style: .selectSplitMethod, vc: self)
         }
-     
+        
         titleLabel.do {
-            $0.font = .KoreanTitle1
+            $0.font = .KoreanLightTitle1
             $0.textColor = .AppColorGrayscale1000
         }
         
         subTitleLabel.do {
             $0.text = "정산 방식을 선택해주세요"
-            $0.font = .KoreanBody
+            $0.font = .KoreanLightBody
             $0.textColor = .TextSecondary
         }
         
