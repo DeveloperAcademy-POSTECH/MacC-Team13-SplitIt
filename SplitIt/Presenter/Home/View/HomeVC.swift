@@ -57,13 +57,15 @@ class HomeVC: UIViewController {
         
         myInfoButton.do {
             $0.setImage(UIImage(named: "SettingIcon"), for: .normal)
-            $0.applyStyle(style: .primaryCalmshell, shape: .square)
+            $0.setImage(UIImage(named: "SettingIcon"), for: .highlighted)
+            $0.applyStyle(style: .surfaceWhite, shape: .home)
             $0.buttonState.accept(true)
         }
 
         splitItButton.do {
             $0.setImage(UIImage(named: "SplitBeginArrow"), for: .normal)
-            $0.applyStyle(style: .primaryWatermelon, shape: .square)
+            $0.setImage(UIImage(named: "SplitBeginArrow"), for: .highlighted)
+            $0.applyStyle(style: .primaryWatermelon, shape: .home)
             $0.buttonState.accept(true)
         }
     }
