@@ -16,7 +16,6 @@ class HomeVC: UIViewController {
     let viewModel = HomeVM()
     
     let myInfoButton: UIButton = UIButton()
-    let historyButton: UIButton = UIButton()
     
     let mainView: UIView = UIView()
     let mainImage: UIImageView = UIImageView()
@@ -43,8 +42,7 @@ class HomeVC: UIViewController {
     
     func setBinding() {
         let input = HomeVM.Input(splitItButtonTapped: splitItButton.rx.tap,
-                                 myInfoButtonTapped: myInfoButton.rx.tap,
-                                 recentSplitButtonTapped: historyButton.rx.tap)
+                                 myInfoButtonTapped: myInfoButton.rx.tap)
         let output = viewModel.transform(input: input)
         
         output.showCreateSplit
@@ -60,16 +58,6 @@ class HomeVC: UIViewController {
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
-
-       
-        output.showHistoryView
-            .drive(onNext: {
-                let vc = HistoryVC()
-                self.navigationController?.pushViewController(vc, animated: true)
-            })
-            .disposed(by: disposeBag)
-
-
     }
 
     
@@ -87,18 +75,7 @@ class HomeVC: UIViewController {
             $0.layer.cornerRadius = 8
             $0.clipsToBounds = true
         }
-        
-        historyButton.do {
-            $0.setImage(
-                UIImage(systemName: "book.fill")?
-                    .applyingSymbolConfiguration(.init(pointSize: 26)), for: .normal)
-            $0.tintColor = .black
-            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
-            $0.layer.borderWidth = 1
-            $0.layer.cornerRadius = 8
-            $0.clipsToBounds = true
-        }
-        
+       
         mainView.do {
             $0.backgroundColor = .AppColorBrandWatermelon
             $0.clipsToBounds = true
@@ -144,7 +121,7 @@ class HomeVC: UIViewController {
     }
 
     func setLayout() {
-        [mainView, mainTextView, splitItButton, myInfoButton, historyButton].forEach {
+        [mainView, mainTextView, splitItButton, myInfoButton].forEach {
             view.addSubview($0)
         }
         
@@ -159,13 +136,7 @@ class HomeVC: UIViewController {
             $0.width.height.equalTo(40)
             $0.trailing.equalToSuperview().offset(-63)
         }
-        
-        historyButton.snp.makeConstraints {
-            $0.trailing.equalTo(myInfoButton.snp.leading).offset(-8)
-            $0.centerY.equalTo(myInfoButton.snp.centerY)
-            $0.width.height.equalTo(40)
-        }
-        
+      
         mainView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(104)
             $0.horizontalEdges.equalToSuperview().inset(55)
