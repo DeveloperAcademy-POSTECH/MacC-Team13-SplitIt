@@ -46,6 +46,11 @@ class NewEditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         setBinding()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+    }
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.searchTextField.resignFirstResponder()
     }
