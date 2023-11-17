@@ -187,7 +187,7 @@ class NewEditCSMemberVM {
             })
             .disposed(by: disposeBag)
         
-        input.searchCellTapped
+        selectedMemberArr
             .asDriver()
             .map { [weak self] _ in
                 guard let self = self else { return false }
