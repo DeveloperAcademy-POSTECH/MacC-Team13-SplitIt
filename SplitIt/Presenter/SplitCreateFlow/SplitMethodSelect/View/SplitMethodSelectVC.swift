@@ -109,27 +109,18 @@ class SplitMethodSelectVC: UIViewController, Reusable {
         
         output.showMethodTapped
             .asDriver()
-            .drive(onNext: {
-                print($0)
+            .drive(onNext: { indexPath in
+                let splitType: SplitType = SplitType(rawValue: indexPath.row)!
+                switch splitType {
+                case .smart:
+                    SplitRepository.share.isSmartSplit = true
+                case .equal:
+                    SplitRepository.share.isSmartSplit = false
+                }
+                let vc = CSInfoVC()
+                self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
-//        output.showSmartSplitCSInfoView
-//            .asDriver()
-//            .drive(onNext: {
-//                let vc = CSInfoVC()
-//                self.navigationController?.pushViewController(vc, animated: true)
-//                SplitRepository.share.isSmartSplit = true
-//            })
-//            .disposed(by: disposeBag)
-//
-//        output.showEqualSplitCSInfoView
-//            .asDriver()
-//            .drive(onNext: {
-//                let vc = CSInfoVC()
-//                self.navigationController?.pushViewController(vc, animated: true)
-//                SplitRepository.share.isSmartSplit = false
-//            })
-//            .disposed(by: disposeBag)
     }
 }
 
@@ -143,5 +134,12 @@ extension SplitMethodSelectVC: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 16.0
+    }
+}
+
+extension SplitMethodSelectVC {
+    enum SplitType: Int {
+        case smart = 0
+        case equal = 1
     }
 }
