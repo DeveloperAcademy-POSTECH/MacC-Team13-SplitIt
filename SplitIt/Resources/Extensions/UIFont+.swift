@@ -54,9 +54,9 @@ extension UIFont {
     class var NumTitle3: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return systemFont(ofSize: 26, weight: .light)
-        case .defaultDevice:
             return systemFont(ofSize: 24, weight: .light)
+        case .defaultDevice:
+            return systemFont(ofSize: 26, weight: .light)
         }
     }
 
@@ -68,9 +68,9 @@ extension UIFont {
     class var NumSubtitle: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return systemFont(ofSize: 23, weight: .light)
-        case .defaultDevice:
             return systemFont(ofSize: 21, weight: .light)
+        case .defaultDevice:
+            return systemFont(ofSize: 23, weight: .light)
         }
     }
 
@@ -82,9 +82,9 @@ extension UIFont {
     class var NumBody: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return systemFont(ofSize: 20, weight: .light)
-        case .defaultDevice:
             return systemFont(ofSize: 18, weight: .light)
+        case .defaultDevice:
+            return systemFont(ofSize: 20, weight: .light)
         }
     }
 
@@ -96,9 +96,9 @@ extension UIFont {
     class var NumCaption1: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return systemFont(ofSize: 18, weight: .light)
-        case .defaultDevice:
             return systemFont(ofSize: 16, weight: .light)
+        case .defaultDevice:
+            return systemFont(ofSize: 18, weight: .light)
         }
     }
 
@@ -158,9 +158,9 @@ extension UIFont {
     class var NumRoundedTitle3: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return systemFont(ofSize: 26, weight: .light).rounded()
-        case .defaultDevice:
             return systemFont(ofSize: 24, weight: .light).rounded()
+        case .defaultDevice:
+            return systemFont(ofSize: 26, weight: .light).rounded()
         }
     }
 
@@ -172,9 +172,9 @@ extension UIFont {
     class var NumRoundedSubtitle: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return systemFont(ofSize: 23, weight: .light).rounded()
-        case .defaultDevice:
             return systemFont(ofSize: 21, weight: .light).rounded()
+        case .defaultDevice:
+            return systemFont(ofSize: 23, weight: .light).rounded()
         }
     }
 
@@ -186,9 +186,9 @@ extension UIFont {
     class var NumRoundedBody: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return systemFont(ofSize: 20, weight: .light).rounded()
-        case .defaultDevice:
             return systemFont(ofSize: 18, weight: .light).rounded()
+        case .defaultDevice:
+            return systemFont(ofSize: 20, weight: .light).rounded()
         }
     }
 
@@ -200,9 +200,9 @@ extension UIFont {
     class var NumRoundedCaption1: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return systemFont(ofSize: 18, weight: .light).rounded()
-        case .defaultDevice:
             return systemFont(ofSize: 16, weight: .light).rounded()
+        case .defaultDevice:
+            return systemFont(ofSize: 18, weight: .light).rounded()
         }
     }
 
