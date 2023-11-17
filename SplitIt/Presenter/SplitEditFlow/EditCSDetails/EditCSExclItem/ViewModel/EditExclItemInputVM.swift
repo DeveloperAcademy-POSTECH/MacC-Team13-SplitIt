@@ -14,6 +14,12 @@ class EditExclItemInputVM {
     var disposeBag = DisposeBag()
     var isEdited = BehaviorRelay(value: false)
     
+    private let exclItemIsAdded = NotificationCenter.default.rx.notification(.exclItemIsAdded)
+    private let exclItemIsEdited = NotificationCenter.default.rx.notification(.exclItemIsEdited)
+    private let exclItemIsDeleted = NotificationCenter.default.rx.notification(.exclItemIsDeleted)
+    
+    lazy var exclItemNotification = Observable.merge([exclItemIsAdded, exclItemIsEdited, exclItemIsDeleted])
+
     struct Input {
         let viewDidDisAppear: Observable<Bool>
         let nextButtonTapped: ControlEvent<Void> // 다음 버튼
