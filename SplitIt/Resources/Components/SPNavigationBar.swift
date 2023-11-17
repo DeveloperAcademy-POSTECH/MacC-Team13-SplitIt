@@ -77,7 +77,6 @@ final class SPNavigationBar: UIView {
     func applyStyle(style: Style, vc: UIViewController) {
         switch style {
         case .selectSplitMethod:
-            setNaviTitle(title: "정산 방식 선택하기")
             setLeftBackButton(action: .toBack, vc: vc)
         case .csInfoCreate:
             setNaviImage(imageCase: 0)

@@ -84,6 +84,8 @@
 		60AE3EC32AE77491009D9D18 /* SplitResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EC22AE77491009D9D18 /* SplitResult.swift */; };
 		60F496952AF753180077F6FB /* SPAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F496942AF753180077F6FB /* SPAlertController.swift */; };
 		60F793432B05C5D800D55ADD /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F793422B05C5D800D55ADD /* UILabel+.swift */; };
+		60F793462B07053800D55ADD /* SplitMethodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F793452B07053800D55ADD /* SplitMethodCell.swift */; };
+		60F793482B070A2200D55ADD /* SplitMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F793472B070A2200D55ADD /* SplitMethod.swift */; };
 		8656D6D42B020C03003660A4 /* NewEditCSMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D32B020C03003660A4 /* NewEditCSMemberVC.swift */; };
 		8656D6D72B020C6D003660A4 /* NewEditCSMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D62B020C6D003660A4 /* NewEditCSMemberVM.swift */; };
 		86C65FF22AEF970F00A7942A /* EditCSListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF12AEF970F00A7942A /* EditCSListVC.swift */; };
@@ -195,6 +197,8 @@
 		60AE3EC22AE77491009D9D18 /* SplitResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitResult.swift; sourceTree = "<group>"; };
 		60F496942AF753180077F6FB /* SPAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPAlertController.swift; sourceTree = "<group>"; };
 		60F793422B05C5D800D55ADD /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
+		60F793452B07053800D55ADD /* SplitMethodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMethodCell.swift; sourceTree = "<group>"; };
+		60F793472B070A2200D55ADD /* SplitMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMethod.swift; sourceTree = "<group>"; };
 		8656D6D32B020C03003660A4 /* NewEditCSMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditCSMemberVC.swift; sourceTree = "<group>"; };
 		8656D6D62B020C6D003660A4 /* NewEditCSMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditCSMemberVM.swift; sourceTree = "<group>"; };
 		86C65FF12AEF970F00A7942A /* EditCSListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVC.swift; sourceTree = "<group>"; };
@@ -329,7 +333,9 @@
 		1A8B05DE2AF145FF00CF5BC5 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				60F793442B07052F00D55ADD /* Cell */,
 				1A8B05E02AF1466300CF5BC5 /* SplitMethodSelectVC.swift */,
+				60F793472B070A2200D55ADD /* SplitMethod.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -781,6 +787,14 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		60F793442B07052F00D55ADD /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				60F793452B07053800D55ADD /* SplitMethodCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		8656D6D12B020BC2003660A4 /* NewEditCSMember */ = {
 			isa = PBXGroup;
 			children = (
@@ -1200,6 +1214,7 @@
 				1A8B05DC2AF0E15A00CF5BC5 /* SPNavigationBar.swift in Sources */,
 				1A7845142AFD29BE00E38403 /* CSMemberEmptyBackGroundView.swift in Sources */,
 				1A1ACC4D2AF3CAF6004AC4CD /* SplitShareSectionFooter.swift in Sources */,
+				60F793462B07053800D55ADD /* SplitMethodCell.swift in Sources */,
 				DE73D6F72AE1983200ABF3EF /* MemberLogVC.swift in Sources */,
 				60990AEE2B01F29200202319 /* CSMemberCell.swift in Sources */,
 				86C660002AF126DE00A7942A /* EditCSItemVM.swift in Sources */,
@@ -1232,6 +1247,7 @@
 				1A8B05E32AF1540A00CF5BC5 /* SplitMethodSelectVM.swift in Sources */,
 				60115DF92ADBF2E10050D32C /* HomeVM.swift in Sources */,
 				1A78450B2AFD28F300E38403 /* CSMemberVM.swift in Sources */,
+				60F793482B070A2200D55ADD /* SplitMethod.swift in Sources */,
 				1AC411742B028AC2008A45BC /* RMMemberLog.swift in Sources */,
 				1A78450D2AFD291C00E38403 /* CSMemberVC.swift in Sources */,
 				1A3852F52ADE5A9F00E9A20B /* Split.swift in Sources */,

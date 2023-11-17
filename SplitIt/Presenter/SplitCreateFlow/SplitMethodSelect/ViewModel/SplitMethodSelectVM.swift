@@ -11,19 +11,21 @@ import RxCocoa
 
 class SplitMethodSelectVM {
     struct Input {
-        let smartSplitButtonTapped: ControlEvent<Void>
-        let equalSplitButtonTapped: ControlEvent<Void>
+        let methodBtnTapped: ControlEvent<IndexPath>
     }
     
     struct Output {
-        let showSmartSplitCSInfoView: ControlEvent<Void>
-        let showEqualSplitCSInfoView: ControlEvent<Void>
+        let showMethodTapped: ControlEvent<IndexPath>
+        let methodList: Observable<[SplitMethod]>
+        let csInfoCount: Driver<String>
     }
     
     func transform(input: Input) -> Output {
-        let showSmartSplitCSInfoView = input.smartSplitButtonTapped
-        let showEqualSplitButtonTapped = input.equalSplitButtonTapped
-        
-        return Output(showSmartSplitCSInfoView: showSmartSplitCSInfoView, showEqualSplitCSInfoView: showEqualSplitButtonTapped)
+        let showMethodTapped = input.methodBtnTapped
+        let methodListSubject = BehaviorSubject<[SplitMethod]>(value: SplitMethod.list)
+        let csInfoCountDriver = Driver<String>.just(SplitRepository.share.csInfoArr.value.first!.title)
+        return Output(showMethodTapped: showMethodTapped,
+                      methodList: methodListSubject.asObservable(),
+                      csInfoCount: csInfoCountDriver)
     }
 }
