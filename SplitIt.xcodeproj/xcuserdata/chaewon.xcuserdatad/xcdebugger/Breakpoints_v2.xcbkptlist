@@ -20,5 +20,68 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2BB21FE0-B72A-49B9-98CE-775CF0377BB1"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SplitIt/Presenter/MyInfoFlow/MyInfoDetail/MyAccountBank/View/MyBankAccountVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "553"
+            endingLineNumber = "553"
+            landmarkName = "setAttribute()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "2BB21FE0-B72A-49B9-98CE-775CF0377BB1 - dd0e95ad429c457"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #9 (__C.UILabel) -&gt; () in SplitIt.MyBankAccountVC.setAttribute() -&gt; ()"
+                  moduleName = "SplitIt"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chaewon/Desktop/MacC-Team13-SplitIt/SplitIt/Presenter/MyInfoFlow/MyInfoDetail/MyAccountBank/View/MyBankAccountVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "555"
+                  endingLineNumber = "555"
+                  offsetFromSymbolStart = "44">
+               </Location>
+               <Location
+                  uuid = "2BB21FE0-B72A-49B9-98CE-775CF0377BB1 - 242044f2384be820"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SplitIt.MyBankAccountVC.setAttribute() -&gt; ()"
+                  moduleName = "SplitIt"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chaewon/Desktop/MacC-Team13-SplitIt/SplitIt/Presenter/MyInfoFlow/MyInfoDetail/MyAccountBank/View/MyBankAccountVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "556"
+                  endingLineNumber = "556"
+                  offsetFromSymbolStart = "2328">
+               </Location>
+               <Location
+                  uuid = "2BB21FE0-B72A-49B9-98CE-775CF0377BB1 - 87c8d7f9ca21afbe"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #10 (SplitIt.SPTextField) -&gt; () in SplitIt.MyBankAccountVC.setAttribute() -&gt; ()"
+                  moduleName = "SplitIt"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chaewon/Desktop/MacC-Team13-SplitIt/SplitIt/Presenter/MyInfoFlow/MyInfoDetail/MyAccountBank/View/MyBankAccountVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "557"
+                  endingLineNumber = "557"
+                  offsetFromSymbolStart = "48">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
