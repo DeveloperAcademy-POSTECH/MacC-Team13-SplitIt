@@ -56,8 +56,8 @@ class HomeVC: UIViewController {
         }
         
         myInfoButton.do {
-            $0.setImage(UIImage(named: "SettingIcon"), for: .normal)
-            $0.setImage(UIImage(named: "SettingIcon"), for: .highlighted)
+            $0.setImage(UIImage(named: "SplitInfoIcon"), for: .normal)
+            $0.setImage(UIImage(named: "SplitInfoIcon"), for: .highlighted)
             $0.applyStyle(style: .surfaceWhite, shape: .home)
             $0.buttonState.accept(true)
         }
