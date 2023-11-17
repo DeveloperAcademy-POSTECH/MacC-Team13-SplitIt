@@ -10,22 +10,18 @@ import SnapKit
 import Then
 import RxCocoa
 import RxSwift
+import Reusable
 
-class SplitMethodSelectVC: UIViewController {
+class SplitMethodSelectVC: UIViewController, Reusable {
     
     let disposeBag = DisposeBag()
+    
     let viewModel = SplitMethodSelectVM()
     
     let header = SPNavigationBar()
-    let smartSplitBorderView = UIView()
-    let smartSplitImageView = UIImageView()
-    let smartSplitTextLabel = UILabel()
-    let smartSplitButton = SPButton()
-    
-    let equalSplitBorderView = UIView()
-    let equalSplitImageView = UIImageView()
-    let equalSplitTextLabel = UILabel()
-    let equalSplitButton = SPButton()
+    let titleLabel = UILabel()
+    let subTitleLabel = UILabel()
+    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,156 +42,106 @@ class SplitMethodSelectVC: UIViewController {
         header.do {
             $0.applyStyle(style: .selectSplitMethod, vc: self)
         }
-        
-        smartSplitBorderView.do {
-            $0.backgroundColor = .clear
-            $0.layer.cornerRadius = 16
-            $0.clipsToBounds = true
-            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
-            $0.layer.borderWidth = 1
+     
+        titleLabel.do {
+            $0.text = "1차 정산"
+            $0.font = .KoreanTitle1
+            $0.textColor = .AppColorGrayscale1000
         }
         
-        smartSplitImageView.do {
-            $0.image = UIImage(named: "Pictogram")
-            $0.contentMode = .scaleAspectFit
-        }
-        
-        smartSplitTextLabel.do {
-            let labelText = "특정 항목에 대해서\n누군가를 제외하고 정산합니다"
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineSpacing = 4
-            let attributedText = NSMutableAttributedString(string: labelText)
-            attributedText.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attributedText.length))
-
-            $0.attributedText = attributedText
-            $0.textAlignment = .center
+        subTitleLabel.do {
+            $0.text = "정산 방식을 선택해주세요"
             $0.font = .KoreanBody
-            $0.textColor = .TextPrimary
-            $0.numberOfLines = 0
+            $0.textColor = .TextSecondary
         }
         
-        smartSplitButton.do {
-            $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
-            $0.setTitle("쓴 만큼 정산하기", for: .normal)
-            $0.buttonState.accept(true)
-        }
-        
-        equalSplitBorderView.do {
-            $0.backgroundColor = .clear
-            $0.layer.cornerRadius = 16
-            $0.clipsToBounds = true
-            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
-            $0.layer.borderWidth = 1
-        }
-        
-        equalSplitImageView.do {
-            $0.image = UIImage(named: "EqualSplitIconDefault")
-            $0.contentMode = .scaleAspectFill
-        }
-        
-        equalSplitTextLabel.do {
-            let labelText = "인원 수 만큼,\n정확히 1/n로 정산합니다"
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineSpacing = 4
-            let attributedText = NSMutableAttributedString(string: labelText)
-            attributedText.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attributedText.length))
-
-            $0.attributedText = attributedText
-            $0.textAlignment = .center
-            $0.font = .KoreanBody
-            $0.textColor = .TextPrimary
-            $0.numberOfLines = 0
-        }
-        
-        equalSplitButton.do {
-            $0.applyStyle(style: .primaryCalmshell, shape: .rounded)
-            $0.setTitle("균등하게 나누기", for: .normal)
-            $0.buttonState.accept(true)
+        setCollectionView()
+    }
+    
+    private func setCollectionView() {
+        collectionView.do {
+            $0.collectionViewLayout = UICollectionViewFlowLayout()
+            $0.register(cellType: SplitMethodCell.self)
+            $0.backgroundColor = .SurfaceBrandCalmshell
+            $0.showsVerticalScrollIndicator = false
+            $0.delegate = self
         }
     }
     
     private func setLayout() {
-        [header,smartSplitBorderView,smartSplitImageView,smartSplitTextLabel,smartSplitButton,equalSplitBorderView,equalSplitImageView,equalSplitTextLabel,equalSplitButton].forEach {
+        [header, titleLabel, subTitleLabel, collectionView].forEach {
             view.addSubview($0)
         }
         
         header.snp.makeConstraints {
             $0.height.equalTo(30)
-            $0.horizontalEdges.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(8)
         }
         
-        smartSplitBorderView.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(41)
-            $0.horizontalEdges.equalToSuperview().inset(30)
-            $0.height.equalToSuperview().multipliedBy(0.38)
+        titleLabel.snp.makeConstraints {
+            $0.top.equalTo(header.snp.bottom).offset(30)
+            $0.leading.equalToSuperview().inset(38)
         }
         
-        smartSplitImageView.snp.makeConstraints {
-            $0.top.equalTo(smartSplitBorderView.snp.top).offset(21)
-            $0.leading.equalTo(smartSplitBorderView).offset(90)
-            $0.trailing.equalTo(smartSplitBorderView).offset(-31)
-            $0.bottom.lessThanOrEqualTo(smartSplitTextLabel).offset(-16)
+        subTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(4)
+            $0.leading.equalTo(titleLabel)
         }
         
-        smartSplitTextLabel.snp.makeConstraints {
-            $0.bottom.equalTo(smartSplitButton.snp.top).offset(-24)
-            $0.centerX.equalTo(smartSplitBorderView)
-        }
-        
-        smartSplitButton.snp.makeConstraints {
-            $0.bottom.equalTo(smartSplitBorderView.snp.bottom).offset(-48)
-            $0.centerX.equalTo(smartSplitBorderView)
-            $0.height.equalTo(48)
-            $0.width.equalTo(220)
-        }
-        
-        equalSplitBorderView.snp.makeConstraints {
-            $0.top.equalTo(smartSplitBorderView.snp.bottom).offset(16)
-            $0.horizontalEdges.equalToSuperview().inset(30)
-            $0.height.equalToSuperview().multipliedBy(0.38)
-        }
-        
-        equalSplitImageView.snp.makeConstraints {
-            $0.top.equalTo(equalSplitBorderView.snp.top).offset(51)
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(equalSplitTextLabel.snp.top).offset(-16)
-        }
-        
-        equalSplitTextLabel.snp.makeConstraints {
-            $0.bottom.equalTo(equalSplitButton.snp.top).offset(-24)
-            $0.centerX.equalTo(smartSplitBorderView)
-        }
-        
-        equalSplitButton.snp.makeConstraints {
-            $0.bottom.equalTo(equalSplitBorderView.snp.bottom).offset(-48)
-            $0.centerX.equalTo(equalSplitBorderView)
-            $0.height.equalTo(48)
-            $0.width.equalTo(220)
+        collectionView.snp.makeConstraints {
+            $0.top.equalTo(subTitleLabel.snp.bottom).offset(24)
+            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
     private func setBinding() {
-        let input = SplitMethodSelectVM.Input(smartSplitButtonTapped: smartSplitButton.rx.tap,
-                                              equalSplitButtonTapped: equalSplitButton.rx.tap)
+        let input = SplitMethodSelectVM.Input(methodBtnTapped: collectionView.rx.itemSelected)
         let output = viewModel.transform(input: input)
         
-        output.showSmartSplitCSInfoView
-            .asDriver()
-            .drive(onNext: {
-                let vc = CSInfoVC()
-                self.navigationController?.pushViewController(vc, animated: true)
-                SplitRepository.share.isSmartSplit = true
-            })
+        output.methodList
+            .bind(to: collectionView.rx.items(cellIdentifier: SplitMethodCell.reuseIdentifier)) { indexPath, item, cell in
+                guard let cell = cell as? SplitMethodCell else { return }
+                cell.configure(item: item)
+            }
             .disposed(by: disposeBag)
         
-        output.showEqualSplitCSInfoView
+        output.showMethodTapped
             .asDriver()
             .drive(onNext: {
-                let vc = CSInfoVC()
-                self.navigationController?.pushViewController(vc, animated: true)
-                SplitRepository.share.isSmartSplit = false
+                print($0)
             })
             .disposed(by: disposeBag)
+//        output.showSmartSplitCSInfoView
+//            .asDriver()
+//            .drive(onNext: {
+//                let vc = CSInfoVC()
+//                self.navigationController?.pushViewController(vc, animated: true)
+//                SplitRepository.share.isSmartSplit = true
+//            })
+//            .disposed(by: disposeBag)
+//
+//        output.showEqualSplitCSInfoView
+//            .asDriver()
+//            .drive(onNext: {
+//                let vc = CSInfoVC()
+//                self.navigationController?.pushViewController(vc, animated: true)
+//                SplitRepository.share.isSmartSplit = false
+//            })
+//            .disposed(by: disposeBag)
+    }
+}
+
+extension SplitMethodSelectVC: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = view.bounds.width - 60
+        let height = width * 2/3
+        return CGSize(width: width,
+                      height: height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 16.0
     }
 }
