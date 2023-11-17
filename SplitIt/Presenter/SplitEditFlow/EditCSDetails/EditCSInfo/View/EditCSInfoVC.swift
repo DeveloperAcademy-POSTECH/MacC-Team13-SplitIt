@@ -109,7 +109,7 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
         header.snp.makeConstraints {
             $0.height.equalTo(30)
             $0.horizontalEdges.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(8)
         }
         
         scrollView.snp.makeConstraints {
