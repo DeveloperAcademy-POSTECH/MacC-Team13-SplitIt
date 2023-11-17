@@ -19,7 +19,7 @@ extension UIFont {
     
     // MARK: Number Typeface
     /**
-     30pt / Num / Title 1
+     32pt / Num / Title 1
      - parameters:
         - property: $num-title1
      */
@@ -33,7 +33,7 @@ extension UIFont {
     }
 
     /**
-     27pt / Num / Title 2
+     29pt / Num / Title 2
      - parameters:
         - property: $num-title2
      */
@@ -47,7 +47,7 @@ extension UIFont {
     }
 
     /**
-     24pt / Num / Title 3
+     26pt / Num / Title 3
      - parameters:
         - property: $num-title3
      */
@@ -61,7 +61,7 @@ extension UIFont {
     }
 
     /**
-     21pt / Num / Subtitle
+     23pt / Num / Subtitle
      - parameters:
         - property: $num-subtitle
      */
@@ -75,7 +75,7 @@ extension UIFont {
     }
 
     /**
-     18pt / Num / Body
+     20pt / Num / Body
      - parameters:
         - property: $num-body
      */
@@ -89,7 +89,7 @@ extension UIFont {
     }
 
     /**
-     15pt / Num / Caption 1
+     18pt / Num / Caption 1
      - parameters:
         - property: $num-caption1
      */
@@ -103,7 +103,7 @@ extension UIFont {
     }
 
     /**
-     12pt / Num / Caption 2
+     14pt / Num / Caption 2
      - parameters:
         - property: $num-caption2
      */
@@ -123,7 +123,7 @@ extension UIFont {
     }
     
     /**
-     30pt / NumRounded / Title 1
+     32pt / NumRounded / Title 1
      - parameters:
         - property: $num-rounded-title1
      */
@@ -137,7 +137,7 @@ extension UIFont {
     }
 
     /**
-     27pt / NumRounded / Title 2
+     29pt / NumRounded / Title 2
      - parameters:
         - property: $num-rounded-title2
      */
@@ -151,7 +151,7 @@ extension UIFont {
     }
 
     /**
-     24pt / NumRounded / Title 3
+     26pt / NumRounded / Title 3
      - parameters:
         - property: $num-rounded-title3
      */
@@ -165,7 +165,7 @@ extension UIFont {
     }
 
     /**
-     21pt / NumRounded / Subtitle
+     23pt / NumRounded / Subtitle
      - parameters:
         - property: $num-rounded-subtitle
      */
@@ -179,7 +179,7 @@ extension UIFont {
     }
 
     /**
-     18pt / NumRounded / Body
+     20pt / NumRounded / Body
      - parameters:
         - property: $num-rounded-body
      */
@@ -193,7 +193,7 @@ extension UIFont {
     }
 
     /**
-     15pt / NumRounded / Caption 1
+     18pt / NumRounded / Caption 1
      - parameters:
         - property: $num-rounded-caption1
      */
@@ -207,7 +207,7 @@ extension UIFont {
     }
 
     /**
-     12pt / NumRounded / Caption 2
+     14pt / NumRounded / Caption 2
      - parameters:
         - property: $num-rounded-caption2
      */
