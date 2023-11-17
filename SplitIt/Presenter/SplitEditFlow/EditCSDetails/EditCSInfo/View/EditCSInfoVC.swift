@@ -261,8 +261,8 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
         
         viewModel.isEdited
             .asDriver()
-            .drive(onNext: { [weak navigationController] shouldPop in
-                navigationController?.interactivePopGestureRecognizer?.isEnabled = !shouldPop
+            .drive(onNext: { [weak navigationController] isEdited in
+                navigationController?.interactivePopGestureRecognizer?.isEnabled = !isEdited
             })
             .disposed(by: disposeBag)
         
