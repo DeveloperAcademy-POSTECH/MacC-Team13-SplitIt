@@ -276,9 +276,9 @@ class NewEditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
                 if let cell = cell as? CSMemberSelectedCell {
                     cell.configure(item: item)
                     cell.xMark.do {
-                        $0.image = UIImage(named: "DeleteIconTypeB")
-                        $0.backgroundColor = .SurfaceBrandWatermelon
-                        $0.layer.cornerRadius = 9
+                        $0.image = UIImage(named: "DeleteIconTypeE")
+//                        $0.backgroundColor = .SurfaceBrandWatermelon
+//                        $0.layer.cornerRadius = 9
                     }
                 }
             }
