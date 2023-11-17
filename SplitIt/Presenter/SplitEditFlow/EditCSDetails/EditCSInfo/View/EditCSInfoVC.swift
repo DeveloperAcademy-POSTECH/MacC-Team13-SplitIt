@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import SnapKit
+import Then
 import RxSwift
 import RxCocoa
+import RxGesture
 
 class EditCSInfoVC: UIViewController, SPAlertDelegate {
     
@@ -162,6 +165,15 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
     }
     
     func setBinding() {
+        // MARK: Alert가 존재할 때 Swipe Back Left Side 감지
+        let swipeBackLeftSideObservable = self.view.rx.panGesture()
+            .when(.began)
+            .filter { gesture in
+                let location = gesture.location(in: self.view)
+                return location.x < 20
+                && !(self.navigationController?.interactivePopGestureRecognizer!.isEnabled)!
+            }
+        
         let titleTFEvent = Observable.merge(
             titleTextFiled.rx.controlEvent(.editingDidBegin).map { UIControl.Event.editingDidBegin},
             titleTextFiled.rx.controlEvent(.editingDidEnd).map { UIControl.Event.editingDidEnd },
@@ -172,10 +184,12 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
             totalAmountTextFiled.rx.controlEvent(.editingDidEnd).map { UIControl.Event.editingDidEnd })
         
         let input = EditCSInfoVM.Input(confirmButtonTapped: header.rightButton.rx.tap,
-                                   title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
-                                   totalAmount: totalAmountTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
-                                   titleTextFieldControlEvent: titleTFEvent,
-                                   totalAmountTextFieldControlEvent: totalAmountTFEvent)
+                                       title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
+                                       totalAmount: totalAmountTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
+                                       titleTextFieldControlEvent: titleTFEvent,
+                                       totalAmountTextFieldControlEvent: totalAmountTFEvent,
+                                       backButtonTapped: header.leftButton.rx.tap,
+                                       swipeBack: swipeBackLeftSideObservable)
         let output = viewModel.transform(input: input)
         
         output.titleString
@@ -245,11 +259,10 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
             })
             .disposed(by: disposeBag)
         
-        header.leftButton.rx.tap
-            .asDriver()
-            .drive { [weak self] _ in
+        output.showBackAlert
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                print("@@@@@@@@\(self.viewModel.isEdit.value)")
                 if self.viewModel.isEdit.value {
                     self.showAlert(view: self.alert,
                                    type: .warnNormal,
@@ -257,8 +270,10 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
                                    descriptions: "지금까지 수정하신 내역이 사라져요",
                                    leftButtonTitle: "취 소",
                                    rightButtonTitle: "중단하기")
-                } else { self.navigationController?.popViewController(animated: true)}
-            }
+                } else {
+                    self.navigationController?.popViewController(animated: true)
+                }
+            })
             .disposed(by: disposeBag)
         
         alert.rightButtonTapSubject
