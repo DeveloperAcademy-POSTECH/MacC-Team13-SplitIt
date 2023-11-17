@@ -105,7 +105,7 @@ class EditExclItemInputVC: UIViewController {
         tableView.snp.makeConstraints {
             $0.top.equalTo(exclListLabel.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview().inset(30)
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
         emptyView.snp.makeConstraints {

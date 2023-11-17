@@ -113,7 +113,7 @@ final class EditCSItemVM {
         ]
 
         let textAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanCaption2,
+            .font: UIFont.KoreanCaption1,
             .foregroundColor: UIColor.TextPrimary
         ]
         
@@ -152,7 +152,7 @@ final class EditCSItemVM {
         ]
 
         let textAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanCaption2,
+            .font: UIFont.KoreanCaption1,
             .foregroundColor: UIColor.TextPrimary
         ]
         
