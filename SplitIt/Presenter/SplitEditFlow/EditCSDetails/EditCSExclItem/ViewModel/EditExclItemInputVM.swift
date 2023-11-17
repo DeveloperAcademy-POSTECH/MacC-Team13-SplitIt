@@ -21,40 +21,25 @@ class EditExclItemInputVM {
     lazy var exclItemNotification = Observable.merge([exclItemIsAdded, exclItemIsEdited, exclItemIsDeleted])
 
     struct Input {
-        let viewDidDisAppear: Observable<Bool>
-        let nextButtonTapped: ControlEvent<Void> // 다음 버튼
+        let backToReceiptTapped: ControlEvent<Void>
         let exclItemAddButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
-        let showResultView: Driver<Void>
+        let showSplitShareView: Driver<Void>
         let exclItemsRelay: BehaviorRelay<[ExclItemInfo]>
-        let nextButtonIsEnable: Driver<Bool>
         let showExclItemInfoModal: Driver<Void>
         let showEmptyView: Driver<Bool>
-        let showToastMessage: BehaviorRelay<Bool>
     }
     
     func transform(input: Input) -> Output {
-        let showResultView = input.nextButtonTapped
+        let showSplitShareView = input.backToReceiptTapped
         let showExclItemInfoModal = input.exclItemAddButtonTapped
-        let nextButtonIsEnable: Driver<Bool>
         let showEmptyView = BehaviorRelay<Bool>(value: false)
 
         let exclItemRepository = SplitRepository.share.exclItemArr
         let exclMemberRepository = SplitRepository.share.exclMemberArr
         let exclItemsRelay = BehaviorRelay<[ExclItemInfo]>(value: [])
-        
-        let showToastMessage = BehaviorRelay<Bool>(value: false)
-        
-//        exclItemRepository
-        
-//        input.viewDidDisAppear
-//            .asDriver(onErrorJustReturn: false)
-//            .drive(onNext: { _ in
-//                SplitRepository.share.deleteCurrentExclItemAndExclMember()
-//            })
-//            .disposed(by: disposeBag)
         
         Observable.combineLatest(exclItemRepository, exclMemberRepository)
             .map{ (exclItems, exclMembers) -> [ExclItemInfo] in
@@ -74,17 +59,17 @@ class EditExclItemInputVM {
             .asDriver(onErrorJustReturn: false)
             .drive(showEmptyView)
             .disposed(by: disposeBag)
-
-        nextButtonIsEnable = exclItemsRelay
-            .map{ $0.count > 0 }
-            .asDriver(onErrorJustReturn: false)
         
-        return Output(showResultView: showResultView.asDriver(),
+        exclItemNotification
+            .subscribe(onNext: { _ in
+                SplitRepository.share.updateDataToDB()
+            })
+            .disposed(by: disposeBag)
+
+        return Output(showSplitShareView: showSplitShareView.asDriver(),
                       exclItemsRelay: exclItemsRelay,
-                      nextButtonIsEnable: nextButtonIsEnable,
                       showExclItemInfoModal: showExclItemInfoModal.asDriver(),
-                      showEmptyView: showEmptyView.asDriver(onErrorJustReturn: false),
-                      showToastMessage: showToastMessage)
+                      showEmptyView: showEmptyView.asDriver(onErrorJustReturn: false))
     }
 
 }

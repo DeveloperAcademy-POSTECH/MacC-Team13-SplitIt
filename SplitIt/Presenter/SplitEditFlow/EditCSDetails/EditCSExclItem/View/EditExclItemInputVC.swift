@@ -121,13 +121,8 @@ class EditExclItemInputVC: UIViewController {
     }
     
     func setBinding() {
-        let input = EditExclItemInputVM.Input(viewDidDisAppear: self.rx.viewDidAppear,
-                                              nextButtonTapped: header.rightButton.rx.tap,
-                                          exclItemAddButtonTapped: exclItemAddButton.rx.tap)
-        Driver.just(true)
-            .drive(header.buttonState)
-            .disposed(by: disposeBag)
-        
+        let input = EditExclItemInputVM.Input(backToReceiptTapped: header.rightButton.rx.tap,
+                                              exclItemAddButtonTapped: exclItemAddButton.rx.tap)
         let output = viewModel.transform(input: input)
         
         output.exclItemsRelay
@@ -176,7 +171,7 @@ class EditExclItemInputVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        output.showResultView
+        output.showSplitShareView
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.navigationController?.viewControllers.forEach {
@@ -185,15 +180,6 @@ class EditExclItemInputVC: UIViewController {
                     }
                 }
             })
-            .disposed(by: disposeBag)
-        
-        header.leftButton.rx.tap
-            .asDriver()
-            .drive { [weak self] _ in
-                guard let self = self else { return }
-                SplitRepository.share.updateDataToDB()
-                self.navigationController?.popViewController(animated: true)
-            }
             .disposed(by: disposeBag)
         
         viewModel.exclItemNotification
