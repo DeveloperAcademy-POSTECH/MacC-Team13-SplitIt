@@ -12,7 +12,7 @@ import UIKit
 class EditExclItemInputVM {
     
     var disposeBag = DisposeBag()
-    var isEdit = BehaviorRelay(value: false)
+    var isEdited = BehaviorRelay(value: false)
     
     struct Input {
         let viewDidDisAppear: Observable<Bool>

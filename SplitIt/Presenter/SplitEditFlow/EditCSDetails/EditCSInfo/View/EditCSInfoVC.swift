@@ -259,7 +259,7 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
             })
             .disposed(by: disposeBag)
         
-        viewModel.isEdit
+        viewModel.isEdited
             .asDriver()
             .drive(onNext: { [weak navigationController] shouldPop in
                 navigationController?.interactivePopGestureRecognizer?.isEnabled = !shouldPop
@@ -270,7 +270,7 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                if self.viewModel.isEdit.value {
+                if self.viewModel.isEdited.value {
                     self.showAlert(view: self.backAlert,
                                    type: .warnNormal,
                                    title: "수정을 중단하시겠어요?",
@@ -394,7 +394,7 @@ extension EditCSInfoVC: CustomKeyboardDelegate {
 extension EditCSInfoVC {
     fileprivate func sendConfirmToastMessage() {
         if let vc = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 1] as? EditCSItemVC {
-            Observable.just(self.viewModel.isEdit.value)
+            Observable.just(self.viewModel.isEdited.value)
                 .bind(to: vc.viewModel.isEdit)
                 .disposed(by: disposeBag)
         }

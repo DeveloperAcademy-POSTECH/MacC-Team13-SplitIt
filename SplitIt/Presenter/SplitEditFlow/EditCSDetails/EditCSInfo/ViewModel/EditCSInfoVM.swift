@@ -14,7 +14,7 @@ class EditCSInfoVM {
     var disposeBag = DisposeBag()
     
     let maxTextCount = 8
-    var isEdit = BehaviorRelay(value: false)
+    var isEdited = BehaviorRelay(value: false)
     
     let csinfo = SplitRepository.share.csInfoArr.value.first
     
@@ -195,7 +195,7 @@ class EditCSInfoVM {
                 }
                 return false
             }
-            .drive(isEdit)
+            .drive(isEdited)
             .disposed(by: disposeBag)
         
         let showBackAlert = Observable.merge(input.backButtonTapped.asObservable(),
