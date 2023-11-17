@@ -107,7 +107,7 @@ final class SPTextField: UITextField {
     private func configureCommonProperties() {
         let attributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: UIColor.TextDeactivate,
-            .font: UIFont.KoreanCaption1
+            .font: UIFont.KoreanBody
         ]
 
         let attributedPlaceholder = NSAttributedString(string: self.placeholder ?? "", attributes: attributes)
