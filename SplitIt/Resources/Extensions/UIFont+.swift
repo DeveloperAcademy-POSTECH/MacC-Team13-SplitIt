@@ -223,8 +223,13 @@ extension UIFont {
      - parameters:
         - property: $receipt-title1
      */
-    class var ReceiptDate: UIFont {
-        return UIFont(name: AppFontName.EdcR, size: 12)!
+    class var ReceiptTitle1: UIFont {
+        switch UIDevice().screenType {
+        case .iPhoneSE:
+            return UIFont(name: AppFontName.EdcR, size: 28)!
+        case .defaultDevice:
+            return UIFont(name: AppFontName.EdcR, size: 30)!
+        }
     }
 
     /**
