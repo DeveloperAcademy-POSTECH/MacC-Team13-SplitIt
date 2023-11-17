@@ -78,13 +78,13 @@ class ExclItemCell: UITableViewCell, Reusable {
         
         currencyLabel.do {
             $0.textColor = .TextPrimary
-            $0.font = .KoreanBody
+            $0.font = .NumBody
             $0.text = "₩"
         }
         
         exclItemPrice.do {
             $0.textColor = .TextPrimary
-            $0.font = .KoreanTitle3
+            $0.font = .NumTitle3
         }
     }
     
@@ -118,16 +118,18 @@ class ExclItemCell: UITableViewCell, Reusable {
         }
         
         exclMembers.snp.makeConstraints {
+            $0.top.equalTo(exclMemberCountLabel.snp.bottom).offset(4)
             $0.leading.equalTo(exclItemName)
-            $0.height.equalTo(27)
-            $0.top.greaterThanOrEqualTo(exclMemberCountLabel.snp.bottom).offset(5)
-            $0.bottom.lessThanOrEqualTo(exclItemPrice.snp.top).offset(-8)
+            $0.trailing.equalToSuperview().inset(12)
+            $0.height.equalTo(19)
+            //$0.top.greaterThanOrEqualTo(exclMemberCountLabel.snp.bottom).offset(4)
+            //$0.bottom.lessThanOrEqualTo(exclItemPrice.snp.top).offset(-8)
         }
         
         exclItemPrice.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(12)
             $0.bottom.equalToSuperview().inset(8)
-            $0.height.equalTo(26)
+            $0.height.equalTo(32)
         }
         
         currencyLabel.snp.makeConstraints {
