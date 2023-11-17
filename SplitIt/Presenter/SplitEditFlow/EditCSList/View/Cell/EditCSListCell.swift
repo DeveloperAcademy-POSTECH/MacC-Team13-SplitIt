@@ -193,11 +193,11 @@ final class EditCSListCell: UITableViewCell, Reusable {
     
     func attributeStringSet(st1: String, st2: Int) -> NSMutableAttributedString {
         let numberAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont(name: "ONEMobileLight", size: 17) as Any
+            .font: UIFont.NumRoundedCaption1 as Any
         ]
 
         let textAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont(name: "ONEMobileLight", size: 20) as Any
+            .font: UIFont.NumRoundedBody as Any
         ]
         
         let formatter = NumberFormatter()
