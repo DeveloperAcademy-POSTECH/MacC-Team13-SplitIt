@@ -44,7 +44,6 @@ class SplitMethodSelectVC: UIViewController, Reusable {
         }
      
         titleLabel.do {
-            $0.text = "1차 정산"
             $0.font = .KoreanTitle1
             $0.textColor = .AppColorGrayscale1000
         }
@@ -100,6 +99,12 @@ class SplitMethodSelectVC: UIViewController, Reusable {
     private func setBinding() {
         let input = SplitMethodSelectVM.Input(methodBtnTapped: collectionView.rx.itemSelected)
         let output = viewModel.transform(input: input)
+        
+        output
+            .csInfoCount
+            .map{"\($0) 정산"}
+            .drive(titleLabel.rx.text)
+            .disposed(by: disposeBag)
         
         output.methodList
             .bind(to: collectionView.rx.items(cellIdentifier: SplitMethodCell.reuseIdentifier)) { indexPath, item, cell in
