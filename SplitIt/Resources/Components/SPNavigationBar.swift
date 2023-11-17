@@ -137,7 +137,7 @@ final class SPNavigationBar: UIView {
             setRightBackButton(title: "저장", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
         case .editExclItemList:
             setNaviTitle(title: "따로 정산")
-            setLeftBackButton(action: .none, vc: vc)
+            setLeftBackButton(action: .toBack, vc: vc)
             setReceiptsButton(vc: vc, action: false)
         }
     }
