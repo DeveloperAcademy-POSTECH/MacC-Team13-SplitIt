@@ -314,7 +314,9 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
         
         output.editButtonTapped
             .drive(onNext: {
-                self.dismiss(animated: true)
+                self.dismiss(animated: true) {
+                    NotificationCenter.default.post(name: .exclItemIsEdited, object: nil)
+                }                
             })
             .disposed(by: disposeBag)
         
@@ -559,7 +561,9 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 SplitRepository.share.deleteExclItemAndRelatedData(exclItemIdx: self.currentExclItemIdx)
-                self.dismiss(animated: true)
+                self.dismiss(animated: true) {
+                    NotificationCenter.default.post(name: .exclItemIsDeleted, object: nil)
+                }
             })
             .disposed(by: disposeBag)
     }
