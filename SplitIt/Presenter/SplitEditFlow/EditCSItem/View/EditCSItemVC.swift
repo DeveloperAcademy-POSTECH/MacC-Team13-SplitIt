@@ -49,6 +49,11 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
         setBinding()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+    }
+    
     func setAttribute() {
         view.backgroundColor = .SurfaceBrandCalmshell
         

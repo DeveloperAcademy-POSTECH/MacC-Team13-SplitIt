@@ -14,7 +14,7 @@ class EditCSInfoVM {
     var disposeBag = DisposeBag()
     
     let maxTextCount = 8
-    var isEdit = BehaviorRelay(value: false)
+    var isEdited = BehaviorRelay(value: false)
     
     let csinfo = SplitRepository.share.csInfoArr.value.first
     
@@ -24,6 +24,8 @@ class EditCSInfoVM {
         let totalAmount: Driver<String>
         let titleTextFieldControlEvent: Observable<UIControl.Event>
         let totalAmountTextFieldControlEvent: Observable<UIControl.Event>
+        let backButtonTapped: ControlEvent<Void>
+        let swipeBack: Observable<UIPanGestureRecognizer>
     }
     
     struct Output {
@@ -36,6 +38,8 @@ class EditCSInfoVM {
         let totalAmountTextFieldMinIsValid: Driver<Bool>
         let confirmButtonIsEnable: Driver<Bool>
         let titleTextFieldControlEvent: Driver<UIControl.Event>
+        let showBackAlert: Observable<Void>
+        let saveCSInfo: Observable<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -191,8 +195,11 @@ class EditCSInfoVM {
                 }
                 return false
             }
-            .drive(isEdit)
+            .drive(isEdited)
             .disposed(by: disposeBag)
+        
+        let showBackAlert = Observable.merge(input.backButtonTapped.asObservable(),
+                                             input.swipeBack.map{ _ in }.asObservable())
     
         return Output(titleString: title.asDriver(),
                       titleCount: textFieldCount.asDriver(),
@@ -202,7 +209,9 @@ class EditCSInfoVM {
                       totalAmountTextFieldIsValid: totalAmountIsValid.asDriver(),
                       totalAmountTextFieldMinIsValid: totalAmountMinIsValidDriver,
                       confirmButtonIsEnable: confirmButtonIsEnable,
-                      titleTextFieldControlEvent: titleTFControlEvent)
+                      titleTextFieldControlEvent: titleTFControlEvent,
+                      showBackAlert: showBackAlert,
+                      saveCSInfo: input.confirmButtonTapped.asObservable())
     }
     
     func calculateMinTotalAmount(_ value: Int) -> Bool {

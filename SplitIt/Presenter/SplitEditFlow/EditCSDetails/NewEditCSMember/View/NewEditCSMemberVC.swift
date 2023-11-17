@@ -28,7 +28,7 @@ class NewEditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     let searchView = UIView()
     let searchLabel = UILabel()
     let searchTableView = UITableView(frame: .zero)
-    let alert = SPAlertController()
+    let backAlert = SPAlertController()
     
     let backgroundView = CSMemberEmptyBackGroundView()
     
@@ -44,6 +44,11 @@ class NewEditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         setAttribute()
         setLayout()
         setBinding()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -210,14 +215,23 @@ class NewEditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     }
     
     private func setBinding() {
+        let swipeBackLeftSideObservable = self.view.rx.panGesture()
+            .when(.began)
+            .filter { gesture in
+                let location = gesture.location(in: self.view)
+                return location.x < 20
+                && !(self.navigationController?.interactivePopGestureRecognizer!.isEnabled)!
+            }
+        
         let input = NewEditCSMemberVM.Input(viewWillAppear: self.rx.viewWillAppear,
-                                        textFieldValue: searchTextField.rx.text.orEmpty.asDriver(),
-                                        textFieldReturnKeyTapped: searchTextFieldReturnKeyTapped,
-                                        searchCellTapped: searchTableView.rx.itemSelected,
-                                        selectedCellTapped: addCollectionView.rx.itemSelected,
+                                            textFieldValue: searchTextField.rx.text.orEmpty.asDriver(),
+                                            textFieldReturnKeyTapped: searchTextFieldReturnKeyTapped,
+                                            searchCellTapped: searchTableView.rx.itemSelected,
+                                            selectedCellTapped: addCollectionView.rx.itemSelected,
                                             backButtonTapped: header.leftButton.rx.tap,
-                                        addButtonTapped: addButton.rx.tap,
-                                            nextButtonTapped: header.rightButton.rx.tap)
+                                            addButtonTapped: addButton.rx.tap,
+                                            saveButtonTapped: header.rightButton.rx.tap,
+                                            swipeBack: swipeBackLeftSideObservable)
         let output = viewModel.transform(input: input)
         
         output.searchMemberArr
@@ -342,40 +356,39 @@ class NewEditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             .asDriver()
             .drive(onNext: {
                 SplitRepository.share.editCSMemberAndExclMember()
+                self.sendConfirmToastMessage()
             })
             .disposed(by: disposeBag)
         
-        header.leftButton.rx.tap
+        viewModel.isEdited
             .asDriver()
-            .drive { [weak self] _ in
+            .drive(onNext: { [weak navigationController] isEdited in
+                navigationController?.interactivePopGestureRecognizer?.isEnabled = !isEdited
+            })
+            .disposed(by: disposeBag)
+        
+        output.showBackAlert
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                print("@@@@@@@@\(self.viewModel.isEdit.value)")
-                if !self.viewModel.isEdit.value {
-                    self.showAlert(view: self.alert,
+                if self.viewModel.isEdited.value {
+                    self.showAlert(view: self.backAlert,
                                    type: .warnNormal,
                                    title: "수정을 중단하시겠어요?",
                                    descriptions: "지금까지 수정하신 내역이 사라져요",
                                    leftButtonTitle: "취 소",
                                    rightButtonTitle: "중단하기")
-                } else { self.navigationController?.popViewController(animated: true) }
-            }
-            .disposed(by: disposeBag)
-        
-        alert.rightButtonTapSubject.asDriver(onErrorJustReturn: ())
-            .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.navigationController?.popViewController(animated: true)
+                } else {
+                    self.navigationController?.popViewController(animated: true)
+                }
             })
             .disposed(by: disposeBag)
         
-        header.rightButton.rx.tap.asDriver()
-            .drive(onNext: { [weak self] in
+        backAlert.rightButtonTapSubject
+            .asDriver(onErrorJustReturn: ())
+            .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                if let vc = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 1] as? EditCSItemVC {
-                    Observable.just(self.viewModel.isEdit.value)
-                        .bind(to: vc.viewModel.isEdit)
-                        .disposed(by: disposeBag)
-                }
+                self.navigationController?.popViewController(animated: true)
             })
             .disposed(by: disposeBag)
     }
@@ -395,5 +408,16 @@ extension NewEditCSMemberVC: UISearchTextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.searchTextFieldReturnKeyTapped.accept(())
         return false
+    }
+}
+
+// MARK: Send ToastMessage
+extension NewEditCSMemberVC {
+    fileprivate func sendConfirmToastMessage() {
+        if let vc = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 1] as? EditCSItemVC {
+            Observable.just(self.viewModel.isEdited.value)
+                .bind(to: vc.viewModel.isEdit)
+                .disposed(by: disposeBag)
+        }
     }
 }

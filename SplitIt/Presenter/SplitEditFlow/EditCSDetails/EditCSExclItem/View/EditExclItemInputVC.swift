@@ -34,6 +34,11 @@ class EditExclItemInputVC: UIViewController {
         setBinding()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+    }
+    
     func setAttribute() {
         view.backgroundColor = .SurfaceBrandCalmshell
         
@@ -225,7 +230,7 @@ class EditExclItemInputVC: UIViewController {
             }
             .disposed(by: disposeBag)
         
-//        viewModel.isEdit.asDriver()
+//        viewModel.isEdited.asDriver()
 //            .drive(onNext: {[weak self] bool in
 //                guard let self = self else { return }
 //                if bool {
