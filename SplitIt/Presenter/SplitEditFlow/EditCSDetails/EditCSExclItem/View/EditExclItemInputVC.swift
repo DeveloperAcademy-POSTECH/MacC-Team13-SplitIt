@@ -143,40 +143,6 @@ class EditExclItemInputVC: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        output.exclItemsRelay
-            .asDriver()
-            .distinctUntilChanged{ (prev, cur) in
-                print("1")
-                print("prev: \(prev)")
-                print("cur: \(cur)")
-                if output.showToastMessage.value {
-                    print("2")
-                    self.processChanges(previousItems: prev, currentItems: cur)
-                }
-                output.showToastMessage.accept(true)
-                return false
-            }
-        
-//            .scan([ExclItemInfo]()){ (prev, cur) in
-//                print("1")
-//                print("prev: \(prev)")
-//                print("cur: \(cur)")
-//                if output.showToastMessage.value {
-//                    print("2")
-//                    self.processChanges(previousItems: prev, currentItems: cur)
-//                }
-//                output.showToastMessage.accept(true)
-//                return cur
-//            }
-            .drive()
-            .disposed(by: disposeBag)
-           
-            
-        
-//        output.nextButtonIsEnable
-//            .drive(nextButton.buttonState)
-//            .disposed(by: disposeBag)
-        
         output.showExclItemInfoModal
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
@@ -230,37 +196,28 @@ class EditExclItemInputVC: UIViewController {
             }
             .disposed(by: disposeBag)
         
-//        viewModel.isEdited.asDriver()
-//            .drive(onNext: {[weak self] bool in
-//                guard let self = self else { return }
-//                if bool {
-//                    var style = ToastStyle()
-//                    style.messageFont = .KoreanCaption1
-//                    self.view.makeToast("  ✓  수정 완료되었습니다!  ", duration: 3.0, position: .bottom, style: style)
-//                }
-//            })
-//            .disposed(by: disposeBag)
+        viewModel.exclItemNotification
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(onNext: { [weak self] notification in
+                guard let self = self else { return }
+                showToast(notificationName: notification.name)
+            })
+            .disposed(by: disposeBag)
     }
     
-    func processChanges(previousItems: [ExclItemInfo], currentItems: [ExclItemInfo]) {
-        if previousItems.count == currentItems.count {
-            print("11111111")
-            // 리스트의 크기가 동일하면 수정된 것으로 간주합니다.
-            var style = ToastStyle()
-            style.messageFont = .KoreanCaption1
-            self.view.makeToast("  ✓  수정 완료되었습니다!  ", duration: 3.0, position: .bottom, style: style)
-        } else if previousItems.count > currentItems.count {
-            // 이전 항목이 더 많으면 삭제된 것으로 간주합니다.
-            print("22222222")
-            var style = ToastStyle()
-            style.messageFont = .KoreanCaption1
-            self.view.makeToast("  ✓  삭제 완료되었습니다!  ", duration: 3.0, position: .bottom, style: style)
-        } else {
-            print("3333333")
-            // 이전 항목이 더 적으면 추가된 것으로 간주합니다.
-            var style = ToastStyle()
-            style.messageFont = .KoreanCaption1
-            self.view.makeToast("  ✓  추가 완료되었습니다!  ", duration: 3.0, position: .bottom, style: style)
+    func showToast(notificationName: Notification.Name) {
+        var style = ToastStyle()
+        style.messageFont = .KoreanCaption1
+        
+        switch notificationName {
+        case .exclItemIsAdded:
+            self.view.makeToast("  ✓  추가가 완료되었습니다!  ", duration: 3.0, position: .bottom, style: style)
+        case .exclItemIsEdited:
+            self.view.makeToast("  ✓  수정이 완료되었습니다!  ", duration: 3.0, position: .bottom, style: style)
+        case .exclItemIsDeleted:
+            self.view.makeToast("  ✓  삭제가 완료되었습니다!  ", duration: 3.0, position: .bottom, style: style)
+        default:
+            break
         }
     }
 }
