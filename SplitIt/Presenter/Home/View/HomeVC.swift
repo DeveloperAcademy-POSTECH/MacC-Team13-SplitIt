@@ -47,7 +47,7 @@ class HomeVC: UIViewController {
         titleDescriptionLabel.do {
             $0.text = "더 쉽고 편한 정산"
             $0.textColor = .TextPrimary
-            $0.font = .KoreanSubtitle
+            $0.font = .KoreanBoldSubtitle
         }
         
         splitImageLogo.do {
