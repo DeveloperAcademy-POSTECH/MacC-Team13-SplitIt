@@ -48,7 +48,7 @@ final class EditCSListCell: UITableViewCell, Reusable {
         }
         
         csTitleLabel.do {
-            $0.font = .KoreanTitle1
+            $0.font = .KoreanTitle3
             $0.textColor = .TextPrimary
         }
         
@@ -60,6 +60,7 @@ final class EditCSListCell: UITableViewCell, Reusable {
         memberCountLabel.do {
             $0.textAlignment = .right
             $0.textColor = .TextPrimary
+            $0.font = .KoreanCaption1
         }
         
         totalAmountLabel.do {
@@ -70,6 +71,7 @@ final class EditCSListCell: UITableViewCell, Reusable {
         exclItemCountLabel.do {
             $0.textAlignment = .right
             $0.textColor = .TextPrimary
+            $0.font = .KoreanCaption1
         }
     }
     
@@ -188,32 +190,14 @@ final class EditCSListCell: UITableViewCell, Reusable {
         view.layer.addSublayer(borderLayer)
     }
     
-    func attributeStringSet(st1: String, st2: String) -> NSMutableAttributedString {
-        
-        let numberAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanCaption1
-        ]
-        let textAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanCaption2
-        ]
-        
-        let numberString = NSAttributedString(string: st1, attributes: numberAttributes)
-        let textString = NSAttributedString(string: " \(st2)", attributes: textAttributes)
-
-        let finalString = NSMutableAttributedString()
-        finalString.append(numberString)
-        finalString.append(textString)
-        
-        return finalString
-    }
     
-    func attributeStringSet2(st1: String, st2: Int) -> NSMutableAttributedString {
+    func attributeStringSet(st1: String, st2: Int) -> NSMutableAttributedString {
         let numberAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanCaption2
+            .font: UIFont(name: "ONEMobileLight", size: 17) as Any
         ]
 
         let textAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanCaption1
+            .font: UIFont(name: "ONEMobileLight", size: 20) as Any
         ]
         
         let formatter = NumberFormatter()
@@ -232,14 +216,12 @@ final class EditCSListCell: UITableViewCell, Reusable {
     
     func configure(csinfo: CSInfo, csMemberCount: Int, exclItemCount: Int) {
         
-        let member = attributeStringSet(st1: "\(csMemberCount)", st2: "명")
-        let price = attributeStringSet2(st1: "₩", st2: csinfo.totalAmount)
-        let excl = attributeStringSet(st1: "\(exclItemCount)", st2: "건")
-        
+        let price = attributeStringSet(st1: "₩", st2: csinfo.totalAmount)
+
         csTitleLabel.text = csinfo.title
-        memberCountLabel.attributedText = member
+        memberCountLabel.text = "\(csMemberCount) 명"
         totalAmountLabel.attributedText = price
-        exclItemCountLabel.attributedText = excl
+        exclItemCountLabel.text = "\(exclItemCount) 건"
     }
 }
 
