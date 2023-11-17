@@ -39,6 +39,7 @@ class EditCSInfoVM {
         let confirmButtonIsEnable: Driver<Bool>
         let titleTextFieldControlEvent: Driver<UIControl.Event>
         let showBackAlert: Observable<Void>
+        let saveCSInfo: Observable<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -209,7 +210,8 @@ class EditCSInfoVM {
                       totalAmountTextFieldMinIsValid: totalAmountMinIsValidDriver,
                       confirmButtonIsEnable: confirmButtonIsEnable,
                       titleTextFieldControlEvent: titleTFControlEvent,
-                      showBackAlert: showBackAlert)
+                      showBackAlert: showBackAlert,
+                      saveCSInfo: input.confirmButtonTapped.asObservable())
     }
     
     func calculateMinTotalAmount(_ value: Int) -> Bool {

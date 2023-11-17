@@ -276,16 +276,9 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
             })
             .disposed(by: disposeBag)
         
-        alert.rightButtonTapSubject
-            .asDriver(onErrorJustReturn: ())
-            .drive { [weak self] _ in
-                guard let self = self else { return }
-                self.navigationController?.popViewController(animated: true)
-            }
-            .disposed(by: disposeBag)
-        
-        header.rightButton.rx.tap.asDriver()
-            .drive(onNext: { [weak self] in
+        output.saveCSInfo
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
                 if let vc = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 1] as? EditCSItemVC {
                     Observable.just(self.viewModel.isEdit.value)
@@ -294,9 +287,14 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
                 }
             })
             .disposed(by: disposeBag)
-                
-                
         
+        alert.rightButtonTapSubject
+            .asDriver(onErrorJustReturn: ())
+            .drive { [weak self] _ in
+                guard let self = self else { return }
+                self.navigationController?.popViewController(animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }
 
