@@ -355,7 +355,6 @@ class MyInfoVC: UIViewController {
         
         output.moveToPrivacyView
             .drive(onNext:{
-                print("개인정보 처리방침 이동dd")
                 let url = NSURL(string: "https://kori-collab.notion.site/e3407a6ca4724b078775fd13749741b1?pvs=4")
                 let privacyWebView: SFSafariViewController = SFSafariViewController(url: url! as URL)
                 self.present(privacyWebView, animated: true, completion: nil)
