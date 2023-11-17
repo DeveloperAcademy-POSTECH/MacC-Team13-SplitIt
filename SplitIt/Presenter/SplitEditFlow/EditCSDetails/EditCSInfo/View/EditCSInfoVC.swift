@@ -30,7 +30,7 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
     let totalAmountTitleMessage = UILabel()
     let totalAmountTextFiled = SPTextField()
     let totalAmountTextFiledNotice = UILabel()
-    let alert = SPAlertController()
+    let backAlert = SPAlertController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -259,12 +259,19 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
             })
             .disposed(by: disposeBag)
         
+        viewModel.isEdit
+            .asDriver()
+            .drive(onNext: { [weak navigationController] shouldPop in
+                navigationController?.interactivePopGestureRecognizer?.isEnabled = !shouldPop
+            })
+            .disposed(by: disposeBag)
+        
         output.showBackAlert
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 if self.viewModel.isEdit.value {
-                    self.showAlert(view: self.alert,
+                    self.showAlert(view: self.backAlert,
                                    type: .warnNormal,
                                    title: "수정을 중단하시겠어요?",
                                    descriptions: "지금까지 수정하신 내역이 사라져요",
@@ -280,15 +287,11 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
-                if let vc = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 1] as? EditCSItemVC {
-                    Observable.just(self.viewModel.isEdit.value)
-                        .bind(to: vc.viewModel.isEdit)
-                        .disposed(by: disposeBag)
-                }
+                self.sendConfirmToastMessage()
             })
             .disposed(by: disposeBag)
         
-        alert.rightButtonTapSubject
+        backAlert.rightButtonTapSubject
             .asDriver(onErrorJustReturn: ())
             .drive { [weak self] _ in
                 guard let self = self else { return }
@@ -384,5 +387,16 @@ extension EditCSInfoVC: CustomKeyboardDelegate {
                 self?.inputTextRelay.accept(Int(self?.totalAmountTextFiled.text ?? ""))
             })
             .disposed(by: disposeBag)
+    }
+}
+
+// MARK: Send ToastMessage
+extension EditCSInfoVC {
+    fileprivate func sendConfirmToastMessage() {
+        if let vc = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 1] as? EditCSItemVC {
+            Observable.just(self.viewModel.isEdit.value)
+                .bind(to: vc.viewModel.isEdit)
+                .disposed(by: disposeBag)
+        }
     }
 }
