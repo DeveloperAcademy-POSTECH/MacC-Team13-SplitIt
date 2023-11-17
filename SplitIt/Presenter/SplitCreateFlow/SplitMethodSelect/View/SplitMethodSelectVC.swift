@@ -65,6 +65,7 @@ class SplitMethodSelectVC: UIViewController, Reusable {
             $0.backgroundColor = .SurfaceBrandCalmshell
             $0.showsVerticalScrollIndicator = false
             $0.delegate = self
+            $0.delaysContentTouches = false
         }
     }
     
@@ -134,6 +135,16 @@ extension SplitMethodSelectVC: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 16.0
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? SplitMethodCell else { return }
+        cell.isHighlighted = true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? SplitMethodCell else { return }
+        cell.isHighlighted = false
     }
 }
 

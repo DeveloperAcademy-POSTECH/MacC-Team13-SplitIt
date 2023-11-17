@@ -29,6 +29,9 @@ class SplitMethodCell: UICollectionViewCell, Reusable {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        setAttribute()
+        setLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -37,9 +40,11 @@ class SplitMethodCell: UICollectionViewCell, Reusable {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-
-        setAttribute()
-        setLayout()
+    }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        
     }
     
     func setAttribute() {
@@ -168,3 +173,16 @@ class SplitMethodCell: UICollectionViewCell, Reusable {
     }
 }
 
+extension SplitMethodCell {
+    override var isHighlighted: Bool {
+       didSet{
+           if self.isHighlighted {
+               self.contentView.backgroundColor = .SurfaceBrandCalmshellPressed
+           }
+           else {
+               self.contentView.backgroundColor = .SurfaceWhite
+           }
+           contentView.layoutIfNeeded()
+       }
+   }
+}
