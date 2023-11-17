@@ -4,6 +4,8 @@
 <dict>
 	<key>UIAppFonts</key>
 	<array>
+		<string>EliceDigitalCodingVerHRegular.ttf</string>
+		<string>EliceDigitalCodingVerHBold.ttf</string>
 		<string>ONEMobileLight.ttf</string>
 		<string>ONEMobileRegular.ttf</string>
 		<string>ONEMobileBold.ttf</string>

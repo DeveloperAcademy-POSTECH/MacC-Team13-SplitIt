@@ -100,6 +100,8 @@
 		86DACB132AF63A08008D7BAF /* EditCSMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB122AF63A08008D7BAF /* EditCSMemberVM.swift */; };
 		86DACB162AF63B99008D7BAF /* EditExclItemInputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB152AF63B99008D7BAF /* EditExclItemInputVC.swift */; };
 		86DACB182AF63BED008D7BAF /* EditExclItemInputVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB172AF63BED008D7BAF /* EditExclItemInputVM.swift */; };
+		C2263A8D2B07332400CF0E16 /* EliceDigitalCodingVerHBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2263A8B2B07332400CF0E16 /* EliceDigitalCodingVerHBold.ttf */; };
+		C2263A8E2B07332400CF0E16 /* EliceDigitalCodingVerHRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2263A8C2B07332400CF0E16 /* EliceDigitalCodingVerHRegular.ttf */; };
 		C229F51A2AEA442E00F9E28D /* SPButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C229F5192AEA442E00F9E28D /* SPButton.swift */; };
 		C291BA132AF4DD6F009501F3 /* UIDevice+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C291BA122AF4DD6F009501F3 /* UIDevice+.swift */; };
 		C2A7978D2AE2740D0049E709 /* ONEMobileBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2A7978A2AE2740D0049E709 /* ONEMobileBold.ttf */; };
@@ -213,6 +215,8 @@
 		86DACB122AF63A08008D7BAF /* EditCSMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSMemberVM.swift; sourceTree = "<group>"; };
 		86DACB152AF63B99008D7BAF /* EditExclItemInputVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExclItemInputVC.swift; sourceTree = "<group>"; };
 		86DACB172AF63BED008D7BAF /* EditExclItemInputVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExclItemInputVM.swift; sourceTree = "<group>"; };
+		C2263A8B2B07332400CF0E16 /* EliceDigitalCodingVerHBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EliceDigitalCodingVerHBold.ttf; sourceTree = "<group>"; };
+		C2263A8C2B07332400CF0E16 /* EliceDigitalCodingVerHRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EliceDigitalCodingVerHRegular.ttf; sourceTree = "<group>"; };
 		C229F5192AEA442E00F9E28D /* SPButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPButton.swift; sourceTree = "<group>"; };
 		C291BA122AF4DD6F009501F3 /* UIDevice+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+.swift"; sourceTree = "<group>"; };
 		C2A7978A2AE2740D0049E709 /* ONEMobileBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ONEMobileBold.ttf; sourceTree = "<group>"; };
@@ -886,6 +890,15 @@
 			path = EditCSExclItem;
 			sourceTree = "<group>";
 		};
+		C2263A8A2B07331600CF0E16 /* Receipt */ = {
+			isa = PBXGroup;
+			children = (
+				C2263A8B2B07332400CF0E16 /* EliceDigitalCodingVerHBold.ttf */,
+				C2263A8C2B07332400CF0E16 /* EliceDigitalCodingVerHRegular.ttf */,
+			);
+			path = Receipt;
+			sourceTree = "<group>";
+		};
 		C2A797872AE273E90049E709 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -897,6 +910,7 @@
 		C2A797882AE273F80049E709 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				C2263A8A2B07331600CF0E16 /* Receipt */,
 				C2A797892AE273FD0049E709 /* Korean */,
 			);
 			path = Fonts;
@@ -1162,7 +1176,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2263A8D2B07332400CF0E16 /* EliceDigitalCodingVerHBold.ttf in Resources */,
 				C2A7978E2AE2740D0049E709 /* ONEMobileLight.ttf in Resources */,
+				C2263A8E2B07332400CF0E16 /* EliceDigitalCodingVerHRegular.ttf in Resources */,
 				6078ACD82ADA74AD00995811 /* LaunchScreen.storyboard in Resources */,
 				C2A7978D2AE2740D0049E709 /* ONEMobileBold.ttf in Resources */,
 				C2A7978F2AE2740D0049E709 /* ONEMobileRegular.ttf in Resources */,
