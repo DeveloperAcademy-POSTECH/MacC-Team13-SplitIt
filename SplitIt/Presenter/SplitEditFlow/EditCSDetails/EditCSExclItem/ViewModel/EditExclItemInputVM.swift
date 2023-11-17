@@ -12,7 +12,6 @@ import UIKit
 class EditExclItemInputVM {
     
     var disposeBag = DisposeBag()
-    var isEdited = BehaviorRelay(value: false)
     
     private let exclItemIsAdded = NotificationCenter.default.rx.notification(.exclItemIsAdded)
     private let exclItemIsEdited = NotificationCenter.default.rx.notification(.exclItemIsEdited)
