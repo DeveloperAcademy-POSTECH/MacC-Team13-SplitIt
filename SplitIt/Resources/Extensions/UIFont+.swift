@@ -17,6 +17,205 @@ struct AppFontName {
 
 extension UIFont {
     
+    // MARK: Number Typeface
+    /**
+     30pt / Num / Title 1
+     - parameters:
+        - property: $num-title1
+     */
+    class var NumTitle1: UIFont {
+        switch UIDevice().screenType {
+        case .iPhoneSE:
+            return systemFont(ofSize: 30, weight: .light)
+        case .defaultDevice:
+            return systemFont(ofSize: 32, weight: .light)
+        }
+    }
+
+    /**
+     27pt / Num / Title 2
+     - parameters:
+        - property: $num-title2
+     */
+    class var NumTitle2: UIFont {
+        switch UIDevice().screenType {
+        case .iPhoneSE:
+            return systemFont(ofSize: 27, weight: .light)
+        case .defaultDevice:
+            return systemFont(ofSize: 29, weight: .light)
+        }
+    }
+
+    /**
+     24pt / Num / Title 3
+     - parameters:
+        - property: $num-title3
+     */
+    class var NumTitle3: UIFont {
+        switch UIDevice().screenType {
+        case .iPhoneSE:
+            return systemFont(ofSize: 26, weight: .light)
+        case .defaultDevice:
+            return systemFont(ofSize: 24, weight: .light)
+        }
+    }
+
+    /**
+     21pt / Num / Subtitle
+     - parameters:
+        - property: $num-subtitle
+     */
+    class var NumSubtitle: UIFont {
+        switch UIDevice().screenType {
+        case .iPhoneSE:
+            return systemFont(ofSize: 23, weight: .light)
+        case .defaultDevice:
+            return systemFont(ofSize: 21, weight: .light)
+        }
+    }
+
+    /**
+     18pt / Num / Body
+     - parameters:
+        - property: $num-body
+     */
+    class var NumBody: UIFont {
+        switch UIDevice().screenType {
+        case .iPhoneSE:
+            return systemFont(ofSize: 20, weight: .light)
+        case .defaultDevice:
+            return systemFont(ofSize: 18, weight: .light)
+        }
+    }
+
+    /**
+     15pt / Num / Caption 1
+     - parameters:
+        - property: $num-caption1
+     */
+    class var NumCaption1: UIFont {
+        switch UIDevice().screenType {
+        case .iPhoneSE:
+            return systemFont(ofSize: 18, weight: .light)
+        case .defaultDevice:
+            return systemFont(ofSize: 16, weight: .light)
+        }
+    }
+
+    /**
+     12pt / Num / Caption 2
+     - parameters:
+        - property: $num-caption2
+     */
+    class var NumCaption2: UIFont {
+        return systemFont(ofSize: 14, weight: .ultraLight)
+    }
+    
+    
+    // MARK: Number Rounded Typeface
+    
+    func rounded() -> UIFont {
+        guard let descriptor = fontDescriptor.withDesign(.rounded) else {
+            return self
+        }
+
+        return UIFont(descriptor: descriptor, size: pointSize)
+    }
+    
+    /**
+     30pt / NumRounded / Title 1
+     - parameters:
+        - property: $num-rounded-title1
+     */
+    class var NumRoundedTitle1: UIFont {
+        switch UIDevice().screenType {
+        case .iPhoneSE:
+            return systemFont(ofSize: 30, weight: .light).rounded()
+        case .defaultDevice:
+            return systemFont(ofSize: 32, weight: .light).rounded()
+        }
+    }
+
+    /**
+     27pt / NumRounded / Title 2
+     - parameters:
+        - property: $num-rounded-title2
+     */
+    class var NumRoundedTitle2: UIFont {
+        switch UIDevice().screenType {
+        case .iPhoneSE:
+            return systemFont(ofSize: 27, weight: .light).rounded()
+        case .defaultDevice:
+            return systemFont(ofSize: 29, weight: .light).rounded()
+        }
+    }
+
+    /**
+     24pt / NumRounded / Title 3
+     - parameters:
+        - property: $num-rounded-title3
+     */
+    class var NumRoundedTitle3: UIFont {
+        switch UIDevice().screenType {
+        case .iPhoneSE:
+            return systemFont(ofSize: 26, weight: .light).rounded()
+        case .defaultDevice:
+            return systemFont(ofSize: 24, weight: .light).rounded()
+        }
+    }
+
+    /**
+     21pt / NumRounded / Subtitle
+     - parameters:
+        - property: $num-rounded-subtitle
+     */
+    class var NumRoundedSubtitle: UIFont {
+        switch UIDevice().screenType {
+        case .iPhoneSE:
+            return systemFont(ofSize: 23, weight: .light).rounded()
+        case .defaultDevice:
+            return systemFont(ofSize: 21, weight: .light).rounded()
+        }
+    }
+
+    /**
+     18pt / NumRounded / Body
+     - parameters:
+        - property: $num-rounded-body
+     */
+    class var NumRoundedBody: UIFont {
+        switch UIDevice().screenType {
+        case .iPhoneSE:
+            return systemFont(ofSize: 20, weight: .light).rounded()
+        case .defaultDevice:
+            return systemFont(ofSize: 18, weight: .light).rounded()
+        }
+    }
+
+    /**
+     15pt / NumRounded / Caption 1
+     - parameters:
+        - property: $num-rounded-caption1
+     */
+    class var NumRoundedCaption1: UIFont {
+        switch UIDevice().screenType {
+        case .iPhoneSE:
+            return systemFont(ofSize: 18, weight: .light).rounded()
+        case .defaultDevice:
+            return systemFont(ofSize: 16, weight: .light).rounded()
+        }
+    }
+
+    /**
+     12pt / NumRounded / Caption 2
+     - parameters:
+        - property: $num-rounded-caption2
+     */
+    class var NumRoundedCaption2: UIFont {
+        return systemFont(ofSize: 14, weight: .ultraLight).rounded()
+    }
+    
+    
     // MARK: Receipt Typeface
     
     /**
@@ -24,13 +223,8 @@ extension UIFont {
      - parameters:
         - property: $receipt-title1
      */
-    class var ReceiptTitle1: UIFont {
-        switch UIDevice().screenType {
-        case .iPhoneSE:
-            return UIFont(name: AppFontName.EdcR, size: 28)!
-        case .defaultDevice:
-            return UIFont(name: AppFontName.EdcR, size: 30)!
-        }
+    class var ReceiptDate: UIFont {
+        return UIFont(name: AppFontName.EdcR, size: 12)!
     }
 
     /**
@@ -110,6 +304,25 @@ extension UIFont {
      */
     class var ReceiptCaption2: UIFont {
         return UIFont(name: AppFontName.EdcR, size: 12)!
+    }
+    
+    /**
+     8pt / Receipt / Footer 1
+     - parameters:
+        - property: $receipt-footer1
+     */
+    class var ReceiptFooter1: UIFont {
+        return UIFont(name: AppFontName.EdcB, size: 8)!
+    }
+    
+    /**
+     8pt / Receipt / Footer 2
+     - parameters:
+        - property: $receipt-footer2
+     */
+    
+    class var ReceiptFooter2: UIFont {
+        return UIFont(name: AppFontName.EdcR, size: 8)!
     }
     
     
