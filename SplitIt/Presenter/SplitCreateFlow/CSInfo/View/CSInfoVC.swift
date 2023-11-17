@@ -43,8 +43,7 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        unfocusTitleTF()
-        focusTotalAmountTF()
+        self.titleTextFiled.becomeFirstResponder()
     }
     
     override func viewDidAppear(_ animated: Bool) {
