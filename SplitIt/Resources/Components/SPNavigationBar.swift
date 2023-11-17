@@ -99,7 +99,7 @@ final class SPNavigationBar: UIView {
             setLeftDismissButton(title: "취소", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
             setRightDismissButton(title: "추가", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
         case .exclItemEditModal:
-            setNaviTitle(title: "따로 정산 항목 수정")
+            setNaviTitle(title: "따로 정산 항목")
             setLeftDismissButton(title: "취소", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
             setRightDismissButton(title: "저장", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
         case .splitEdit:

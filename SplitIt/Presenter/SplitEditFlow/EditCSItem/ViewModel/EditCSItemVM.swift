@@ -192,12 +192,12 @@ final class EditCSItemVM {
     func totalAmountAttributeString(price: Int) -> NSMutableAttributedString {
         
         let numberAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanCaption2,
+            .font: UIFont(name: "ONEMobileLight", size: 17) as Any,
             .foregroundColor: UIColor.TextPrimary
         ]
 
         let textAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KoreanBody,
+            .font: UIFont(name: "ONEMobileLight", size: 20) as Any,
             .foregroundColor: UIColor.TextPrimary
         ]
 
