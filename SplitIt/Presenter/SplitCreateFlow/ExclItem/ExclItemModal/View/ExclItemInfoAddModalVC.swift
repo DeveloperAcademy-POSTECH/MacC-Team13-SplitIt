@@ -259,7 +259,9 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
         
         output.addButtonTapped
             .drive(onNext: {
-                self.dismiss(animated: true)
+                self.dismiss(animated: true) {
+                    NotificationCenter.default.post(name: .exclItemIsAdded, object: nil)
+                }
             })
             .disposed(by: disposeBag)
         
