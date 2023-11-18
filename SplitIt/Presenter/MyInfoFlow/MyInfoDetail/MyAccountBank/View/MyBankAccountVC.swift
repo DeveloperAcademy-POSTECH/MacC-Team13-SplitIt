@@ -252,14 +252,15 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
     }
     
     func setBinding() {
-        
         let swipeBackLeftSideObservable = self.view.rx.panGesture()
             .when(.began)
             .filter { gesture in
                 let location = gesture.location(in: self.view)
                 return location.x < 20
+                && self.changedData() ? (self.navigationController?.interactivePopGestureRecognizer!.isEnabled)! : !(self.navigationController?.interactivePopGestureRecognizer!.isEnabled)!
             }
         
+       
         let selectedBankTap = addTapGesture(to: bankTextField)
         let tossTap = addTapGesture(to: tossPayView)
         let kakaoTap = addTapGesture(to: kakaoPayView)
@@ -273,7 +274,8 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
                                           kakaoTapeed: kakaoTap.rx.event.asObservable().map { _ in () },
                                           naverTapped: naverTap.rx.event.asObservable().map { _ in () },
                                           deleteBtnTapped: deleteBtn.rx.tap.asDriver(),
-                                          cancelBtnTapped: header.leftButton.rx.tap.asObservable()
+                                          cancelBtnTapped: header.leftButton.rx.tap.asObservable(),
+                                          swipeBack: swipeBackLeftSideObservable
                                           
         )
         
@@ -328,24 +330,19 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
             })
             .disposed(by: disposeBag)
         
-        let setBackAlertObservable = swipeBackLeftSideObservable
-            .flatMap { [weak self] _ -> Observable<Void> in
-                guard let self = self else { return Observable.empty() }
+        swipeBackLeftSideObservable
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.navigationController?.interactivePopGestureRecognizer?.isEnabled = !self.changedData()
                 
                 if self.changedData() {
                     self.setBackAlert()
-                    self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
                 } else {
                     self.navigationController?.popViewController(animated: true)
                 }
-                
-                return Observable.just(())
-            }
-
-        Observable.merge(output.cancelBackToView, setBackAlertObservable)
-            .subscribe()
+            })
             .disposed(by: disposeBag)
-        
+     
         output.cancelBackToView
             .subscribe(onNext: { [weak self] in
                 if self?.changedData() == true {
@@ -355,6 +352,8 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
                 }
             })
             .disposed(by: disposeBag)
+        
+      
     }
     
     func deleteAllInfo() {
