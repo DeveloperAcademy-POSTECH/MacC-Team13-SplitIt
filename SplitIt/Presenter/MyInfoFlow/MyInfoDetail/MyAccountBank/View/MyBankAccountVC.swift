@@ -258,6 +258,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
             .filter { gesture in
                 let location = gesture.location(in: self.view)
                 return location.x < 20
+                && !(self.navigationController?.interactivePopGestureRecognizer!.isEnabled)!
             }
         
         let selectedBankTap = addTapGesture(to: bankTextField)
