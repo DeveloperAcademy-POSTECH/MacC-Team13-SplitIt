@@ -14,6 +14,7 @@ class MyBankAccountVM {
     var disposeBag = DisposeBag()
     var bankModalListVC: BankListModalVC?
     let userDefault = UserDefaults.standard
+    var isEdited = BehaviorRelay<Bool>(value: false)
     
     var isTossPayToggled = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "tossPay"))
     var isKakaoPayToggled = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "kakaoPay"))
@@ -40,7 +41,7 @@ class MyBankAccountVM {
         let naverTapped: Observable<Void>
         let deleteBtnTapped: Driver<Void>
         let cancelBtnTapped: Observable<Void>
-        
+        let swipeBack: Observable<UIPanGestureRecognizer>
     }
     
     
@@ -70,8 +71,6 @@ class MyBankAccountVM {
 
         editDoneBtnTapped
             .drive(onNext: {
-                
-                
                 if self.inputBankName == "선택 안함" {
                     UserDefaults.standard.set("선택 안함", forKey: "userBank")
                     UserDefaults.standard.set("", forKey: "userAccount")
@@ -80,7 +79,6 @@ class MyBankAccountVM {
                     if !self.inputBankName.isEmpty || self.checkBank == 1 {
                         UserDefaults.standard.set(self.inputBankName, forKey: "userBank")
                         self.checkBank = 0
-                        
                     }
                     
                     if !self.inputAccount.isEmpty || self.checkAccount == 1 {
@@ -113,8 +111,6 @@ class MyBankAccountVM {
                         UserDefaults.standard.set(toggled, forKey: "naverPay")
                     })
                     .disposed(by: self.disposeBag)
-              
-
                 
             })
             .disposed(by: disposeBag)
@@ -151,7 +147,6 @@ class MyBankAccountVM {
             .disposed(by: disposeBag)
 
         
-        
         inputAccountText
             .bind(onNext: { text in
                 if text.isEmpty {
@@ -163,6 +158,10 @@ class MyBankAccountVM {
             })
             .disposed(by: disposeBag)
       
+        
+        let showBackAlert = Observable.merge(input.deleteBtnTapped.asObservable(),
+                                             input.swipeBack.map{ _ in }.asObservable())
+        
         let output = Output(popToMyInfoView: editDoneBtnTapped,
                             showBankModel: selectBackTapped,
                             toggleTossPay: tossTapped,
