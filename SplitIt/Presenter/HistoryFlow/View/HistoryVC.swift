@@ -37,7 +37,7 @@ class HistoryVC: UIViewController {
     }
     
     private func setAttribute() {
-        view.backgroundColor = .SurfacePrimary
+        view.backgroundColor = .SurfaceBrandCalmshell 
         
         header.do {
             $0.applyStyle(style: .history, vc: self)
@@ -137,7 +137,7 @@ class HistoryVC: UIViewController {
         
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(94))
+            heightDimension: .estimated(79))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
@@ -152,19 +152,19 @@ class HistoryVC: UIViewController {
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .absolute(19)),
+                heightDimension: .absolute(25)),
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .topLeading,
             absoluteOffset: CGPoint(x: 0, y: 0))
         
         let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = 12
+        section.interGroupSpacing = 8
         
         section.boundarySupplementaryItems = [header]
         
         let layout = UICollectionViewCompositionalLayout(section: section)
         let config = UICollectionViewCompositionalLayoutConfiguration()
-        config.interSectionSpacing = 12
+        config.interSectionSpacing = 24
         layout.configuration = config
         return layout
     }

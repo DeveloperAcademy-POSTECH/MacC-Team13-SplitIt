@@ -26,7 +26,7 @@
      private func setAttribute() {
          headerTitle.do {
              $0.textColor = .TextPrimary
-             $0.font = .KoreanCaption2
+             $0.font = .NumCaption1
          }
      }
 

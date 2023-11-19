@@ -113,6 +113,9 @@ final class SPTextField: UITextField {
         let attributedPlaceholder = NSAttributedString(string: self.placeholder ?? "", attributes: attributes)
 
         self.attributedPlaceholder = attributedPlaceholder
+        self.autocorrectionType = .no
+        self.spellCheckingType = .no
+        self.autocapitalizationType = .none
 
         self.backgroundColor = UIColor.SurfacePrimary
         self.layer.cornerRadius = 8
@@ -129,7 +132,10 @@ final class SPTextField: UITextField {
         let attributedPlaceholder = NSAttributedString(string: self.placeholder ?? "", attributes: attributes)
 
         self.attributedPlaceholder = attributedPlaceholder
-
+        self.autocorrectionType = .no
+        self.spellCheckingType = .no
+        self.autocapitalizationType = .none
+        
         self.backgroundColor = UIColor.SurfacePrimary
         self.layer.cornerRadius = 8
         self.layer.borderWidth = 1
@@ -145,9 +151,6 @@ final class SPTextField: UITextField {
     }
 
     private func configureActiveProperties() {
-        self.autocorrectionType = .no
-        self.spellCheckingType = .no
-        self.autocapitalizationType = .none
         self.layer.borderColor = UIColor.BorderPrimary.cgColor
     }
 

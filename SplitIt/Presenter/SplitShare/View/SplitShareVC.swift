@@ -64,7 +64,7 @@ class SplitShareVC: UIViewController {
             $0.separatorStyle = .none
             $0.delegate = self
             $0.backgroundColor = .white
-            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
+            $0.layer.borderColor = UIColor.BorderTertiary.cgColor
             $0.layer.borderWidth = 1
             $0.register(cellType: SplitShareTableCell.self)
             $0.rowHeight = UITableView.automaticDimension
@@ -75,12 +75,12 @@ class SplitShareVC: UIViewController {
         }
         
         csAddButton.do {
-            $0.applyStyle(style: .primaryMushroom, shape: .square)
+            $0.applyStyle(style: .surfaceWhite, shape: .square)
             $0.buttonState.accept(true)
         }
         
         editButton.do {
-            $0.applyStyle(style: .primaryCalmshell, shape: .square)
+            $0.applyStyle(style: .primaryRadish, shape: .square)
             $0.setImage(UIImage(systemName: "pencil"), for: .normal)
             $0.tintColor = .TextPrimary
             $0.setTitle(" 정산 수정", for: .normal)
@@ -112,16 +112,17 @@ class SplitShareVC: UIViewController {
         }
         
         csAddButton.snp.makeConstraints {
-            $0.bottom.equalTo(shareButton.snp.top).offset(-40)
-            $0.leading.equalToSuperview().offset((UIScreen.main.bounds.width - 276) / 2)
-            $0.width.equalTo(130)
+            $0.bottom.equalTo(shareButton.snp.top).offset(-31)
+            $0.leading.equalToSuperview().offset(38)
+            $0.trailing.equalTo(editButton.snp.leading).offset(-14)
+            $0.width.equalTo((UIScreen.main.bounds.width - 90) / 2)
             $0.height.equalTo(48)
         }
         
         editButton.snp.makeConstraints {
             $0.bottom.equalTo(csAddButton.snp.bottom)
-            $0.leading.equalTo(csAddButton.snp.trailing).offset(16)
-            $0.width.equalTo(130)
+            $0.leading.equalTo(csAddButton.snp.trailing).offset(14)
+            $0.trailing.equalToSuperview().offset(-38)
             $0.height.equalTo(48)
         }
         
