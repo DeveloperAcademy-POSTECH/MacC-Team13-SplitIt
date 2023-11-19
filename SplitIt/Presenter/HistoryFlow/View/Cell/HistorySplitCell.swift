@@ -16,7 +16,6 @@ class HistorySplitCell: UICollectionViewCell, Reusable {
     let viewModel = HistorySplitCellVM()
     
     let splitTitleLabel = UILabel()
-    let csTitleLabel = UILabel()
     let csMemberLabel = UILabel()
     let amountStackView = UIStackView()
     let totalAmountLabel = UILabel()
@@ -52,43 +51,37 @@ class HistorySplitCell: UICollectionViewCell, Reusable {
             $0.font = .KoreanBody
         }
         
-        csTitleLabel.do {
-            $0.textColor = .TextPrimary
-            $0.font = .KoreanCaption2
-            $0.numberOfLines = 1
-        }
-        
         csMemberLabel.do {
-            $0.textColor = .TextPrimary
+            $0.textColor = .TextSecondary
             $0.font = .KoreanCaption2
             $0.numberOfLines = 1
         }
         
         totalAmountLabel.do {
             $0.textColor = .TextPrimary
-            $0.font = .KoreanBody
+            $0.font = .NumBody
         }
         
         krwLabel.do {
             $0.text = "₩"
             $0.textColor = .TextPrimary
-            $0.font = .KoreanCaption2
+            $0.font = .NumCaption1
         }
         
         enterEditLabel.do {
             $0.text = "자세히 보기"
-            $0.textColor = .TextPrimary
+            $0.textColor = .TextSecondary
             $0.font = .KoreanCaption2
+            setUnderLine(label: $0)
         }
         
         enterEditImage.do {
-            $0.image = UIImage(systemName: "chevron.right")
-            $0.tintColor = .SurfaceTertiary
+            $0.image = UIImage(named: "ChevronRightIconGray")
         }
     }
     
     private func setLayout() {
-        [splitTitleLabel,csTitleLabel,csMemberLabel,amountStackView,enterEditLabel,enterEditImage].forEach {
+        [splitTitleLabel,csMemberLabel,amountStackView,enterEditLabel,enterEditImage].forEach {
             contentView.addSubview($0)
         }
         
@@ -101,17 +94,11 @@ class HistorySplitCell: UICollectionViewCell, Reusable {
         splitTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.leading.equalToSuperview().offset(16)
-            $0.width.lessThanOrEqualTo(width)
-        }
-        
-        csTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(splitTitleLabel.snp.bottom).offset(4)
-            $0.leading.equalTo(splitTitleLabel.snp.leading)
-            $0.width.lessThanOrEqualTo(width)
+            $0.width.lessThanOrEqualTo(width + 38)
         }
         
         csMemberLabel.snp.makeConstraints {
-            $0.top.equalTo(csTitleLabel.snp.bottom).offset(8)
+            $0.top.equalTo(splitTitleLabel.snp.bottom).offset(12)
             $0.leading.equalTo(splitTitleLabel.snp.leading)
             $0.width.lessThanOrEqualTo(width)
         }
@@ -123,7 +110,7 @@ class HistorySplitCell: UICollectionViewCell, Reusable {
         }
         
         krwLabel.snp.makeConstraints {
-            $0.trailing.equalTo(totalAmountLabel.snp.leading).offset(-2)
+            $0.trailing.equalTo(totalAmountLabel.snp.leading).offset(-4)
             $0.bottom.equalToSuperview()
         }
         
@@ -132,28 +119,28 @@ class HistorySplitCell: UICollectionViewCell, Reusable {
             $0.trailing.equalToSuperview()
         }
         
-        enterEditImage.snp.makeConstraints {
+        enterEditLabel.snp.makeConstraints {
             $0.top.equalTo(splitTitleLabel.snp.top)
-            $0.trailing.equalToSuperview().offset(-16)
-            $0.width.equalTo(8)
-            $0.height.equalTo(13.8)
+            $0.trailing.equalTo(enterEditImage.snp.leading).offset(-5)
         }
         
-        enterEditLabel.snp.makeConstraints {
-            $0.centerY.equalTo(enterEditImage.snp.centerY)
-            $0.trailing.equalTo(enterEditImage.snp.leading).offset(-5)
+        enterEditImage.snp.makeConstraints {
+            $0.top.equalTo(enterEditLabel.snp.top)
+            $0.bottom.equalTo(enterEditLabel.snp.bottom)
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.width.equalTo(8)
         }
     }
     
     func configure(split: Split, index: Int) {
         self.splitTitleLabel.text = split.title == "" ? viewModel.getCSTitles(splitIdx: split.splitIdx) : split.title
-        self.csTitleLabel.text = viewModel.getCSTitles(splitIdx: split.splitIdx)
         self.csMemberLabel.text = viewModel.getCSMembers()
         self.totalAmountLabel.text = viewModel.getTotalAmount()
-        self.csTitleLabel.backgroundColor = backgroundColor(forSectionIndex: index)
     }
     
-    private func backgroundColor(forSectionIndex sectionIndex: Int) -> UIColor {
-        return [UIColor.AppColorBrandCherry, UIColor.AppColorBrandPear, UIColor.AppColorBrandRadish, UIColor.AppColorBrandMushroom][sectionIndex % 4]
+    private func setUnderLine(label: UILabel) {
+        let textAttribute = NSMutableAttributedString(string: label.text ?? "")
+        textAttribute.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: textAttribute.length))
+        label.attributedText = textAttribute
     }
 }
