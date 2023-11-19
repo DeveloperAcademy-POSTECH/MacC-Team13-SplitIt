@@ -20,7 +20,6 @@ class SplitShareVC: UIViewController {
     let viewModel = SplitShareVM()
     
     let header = SPNavigationBar()
-    let mainTitle = UILabel()
     let tableView = UITableView(frame: .zero, style: .grouped)
     let csAddButton = SPButton()
     let editButton = SPButton()
@@ -42,7 +41,6 @@ class SplitShareVC: UIViewController {
         setLayout()
         setBind()
         
-        // TODO: - nil일때로 설정 바꿔주기
         if UserDefaults.standard.string(forKey: "userBank") == nil { setPopUp() }
     }
     
@@ -58,12 +56,6 @@ class SplitShareVC: UIViewController {
             $0.applyStyle(style: .createToShare, vc: self)
         }
         
-        mainTitle.do {
-            $0.text = "영수증을 스크롤하여 확인해보세요"
-            $0.font = .KoreanBody
-            $0.textColor = .TextPrimary
-        }
-        
         tableView.do {
             $0.separatorStyle = .none
             $0.delegate = self
@@ -74,6 +66,8 @@ class SplitShareVC: UIViewController {
             $0.rowHeight = UITableView.automaticDimension
             $0.estimatedRowHeight = 100
             $0.showsVerticalScrollIndicator = false
+            $0.layer.cornerRadius = 8
+            $0.clipsToBounds = true
         }
         
         csAddButton.do {
@@ -83,20 +77,21 @@ class SplitShareVC: UIViewController {
         
         editButton.do {
             $0.applyStyle(style: .primaryCalmshell, shape: .square)
-            $0.setTitle("✎ 정산 수정", for: .normal)
+            $0.setImage(UIImage(systemName: "pencil"), for: .normal)
+            $0.tintColor = .TextPrimary
+            $0.setTitle(" 정산 수정", for: .normal)
             $0.buttonState.accept(true)
         }
         
         shareButton.do {
             $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
-            $0.setTitle("정산자의 확인을 기다리고 있어요", for: .disabled)
-            $0.setTitle("친구에게 영수증 공유하기", for: .normal)
+            $0.setTitle("영수증 공유하기", for: .normal)
             $0.buttonState.accept(true)
         }
     }
     
     private func setLayout() {
-        [header,mainTitle,tableView,csAddButton,editButton,shareButton].forEach {
+        [header,tableView,csAddButton,editButton,shareButton].forEach {
             view.addSubview($0)
         }
         
@@ -106,13 +101,8 @@ class SplitShareVC: UIViewController {
             $0.leading.trailing.equalToSuperview()
         }
         
-        mainTitle.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(30)
-            $0.centerX.equalToSuperview()
-        }
-        
         tableView.snp.makeConstraints {
-            $0.top.equalTo(mainTitle.snp.bottom).offset(24)
+            $0.top.equalTo(header.snp.bottom).offset(30)
             $0.horizontalEdges.equalToSuperview().inset(30)
             $0.bottom.equalTo(csAddButton.snp.top).offset(-24)
         }
@@ -182,6 +172,7 @@ class SplitShareVC: UIViewController {
             .drive(onNext: { [weak self] sendPayString in
                 guard let self = self else { return }
                 self.tableView.layer.borderColor = UIColor.clear.cgColor
+                self.tableView.layer.cornerRadius = 0
                 let image = self.tableView.takeSnapshotOfFullContent()
                 
                 var items: [Any] = []
@@ -194,6 +185,7 @@ class SplitShareVC: UIViewController {
                 self.present(vc, animated: true)
                 
                 self.tableView.layer.borderColor = UIColor.BorderPrimary.cgColor
+                self.tableView.layer.cornerRadius = 8
                 
                 vc.completionWithItemsHandler = { activity, success, items, error in
                     if success {
@@ -270,11 +262,11 @@ extension SplitShareVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         let count = csInfos.count
-        var defaultHeight: CGFloat = 100
+        var defaultHeight: CGFloat = 134
         
         if count > 0 { defaultHeight += 18 }
         
-        let headerHeight = defaultHeight + CGFloat(count * 20)
+        let headerHeight = defaultHeight + CGFloat(count * 22)
         return headerHeight
     }
     
@@ -285,11 +277,11 @@ extension SplitShareVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let count = resultArr[indexPath.row].exclDatas.count
-        var defaultHeight: CGFloat = 44
+        var defaultHeight: CGFloat = 60
         
         if count > 0 { defaultHeight += 16 }
         
-        let cellHeight = defaultHeight + CGFloat(count * 18)
+        let cellHeight = defaultHeight + CGFloat(count * 19)
         return cellHeight
     }
 }

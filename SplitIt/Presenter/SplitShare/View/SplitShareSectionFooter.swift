@@ -12,6 +12,7 @@ import SnapKit
 class SplitShareSectionFooter: UIView {
     let mainTitle = UILabel()
     let subTitle = UILabel()
+    let imageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,31 +28,44 @@ class SplitShareSectionFooter: UIView {
     private func setAttribute() {
         mainTitle.do {
             $0.text = "Created by iOS App Split it!"
-            $0.font = UIFont.systemFont(ofSize: 8, weight: .bold)
+            $0.font = .ReceiptFooter1
             $0.textColor = .TextPrimary
+            $0.addCharacterSpacing()
         }
         
         subTitle.do {
             $0.text = "Copyright 2023. Whipping cream on citron tea. All right reserved."
-            $0.font = UIFont.systemFont(ofSize: 8)
+            $0.font = .ReceiptFooter2
             $0.textColor = .TextPrimary
+            $0.addCharacterSpacing()
+        }
+        
+        imageView.do {
+            $0.image = UIImage(named: "Receipt")
         }
     }
     
     private func setLayout() {
-        [mainTitle,subTitle].forEach {
+        [mainTitle,subTitle,imageView].forEach {
             addSubview($0)
         }
         
         mainTitle.snp.makeConstraints {
             $0.top.equalToSuperview().offset(8)
-            $0.centerX.equalToSuperview()
+            $0.leading.equalToSuperview().inset(16)
         }
         
         subTitle.snp.makeConstraints {
             $0.top.equalTo(mainTitle.snp.bottom)
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-10)
+            $0.leading.equalToSuperview().inset(16)
+            $0.bottom.equalTo(imageView.snp.bottom)
+        }
+        
+        imageView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(8)
+            $0.size.equalTo(24)
+            $0.trailing.equalToSuperview().inset(16)
+            $0.bottom.equalToSuperview().offset(-8)
         }
     }
 }
