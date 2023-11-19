@@ -119,9 +119,9 @@ class SplitMethodSelectVC: UIViewController, Reusable {
                 let splitType: SplitType = SplitType(rawValue: indexPath.row)!
                 switch splitType {
                 case .smart:
-                    SplitRepository.share.isSmartSplit = true
+                    UserDefaults.standard.set("Smart", forKey: "CreateFlow")
                 case .equal:
-                    SplitRepository.share.isSmartSplit = false
+                    UserDefaults.standard.set("Equal", forKey: "CreateFlow")
                 }
                 let vc = CSInfoVC()
                 self.navigationController?.pushViewController(vc, animated: true)

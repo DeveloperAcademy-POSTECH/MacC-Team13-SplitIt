@@ -29,6 +29,15 @@ class HomeVM {
         showCreateSplit
             .drive(onNext: {
                 SplitRepository.share.createDatasForCreateFlow()
+                UserDefaults.standard.set("Create", forKey: "ShareFlow")
+                UserDefaults.standard.set("PopUp", forKey: "MyInfoFlow")
+            })
+            .disposed(by: disposeBag)
+        
+        showInfoView
+            .drive(onNext: {
+                UserDefaults.standard.set("History", forKey: "ShareFlow")
+                UserDefaults.standard.set("Setting", forKey: "MyInfoFlow")
             })
             .disposed(by: disposeBag)
 

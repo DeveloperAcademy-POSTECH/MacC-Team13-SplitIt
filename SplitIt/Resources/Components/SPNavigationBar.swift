@@ -40,9 +40,11 @@ extension SPNavigationBar {
         case history
         /// 설정 View
         case setting
-        /// 나의 정보 View
-        case myInfo
-        ///  멤버 추가 내역 View
+        /// 셋팅에서 들어가는 나의 정보 View
+        case settingToMyInfo
+        /// popup에서 들어가는 나의 정보 View
+        case popUpToMyInfo
+        /// 멤버 추가 내역 View
         case memberSearchHistory
         /// csInfo 타이틀, 총금액 수정 View
         case editCSInfo
@@ -115,17 +117,20 @@ final class SPNavigationBar: UIView {
             setNaviTitle(title: "정산 결과")
             setLeftBackButton(action: .toBack, vc: vc)
         case .history:
-            setNaviTitle(title: "과거 정산 내역")
+            setNaviTitle(title: "정산 기록")
             setLeftBackButton(action: .toBack, vc: vc)
         case .setting:
             setNaviTitle(title: "나의 설정")
             setLeftBackButton(action: .toBack, vc: vc)
-        case .myInfo:
-            setNaviTitle(title: "나의 정보")
+        case .settingToMyInfo:
+            setNaviTitle(title: "계좌 설정")
             setLeftBackButton(action: .toBack, vc: vc)
             setRightBackButton(title: "저장", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
+        case .popUpToMyInfo:
+            setNaviTitle(title: "계좌 설정")
+            setRightDismissButton(title: "저장", titleColor: .SurfaceBrandWatermelon, selectedColor: .SurfaceBrandWatermelonPressed, vc: vc)
         case .memberSearchHistory:
-            setNaviTitle(title: "멤버 추가 내역")
+            setNaviTitle(title: "멤버 내역")
             setLeftBackButton(action: .toBack, vc: vc)
         case .editCSInfo:
             setNaviTitle(title: "이름 및 총액")
@@ -176,7 +181,7 @@ final class SPNavigationBar: UIView {
             self.addSubview($0)
         }
         
-        if SplitRepository.share.isSmartSplit {
+        if UserDefaults.standard.string(forKey: "CreateFlow") == "Smart" {
             csInfoCreateView.snp.makeConstraints {
                 $0.centerY.equalToSuperview()
                 $0.height.equalTo(30)

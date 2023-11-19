@@ -23,9 +23,6 @@ final class SplitRepository {
     private(set) var memberLogArr = BehaviorRelay<[MemberLog]>(value: [])
     
     private init() { }
-    
-    var isSmartSplit = true
-    var isCreate = true
 
     /// DB에서 날짜를 기준으로 20개의 split만 필터링해서 하위 모든 Arr 패치
     func fetchSplitArrFromDBForHistoryView() {

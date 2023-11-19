@@ -490,8 +490,12 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         }
          
         header.do {
-            $0.applyStyle(style: .myInfo, vc: self)
-            $0.leftButton.removeTarget(nil, action: nil, for: .touchUpInside)
+            if UserDefaults.standard.string(forKey: "MyInfoFlow") == "Setting" {
+                $0.applyStyle(style: .settingToMyInfo, vc: self)
+                $0.leftButton.removeTarget(nil, action: nil, for: .touchUpInside)
+            } else {
+                $0.applyStyle(style: .popUpToMyInfo, vc: self)
+            }
         }
         
         bankLabel.do {
