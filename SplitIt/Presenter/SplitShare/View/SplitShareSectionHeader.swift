@@ -13,6 +13,7 @@ class SplitShareSectionHeader: UIView {
     let splitImage = UIImageView()
     let dateLabel = UILabel()
     let firstDashLine = UIView()
+    let label = UILabel()
     let stackView = UIStackView()
     let secondDashLine = UIView()
     
@@ -35,8 +36,9 @@ class SplitShareSectionHeader: UIView {
         }
         
         dateLabel.do {
-            $0.font = .KoreanCaption2
+            $0.font = .ReceiptCaption2
             $0.textColor = .TextPrimary
+            $0.addCharacterSpacing()
         }
         
         firstDashLine.do {
@@ -54,6 +56,13 @@ class SplitShareSectionHeader: UIView {
             
             shapeLayer.path = path
             $0.layer.addSublayer(shapeLayer)
+        }
+        
+        label.do {
+            $0.text = "함께한 곳"
+            $0.font = .ReceiptCaption1
+            $0.textColor = .TextPrimary
+            $0.addCharacterSpacing()
         }
         
         stackView.do {
@@ -81,7 +90,7 @@ class SplitShareSectionHeader: UIView {
     }
     
     private func setLayout() {
-        [splitImage,dateLabel,firstDashLine,stackView,secondDashLine].forEach {
+        [splitImage,dateLabel,firstDashLine,label,stackView,secondDashLine].forEach {
             addSubview($0)
         }
         
@@ -92,8 +101,8 @@ class SplitShareSectionHeader: UIView {
         }
         
         dateLabel.snp.makeConstraints {
-            $0.top.equalTo(splitImage.snp.bottom).offset(8)
-            $0.trailing.equalToSuperview().inset(18)
+            $0.top.equalTo(splitImage.snp.bottom).offset(16)
+            $0.trailing.equalToSuperview().inset(26)
         }
         
         firstDashLine.snp.makeConstraints {
@@ -101,8 +110,13 @@ class SplitShareSectionHeader: UIView {
             $0.horizontalEdges.equalToSuperview().inset(18)
         }
         
-        stackView.snp.makeConstraints {
+        label.snp.makeConstraints {
             $0.top.equalTo(firstDashLine.snp.bottom).offset(8)
+            $0.leading.equalToSuperview().inset(22)
+        }
+        
+        stackView.snp.makeConstraints {
+            $0.top.equalTo(label.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(18)
         }
         
@@ -114,59 +128,81 @@ class SplitShareSectionHeader: UIView {
     }
     
     func configure(item: [CSInfo], splitDate: Date) {
+        let colorSet: [UIColor] = [.SurfaceBrandCherry, .SurfaceBrandPear, .SurfaceBrandRadish, .SurfaceBrandWatermelon]
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy년 MM월 dd일"
-        self.dateLabel.text = "정산 날짜: \(dateFormatter.string(from: splitDate))"
+        let dateFormatter = DateFormatterHelper()
+        self.dateLabel.text = "발급일: \(dateFormatter.dateToResult(from: splitDate))"
         
-        var count = 1
+        var count = 0
         
         for csInfo in item {
+            
             let titleView = UIView()
-            let csCount = UILabel()
+            let dotView = UIView()
             let csTitle = UILabel()
+            let krwLabel = UILabel()
             let csPrice = UILabel()
             
             titleView.backgroundColor = .clear
             
-            csCount.do {
-                $0.text = "\(count)차"
-                $0.font = .KoreanCaption1
-                $0.textColor = .TextPrimary
+            dotView.do {
+                $0.backgroundColor = colorSet[count % 4]
+                $0.layer.borderColor = UIColor.BorderPrimary.cgColor
+                $0.layer.borderWidth = 1
+                $0.clipsToBounds = true
+                $0.layer.cornerRadius = 4
             }
             
             csTitle.do {
                 $0.text = csInfo.title
-                $0.font = .KoreanCaption2
+                $0.font = .ReceiptCaption2
+                $0.textColor = .TextPrimary
+                $0.addCharacterSpacing()
+            }
+            
+            krwLabel.do {
+                $0.text = "₩"
+                $0.font = .ReceiptFooter2
                 $0.textColor = .TextPrimary
             }
             
             csPrice.do {
-                $0.text = "₩ \(NumberFormatter.localizedString(from: csInfo.totalAmount as NSNumber, number: .decimal))"
-                $0.font = .KoreanCaption2
+                $0.text = "\(NumberFormatter.localizedString(from: csInfo.totalAmount as NSNumber, number: .decimal))"
+                $0.font = .ReceiptCaption2
                 $0.textColor = .TextPrimary
+                $0.addCharacterSpacing()
             }
             
-            [csCount,csTitle,csPrice].forEach {
+            [dotView,csTitle,krwLabel,csPrice].forEach {
                 titleView.addSubview($0)
             }
             
             titleView.snp.makeConstraints {
-                $0.verticalEdges.leading.equalTo(csCount)
-                $0.trailing.equalTo(csPrice)
+                $0.top.equalTo(csTitle).offset(-2)
+                $0.bottom.equalTo(csTitle).offset(2)
+                $0.leading.equalTo(dotView)
+                $0.trailing.equalTo(csPrice).inset(-8)
             }
             
-            csCount.snp.makeConstraints {
-                $0.bottom.leading.equalToSuperview()
+            dotView.snp.makeConstraints {
+                $0.centerY.equalToSuperview()
+                $0.leading.equalToSuperview().inset(12)
+                $0.size.equalTo(8)
             }
             
             csTitle.snp.makeConstraints {
-                $0.bottom.equalToSuperview()
-                $0.leading.equalTo(csCount.snp.trailing).offset(2)
+                $0.centerY.equalToSuperview()
+                $0.leading.equalTo(dotView.snp.trailing).offset(4)
+            }
+            
+            krwLabel.snp.makeConstraints {
+                $0.trailing.equalTo(csPrice.snp.leading).offset(-4)
+                $0.bottom.equalToSuperview().offset(-2)
             }
             
             csPrice.snp.makeConstraints {
-                $0.bottom.trailing.equalToSuperview()
+                $0.bottom.equalToSuperview()
+                $0.trailing.equalToSuperview()
             }
             
             self.stackView.addArrangedSubview(titleView)
