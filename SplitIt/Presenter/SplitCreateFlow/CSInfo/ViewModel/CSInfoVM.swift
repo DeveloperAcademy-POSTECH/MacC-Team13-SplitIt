@@ -85,8 +85,6 @@ class CSInfoVM {
             .withLatestFrom(csInfoDriver)
             .drive(onNext: { title, totalAmount in
                 SplitRepository.share.inputCSInfoDatas(title: title, totalAmount: totalAmount)
-                
-                SplitRepository.share.isCreate = true
             })
             .disposed(by: disposeBag)
         

@@ -53,7 +53,11 @@ class SplitShareVC: UIViewController {
         view.backgroundColor = .SurfacePrimary
         
         header.do {
-            $0.applyStyle(style: .createToShare, vc: self)
+            if UserDefaults.standard.string(forKey: "ShareFlow") == "Create" {
+                $0.applyStyle(style: .createToShare, vc: self)
+            } else {
+                $0.applyStyle(style: .historyToShare, vc: self)
+            }
         }
         
         tableView.do {

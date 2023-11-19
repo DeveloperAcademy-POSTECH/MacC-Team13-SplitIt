@@ -170,6 +170,8 @@ class CSMemberVM {
                         self.repo.createMemberLog(name: name)
                     }
                 }
+                
+                if UserDefaults.standard.string(forKey: "CreateFlow") == "Equal" { self.repo.updateDataToDB() }
             })
             .disposed(by: disposeBag)
         
