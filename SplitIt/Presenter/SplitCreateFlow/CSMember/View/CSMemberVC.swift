@@ -99,8 +99,6 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             $0.placeholder = "이름을 입력하세요"
             $0.applyStyle(.normal)
             $0.textColor = .TextPrimary
-            $0.autocorrectionType = .no
-            $0.spellCheckingType = .no
             $0.delegate = self
         }
         
@@ -268,19 +266,6 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         output.textFieldValue
             .asDriver()
             .drive(searchTextField.rx.value)
-            .disposed(by: disposeBag)
-        
-        output.textFieldIsValid
-            .asDriver()
-            .map { [weak self] isValid -> String in
-                guard let self = self else { return "" }
-                if !isValid {
-                    return String(self.searchTextField.text?.prefix(self.viewModel.maxTextCount) ?? "")
-                } else {
-                    return self.searchTextField.text ?? ""
-                }
-            }
-            .drive(searchTextField.rx.text)
             .disposed(by: disposeBag)
         
         output.selectedMemberArr

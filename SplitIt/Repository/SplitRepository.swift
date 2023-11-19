@@ -86,14 +86,14 @@ final class SplitRepository {
     /// 이름 배열을 받아와서 csMember 생성
     func createCSMemberArr(nameArr: [String]) {
         let currentCSInfoIdx = csInfoArr.value.first!.csInfoIdx
-        let newCSMembers = nameArr.map { CSMember(name: $0, csInfoIdx: currentCSInfoIdx)}
+        let newCSMembers = nameArr.map { CSMember(name: $0.trimmingCharacters(in: .whitespacesAndNewlines), csInfoIdx: currentCSInfoIdx) }
         csMemberArr.accept(newCSMembers)
     }
     
     /// CSInfoIdx, name으로 ExclItem 생성
     func createExclItem(name: String, price: Int, exclMember: [ExclItemTable]) {
         let currentCSInfoIdx = csInfoArr.value.first!.csInfoIdx
-        let newExclItem: ExclItem = ExclItem(name: name, price: price, csInfoIdx: currentCSInfoIdx)
+        let newExclItem: ExclItem = ExclItem(name: name.trimmingCharacters(in: .whitespacesAndNewlines), price: price, csInfoIdx: currentCSInfoIdx)
         var preExclItemArr: [ExclItem] = exclItemArr.value
         preExclItemArr.append(newExclItem)
         exclItemArr.accept(preExclItemArr)
@@ -101,7 +101,7 @@ final class SplitRepository {
         var currentExclMemberArr = exclMemberArr.value
        
         for item in exclMember {
-            let newExclMember = ExclMember(name: item.name, isTarget: item.isTarget, exclItemIdx: newExclItem.exclItemIdx)
+            let newExclMember = ExclMember(name: item.name.trimmingCharacters(in: .whitespacesAndNewlines), isTarget: item.isTarget, exclItemIdx: newExclItem.exclItemIdx)
             
             currentExclMemberArr.append(newExclMember)
         }
@@ -132,27 +132,15 @@ final class SplitRepository {
     
     /// name을 받아서 memberLogArr, realm에 새로 생성
     func createMemberLog(name: String) {
-        RealmManager().updateData(arr: [MemberLog(name: name)])
+        RealmManager().updateData(arr: [MemberLog(name: name.trimmingCharacters(in: .whitespacesAndNewlines))])
     }
 
     /// 현재 csInfo의 정보 변경하기
     func inputCSInfoDatas(title: String, totalAmount: Int) {
         var currentCSInfo = csInfoArr.value.first!
-        currentCSInfo.title = title
+        currentCSInfo.title = title.trimmingCharacters(in: .whitespacesAndNewlines)
         currentCSInfo.totalAmount = totalAmount
         csInfoArr.accept([currentCSInfo])
-    }
-
-    // TODO: - 현재 split의 title을 수정 => 지금은 사용하는데 없는데 디자인이랑 말해서 정산 이름 바꾸는 뷰 안만들거면 삭제할 것
-    func editSplitTitle(title: String) {
-        let realmManager = RealmManager()
-        
-        let splits: [Split] = splitArr.value
-        var split: Split = splits.first!
-        split.title = title
-        split.createDate = Date.now
-        splitArr.accept([split])
-        realmManager.updateData(arr: [split])
     }
     
     // TODO: - EditCSInfo에서 이 메서드로 바꿀 것
@@ -161,7 +149,7 @@ final class SplitRepository {
         
         let csInfos: [CSInfo] = csInfoArr.value
         var csInfo: CSInfo = csInfos.first!
-        csInfo.title = title
+        csInfo.title = title.trimmingCharacters(in: .whitespacesAndNewlines)
         csInfo.totalAmount = totalAmount
         csInfoArr.accept([csInfo])
         editSplitCreateDate()
@@ -200,7 +188,7 @@ final class SplitRepository {
         let exclItemIdxArr: [String] = exclItems.map { $0.exclItemIdx }
         
         if let index = exclItemIdxArr.firstIndex(of: exclItemIdx) {
-            exclItems[index].name = name
+            exclItems[index].name = name.trimmingCharacters(in: .whitespacesAndNewlines)
             exclItems[index].price = price
         }
         

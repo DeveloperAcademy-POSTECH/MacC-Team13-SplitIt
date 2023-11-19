@@ -31,7 +31,6 @@ class CSMemberVM {
         let selectedMemberArr: BehaviorRelay<[MemberCheck]>
         let isCellAppear: BehaviorRelay<Bool>
         let deleteIndex: BehaviorRelay<Int>
-        let textFieldIsValid: BehaviorRelay<Bool>
         let textFieldValue: BehaviorRelay<String>
         let showExclItemVC: ControlEvent<Void>
         let showExitAlert: Driver<Void>
@@ -44,10 +43,10 @@ class CSMemberVM {
         
         let isCellAppearRelay = BehaviorRelay(value: true)
         let deleteIndexRelay = BehaviorRelay(value: 0)
-        let textFieldIsValid = BehaviorRelay<Bool>(value: true)
         let textFieldValue = BehaviorRelay(value: "")
         
         let showExclItemVC = input.nextButtonTapped
+        let showExitAlert = input.exitButtonTapped.asDriver()
         
         let hapticManager = HapticManager()
         
@@ -70,12 +69,17 @@ class CSMemberVM {
             .disposed(by: disposeBag)
         
         input.textFieldValue
-            .map { [weak self] text -> Bool in
-                guard let self = self else { return false }
-                textFieldValue.accept(text)
-                return text.count < self.maxTextCount
+            .map { [weak self] text in
+                guard let self = self else { return "" }
+                var fixText: String = text
+                
+                if text.count > self.maxTextCount {
+                    fixText.removeLast()
+                }
+                
+                return fixText
             }
-            .drive(textFieldIsValid)
+            .drive(textFieldValue)
             .disposed(by: disposeBag)
         
         // inputText와 allMemberArr 중 변경이 일어났을 때 해당 내용을 searchMemberArr에 반영
@@ -135,8 +139,11 @@ class CSMemberVM {
         
         // + 버튼을 눌렀을 때 확인해서 동작
         Driver.merge(input.addButtonTapped.asDriver(), input.textFieldReturnKeyTapped.asDriver(onErrorJustReturn: ()))
-            .withLatestFrom(input.textFieldValue)
+            .withLatestFrom(textFieldValue.asDriver())
             .drive(onNext: { name in
+                
+                let name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+                
                 if name == "" || name == "정산자" { return }
                 if selectedMemberArr.value.map({ $0.name }).contains(name) { return }
                 
@@ -163,7 +170,7 @@ class CSMemberVM {
         input.nextButtonTapped
             .asDriver()
             .drive(onNext: {
-                var selectedMemberNameArr = selectedMemberArr.value.map { $0.name }
+                let selectedMemberNameArr = selectedMemberArr.value.map { $0.name }
 
                 for name in selectedMemberNameArr {
                     if !allMemberArr.value.map({ $0.name }).contains(name) && name != "정산자" {
@@ -189,10 +196,9 @@ class CSMemberVM {
                       selectedMemberArr: selectedMemberArr,
                       isCellAppear: isCellAppearRelay,
                       deleteIndex: deleteIndexRelay,
-                      textFieldIsValid: textFieldIsValid,
                       textFieldValue: textFieldValue,
                       showExclItemVC: showExclItemVC,
-                      showExitAlert: input.exitButtonTapped.asDriver())
+                      showExitAlert: showExitAlert)
     }
     
     private func tranformIsCheckInSelectMemberArr(allMemberArrValue: [MemberCheck], name: String) -> [MemberCheck] {
