@@ -57,6 +57,7 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        SplitRepository.share.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: viewModel.csInfoIdx)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
