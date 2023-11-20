@@ -56,6 +56,10 @@ class KeyboardButton: UIButton {
         let isIPhoneXSeries = (screenSize.height == 2436 || screenSize.height == 2688 || screenSize.height == 1792 || screenSize.height == 2532)
         
         if UIDevice.current.userInterfaceIdiom == .phone {
+            print(111,screenSize.height)
+            //14 - 기본, Pro, Pro Max, Plus,
+            //13 - 미니, 기본, Pro, Pro Max
+            //SE - 3세대
             switch screenSize.height {
             case 1136:
                 return isIPhoneXSeries ? 335 : 216
@@ -63,8 +67,10 @@ class KeyboardButton: UIButton {
                 return isIPhoneXSeries ? 335 : 216
             case 1920, 2208:
                 return isIPhoneXSeries ? 348 : 226
-            case 2436, 2688, 1792, 2532:
+            case 1792, 2340, 2436, 2532, 2556, 2688, 2796:
                 return 291
+            case 2778:
+                return 301
             default:
                 return 216
             }

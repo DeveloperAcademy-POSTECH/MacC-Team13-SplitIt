@@ -166,7 +166,9 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
   
     func updateViewLayout(text: String) {
         
-        if text == "선택 안함" || text == ""{
+        
+        
+        if text == "선택 안함" || text == "" {
             self.bankSelectedView.isHidden = true
             payLabel.snp.removeConstraints()
             payLabel.snp.makeConstraints {
@@ -194,13 +196,18 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         let bankValueDriver = bankValue.asDriver()
         
         let isTextEmptyObservable = Driver.combineLatest(nameObservable, accountObservable, bankValueDriver)
+    
         
             .map { text1, text2, bankValue in
-                if bankValue != "선택 안함" {
+                if bankValue != "선택 안함" || bankValue == nil {
                     if self.nameTextField.text?.count != 0 && self.accountTextField.text?.count != 0 {
                         return true
                     } else {
-                        return !(text1.count == 0) && !(text2.count == 0)
+                        if bankValue == nil {
+                            return false
+                        } else {
+                            return !(text1.count == 0) && !(text2.count == 0)
+                        }
                     }
                 } else {
                     return true
@@ -210,8 +217,9 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         isTextEmptyObservable
             .drive(header.buttonState)
             .disposed(by: disposeBag)
+        
 
-        if UserDefaults.standard.string(forKey: "userBank") == "" ||  UserDefaults.standard.string(forKey: "userBank") == "선택 안함" || self.bankTextField.text == "선택해주세요"{
+        if UserDefaults.standard.string(forKey: "userBank") == "" ||  UserDefaults.standard.string(forKey: "userBank") == "선택 안함" || self.bankTextField.text == "선택해주세요" || userDefault.object(forKey: "tossPay") == nil {
             bankSelectedView.isHidden = true
             payLabel.snp.makeConstraints {
                 $0.top.equalTo(bankTextField.snp.bottom).offset(24)
@@ -247,7 +255,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
             UserDefaults.standard.set("", forKey: "userName")
         }
         if UserDefaults.standard.object(forKey: "userBank") == nil {
-            UserDefaults.standard.set(nil, forKey: "userBank")
+            UserDefaults.standard.set("", forKey: "userBank")
         }
     }
     
@@ -471,7 +479,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
     }
     
     func headerButtonState() {
-        if userDefault.string(forKey: "userBank") != "" {
+        if userDefault.string(forKey: "userBank") != "" || userDefault.string(forKey: "tossPay") == nil{
             header.buttonState.accept(true)
         } else {
             header.buttonState.accept(false)

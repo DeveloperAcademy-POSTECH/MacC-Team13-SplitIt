@@ -96,6 +96,7 @@ class MyInfoVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         userNewInfo()
+        
     }
     
     
@@ -105,17 +106,17 @@ class MyInfoVC: UIViewController {
         let tossValue = UserDefaults.standard.bool(forKey: "tossPay")
         let kakaoValue = UserDefaults.standard.bool(forKey: "kakaoPay")
         let naverValue = UserDefaults.standard.bool(forKey: "naverPay")
+        var viewValue = false
         
-//        let bank: Bool = userDefault.string(forKey: "userBank") == "" || userDefault.string(forKey: "userBank") == "선택 안함" ? false : true
+        if let visited = userDefault.object(forKey: "userBank"){
+            viewValue = true
+        } else {
+            viewValue = false
+        }
+        
         let bank: Bool = userDefault.string(forKey: "userBank") == "선택 안함" ? false : true
         let checkPay = tossValue || kakaoValue || naverValue //하나라도 참이면 checkPay는 참
         let firstCheck: Bool = UserDefaults.standard.string(forKey: "userBank") == Optional("") //아예 처음이면 nil, 뭐라도 저장되면 nil이 아님
-//
-//        if firstCheck {
-//            view.backgroundColor = .red
-//        } else {
-//            view.backgroundColor = .blue
-//        }
         
         self.accountBankLabel.text = userDefault.string(forKey: "userBank") != "선택 안함" ? userDefault.string(forKey: "userBank") : "계좌를 사용하지 않아요"
         self.accountLabel.text = userDefault.string(forKey: "userAccount")
@@ -123,7 +124,7 @@ class MyInfoVC: UIViewController {
         
         //모든 정보가 없을 때,
        // if !bank && !checkPay {
-        if firstCheck {
+        if firstCheck || !viewValue {
             backViewHeight = 104
             
             accountView.isHidden = true
