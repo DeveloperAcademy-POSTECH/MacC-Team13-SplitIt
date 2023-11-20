@@ -75,12 +75,17 @@ final class EditCSMemberVM {
             .disposed(by: disposeBag)
         
         input.textFieldValue
-            .map { [weak self] text -> Bool in
-                guard let self = self else { return false }
-                textFieldValue.accept(text)
-                return text.count < self.maxTextCount
+            .map { [weak self] text in
+                guard let self = self else { return "" }
+                var fixText: String = text
+                
+                if text.count > self.maxTextCount {
+                    fixText.removeLast()
+                }
+                
+                return fixText
             }
-            .drive(textFieldIsValid)
+            .drive(textFieldValue)
             .disposed(by: disposeBag)
         
         // inputText와 allMemberArr 중 변경이 일어났을 때 해당 내용을 searchMemberArr에 반영
@@ -154,6 +159,11 @@ final class EditCSMemberVM {
                 
                 if allMemberArr.value.map({ $0.name }).contains(name) {
                     allMemberArr.accept(self.tranformIsCheckInSelectMemberArr(allMemberArrValue: allMemberArr.value, name: name))
+                } else if !allMemberArr.value.map({ $0.name }).contains(name) && name != "정산자" {
+                    var currentAllMemberArr = allMemberArr.value
+                    currentAllMemberArr.append(newSelectMember)
+                    allMemberArr.accept(currentAllMemberArr)
+                    repo.createMemberLog(name: name)
                 }
                 
                 searchMemberArr.accept(allMemberArr.value)
@@ -165,18 +175,18 @@ final class EditCSMemberVM {
             .disposed(by: disposeBag)
         
         // 버튼 탭 시 repo에 있는 csMemberArr를 업데이트하고 기존 검색기록에 없던 이름은 검색기록에 추가
-        input.saveButtonTapped
-            .asDriver()
-            .drive(onNext: {
-                var selectedMemberNameArr = selectedMemberArr.value.map { $0.name }
-
-                for name in selectedMemberNameArr {
-                    if !allMemberArr.value.map({ $0.name }).contains(name) && name != "정산자" {
-                        repo.createMemberLog(name: name)
-                    }
-                }
-            })
-            .disposed(by: disposeBag)
+//        input.saveButtonTapped
+//            .asDriver()
+//            .drive(onNext: {
+//                var selectedMemberNameArr = selectedMemberArr.value.map { $0.name }
+//
+//                for name in selectedMemberNameArr {
+//                    if !allMemberArr.value.map({ $0.name }).contains(name) && name != "정산자" {
+//                        repo.createMemberLog(name: name)
+//                    }
+//                }
+//            })
+//            .disposed(by: disposeBag)
         
         // 멤버 선택 시 SplitRepository의 csMember에 바로 적용
         selectedMemberArr
