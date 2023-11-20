@@ -34,6 +34,7 @@ class SplitMethodSelectVC: UIViewController, Reusable {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        UserDefaults.standard.set("Create", forKey: "ShareFlow")
     }
     
     private func setAttribute() {

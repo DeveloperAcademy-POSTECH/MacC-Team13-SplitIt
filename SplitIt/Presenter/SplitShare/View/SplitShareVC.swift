@@ -40,12 +40,22 @@ class SplitShareVC: UIViewController {
         setAttribute()
         setLayout()
         setBind()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        if UserDefaults.standard.string(forKey: "userBank") == nil { setPopUp() }
+        if UserDefaults.standard.string(forKey: "userBank") == "" {
+            UserDefaults.standard.set("PopUp", forKey: "MyInfoFlow")
+            setPopUp()
+        } else {
+            removePopUp()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
         if UserDefaults.standard.string(forKey: "ShareFlow") == "Create" {
             navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         } else {
@@ -86,6 +96,7 @@ class SplitShareVC: UIViewController {
         editButton.do {
             $0.applyStyle(style: .surfaceSecondary, shape: .square)
             $0.setImage(UIImage(named: "SplitEditIcon"), for: .normal)
+            $0.setImage(UIImage(named: "SplitEditIcon"), for: .highlighted)
             $0.setTitle(" 정산 수정", for: .normal)
             $0.buttonState.accept(true)
         }
