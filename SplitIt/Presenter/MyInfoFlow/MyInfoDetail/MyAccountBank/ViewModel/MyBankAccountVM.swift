@@ -159,8 +159,8 @@ class MyBankAccountVM {
             .disposed(by: disposeBag)
       
         
-        let showBackAlert = Observable.merge(input.deleteBtnTapped.asObservable(),
-                                             input.swipeBack.map{ _ in }.asObservable())
+//        let showBackAlert = Observable.merge(input.deleteBtnTapped.asObservable(),
+//                                             input.swipeBack.map{ _ in }.asObservable())
         
         let output = Output(popToMyInfoView: editDoneBtnTapped,
                             showBankModel: selectBackTapped,
