@@ -33,10 +33,33 @@ extension UILabel {
         self.textAlignment = existingTextAlignment
     }
     
-    func addCharacterSpacing(kernValue: Double = -1) {
+    func setKernSpacing(spacingValue: Double = -1) {
         guard let text = text, !text.isEmpty else { return }
         let string = NSMutableAttributedString(string: text)
-        string.addAttribute(NSAttributedString.Key.kern, value: kernValue, range: NSRange(location: 0, length: string.length - 1))
+        string.addAttribute(NSAttributedString.Key.kern, value: spacingValue, range: NSRange(location: 0, length: string.length - 1))
         attributedText = string
+    }
+    
+    func countCurrentLines() -> Int {
+        guard let text = self.text as NSString? else { return 0 }
+        guard let font = self.font else { return 0 }
+        
+        var attributes = [NSAttributedString.Key: Any]()
+        
+        if let kernAttribute = self.attributedText?.attributes(at: 0, effectiveRange: nil).first(where: { key, _ in
+            return key == .kern
+        }) {
+            attributes[.kern] = kernAttribute.value
+        }
+        attributes[.font] = font
+        
+        let labelTextSize = text.boundingRect(
+            with: CGSize(width: UIScreen.main.bounds.width - 130, height: .greatestFiniteMagnitude),
+            options: .usesLineFragmentOrigin,
+            attributes: attributes,
+            context: nil
+        )
+        
+        return Int(ceil(labelTextSize.height / font.lineHeight))
     }
 }

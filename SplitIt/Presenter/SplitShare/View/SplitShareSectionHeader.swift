@@ -38,7 +38,7 @@ class SplitShareSectionHeader: UIView {
         dateLabel.do {
             $0.font = .ReceiptCaption2
             $0.textColor = .TextPrimary
-            $0.addCharacterSpacing()
+            $0.setKernSpacing()
         }
         
         firstDashLine.do {
@@ -62,7 +62,7 @@ class SplitShareSectionHeader: UIView {
             $0.text = "함께한 곳"
             $0.font = .ReceiptCaption1
             $0.textColor = .TextPrimary
-            $0.addCharacterSpacing()
+            $0.setKernSpacing()
         }
         
         stackView.do {
@@ -121,7 +121,7 @@ class SplitShareSectionHeader: UIView {
         }
         
         secondDashLine.snp.makeConstraints {
-            $0.top.equalTo(stackView.snp.bottom).offset(8)
+            $0.top.equalTo(stackView.snp.bottom).offset(10)
             $0.horizontalEdges.equalToSuperview().inset(18)
             $0.bottom.equalToSuperview()
         }
@@ -157,7 +157,7 @@ class SplitShareSectionHeader: UIView {
                 $0.text = csInfo.title
                 $0.font = .ReceiptCaption2
                 $0.textColor = .TextPrimary
-                $0.addCharacterSpacing()
+                $0.setKernSpacing()
             }
             
             krwLabel.do {
@@ -170,7 +170,7 @@ class SplitShareSectionHeader: UIView {
                 $0.text = "\(NumberFormatter.localizedString(from: csInfo.totalAmount as NSNumber, number: .decimal))"
                 $0.font = .ReceiptCaption2
                 $0.textColor = .TextPrimary
-                $0.addCharacterSpacing()
+                $0.setKernSpacing()
             }
             
             [dotView,csTitle,krwLabel,csPrice].forEach {

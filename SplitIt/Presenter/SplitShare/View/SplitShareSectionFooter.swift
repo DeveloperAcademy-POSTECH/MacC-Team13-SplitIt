@@ -30,14 +30,14 @@ class SplitShareSectionFooter: UIView {
             $0.text = "Created by iOS App Split it!"
             $0.font = .ReceiptFooter1
             $0.textColor = .TextPrimary
-            $0.addCharacterSpacing()
+            $0.setKernSpacing()
         }
         
         subTitle.do {
             $0.text = "Copyright 2023. Whipping cream on citron tea. All right reserved."
             $0.font = .ReceiptFooter2
             $0.textColor = .TextPrimary
-            $0.addCharacterSpacing()
+            $0.setKernSpacing()
         }
         
         imageView.do {
@@ -52,19 +52,19 @@ class SplitShareSectionFooter: UIView {
         
         mainTitle.snp.makeConstraints {
             $0.top.equalToSuperview().offset(8)
-            $0.leading.equalToSuperview().inset(16)
+            $0.leading.equalToSuperview().inset(18)
         }
         
         subTitle.snp.makeConstraints {
             $0.top.equalTo(mainTitle.snp.bottom)
-            $0.leading.equalToSuperview().inset(16)
+            $0.leading.equalToSuperview().inset(18)
             $0.bottom.equalTo(imageView.snp.bottom)
         }
         
         imageView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(8)
             $0.size.equalTo(24)
-            $0.trailing.equalToSuperview().inset(16)
+            $0.trailing.equalToSuperview().inset(18)
             $0.bottom.equalToSuperview().offset(-8)
         }
     }

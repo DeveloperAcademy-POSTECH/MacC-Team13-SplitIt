@@ -664,6 +664,7 @@ extension ExclItemInfoEditModalVC: CustomKeyboardDelegate {
         priceTextFiled.inputView = customKeyboard.inputView
         customKeyboard.delegate = self
         customKeyboard.setCurrentTextField(priceTextFiled)
+        customKeyboard.applyOption(.price)
         customKeyboard.customKeyObservable
             .subscribe(onNext: { [weak self] value in
                 self?.customKeyboard.handleInputValue(value)

@@ -7,12 +7,12 @@
 
 import UIKit
 
-struct AppFontName {
-    static let OneL = "ONEMobileLight"
-    static let OneR = "ONEMobileRegular"
-    static let OneB = "ONEMobileBold"
-    static let EdcR = "EliceDigitalCodingver.H"
-    static let EdcB = "EliceDigitalCodingver.H-Bd"
+enum AppFontName: String {
+    case OneL = "ONEMobileLight"
+    case OneR = "ONEMobileRegular"
+    case OneB = "ONEMobileBold"
+    case EdcR = "EliceDigitalCodingver.H"
+    case EdcB = "EliceDigitalCodingver.H-Bd"
 }
 
 extension UIFont {
@@ -581,9 +581,9 @@ extension UIFont {
     class var ReceiptTitle1: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.EdcR, size: 28)!
+            return UIFont(name: AppFontName.EdcR.rawValue, size: 28)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.EdcR, size: 30)!
+            return UIFont(name: AppFontName.EdcR.rawValue, size: 30)!
         }
     }
     
@@ -595,9 +595,9 @@ extension UIFont {
     class var ReceiptTitle2: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.EdcR, size: 25)!
+            return UIFont(name: AppFontName.EdcR.rawValue, size: 25)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.EdcR, size: 27)!
+            return UIFont(name: AppFontName.EdcR.rawValue, size: 27)!
         }
     }
     
@@ -609,9 +609,9 @@ extension UIFont {
     class var ReceiptTitle3: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.EdcR, size: 22)!
+            return UIFont(name: AppFontName.EdcR.rawValue, size: 22)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.EdcR, size: 24)!
+            return UIFont(name: AppFontName.EdcR.rawValue, size: 24)!
         }
     }
     
@@ -623,9 +623,9 @@ extension UIFont {
     class var ReceiptSubtitle: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.EdcR, size: 19)!
+            return UIFont(name: AppFontName.EdcR.rawValue, size: 19)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.EdcR, size: 21)!
+            return UIFont(name: AppFontName.EdcR.rawValue, size: 21)!
         }
     }
     
@@ -637,9 +637,9 @@ extension UIFont {
     class var ReceiptBody: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.EdcR, size: 16)!
+            return UIFont(name: AppFontName.EdcR.rawValue, size: 16)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.EdcR, size: 18)!
+            return UIFont(name: AppFontName.EdcR.rawValue, size: 18)!
         }
     }
     
@@ -651,9 +651,9 @@ extension UIFont {
     class var ReceiptCaption1: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.EdcR, size: 14)!
+            return UIFont(name: AppFontName.EdcR.rawValue, size: 14)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.EdcR, size: 15)!
+            return UIFont(name: AppFontName.EdcR.rawValue, size: 15)!
         }
     }
     
@@ -663,7 +663,7 @@ extension UIFont {
      - property: $receipt-caption2
      */
     class var ReceiptCaption2: UIFont {
-        return UIFont(name: AppFontName.EdcR, size: 12)!
+        return UIFont(name: AppFontName.EdcR.rawValue, size: 12)!
     }
     
     /**
@@ -672,7 +672,7 @@ extension UIFont {
      - property: $receipt-footer1
      */
     class var ReceiptFooter1: UIFont {
-        return UIFont(name: AppFontName.EdcB, size: 8)!
+        return UIFont(name: AppFontName.EdcB.rawValue, size: 8)!
     }
     
     /**
@@ -682,7 +682,7 @@ extension UIFont {
      */
     
     class var ReceiptFooter2: UIFont {
-        return UIFont(name: AppFontName.EdcR, size: 8)!
+        return UIFont(name: AppFontName.EdcR.rawValue, size: 8)!
     }
     
     
@@ -697,9 +697,9 @@ extension UIFont {
     class var KoreanTitle1: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneR, size: 28)!
+            return UIFont(name: AppFontName.OneR.rawValue, size: 28)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneR, size: 30)!
+            return UIFont(name: AppFontName.OneR.rawValue, size: 30)!
         }
     }
     
@@ -711,9 +711,9 @@ extension UIFont {
     class var KoreanBoldTitle1: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneB, size: 28)!
+            return UIFont(name: AppFontName.OneB.rawValue, size: 28)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneB, size: 30)!
+            return UIFont(name: AppFontName.OneB.rawValue, size: 30)!
         }
     }
     
@@ -725,9 +725,9 @@ extension UIFont {
     class var KoreanLightTitle1: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneL, size: 28)!
+            return UIFont(name: AppFontName.OneL.rawValue, size: 28)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneL, size: 30)!
+            return UIFont(name: AppFontName.OneL.rawValue, size: 30)!
         }
     }
     
@@ -739,9 +739,9 @@ extension UIFont {
     class var KoreanTitle2: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneR, size: 25)!
+            return UIFont(name: AppFontName.OneR.rawValue, size: 25)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneR, size: 27)!
+            return UIFont(name: AppFontName.OneR.rawValue, size: 27)!
         }
     }
     
@@ -753,9 +753,9 @@ extension UIFont {
     class var KoreanBoldTitle2: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneB, size: 25)!
+            return UIFont(name: AppFontName.OneB.rawValue, size: 25)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneB, size: 27)!
+            return UIFont(name: AppFontName.OneB.rawValue, size: 27)!
         }
     }
     
@@ -767,9 +767,9 @@ extension UIFont {
     class var KoreanLightTitle2: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneL, size: 25)!
+            return UIFont(name: AppFontName.OneL.rawValue, size: 25)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneL, size: 27)!
+            return UIFont(name: AppFontName.OneL.rawValue, size: 27)!
         }
     }
     
@@ -781,9 +781,9 @@ extension UIFont {
     class var KoreanTitle3: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneR, size: 22)!
+            return UIFont(name: AppFontName.OneR.rawValue, size: 22)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneR, size: 24)!
+            return UIFont(name: AppFontName.OneR.rawValue, size: 24)!
         }
     }
     
@@ -795,9 +795,9 @@ extension UIFont {
     class var KoreanBoldTitle3: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneB, size: 22)!
+            return UIFont(name: AppFontName.OneB.rawValue, size: 22)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneB, size: 24)!
+            return UIFont(name: AppFontName.OneB.rawValue, size: 24)!
         }
     }
     
@@ -809,9 +809,9 @@ extension UIFont {
     class var KoreanLightTitle3: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneL, size: 22)!
+            return UIFont(name: AppFontName.OneL.rawValue, size: 22)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneL, size: 24)!
+            return UIFont(name: AppFontName.OneL.rawValue, size: 24)!
         }
     }
     
@@ -823,9 +823,9 @@ extension UIFont {
     class var KoreanSubtitle: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneR, size: 19)!
+            return UIFont(name: AppFontName.OneR.rawValue, size: 19)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneR, size: 21)!
+            return UIFont(name: AppFontName.OneR.rawValue, size: 21)!
         }
     }
     
@@ -837,9 +837,9 @@ extension UIFont {
     class var KoreanBoldSubtitle: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneB, size: 19)!
+            return UIFont(name: AppFontName.OneB.rawValue, size: 19)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneB, size: 21)!
+            return UIFont(name: AppFontName.OneB.rawValue, size: 21)!
         }
     }
     
@@ -851,9 +851,9 @@ extension UIFont {
     class var KoreanLightSubtitle: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneL, size: 19)!
+            return UIFont(name: AppFontName.OneL.rawValue, size: 19)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneL, size: 21)!
+            return UIFont(name: AppFontName.OneL.rawValue, size: 21)!
         }
     }
     
@@ -865,9 +865,9 @@ extension UIFont {
     class var KoreanBody: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneR, size: 16)!
+            return UIFont(name: AppFontName.OneR.rawValue, size: 16)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneR, size: 18)!
+            return UIFont(name: AppFontName.OneR.rawValue, size: 18)!
         }
     }
     
@@ -879,9 +879,9 @@ extension UIFont {
     class var KoreanBoldBody: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneB, size: 16)!
+            return UIFont(name: AppFontName.OneB.rawValue, size: 16)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneB, size: 18)!
+            return UIFont(name: AppFontName.OneB.rawValue, size: 18)!
         }
     }
     
@@ -893,9 +893,9 @@ extension UIFont {
     class var KoreanLightBody: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneL, size: 16)!
+            return UIFont(name: AppFontName.OneL.rawValue, size: 16)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneL, size: 18)!
+            return UIFont(name: AppFontName.OneL.rawValue, size: 18)!
         }
     }
     
@@ -905,7 +905,7 @@ extension UIFont {
      - property: $korean-button-text
      */
     class var KoreanButtonText: UIFont {
-        return UIFont(name: AppFontName.OneB, size: 16)!
+        return UIFont(name: AppFontName.OneB.rawValue, size: 16)!
     }
     
     /**
@@ -914,7 +914,7 @@ extension UIFont {
      - property: $korean-small-button-text
      */
     class var KoreanSmallButtonText: UIFont {
-        return UIFont(name: AppFontName.OneB, size: 12)!
+        return UIFont(name: AppFontName.OneB.rawValue, size: 12)!
     }
     
     /**
@@ -925,9 +925,9 @@ extension UIFont {
     class var KoreanCaption1: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneR, size: 14)!
+            return UIFont(name: AppFontName.OneR.rawValue, size: 14)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneR, size: 15)!
+            return UIFont(name: AppFontName.OneR.rawValue, size: 15)!
         }
     }
     
@@ -939,9 +939,9 @@ extension UIFont {
     class var KoreanBoldCaption1: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneB, size: 14)!
+            return UIFont(name: AppFontName.OneB.rawValue, size: 14)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneB, size: 15)!
+            return UIFont(name: AppFontName.OneB.rawValue, size: 15)!
         }
     }
     
@@ -953,9 +953,9 @@ extension UIFont {
     class var KoreanLightCaption1: UIFont {
         switch UIDevice().screenType {
         case .iPhoneSE:
-            return UIFont(name: AppFontName.OneL, size: 14)!
+            return UIFont(name: AppFontName.OneL.rawValue, size: 14)!
         case .defaultDevice:
-            return UIFont(name: AppFontName.OneL, size: 15)!
+            return UIFont(name: AppFontName.OneL.rawValue, size: 15)!
         }
     }
     
@@ -965,7 +965,7 @@ extension UIFont {
      - property: $korean-caption2
      */
     class var KoreanCaption2: UIFont {
-        return UIFont(name: AppFontName.OneL, size: 12)!
+        return UIFont(name: AppFontName.OneL.rawValue, size: 12)!
     }
     
     /**
@@ -974,6 +974,6 @@ extension UIFont {
      - property: $korean-bold-caption2
      */
     class var KoreanBoldCaption2: UIFont {
-        return UIFont(name: AppFontName.OneB, size: 12)!
+        return UIFont(name: AppFontName.OneB.rawValue, size: 12)!
     }
 }
