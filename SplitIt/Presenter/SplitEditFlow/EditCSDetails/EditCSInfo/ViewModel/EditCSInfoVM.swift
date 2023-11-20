@@ -16,7 +16,7 @@ class EditCSInfoVM {
     let maxTextCount = 8
     var isEdited = BehaviorRelay(value: false)
     
-    let csinfo = SplitRepository.share.csInfoArr.value.first
+    
     
     struct Input {
         let confirmButtonTapped: ControlEvent<Void> // 다음 버튼
@@ -43,6 +43,7 @@ class EditCSInfoVM {
     }
     
     func transform(input: Input) -> Output {
+        let csinfo = SplitRepository.share.csInfoArr.value.first
         let inputTitle = input.title
         let saveCSInfo = input.confirmButtonTapped
         let textFieldCount = BehaviorRelay<String>(value: "")
@@ -72,7 +73,7 @@ class EditCSInfoVM {
             .drive(title)
             .disposed(by: disposeBag)
         
-        if let csinfo = self.csinfo {
+        if let csinfo = csinfo {
             let titleDriver = Driver<String>.just(csinfo.title)
             let totalAmountDriver = Driver<String>.just("\(csinfo.totalAmount)")
             
@@ -141,8 +142,7 @@ class EditCSInfoVM {
             .asDriver()
             .withLatestFrom(csInfoDriver)
             .drive(onNext: { title, totalAmount in
-                SplitRepository.share.editCSInfoTitle(title: title)
-                SplitRepository.share.editCSInfoTotalAcount(totalAcount: totalAmount)
+                SplitRepository.share.editCSInfo(title: title, totalAmount: totalAmount)
             })
             .disposed(by: disposeBag)
         
@@ -190,7 +190,7 @@ class EditCSInfoVM {
         isEditTF
             .map { [weak self] _ in
                 guard let self = self else { return false }
-                if let csinfo = self.csinfo {
+                if let csinfo = csinfo {
                     return (totalAmountResult.value != csinfo.totalAmount) || (title.value != csinfo.title)
                 }
                 return false
@@ -223,4 +223,5 @@ class EditCSInfoVM {
         return isValid
     }
 }
+
 

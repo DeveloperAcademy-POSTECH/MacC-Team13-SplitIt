@@ -13,75 +13,51 @@ import UIKit
 final class EditCSListVM {
     var disposeBag = DisposeBag()
     
-    let dataModel = SplitRepository.share
     let maxTextCount = 8
     let splitIdx: String
-    
-    var split: Driver<Split> {
-        dataModel.splitArr
-            .asDriver()
-            .flatMap { splitList -> Driver<Split> in
-                if let firstSplit = splitList.first {
-                    return Driver.just(firstSplit)
-                } else {
-                    return Driver.empty()
-                }
-            }
-    }
-    
-    var csinfoList: Driver<[CSInfo]> {
-        dataModel.csInfoArr.asDriver()
-    }
-    
-    var exclList: Driver<[ExclItem]> {
-        dataModel.exclItemArr.asDriver()
-    }
-    
-    var csMemberList: Driver<[CSMember]> {
-        dataModel.csMemberArr.asDriver()
-    }
 
     init() {
         let arrSplit = SplitRepository.share.splitArr.value
         if let firstSplit = arrSplit.first {
             self.splitIdx = firstSplit.splitIdx
-            self.dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: splitIdx)
         } else {
             splitIdx = ""
         }
     }
     
     struct Input {
-        let viewDidLoad: Observable<Bool>
+        let viewDidAppear: Observable<Bool>
         let csEditTapped: ControlEvent<IndexPath>
     }
     
     struct Output {
+        let csInfoList: Driver<[CSInfo]>
+        let memberCount: Driver<[Int]>
+        let exclItemCount: Driver<[Int]>
         let pushCSEditView: Driver<String>
     }
     
     func transform(input: Input) -> Output {
-        let csinfoIndex = input.csEditTapped.asDriver()
+        let dataModel = SplitRepository.share
+        let csinfoIndex = input.csEditTapped
+        let csinfoList: BehaviorRelay<[CSInfo]> = dataModel.csInfoArr
+        let exclList: BehaviorRelay<[ExclItem]> = dataModel.exclItemArr
+        let csMemberList: BehaviorRelay<[CSMember]> = dataModel.csMemberArr
         
-        input.viewDidLoad
+        input.viewDidAppear
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: splitIdx)
+//                dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: self.splitIdx)
             })
             .disposed(by: disposeBag)
         
-        let pushEditView: Driver<String> = csinfoIndex
-            .withLatestFrom(self.csinfoList) { indexPath, data in
+        let pushEditView = csinfoIndex
+            .withLatestFrom(csinfoList) { indexPath, data in
                 return data[indexPath.row].csInfoIdx
             }
         
-        return Output(pushCSEditView: pushEditView)
-    }
-    
-    func memberCount() -> [Int] {
-        let countsDriver: Driver<[Int]> = csinfoList.flatMapLatest { [weak self] infoList in
-            guard let self = self else { return Driver.empty() }
-            return self.csMemberList.map { members in
+        let memberCount = csinfoList.flatMapLatest { infoList in
+            return csMemberList.map { members in
                 infoList.map { info in
                     members.filter { member in
                         member.csInfoIdx == info.csInfoIdx
@@ -90,18 +66,7 @@ final class EditCSListVM {
             }
         }
         
-        var count: [Int] = []
-        countsDriver.drive {
-            count = $0
-        }
-        .disposed(by: disposeBag)
-        
-        return count
-    }
-    
-    func exclItemCount() -> [Int] {
-        let countsDriver: Driver<[Int]> = csinfoList.flatMapLatest { [weak self] infoList in
-            guard let self = self else { return Driver.empty() }
+        let exclItemCount = csinfoList.flatMapLatest { infoList in
             return exclList.map { members in
                 infoList.map { info in
                     members.filter { member in
@@ -110,13 +75,12 @@ final class EditCSListVM {
                 }
             }
         }
-        var count: [Int] = []
-        countsDriver.drive {
-            count = $0
-        }
-        .disposed(by: disposeBag)
         
-        return count
+        return Output(
+            csInfoList: csinfoList.asDriver(),
+            memberCount: memberCount.asDriver(onErrorJustReturn: []),
+            exclItemCount: exclItemCount.asDriver(onErrorJustReturn: []),
+            pushCSEditView: pushEditView.asDriver(onErrorJustReturn: ""))
     }
-
+    
 }

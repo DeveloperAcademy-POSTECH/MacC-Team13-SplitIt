@@ -13,41 +13,17 @@ import UIKit
 final class EditCSItemVM {
     var disposeBag = DisposeBag()
     
-    let dataModel = SplitRepository.share
+    
     let isEdit = BehaviorRelay(value: false)
     let maxTextCount = 8
     let csInfoIdx: String
-    let csCount: Bool
-    
-    var csinfo: Driver<CSInfo> {
-        dataModel.csInfoArr
-            .asDriver()
-            .flatMap { csinfoList -> Driver<CSInfo> in
-                if let firstcsinfo = csinfoList.first {
-                    return Driver.just(firstcsinfo)
-                } else {
-                    return Driver.empty()
-                }
-            }
-    }
-    
-    var exclList: Driver<[ExclItem]> {
-        dataModel.exclItemArr.asDriver()
-    }
-    
-    var csMemberList: Driver<[CSMember]> {
-        dataModel.csMemberArr.asDriver()
-    }
     
     init(csinfoIdx: String) {
-        self.csCount = dataModel.csInfoArr.value.count > 1 ? false : true
-        
-        dataModel.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: csinfoIdx)
         self.csInfoIdx = csinfoIdx
     }
     
     struct Input {
-        let viewDidLoad: Observable<Bool>
+        let viewDidAppear: Observable<Bool>
         let titlePriceEditTapped: ControlEvent<Void>
         let memberEditTapped: ControlEvent<Void>
         let exclItemEditTapped: ControlEvent<Void>
@@ -67,13 +43,21 @@ final class EditCSItemVM {
     }
     
     func transform(input: Input) -> Output {
-        input.viewDidLoad
-            .subscribe { [weak self]_ in
-                guard let self = self else { return }
-                self.dataModel.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: self.csInfoIdx)
-            }
-            .disposed(by: disposeBag)
+        let dataModel = SplitRepository.share
+        let csCount = dataModel.csInfoArr.value.count > 1 ? false : true
+        let exclList = dataModel.exclItemArr.asDriver()
+        let csMemberList = dataModel.csMemberArr.asDriver()
+        let csinfo = dataModel.csInfoArr
+                .asDriver()
+                .flatMap { csinfoList -> Driver<CSInfo> in
+                    if let firstcsinfo = csinfoList.first {
+                        return Driver.just(firstcsinfo)
+                    } else {
+                        return Driver.empty()
+                    }
+                }
         
+
         let title = csinfo.map { $0.title }
         let totalAmount: Driver<NSMutableAttributedString> = csinfo.map { [weak self] csinfo in
             guard let self = self else { return NSMutableAttributedString(string: "") }
@@ -95,6 +79,13 @@ final class EditCSItemVM {
         let exclEditView = input.exclItemEditTapped.asDriver()
         let delbtn = input.delButtonTapped.asDriver()
         
+        input.viewDidAppear
+            .subscribe { [weak self]_ in
+                guard let self = self else { return }
+//                dataModel.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: self.csInfoIdx)
+            }
+            .disposed(by: disposeBag)
+        
         return Output(csTitle: title,
                       csTotalAmount: totalAmount,
                       csMember: member,
@@ -103,7 +94,7 @@ final class EditCSItemVM {
                       pushCSMemberEditView: memberEditView,
                       pushCSExclItemEditView: exclEditView,
                       popDeleteCSInfo: delbtn,
-                      deleteBtnHidden: Driver<Bool>.just(self.csCount))
+                      deleteBtnHidden: Driver<Bool>.just(csCount))
     }
     
     func memberAttributeString(member: [CSMember]) -> NSMutableAttributedString {
@@ -215,3 +206,4 @@ final class EditCSItemVM {
         return finalString
     }
 }
+

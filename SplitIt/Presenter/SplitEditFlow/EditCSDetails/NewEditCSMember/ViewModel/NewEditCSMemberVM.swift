@@ -11,7 +11,7 @@ import RxSwift
 import UIKit
 
 class NewEditCSMemberVM {
-    let repo = SplitRepository.share
+    
     let disposeBag = DisposeBag()
     
     let maxTextCount = 8
@@ -41,6 +41,7 @@ class NewEditCSMemberVM {
     }
     
     func transform(input: Input) -> Output {
+        let repo = SplitRepository.share
         let allMemberArr = BehaviorRelay<[MemberCheck]>(value: [])
         let searchMemberArr = BehaviorRelay<[MemberCheck]>(value: [])
         let selectedMemberArr = BehaviorRelay<[MemberCheck]>(value: repo.csMemberArr.value.map { MemberCheck(name: $0.name, isCheck: true) }.reversed())
@@ -58,8 +59,8 @@ class NewEditCSMemberVM {
         // 현재 csMember에 들어가 있는 값은 처음 뷰에 들어올 때부터 selectedMemberArr에 들어가 있어야하고 isCheck도 true여야 한다
         input.viewWillAppear.asDriver(onErrorJustReturn: true)
             .drive(onNext: { _ in
-                self.repo.fetchMemberLog()
-                allMemberArr.accept(self.repo.memberLogArr.value.map { MemberCheck(name: $0.name) })
+                repo.fetchMemberLog()
+                allMemberArr.accept(repo.memberLogArr.value.map { MemberCheck(name: $0.name) })
                 
                 var allMembers = allMemberArr.value
                 
@@ -171,7 +172,7 @@ class NewEditCSMemberVM {
 
                 for name in selectedMemberNameArr {
                     if !allMemberArr.value.map({ $0.name }).contains(name) && name != "정산자" {
-                        self.repo.createMemberLog(name: name)
+                        repo.createMemberLog(name: name)
                     }
                 }
             })
@@ -183,7 +184,7 @@ class NewEditCSMemberVM {
             .drive(onNext: { member in
                 var selectedMemberNameArr = member.map { $0.name }
                 selectedMemberNameArr.reverse()
-                self.repo.createCSMemberArr(nameArr: selectedMemberNameArr)
+                repo.createCSMemberArr(nameArr: selectedMemberNameArr)
             })
             .disposed(by: disposeBag)
         
@@ -243,3 +244,4 @@ class NewEditCSMemberVM {
     }
 }
  
+

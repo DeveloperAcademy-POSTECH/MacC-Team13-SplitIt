@@ -23,10 +23,16 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
     let titleLabel = UILabel()
     let totalAmountLabel = UILabel()
     let titlePriceEditBtn = DefaultEditButton()
+    let subtitle = UILabel()
+    let titleView = UIView()
     let memberLabel = UILabel()
     let memberEditBtn = DefaultEditButton()
+    let subMember = UILabel()
+    let memberView = UIView()
     let exclLabel = UILabel()
     let exclEditBtn = DefaultEditButton()
+    let subExcl = UILabel()
+    let exclView = UIView()
     let delButton = UILabel()
     let delBtnTap = UITapGestureRecognizer()
     let alert = SPAlertController()
@@ -51,6 +57,7 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        SplitRepository.share.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: viewModel.csInfoIdx)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
@@ -64,9 +71,52 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
             $0.applyStyle(style: .csEdit, vc: self)
         }
         
+        subtitle.do {
+            $0.text = "이름 및 총액"
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextSecondary
+        }
+        
         titleLabel.do {
             $0.textColor = .TextPrimary
             $0.font = .KoreanTitle3
+        }
+        
+        titleView.do {
+            $0.addSubview(titleLabel)
+            $0.addSubview(totalAmountLabel)
+            $0.addSubview(titlePriceEditBtn)
+            $0.layer.cornerRadius = 8
+            $0.layer.borderWidth = 1
+            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
+        }
+        
+        subMember.do {
+            $0.text = "함께한 사람들"
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextSecondary
+        }
+        
+        memberView.do {
+            $0.addSubview(memberLabel)
+            $0.addSubview(memberEditBtn)
+            $0.layer.cornerRadius = 8
+            $0.layer.borderWidth = 1
+            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
+        }
+        
+        subExcl.do {
+            $0.text = "따로 계산할 것"
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextSecondary
+        }
+        
+        exclView.do {
+            $0.addSubview(exclLabel)
+            $0.addSubview(exclEditBtn)
+            $0.layer.cornerRadius = 8
+            $0.layer.borderWidth = 1
+            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
         }
         
         delButton.do {
@@ -80,31 +130,8 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
     }
     
     func setLayout() {
-        let subtitle = UILabel().then {
-            $0.text = "이름 및 총액"
-            $0.font = .KoreanCaption1
-            $0.textColor = .TextSecondary
-        }
-        
-        let titlePriceView = setTitleView()
-        
-        let subMember = UILabel().then {
-            $0.text = "함께한 사람들"
-            $0.font = .KoreanCaption1
-            $0.textColor = .TextSecondary
-        }
-        
-        let memberView = setMemberView()
-        
-        let subExcl = UILabel().then {
-            $0.text = "따로 계산할 것"
-            $0.font = .KoreanCaption1
-            $0.textColor = .TextSecondary
-        }
-        
-        let exclView = setExclView()
 
-        [headerView, subtitle, titlePriceView, subMember, memberView, subExcl, exclView, delButton].forEach {
+        [headerView, subtitle, titleView, subMember, memberView, subExcl, exclView, delButton].forEach {
             view.addSubview($0)
         }
         
@@ -120,8 +147,8 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
         }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(titlePriceView).inset(12)
-            $0.leading.equalTo(titlePriceView).inset(16)
+            $0.top.equalTo(titleView).inset(12)
+            $0.leading.equalTo(titleView).inset(16)
         }
         
         totalAmountLabel.snp.makeConstraints {
@@ -131,23 +158,23 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
         
         titlePriceEditBtn.snp.makeConstraints {
             $0.top.equalTo(totalAmountLabel)
-            $0.trailing.equalTo(titlePriceView).inset(16)
+            $0.trailing.equalTo(titleView).inset(16)
         }
         
-        titlePriceView.snp.makeConstraints {
+        titleView.snp.makeConstraints {
             $0.top.equalTo(subtitle.snp.bottom).offset(4)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(81)
         }
         
         subMember.snp.makeConstraints {
-            $0.top.equalTo(titlePriceView.snp.bottom).offset(16)
+            $0.top.equalTo(titleView.snp.bottom).offset(16)
             $0.leading.equalTo(subtitle)
         }
         
         memberView.snp.makeConstraints {
             $0.top.equalTo(subMember.snp.bottom).offset(4)
-            $0.leading.trailing.equalTo(titlePriceView)
+            $0.leading.trailing.equalTo(titleView)
             $0.height.equalTo(43)
         }
         
@@ -168,7 +195,7 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
         
         exclView.snp.makeConstraints {
             $0.top.equalTo(subExcl.snp.bottom).offset(4)
-            $0.leading.trailing.equalTo(titlePriceView)
+            $0.leading.trailing.equalTo(titleView)
             $0.height.equalTo(43)
         }
         
@@ -189,7 +216,7 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
     }
     
     func setBinding() {
-        let input = EditCSItemVM.Input(viewDidLoad: self.rx.viewWillAppear,
+        let input = EditCSItemVM.Input(viewDidAppear: self.rx.viewDidAppear,
                                        titlePriceEditTapped: titlePriceEditBtn.rx.tap,
                                        memberEditTapped: memberEditBtn.rx.tap,
                                        exclItemEditTapped: exclEditBtn.rx.tap,
@@ -223,7 +250,6 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
             .drive(onNext: { [weak self] attriString in
                 guard let self = self else { return }
                 self.exclLabel.attributedText = attriString
-                // 수정하기 뭐임?
             })
             .disposed(by: disposeBag)
         
@@ -309,42 +335,3 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
     }
 }
 
-// MARK: View Draw Function
-extension EditCSItemVC {
-    private func setTitleView() -> UIView {
-        let totalPriceStack = UIView().then {
-            $0.addSubview(titleLabel)
-            $0.addSubview(totalAmountLabel)
-            $0.addSubview(titlePriceEditBtn)
-            $0.layer.cornerRadius = 8
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
-        }
-        
-        return totalPriceStack
-    }
-    
-    private func setMemberView() -> UIView {
-        let view = UIView().then {
-            $0.addSubview(memberLabel)
-            $0.addSubview(memberEditBtn)
-            $0.layer.cornerRadius = 8
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
-        }
-        
-        return view
-    }
-    
-    private func setExclView() -> UIView {
-        let view = UIView().then {
-            $0.addSubview(exclLabel)
-            $0.addSubview(exclEditBtn)
-            $0.layer.cornerRadius = 8
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
-        }
-        
-        return view
-    }
-}

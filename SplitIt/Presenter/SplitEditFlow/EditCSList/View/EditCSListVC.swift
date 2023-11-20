@@ -12,12 +12,11 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import RxAppState
-import RealmSwift
 
 final class EditCSListVC: UIViewController, UIScrollViewDelegate {
     
     var disposeBag = DisposeBag()
-    var viewModel = EditCSListVM()
+    let viewModel = EditCSListVM()
     
     let headerView = SPNavigationBar()
     let tableView = UITableView(frame: .zero)
@@ -29,20 +28,12 @@ final class EditCSListVC: UIViewController, UIScrollViewDelegate {
         setBinding()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-//        setKeyboardNotification()
-        super.viewWillAppear(animated)
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        SplitRepository.share.fetchSplitArrFromDBWithSplitIdx(splitIdx: viewModel.splitIdx)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
+
     func setAttribute() {
         view.backgroundColor = .SurfaceBrandCalmshell
         
@@ -54,15 +45,6 @@ final class EditCSListVC: UIViewController, UIScrollViewDelegate {
             $0.backgroundColor = .SurfaceBrandCalmshell
             $0.register(cellType: EditCSListCell.self)
             $0.rowHeight = 208
-            let tapGesture = UITapGestureRecognizer()
-            tapGesture.rx.event.bind { [weak self] _ in
-                guard let self = self else { return }
-                self.view.endEditing(true)
-            }.disposed(by: disposeBag)
-            
-            $0.addGestureRecognizer(tapGesture)
-            tapGesture.delegate = self
-            
             $0.separatorStyle = .none
             $0.showsVerticalScrollIndicator = false
         }
@@ -91,33 +73,36 @@ final class EditCSListVC: UIViewController, UIScrollViewDelegate {
     
     func setBinding() {
         let input = EditCSListVM.Input(
-                                    viewDidLoad: self.rx.viewWillAppear,
+                                    viewDidAppear: self.rx.viewDidAppear,
                                      csEditTapped: tableView.rx.itemSelected)
         
-        viewModel.csinfoList
+        let output = viewModel.transform(input: input)
+        
+        output.csInfoList
             .drive(tableView.rx.items(cellIdentifier: "EditCSListCell", cellType: EditCSListCell.self)) { [weak self] (idx, item, cell) in
                 guard let self = self else { return }
-                let memberCount = self.viewModel.memberCount()
-                let exclCount = self.viewModel.exclItemCount()
-                cell.configure(csinfo: item, csMemberCount: memberCount[idx], exclItemCount: exclCount[idx])
+                let memberCount = output.memberCount
+                let exclCount = output.exclItemCount
+                
+                Driver.combineLatest(memberCount, exclCount)
+                    .drive { (members, excls) in
+                        print("sdfsdf@@@\(members) asd, \(excls)")
+                        guard idx < members.count, idx < excls.count else { return }
+                        cell.configure(csinfo: item, csMemberCount: members[idx], exclItemCount: excls[idx])
+                    }
+                    .disposed(by: self.disposeBag)
             }
             .disposed(by: disposeBag)
-        
-        let output = viewModel.transform(input: input)
         
         output.pushCSEditView
             .drive(onNext: { [weak self] csinfoIdx in
                 guard let self = self else { return }
                 let vc = EditCSItemVC(csinfoIdx: csinfoIdx)
                 self.navigationController?.pushViewController(vc, animated: true)
+                SplitRepository.share.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: csinfoIdx)
             })
             .disposed(by: disposeBag)
     }
     
 }
 
-extension EditCSListVC {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        return (touch.view == self.tableView)
-    }
-}
