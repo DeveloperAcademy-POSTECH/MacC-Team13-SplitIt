@@ -84,9 +84,8 @@ class SplitShareVC: UIViewController {
         }
         
         editButton.do {
-            $0.applyStyle(style: .primaryRadish, shape: .square)
-            $0.setImage(UIImage(systemName: "pencil"), for: .normal)
-            $0.tintColor = .TextPrimary
+            $0.applyStyle(style: .surfaceSecondary, shape: .square)
+            $0.setImage(UIImage(named: "SplitEditIcon"), for: .normal)
             $0.setTitle(" 정산 수정", for: .normal)
             $0.buttonState.accept(true)
         }
