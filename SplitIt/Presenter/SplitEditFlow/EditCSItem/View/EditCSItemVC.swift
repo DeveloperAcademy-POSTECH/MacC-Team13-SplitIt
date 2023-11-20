@@ -215,7 +215,7 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
     }
     
     func setBinding() {
-        let input = EditCSItemVM.Input(viewDidAppear: self.rx.viewDiAppear,
+        let input = EditCSItemVM.Input(viewDidAppear: self.rx.viewDidAppear,
                                        titlePriceEditTapped: titlePriceEditBtn.rx.tap,
                                        memberEditTapped: memberEditBtn.rx.tap,
                                        exclItemEditTapped: exclEditBtn.rx.tap,
