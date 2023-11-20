@@ -192,9 +192,9 @@ extension SPButton {
         case primaryPear
         case primaryMushroom
         case primaryRadish
-        case warningRed
         case surfaceWhite
         case surfaceSecondary
+        case warningRed
     }
     
     enum Shape {
