@@ -239,6 +239,13 @@ extension UIColor {
     class var SurfaceBrandRadishPressed: UIColor { return UIColor.AppColorBrandRadishPressed }
     
     /**
+     주 보조 면의 색상이 적용되는 Button의 Pressed 상태를 위한 색상입니다.
+     - parameters:
+     - property: $surface-secondary-pressed
+     */
+    class var SurfaceSecondaryPressed: UIColor { return UIColor.AppColorGrayscale900 }
+    
+    /**
      주의 및 경고의 색상이 적용되는 Button의 Pressed 상태를 위한 색상입니다.
      - parameters:
      - property: $surface-warn-pressed
