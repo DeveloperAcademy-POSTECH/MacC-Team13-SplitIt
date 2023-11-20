@@ -86,7 +86,6 @@ final class EditCSListVC: UIViewController, UIScrollViewDelegate {
                 
                 Driver.combineLatest(memberCount, exclCount)
                     .drive { (members, excls) in
-                        print("sdfsdf@@@\(members) asd, \(excls)")
                         guard idx < members.count, idx < excls.count else { return }
                         cell.configure(csinfo: item, csMemberCount: members[idx], exclItemCount: excls[idx])
                     }
