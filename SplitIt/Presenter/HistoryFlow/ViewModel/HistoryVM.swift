@@ -32,6 +32,7 @@ class HistoryVM {
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.repo.fetchSplitArrFromDBForHistoryView()
+                UserDefaults.standard.set("History", forKey: "ShareFlow")
             })
             .disposed(by: disposeBag)
         
