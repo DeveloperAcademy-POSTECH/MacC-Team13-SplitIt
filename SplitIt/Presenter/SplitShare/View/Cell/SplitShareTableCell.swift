@@ -44,25 +44,25 @@ class SplitShareTableCell: UITableViewCell, Reusable {
         nameLabel.do {
             $0.font = .ReceiptBody
             $0.textColor = .TextPrimary
-            $0.addCharacterSpacing()
+            $0.setKernSpacing()
         }
         
         krwLabel.do {
             $0.text = "₩"
             $0.font = .ReceiptCaption2
             $0.textColor = .TextPrimary
-            $0.addCharacterSpacing()
+            $0.setKernSpacing()
         }
         
         priceLabel.do {
             $0.font = .ReceiptBody
             $0.textColor = .TextPrimary
-            $0.addCharacterSpacing()
+            $0.setKernSpacing()
         }
         
         stackView.do {
             $0.axis = .vertical
-            $0.spacing = 4
+            $0.spacing = 8
             $0.translatesAutoresizingMaskIntoConstraints = true
         }
         
@@ -129,23 +129,46 @@ class SplitShareTableCell: UITableViewCell, Reusable {
                 $0.text = "제외 항목"
                 $0.font = .ReceiptCaption2
                 $0.textColor = .TextPrimary
-                $0.addCharacterSpacing()
+                $0.setKernSpacing()
             }
             
             self.stackView.addArrangedSubview(exclTitle)
             
             for str in item.exclDatas {
+                let dataView = UIView()
+                let dot = UILabel()
                 let dataLabel = UILabel()
                 
+                dot.do {
+                    $0.text = "·"
+                    $0.font = .ReceiptCaption2
+                    $0.textColor = .TextSecondary
+                }
+                
                 dataLabel.do {
-                    $0.text = "· \(str)"
+                    $0.text = "\(str)"
                     $0.font = .ReceiptCaption2
                     $0.textColor = .TextSecondary
                     $0.numberOfLines = 0
-                    $0.addCharacterSpacing()
+                    $0.setKernSpacing()
+                    $0.setLineSpacing(3)
                 }
                 
-                self.stackView.addArrangedSubview(dataLabel)
+                [dot,dataLabel].forEach {
+                    dataView.addSubview($0)
+                }
+                
+                dot.snp.makeConstraints {
+                    $0.leading.top.equalToSuperview()
+                }
+                
+                dataLabel.snp.makeConstraints {
+                    $0.leading.equalTo(dot.snp.trailing)
+                    $0.width.equalTo(UIScreen.main.bounds.width - 140)
+                    $0.top.height.equalToSuperview()
+                }
+                
+                self.stackView.addArrangedSubview(dataView)
             }
         }
     }

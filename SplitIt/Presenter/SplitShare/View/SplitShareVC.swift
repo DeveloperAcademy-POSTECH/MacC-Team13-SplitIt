@@ -46,7 +46,11 @@ class SplitShareVC: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        if UserDefaults.standard.string(forKey: "ShareFlow") == "Create" {
+            navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        } else {
+            navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        }
     }
     
     private func setAttribute() {
@@ -64,7 +68,7 @@ class SplitShareVC: UIViewController {
             $0.separatorStyle = .none
             $0.delegate = self
             $0.backgroundColor = .white
-            $0.layer.borderColor = UIColor.BorderTertiary.cgColor
+            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
             $0.layer.borderWidth = 1
             $0.register(cellType: SplitShareTableCell.self)
             $0.rowHeight = UITableView.automaticDimension
@@ -267,7 +271,7 @@ extension SplitShareVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         let count = csInfos.count
-        var defaultHeight: CGFloat = 134
+        var defaultHeight: CGFloat = 136
         
         if count > 0 { defaultHeight += 18 }
         
@@ -281,12 +285,28 @@ extension SplitShareVC: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let count = resultArr[indexPath.row].exclDatas.count
-        var defaultHeight: CGFloat = 60
+        var allDataLineCount = 0
         
-        if count > 0 { defaultHeight += 16 }
+        for data in resultArr[indexPath.row].exclDatas {
+            let label = UILabel()
+            
+            label.do {
+                $0.text = "· \(data)"
+                $0.font = .ReceiptCaption2
+                $0.textColor = .TextSecondary
+                $0.numberOfLines = 0
+                $0.setKernSpacing()
+            }
+            
+            allDataLineCount += label.countCurrentLines()
+        }
         
-        let cellHeight = defaultHeight + CGFloat(count * 19)
+        var defaultHeight: CGFloat = 52
+        
+        if allDataLineCount > 0 { defaultHeight += 22 }
+        
+        let cellHeight = defaultHeight + CGFloat(allDataLineCount * 21)
+        
         return cellHeight
     }
 }

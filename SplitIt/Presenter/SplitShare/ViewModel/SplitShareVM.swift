@@ -144,6 +144,8 @@ class SplitShareVM {
             }
         }
         
+        splitResultArr.sort { $0.memberPrice < $1.memberPrice }
+        
         return splitResultArr
     }
     

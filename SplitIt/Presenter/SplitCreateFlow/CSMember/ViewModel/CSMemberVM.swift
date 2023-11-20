@@ -156,6 +156,11 @@ class CSMemberVM {
                 
                 if allMemberArr.value.map({ $0.name }).contains(name) {
                     allMemberArr.accept(self.tranformIsCheckInSelectMemberArr(allMemberArrValue: allMemberArr.value, name: name))
+                } else if !allMemberArr.value.map({ $0.name }).contains(name) && name != "정산자" {
+                    var currentAllMemberArr = allMemberArr.value
+                    currentAllMemberArr.append(newSelectMember)
+                    allMemberArr.accept(currentAllMemberArr)
+                    self.repo.createMemberLog(name: name)
                 }
                 
                 searchMemberArr.accept(allMemberArr.value)
@@ -170,14 +175,6 @@ class CSMemberVM {
         input.nextButtonTapped
             .asDriver()
             .drive(onNext: {
-                let selectedMemberNameArr = selectedMemberArr.value.map { $0.name }
-
-                for name in selectedMemberNameArr {
-                    if !allMemberArr.value.map({ $0.name }).contains(name) && name != "정산자" {
-                        self.repo.createMemberLog(name: name)
-                    }
-                }
-                
                 if UserDefaults.standard.string(forKey: "CreateFlow") == "Equal" { self.repo.updateDataToDB() }
             })
             .disposed(by: disposeBag)
