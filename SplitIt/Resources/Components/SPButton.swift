@@ -23,8 +23,9 @@ final class SPButton: UIButton {
         .primaryPear: .SurfaceBrandPear,
         .primaryMushroom: .SurfaceBrandMushroom,
         .primaryRadish: .SurfaceBrandRadish,
-        .warningRed: .SurfaceWarnRed,
-        .surfaceWhite: .SurfaceWhite
+        .surfaceWhite: .SurfaceWhite,
+        .surfaceSecondary: .SurfaceSecondary,
+        .warningRed: .SurfaceWarnRed
     ]
     
     let colorPressedArray: [Style: UIColor] = [
@@ -34,8 +35,9 @@ final class SPButton: UIButton {
         .primaryPear: .SurfaceBrandPearPressed,
         .primaryMushroom: .SurfaceBrandMushroomPressed,
         .primaryRadish: .SurfaceBrandRadishPressed,
-        .warningRed: .SurfaceWarnRedPressed,
-        .surfaceWhite: .SurfaceSelected
+        .surfaceWhite: .SurfaceSelected,
+        .surfaceSecondary: .SurfaceSecondaryPressed,
+        .warningRed: .SurfaceWarnRedPressed
     ]
 
     func applyStyle(style: Style, shape: Shape) {
@@ -192,6 +194,7 @@ extension SPButton {
         case primaryRadish
         case warningRed
         case surfaceWhite
+        case surfaceSecondary
     }
     
     enum Shape {
@@ -226,6 +229,7 @@ extension SPButton {
     // Home 관련 버튼 프로퍼티
     private func configureCommonPropertiesForHome() {
         self.layer.cornerRadius = 8
+        self.layer.borderWidth = 2
     }
     
     // 활성 상태 프로퍼티
