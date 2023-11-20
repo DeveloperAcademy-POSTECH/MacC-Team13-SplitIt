@@ -73,7 +73,6 @@
 		6078ACF22ADA757E00995811 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 6078ACF12ADA757E00995811 /* RxDataSources */; };
 		607ED87E2AF0D06F00A82349 /* ExclItemInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607ED87D2AF0D06F00A82349 /* ExclItemInfo.swift */; };
 		60990AEC2B01F24100202319 /* MemberCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60990AEB2B01F24100202319 /* MemberCheck.swift */; };
-		60990AEE2B01F29200202319 /* CSMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60990AED2B01F29200202319 /* CSMemberCell.swift */; };
 		60AE3EAA2AE6562E009D9D18 /* DateFormatterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EA92AE6562E009D9D18 /* DateFormatterHelper.swift */; };
 		60AE3EB52AE773BF009D9D18 /* SplitShareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EB42AE773BF009D9D18 /* SplitShareVC.swift */; };
 		60AE3EB82AE773F5009D9D18 /* SplitShareVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE3EB72AE773F5009D9D18 /* SplitShareVM.swift */; };
@@ -87,8 +86,8 @@
 		60F793462B07053800D55ADD /* SplitMethodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F793452B07053800D55ADD /* SplitMethodCell.swift */; };
 		60F793482B070A2200D55ADD /* SplitMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F793472B070A2200D55ADD /* SplitMethod.swift */; };
 		60F7934A2B07AD8000D55ADD /* Notification+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F793492B07AD8000D55ADD /* Notification+.swift */; };
-		8656D6D42B020C03003660A4 /* NewEditCSMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D32B020C03003660A4 /* NewEditCSMemberVC.swift */; };
-		8656D6D72B020C6D003660A4 /* NewEditCSMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D62B020C6D003660A4 /* NewEditCSMemberVM.swift */; };
+		8656D6D42B020C03003660A4 /* EditCSMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D32B020C03003660A4 /* EditCSMemberVC.swift */; };
+		8656D6D72B020C6D003660A4 /* EditCSMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D62B020C6D003660A4 /* EditCSMemberVM.swift */; };
 		86C65FF22AEF970F00A7942A /* EditCSListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF12AEF970F00A7942A /* EditCSListVC.swift */; };
 		86C65FF42AEF985A00A7942A /* EditCSListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF32AEF985A00A7942A /* EditCSListVM.swift */; };
 		86C65FF62AEF9ADF00A7942A /* EditCSListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF52AEF9ADF00A7942A /* EditCSListCell.swift */; };
@@ -97,8 +96,6 @@
 		86C660002AF126DE00A7942A /* EditCSItemVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FFF2AF126DE00A7942A /* EditCSItemVM.swift */; };
 		86DACB0C2AF4ECC9008D7BAF /* EditCSInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB0B2AF4ECC9008D7BAF /* EditCSInfoVC.swift */; };
 		86DACB0E2AF4ECE7008D7BAF /* EditCSInfoVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB0D2AF4ECE7008D7BAF /* EditCSInfoVM.swift */; };
-		86DACB112AF639E0008D7BAF /* EditCSMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB102AF639E0008D7BAF /* EditCSMemberVC.swift */; };
-		86DACB132AF63A08008D7BAF /* EditCSMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB122AF63A08008D7BAF /* EditCSMemberVM.swift */; };
 		86DACB162AF63B99008D7BAF /* EditExclItemInputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB152AF63B99008D7BAF /* EditExclItemInputVC.swift */; };
 		86DACB182AF63BED008D7BAF /* EditExclItemInputVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DACB172AF63BED008D7BAF /* EditExclItemInputVM.swift */; };
 		C2263A8D2B07332400CF0E16 /* EliceDigitalCodingVerHBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2263A8B2B07332400CF0E16 /* EliceDigitalCodingVerHBold.ttf */; };
@@ -189,7 +186,6 @@
 		6078ACD92ADA74AD00995811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607ED87D2AF0D06F00A82349 /* ExclItemInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInfo.swift; sourceTree = "<group>"; };
 		60990AEB2B01F24100202319 /* MemberCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCheck.swift; sourceTree = "<group>"; };
-		60990AED2B01F29200202319 /* CSMemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSMemberCell.swift; sourceTree = "<group>"; };
 		60AE3EA92AE6562E009D9D18 /* DateFormatterHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterHelper.swift; sourceTree = "<group>"; };
 		60AE3EB42AE773BF009D9D18 /* SplitShareVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitShareVC.swift; sourceTree = "<group>"; };
 		60AE3EB72AE773F5009D9D18 /* SplitShareVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitShareVM.swift; sourceTree = "<group>"; };
@@ -203,8 +199,8 @@
 		60F793452B07053800D55ADD /* SplitMethodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMethodCell.swift; sourceTree = "<group>"; };
 		60F793472B070A2200D55ADD /* SplitMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMethod.swift; sourceTree = "<group>"; };
 		60F793492B07AD8000D55ADD /* Notification+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+.swift"; sourceTree = "<group>"; };
-		8656D6D32B020C03003660A4 /* NewEditCSMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditCSMemberVC.swift; sourceTree = "<group>"; };
-		8656D6D62B020C6D003660A4 /* NewEditCSMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEditCSMemberVM.swift; sourceTree = "<group>"; };
+		8656D6D32B020C03003660A4 /* EditCSMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSMemberVC.swift; sourceTree = "<group>"; };
+		8656D6D62B020C6D003660A4 /* EditCSMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSMemberVM.swift; sourceTree = "<group>"; };
 		86C65FF12AEF970F00A7942A /* EditCSListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVC.swift; sourceTree = "<group>"; };
 		86C65FF32AEF985A00A7942A /* EditCSListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVM.swift; sourceTree = "<group>"; };
 		86C65FF52AEF9ADF00A7942A /* EditCSListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListCell.swift; sourceTree = "<group>"; };
@@ -213,8 +209,6 @@
 		86C65FFF2AF126DE00A7942A /* EditCSItemVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSItemVM.swift; sourceTree = "<group>"; };
 		86DACB0B2AF4ECC9008D7BAF /* EditCSInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSInfoVC.swift; sourceTree = "<group>"; };
 		86DACB0D2AF4ECE7008D7BAF /* EditCSInfoVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSInfoVM.swift; sourceTree = "<group>"; };
-		86DACB102AF639E0008D7BAF /* EditCSMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSMemberVC.swift; sourceTree = "<group>"; };
-		86DACB122AF63A08008D7BAF /* EditCSMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSMemberVM.swift; sourceTree = "<group>"; };
 		86DACB152AF63B99008D7BAF /* EditExclItemInputVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExclItemInputVC.swift; sourceTree = "<group>"; };
 		86DACB172AF63BED008D7BAF /* EditExclItemInputVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExclItemInputVM.swift; sourceTree = "<group>"; };
 		C2263A8B2B07332400CF0E16 /* EliceDigitalCodingVerHBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EliceDigitalCodingVerHBold.ttf; sourceTree = "<group>"; };
@@ -716,31 +710,6 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
-		60990AF92B01F7A200202319 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				60990AFB2B01F7AE00202319 /* Cell */,
-				86DACB102AF639E0008D7BAF /* EditCSMemberVC.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		60990AFA2B01F7A700202319 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				86DACB122AF63A08008D7BAF /* EditCSMemberVM.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		60990AFB2B01F7AE00202319 /* Cell */ = {
-			isa = PBXGroup;
-			children = (
-				60990AED2B01F29200202319 /* CSMemberCell.swift */,
-			);
-			path = Cell;
-			sourceTree = "<group>";
-		};
 		60990AFC2B01F7BD00202319 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -802,19 +771,19 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
-		8656D6D12B020BC2003660A4 /* NewEditCSMember */ = {
+		8656D6D12B020BC2003660A4 /* EditCSMember */ = {
 			isa = PBXGroup;
 			children = (
 				8656D6D52B020C57003660A4 /* ViewModel */,
 				8656D6D22B020BEF003660A4 /* View */,
 			);
-			path = NewEditCSMember;
+			path = EditCSMember;
 			sourceTree = "<group>";
 		};
 		8656D6D22B020BEF003660A4 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				8656D6D32B020C03003660A4 /* NewEditCSMemberVC.swift */,
+				8656D6D32B020C03003660A4 /* EditCSMemberVC.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -822,7 +791,7 @@
 		8656D6D52B020C57003660A4 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				8656D6D62B020C6D003660A4 /* NewEditCSMemberVM.swift */,
+				8656D6D62B020C6D003660A4 /* EditCSMemberVM.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -858,9 +827,8 @@
 		86DACB092AF4EC4F008D7BAF /* EditCSDetails */ = {
 			isa = PBXGroup;
 			children = (
-				8656D6D12B020BC2003660A4 /* NewEditCSMember */,
+				8656D6D12B020BC2003660A4 /* EditCSMember */,
 				86DACB142AF63B01008D7BAF /* EditCSExclItem */,
-				86DACB0F2AF6393C008D7BAF /* EditCSMember */,
 				86DACB0A2AF4ECB8008D7BAF /* EditCSInfo */,
 			);
 			path = EditCSDetails;
@@ -873,15 +841,6 @@
 				60990AF72B01F79600202319 /* View */,
 			);
 			path = EditCSInfo;
-			sourceTree = "<group>";
-		};
-		86DACB0F2AF6393C008D7BAF /* EditCSMember */ = {
-			isa = PBXGroup;
-			children = (
-				60990AFA2B01F7A700202319 /* ViewModel */,
-				60990AF92B01F7A200202319 /* View */,
-			);
-			path = EditCSMember;
 			sourceTree = "<group>";
 		};
 		86DACB142AF63B01008D7BAF /* EditCSExclItem */ = {
@@ -1224,7 +1183,6 @@
 				86DACB162AF63B99008D7BAF /* EditExclItemInputVC.swift in Sources */,
 				604CDC7D2AF1522C00416454 /* ExclItemInfoEditModalVC.swift in Sources */,
 				DE73D6E72AE0D20600ABF3EF /* BankListData.swift in Sources */,
-				86DACB132AF63A08008D7BAF /* EditCSMemberVM.swift in Sources */,
 				DEFE9D832AEAB80A009C693E /* KeyboardButton.swift in Sources */,
 				60F496952AF753180077F6FB /* SPAlertController.swift in Sources */,
 				1A2DCC452AF771C600FB2FE2 /* HapticManager.swift in Sources */,
@@ -1235,7 +1193,6 @@
 				1A1ACC4D2AF3CAF6004AC4CD /* SplitShareSectionFooter.swift in Sources */,
 				60F793462B07053800D55ADD /* SplitMethodCell.swift in Sources */,
 				DE73D6F72AE1983200ABF3EF /* MemberLogVC.swift in Sources */,
-				60990AEE2B01F29200202319 /* CSMemberCell.swift in Sources */,
 				60F7934A2B07AD8000D55ADD /* Notification+.swift in Sources */,
 				86C660002AF126DE00A7942A /* EditCSItemVM.swift in Sources */,
 				C2A7979C2AE276E90049E709 /* HistorySplitCell.swift in Sources */,
@@ -1258,11 +1215,10 @@
 				60990AEC2B01F24100202319 /* MemberCheck.swift in Sources */,
 				86DACB0E2AF4ECE7008D7BAF /* EditCSInfoVM.swift in Sources */,
 				1A4DB2292ADE61E800616243 /* RealmManager.swift in Sources */,
-				8656D6D72B020C6D003660A4 /* NewEditCSMemberVM.swift in Sources */,
+				8656D6D72B020C6D003660A4 /* EditCSMemberVM.swift in Sources */,
 				60115E012ADC01150050D32C /* UITextField+.swift in Sources */,
 				60104CE92AEFF73800489AAD /* ExclItemInfoModalSection.swift in Sources */,
 				1AC411792B028B8B008A45BC /* RealmRepresentable.swift in Sources */,
-				86DACB112AF639E0008D7BAF /* EditCSMemberVC.swift in Sources */,
 				604CDC862AF2396300416454 /* ExcltemInfoModalAlertVC.swift in Sources */,
 				1A8B05E32AF1540A00CF5BC5 /* SplitMethodSelectVM.swift in Sources */,
 				60115DF92ADBF2E10050D32C /* HomeVM.swift in Sources */,
@@ -1281,7 +1237,7 @@
 				1AC4116A2B028A88008A45BC /* RMSplit.swift in Sources */,
 				DE73D6E52AE0D12C00ABF3EF /* MyBankAccountVM.swift in Sources */,
 				1AC4116C2B028A92008A45BC /* RMCSInfo.swift in Sources */,
-				8656D6D42B020C03003660A4 /* NewEditCSMemberVC.swift in Sources */,
+				8656D6D42B020C03003660A4 /* EditCSMemberVC.swift in Sources */,
 				1A4DB22B2ADE68E400616243 /* SplitRepository.swift in Sources */,
 				C291BA132AF4DD6F009501F3 /* UIDevice+.swift in Sources */,
 				1A3852FD2ADE5B0100E9A20B /* ExclMember.swift in Sources */,

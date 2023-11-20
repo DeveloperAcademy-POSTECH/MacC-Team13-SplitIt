@@ -264,7 +264,7 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
         output.pushCSMemberEditView
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                let vc = NewEditCSMemberVC()
+                let vc = EditCSMemberVC()
                 self.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
