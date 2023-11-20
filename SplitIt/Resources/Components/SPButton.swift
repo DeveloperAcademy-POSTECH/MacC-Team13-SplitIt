@@ -104,7 +104,13 @@ final class SPButton: UIButton {
                     self.isEnabled = isEnable
                     if isEnable {
                         self.backgroundColor = colorArray[style]
-                        self.configureActiveProperties()
+                        
+                        if colorArray[style] == .SurfaceSecondary {
+                            self.configureActivePropertiesInvert()
+                        } else {
+                            self.configureActiveProperties()
+                        }
+                        
                         self.configureUnpressedPropertiesForSquare()
                     } else {
                         self.backgroundColor = .AppColorBrandCalmshell
@@ -120,7 +126,13 @@ final class SPButton: UIButton {
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
                 self.isEnabled = true
-                self.configureActiveProperties()
+                
+                if colorArray[style] == .SurfaceSecondary {
+                    self.configureActivePropertiesInvert()
+                } else {
+                    self.configureActiveProperties()
+                }
+                
                 self.configureUnpressedPropertiesForSquare()
                 self.backgroundColor = colorArray[style]
                 self.frame = CGRect(origin: CGPoint(x: self.frame.minX, y: self.frame.minY - 2.0), size: self.frame.size)
@@ -235,6 +247,13 @@ extension SPButton {
     // 활성 상태 프로퍼티
     private func configureActiveProperties() {
         self.setTitleColor(.TextPrimary, for: .normal)
+        self.layer.borderColor = UIColor.BorderPrimary.cgColor
+        self.layer.shadowColor = UIColor.BorderPrimary.cgColor
+    }
+    
+    // 활성 상태 프로퍼티 텍스트 색 반전
+    private func configureActivePropertiesInvert() {
+        self.setTitleColor(.TextInvert, for: .normal)
         self.layer.borderColor = UIColor.BorderPrimary.cgColor
         self.layer.shadowColor = UIColor.BorderPrimary.cgColor
     }
