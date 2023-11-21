@@ -122,7 +122,7 @@ class SplitShareVC: UIViewController {
         tableView.snp.makeConstraints {
             $0.top.equalTo(header.snp.bottom).offset(30)
             $0.horizontalEdges.equalToSuperview().inset(30)
-            $0.bottom.equalTo(csAddButton.snp.top).offset(-24)
+            $0.bottom.equalTo(csAddButton.snp.top).offset(-17)
         }
         
         csAddButton.snp.makeConstraints {
@@ -141,7 +141,7 @@ class SplitShareVC: UIViewController {
         }
         
         shareButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-40)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-33)
             $0.height.equalTo(48)
             $0.horizontalEdges.equalToSuperview().inset(30)
         }

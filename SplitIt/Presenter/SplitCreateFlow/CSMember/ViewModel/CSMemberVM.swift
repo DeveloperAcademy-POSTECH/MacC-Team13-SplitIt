@@ -88,7 +88,7 @@ class CSMemberVM {
             .map { text -> String in
                 let count = text.count
                 
-                return "| \(count)/8자"
+                return "\(count)/8자"
             }
             .drive(textCount)
             .disposed(by: disposeBag)
