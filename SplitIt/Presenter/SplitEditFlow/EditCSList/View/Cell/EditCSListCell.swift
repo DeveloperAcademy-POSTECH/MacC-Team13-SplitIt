@@ -15,11 +15,22 @@ final class EditCSListCell: UITableViewCell, Reusable {
     
     var disposeBag = DisposeBag()
     
+    let nameLabel = UILabel()
+    let priceLabel = UILabel()
+    let exclLabel = UILabel()
     let csTitleLabel = UILabel()
     let editBtnLabel = DefaultEditButton()
     let memberCountLabel = UILabel()
     let totalAmountLabel = UILabel()
     let exclItemCountLabel = UILabel()
+    let divView1 = UIView()
+    let divView2 = UIView()
+    lazy var titleStack = UIStackView(arrangedSubviews: [csTitleLabel, editBtnLabel])
+    lazy var nameStackView = UIStackView(arrangedSubviews: [nameLabel, memberCountLabel])
+    lazy var priceStackView = UIStackView(arrangedSubviews: [priceLabel, totalAmountLabel])
+    lazy var exclStackView = UIStackView(arrangedSubviews: [exclLabel, exclItemCountLabel])
+    lazy var mainStackView = UIStackView(arrangedSubviews: [titleStack, divView1, nameStackView,
+                                                            priceStackView, divView2, exclStackView])
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -44,7 +55,26 @@ final class EditCSListCell: UITableViewCell, Reusable {
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.BorderPrimary.cgColor
-            $0.backgroundColor = .SurfaceBrandCalmshell
+            $0.backgroundColor = .SurfaceWhite
+        }
+        
+        nameLabel.do {
+            $0.text = "인원"
+            $0.textColor = .TextSecondary
+            $0.font = .KoreanCaption1
+        }
+        
+        priceLabel.do {
+            $0.text = "총액"
+            $0.textColor = .TextSecondary
+            $0.font = .KoreanCaption1
+        }
+        
+        
+        exclLabel.do {
+            $0.text = "제외 항목"
+            $0.textColor = .TextSecondary
+            $0.font = .KoreanCaption1
         }
         
         csTitleLabel.do {
@@ -73,29 +103,6 @@ final class EditCSListCell: UITableViewCell, Reusable {
             $0.textColor = .TextPrimary
             $0.font = .KoreanCaption1
         }
-    }
-    
-    func setLayout() {
-        
-        let nameLabel = UILabel().then {
-            $0.text = "인원"
-            $0.textColor = .TextSecondary
-            $0.font = .KoreanCaption1
-        }
-        
-        let priceLabel = UILabel().then {
-            $0.text = "총액"
-            $0.textColor = .TextSecondary
-            $0.font = .KoreanCaption1
-        }
-        
-        let exclLabel = UILabel().then {
-            $0.text = "제외 항목"
-            $0.textColor = .TextSecondary
-            $0.font = .KoreanCaption1
-        }
-        
-        let titleStack = UIStackView(arrangedSubviews: [csTitleLabel, editBtnLabel])
         
         titleStack.do {
             $0.axis = .horizontal
@@ -104,25 +111,25 @@ final class EditCSListCell: UITableViewCell, Reusable {
             $0.alignment = .trailing
         }
         
-        let nameStackView = UIStackView(arrangedSubviews: [nameLabel, memberCountLabel]).then {
+        nameStackView.do {
             $0.axis = .horizontal
             $0.spacing = 10
             $0.distribution = .fillEqually
         }
         
-        let priceStackView = UIStackView(arrangedSubviews: [priceLabel, totalAmountLabel]).then {
+        priceStackView.do {
             $0.axis = .horizontal
             $0.spacing = 10
             $0.distribution = .fillEqually
         }
         
-        let exclStackView = UIStackView(arrangedSubviews: [exclLabel, exclItemCountLabel]).then {
+        exclStackView.do {
             $0.axis = .horizontal
             $0.spacing = 10
             $0.distribution = .fillEqually
         }
         
-        let divView1 = UIView().then {
+        divView1.do {
             let lineDashPattern: [NSNumber]? = [6, 6]
 
             let shapeLayer = CAShapeLayer()
@@ -139,7 +146,7 @@ final class EditCSListCell: UITableViewCell, Reusable {
             $0.layer.addSublayer(shapeLayer)
         }
         
-        let divView2 = UIView().then {
+        divView2.do {
             let lineDashPattern: [NSNumber]? = [6, 6]
 
             let shapeLayer = CAShapeLayer()
@@ -155,6 +162,17 @@ final class EditCSListCell: UITableViewCell, Reusable {
             shapeLayer.path = path
             $0.layer.addSublayer(shapeLayer)
         }
+        
+        mainStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 16
+        }
+        
+        setLineDot(view: divView1)
+        setLineDot(view: divView2)
+    }
+    
+    func setLayout() {
         
         divView1.snp.makeConstraints {
             $0.height.equalTo(1)
@@ -163,21 +181,29 @@ final class EditCSListCell: UITableViewCell, Reusable {
         divView2.snp.makeConstraints {
             $0.height.equalTo(1)
         }
-        
-        setLineDot(view: divView1)
-        setLineDot(view: divView2)
 
-        let mainStackView = UIStackView(arrangedSubviews: [titleStack, divView1, nameStackView, priceStackView, divView2, exclStackView]).then {
-            $0.axis = .vertical
-            $0.spacing = 16
-        }
-        
         contentView.addSubview(mainStackView)
+        
         mainStackView.snp.makeConstraints {
             $0.edges.equalToSuperview().inset(16)
         }
     }
     
+    func configure(csinfo: CSInfo, csMemberCount: Int, exclItemCount: Int) {
+        
+        let price = attributeStringPriceSet(st1: "₩", st2: csinfo.totalAmount)
+        let member = attributeStringMemberAndExclCountSet(st1: csMemberCount, st2: "명")
+        let excl = attributeStringMemberAndExclCountSet(st1: exclItemCount, st2: "건")
+
+        csTitleLabel.text = csinfo.title
+        memberCountLabel.attributedText = member
+        totalAmountLabel.attributedText = price
+        exclItemCountLabel.attributedText = excl
+    }
+}
+
+extension EditCSListCell {
+    // 점선 그리기
     func setLineDot(view: UIView){
         
         let borderLayer = CAShapeLayer()
@@ -190,8 +216,8 @@ final class EditCSListCell: UITableViewCell, Reusable {
         view.layer.addSublayer(borderLayer)
     }
     
-    
-    func attributeStringSet(st1: String, st2: Int) -> NSMutableAttributedString {
+    // attrubuteString 셋팅
+    func attributeStringPriceSet(st1: String, st2: Int) -> NSMutableAttributedString {
         let numberAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.NumRoundedCaption1 as Any
         ]
@@ -214,14 +240,25 @@ final class EditCSListCell: UITableViewCell, Reusable {
         return finalString
     }
     
-    func configure(csinfo: CSInfo, csMemberCount: Int, exclItemCount: Int) {
-        
-        let price = attributeStringSet(st1: "₩", st2: csinfo.totalAmount)
+    func attributeStringMemberAndExclCountSet(st1: Int, st2: String) -> NSMutableAttributedString {
+        let numberAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.NumRoundedBody as Any
+        ]
 
-        csTitleLabel.text = csinfo.title
-        memberCountLabel.text = "\(csMemberCount) 명"
-        totalAmountLabel.attributedText = price
-        exclItemCountLabel.text = "\(exclItemCount) 건"
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.NumRoundedCaption1 as Any
+        ]
+        
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        
+        let numberString = NSAttributedString(string: "\(st1) ", attributes: numberAttributes)
+        let textString = NSAttributedString(string: st2, attributes: textAttributes)
+
+        let finalString = NSMutableAttributedString()
+        finalString.append(numberString)
+        finalString.append(textString)
+        
+        return finalString
     }
 }
-

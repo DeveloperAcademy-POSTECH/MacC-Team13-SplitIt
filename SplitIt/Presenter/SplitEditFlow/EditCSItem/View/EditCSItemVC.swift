@@ -89,10 +89,11 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.BorderSecondary.cgColor
+            $0.backgroundColor = .SurfaceWhite
         }
         
         subMember.do {
-            $0.text = "함께한 사람들"
+            $0.text = "함께한 멤버"
             $0.font = .KoreanCaption1
             $0.textColor = .TextSecondary
         }
@@ -103,10 +104,11 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.BorderSecondary.cgColor
+            $0.backgroundColor = .SurfaceWhite
         }
         
         subExcl.do {
-            $0.text = "따로 계산할 것"
+            $0.text = "따로 정산 항목"
             $0.font = .KoreanCaption1
             $0.textColor = .TextSecondary
         }
@@ -117,6 +119,7 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.BorderSecondary.cgColor
+            $0.backgroundColor = .SurfaceWhite
         }
         
         delButton.do {
