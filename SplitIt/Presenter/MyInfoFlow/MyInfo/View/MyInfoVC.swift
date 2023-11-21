@@ -457,7 +457,7 @@ class MyInfoVC: UIViewController {
         emptyView.snp.makeConstraints {
             $0.height.equalTo(104)
             $0.leading.trailing.equalTo(view).inset(30)
-            $0.top.equalTo(myInfoLabel.snp.bottom).offset(8)
+            $0.top.equalTo(myInfoLabel.snp.bottom).offset(4)
         }
         
         accountView.snp.makeConstraints {
@@ -492,7 +492,7 @@ class MyInfoVC: UIViewController {
         }
         
         accountLabel.snp.makeConstraints {
-            $0.top.equalTo(accountInfoLabel.snp.bottom).offset(4)
+            $0.top.equalTo(accountInfoLabel.snp.bottom).offset(6)
             $0.leading.equalTo(accountBankLabel.snp.trailing).offset(4)
         }
         
