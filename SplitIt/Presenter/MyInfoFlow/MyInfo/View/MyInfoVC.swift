@@ -550,11 +550,11 @@ class MyInfoVC: UIViewController {
         }
         
         friendChevron.snp.makeConstraints {
-            $0.width.equalTo(8)
-            $0.height.equalTo(16)
+//            $0.width.equalTo(10)
+//            $0.height.equalTo(20)
             $0.top.equalToSuperview().offset(16)
             $0.bottom.equalToSuperview().inset(20)
-            $0.trailing.equalToSuperview().inset(16)
+            $0.trailing.equalToSuperview()
         }
         
         historyListView.snp.makeConstraints {
@@ -577,11 +577,11 @@ class MyInfoVC: UIViewController {
         }
         
         historyChevron.snp.makeConstraints {
-            $0.width.equalTo(8)
-            $0.height.equalTo(16)
+//            $0.width.equalTo(10)
+//            $0.height.equalTo(20)
             $0.top.equalToSuperview().inset(20)
             $0.bottom.equalToSuperview().inset(16)
-            $0.trailing.equalToSuperview().inset(16)
+            $0.trailing.equalToSuperview()
         }
         
         
@@ -677,13 +677,13 @@ class MyInfoVC: UIViewController {
         nameInfoLabel.do {
             $0.text = "예금주 성함"
             $0.font = .KoreanCaption2
-            $0.textColor = .TextPrimary
+            $0.textColor = .TextSecondary
         }
         
         accountInfoLabel.do {
             $0.text = "은행 및 계좌번호"
             $0.font = .KoreanCaption2
-            $0.textColor = .TextPrimary
+            $0.textColor = .TextSecondary
         }
         
         accountBankLabel.do {

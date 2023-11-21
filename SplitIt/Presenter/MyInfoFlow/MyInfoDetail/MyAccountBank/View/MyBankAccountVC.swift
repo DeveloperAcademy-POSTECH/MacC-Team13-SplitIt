@@ -425,7 +425,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         nameTextField.rx.text.orEmpty
             .map { text -> String in
                 let cnt = min(text.count, 8)
-                return "(\(cnt)/8)"
+                return "\(cnt)/8"
             }
             .bind(to: nameCountLabel.rx.text)
             .disposed(by: disposeBag)
@@ -447,7 +447,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         accountTextField.rx.text.orEmpty
             .map { text -> String in
                 let cnt = min(text.count, 17)
-                return "(\(cnt)/17)"
+                return "\(cnt)/17"
             }
             .bind(to: accountCountLabel.rx.text)
             .disposed(by: disposeBag)
@@ -509,7 +509,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         bankLabel.do {
             $0.text = "은행"
             $0.font = UIFont.KoreanCaption2
-            $0.textColor = UIColor.TextPrimary
+            $0.textColor = .TextSecondary
         }
         
         bankTextField.do {
@@ -528,7 +528,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         accountLabel.do {
             $0.text = "계좌번호"
             $0.font = UIFont.KoreanCaption2
-            $0.textColor = UIColor.TextPrimary
+            $0.textColor = .TextSecondary
         }
 
         accountTextField.do {
@@ -545,7 +545,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         }
         
         accountCountLabel.do {
-            $0.font = UIFont.KoreanCaption2
+            $0.font = UIFont.KoreanCaption1
             $0.textColor = UIColor.TextSecondary
 
         }
@@ -553,11 +553,11 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         nameLabel.do {
             $0.text = "예금주 성함"
             $0.font = UIFont.KoreanCaption2
-            $0.textColor = UIColor.TextPrimary
+            $0.textColor = .TextSecondary
         }
         
         nameCountLabel.do {
-            $0.font = UIFont.KoreanCaption2
+            $0.font = UIFont.KoreanCaption1
             $0.textColor = UIColor.TextSecondary
 
         }
@@ -608,7 +608,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         }
         
         tossLabel.do {
-            $0.text = "토스"
+            $0.text = "토스뱅크"
             $0.font = .KoreanCaption2
             $0.textAlignment = .center
             $0.textColor = .TextPrimary
