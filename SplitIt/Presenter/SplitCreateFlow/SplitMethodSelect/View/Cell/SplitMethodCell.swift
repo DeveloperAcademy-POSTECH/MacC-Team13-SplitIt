@@ -29,9 +29,6 @@ class SplitMethodCell: UICollectionViewCell, Reusable {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        setAttribute()
-        setLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -40,11 +37,9 @@ class SplitMethodCell: UICollectionViewCell, Reusable {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-    }
-    override func prepareForReuse() {
-        super.prepareForReuse()
         
-        
+        setAttribute()
+        setLayout()
     }
     
     func setAttribute() {
@@ -74,7 +69,7 @@ class SplitMethodCell: UICollectionViewCell, Reusable {
             $0.textColor = .TextPrimary
             $0.numberOfLines = 2
             $0.textAlignment = .center
-            $0.setLineSpacing(4)
+            $0.setLineSpacing(3)
         }
         
         recommendView.do {
