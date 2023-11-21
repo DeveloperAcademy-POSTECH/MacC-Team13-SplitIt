@@ -550,10 +550,7 @@ class MyInfoVC: UIViewController {
         }
         
         friendChevron.snp.makeConstraints {
-//            $0.width.equalTo(10)
-//            $0.height.equalTo(20)
-            $0.top.equalToSuperview().offset(16)
-            $0.bottom.equalToSuperview().inset(20)
+            $0.top.bottom.equalToSuperview().inset(16)
             $0.trailing.equalToSuperview()
         }
         
@@ -577,10 +574,7 @@ class MyInfoVC: UIViewController {
         }
         
         historyChevron.snp.makeConstraints {
-//            $0.width.equalTo(10)
-//            $0.height.equalTo(20)
-            $0.top.equalToSuperview().inset(20)
-            $0.bottom.equalToSuperview().inset(16)
+            $0.top.bottom.equalToSuperview().inset(16)
             $0.trailing.equalToSuperview()
         }
         

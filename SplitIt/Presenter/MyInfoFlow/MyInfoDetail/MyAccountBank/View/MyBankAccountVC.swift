@@ -577,7 +577,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         payLabel.do {
             $0.text = "간편페이 사용여부"
             $0.font = UIFont.KoreanCaption2
-            $0.textColor = UIColor.TextPrimary
+            $0.textColor = UIColor.TextSecondary
         }
         
         leftBar.do {
