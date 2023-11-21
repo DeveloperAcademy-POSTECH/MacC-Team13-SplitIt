@@ -47,14 +47,28 @@ class EditExclItemInputVC: UIViewController {
         }
         
         exclListLabel.do {
-            $0.text = "따로 정산 목록"
-            $0.font = .KoreanSubtitle
-            $0.textColor = .TextPrimary
+            let numberAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.KoreanSubtitle,
+                .foregroundColor: UIColor.TextPrimary,
+            ]
+
+            let textAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.KoreanSubtitle,
+                .foregroundColor: UIColor.TextSecondary
+            ]
+            
+            let numberString = NSAttributedString(string: "목록", attributes: numberAttributes)
+            let textString = NSAttributedString(string: " |", attributes: textAttributes)
+
+            let finalString = NSMutableAttributedString()
+            finalString.append(numberString)
+            finalString.append(textString)
+            $0.attributedText = finalString
         }
         
         exclItemCountLabel.do {
             $0.font = .KoreanCaption1
-            $0.textColor = .TextPrimary
+            $0.textColor = .TextSecondary
             $0.textAlignment = .justified
         }
         
@@ -96,8 +110,8 @@ class EditExclItemInputVC: UIViewController {
         }
         
         exclItemCountLabel.snp.makeConstraints {
-            $0.bottom.equalTo(exclListLabel.snp.bottom)
-            $0.leading.equalTo(exclListLabel.snp.trailing).offset(8)
+            $0.centerY.equalTo(exclListLabel)
+            $0.leading.equalTo(exclListLabel.snp.trailing).offset(4)
         }
         
         exclItemAddButton.snp.makeConstraints {
