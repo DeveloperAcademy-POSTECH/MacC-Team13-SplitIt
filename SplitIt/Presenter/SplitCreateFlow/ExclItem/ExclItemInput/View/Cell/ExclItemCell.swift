@@ -78,13 +78,13 @@ class ExclItemCell: UITableViewCell, Reusable {
         
         currencyLabel.do {
             $0.textColor = .TextPrimary
-            $0.font = .NumBody
+            $0.font = .NumRoundedBody
             $0.text = "₩"
         }
         
         exclItemPrice.do {
             $0.textColor = .TextPrimary
-            $0.font = .NumTitle3
+            $0.font = .NumRoundedTitle3
         }
     }
     
