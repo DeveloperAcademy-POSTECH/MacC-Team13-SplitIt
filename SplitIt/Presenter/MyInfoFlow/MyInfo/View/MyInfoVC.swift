@@ -463,7 +463,7 @@ class MyInfoVC: UIViewController {
         accountView.snp.makeConstraints {
             $0.height.equalTo(230)
             $0.leading.trailing.equalTo(view).inset(30)
-            $0.top.equalTo(myInfoLabel.snp.bottom).offset(8)
+            $0.top.equalTo(myInfoLabel.snp.bottom).offset(4)
         }
         
         myInfoLabel.snp.makeConstraints {
@@ -505,7 +505,7 @@ class MyInfoVC: UIViewController {
         accountEditChevron.snp.makeConstraints {
 //            $0.height.equalTo(14)
 //            $0.width.equalTo(8)
-            $0.bottom.equalToSuperview().inset(18)
+            $0.bottom.equalToSuperview().inset(14)
             $0.trailing.equalToSuperview().inset(16)
         }
         
@@ -606,9 +606,9 @@ class MyInfoVC: UIViewController {
         }
         
         emptyAccountEditChevron.snp.makeConstraints {
-            $0.height.equalTo(18)
-            $0.width.equalTo(9)
-            $0.bottom.equalToSuperview().inset(12)
+//            $0.height.equalTo(18)
+//            $0.width.equalTo(9)
+            $0.bottom.equalToSuperview().inset(8)
             $0.trailing.equalToSuperview().inset(16)
         }
         
@@ -821,7 +821,7 @@ class MyInfoVC: UIViewController {
         
         
         emptyAccountEditChevron.do {
-            $0.image = UIImage(systemName: "chevron.right")
+            $0.image = UIImage(named: "ChevronRightIconDefault")
             $0.tintColor = UIColor.BorderPrimary
         }
     }
