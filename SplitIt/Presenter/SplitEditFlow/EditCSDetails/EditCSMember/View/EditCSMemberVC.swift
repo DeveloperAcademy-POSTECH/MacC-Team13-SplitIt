@@ -24,6 +24,7 @@ final class EditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     let lineView = UIView()
     let searchTextFieldLabel = UILabel()
     let searchTextField = SPTextField()
+    let textCount = UILabel()
     let addButton = UIButton()
     let searchView = UIView()
     let searchLabel = UILabel()
@@ -94,6 +95,11 @@ final class EditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             $0.textColor = .TextPrimary
         }
         
+        textCount.do {
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextSecondary
+        }
+        
         searchTextField.do {
             $0.placeholder = "이름을 입력하세요"
             $0.applyStyle(.normal)
@@ -138,7 +144,7 @@ final class EditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     }
     
     private func setLayout() {
-        [header,addLabel,memberCount,addCollectionView,lineView,searchTextFieldLabel,searchTextField,addButton,searchView,backgroundView].forEach {
+        [header,addLabel,memberCount,addCollectionView,lineView,searchTextFieldLabel,textCount,searchTextField,addButton,searchView,backgroundView].forEach {
             view.addSubview($0)
         }
         
@@ -179,6 +185,11 @@ final class EditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             $0.leading.equalToSuperview().offset(38)
         }
          
+        textCount.snp.makeConstraints {
+            $0.centerY.equalTo(searchTextFieldLabel)
+            $0.leading.equalTo(searchTextFieldLabel.snp.trailing).offset(4)
+        }
+        
         searchTextField.snp.makeConstraints {
             $0.top.equalTo(searchTextFieldLabel.snp.bottom).offset(8)
             $0.height.equalTo(46)
@@ -265,6 +276,11 @@ final class EditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
                 guard let self = self else { return }
                 self.backgroundView.configure(item: text)
             })
+            .disposed(by: disposeBag)
+        
+        output.textCount
+            .asDriver()
+            .drive(textCount.rx.text)
             .disposed(by: disposeBag)
         
         output.textFieldValue

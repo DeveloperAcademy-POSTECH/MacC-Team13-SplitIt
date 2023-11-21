@@ -24,6 +24,7 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     let addCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     let lineView = UIView()
     let searchTextFieldLabel = UILabel()
+    let textCount = UILabel()
     let searchTextField = SPTextField()
     let addButton = UIButton()
     let searchView = UIView()
@@ -95,6 +96,11 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             $0.textColor = .TextPrimary
         }
         
+        textCount.do {
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextSecondary
+        }
+        
         searchTextField.do {
             $0.placeholder = "이름을 입력하세요"
             $0.applyStyle(.normal)
@@ -141,7 +147,7 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     }
     
     private func setLayout() {
-        [header,addLabel,memberCount,addCollectionView,lineView,searchTextFieldLabel,searchTextField,addButton,searchView,nextButton,backgroundView].forEach {
+        [header,addLabel,memberCount,addCollectionView,lineView,searchTextFieldLabel,textCount,searchTextField,addButton,searchView,nextButton,backgroundView].forEach {
             view.addSubview($0)
         }
         
@@ -180,6 +186,11 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         searchTextFieldLabel.snp.makeConstraints {
             $0.top.equalTo(lineView.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(38)
+        }
+        
+        textCount.snp.makeConstraints {
+            $0.centerY.equalTo(searchTextFieldLabel)
+            $0.leading.equalTo(searchTextFieldLabel.snp.trailing).offset(4)
         }
          
         searchTextField.snp.makeConstraints {
@@ -266,6 +277,11 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         output.textFieldValue
             .asDriver()
             .drive(searchTextField.rx.value)
+            .disposed(by: disposeBag)
+        
+        output.textCount
+            .asDriver()
+            .drive(textCount.rx.text)
             .disposed(by: disposeBag)
         
         output.selectedMemberArr
