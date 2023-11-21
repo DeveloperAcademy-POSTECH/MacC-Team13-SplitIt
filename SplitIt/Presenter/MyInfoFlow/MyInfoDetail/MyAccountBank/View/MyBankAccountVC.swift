@@ -117,7 +117,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
     func changedData() -> Bool {
         let preName = userDefault.string(forKey: "userName")
         let preAccount = userDefault.string(forKey: "userAccount")
-        let preBank = userDefault.string(forKey: "userBank") != Optional("") ? userDefault.string(forKey: "userBank") : "선택해주세요"
+        let preBank = userDefault.string(forKey: "userBank") != Optional("") ? userDefault.string(forKey: "userBank") : "은행을 선택해주세요"
         let preToss = userDefault.bool(forKey: "tossPay")
         let preKakao = userDefault.bool(forKey: "kakaoPay")
         let preNaver = userDefault.bool(forKey: "naverPay")
@@ -219,7 +219,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
             .disposed(by: disposeBag)
         
 
-        if UserDefaults.standard.string(forKey: "userBank") == "" ||  UserDefaults.standard.string(forKey: "userBank") == "선택 안함" || self.bankTextField.text == "선택해주세요" || userDefault.object(forKey: "tossPay") == nil {
+        if UserDefaults.standard.string(forKey: "userBank") == "" ||  UserDefaults.standard.string(forKey: "userBank") == "선택 안함" || self.bankTextField.text == "은행을 선택해주세요" || userDefault.object(forKey: "tossPay") == nil {
             bankSelectedView.isHidden = true
             payLabel.snp.makeConstraints {
                 $0.top.equalTo(bankTextField.snp.bottom).offset(24)
@@ -320,7 +320,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
                         self?.bankValue.accept(bankName)
                         self?.accountTextField.text = ""
                         self?.nameTextField.text = ""
-                        self?.bankTextField.text = bankName != "" ? bankName : "선택해주세요"
+                        self?.bankTextField.text = bankName != "" ? bankName : "은행을 선택해주세요"
                         self?.updateViewLayout(text: bankName)
                         self?.viewModel.inputBankName = bankName
                         self?.viewModel.checkBank = 1
@@ -408,7 +408,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
             .observe(String.self, "userBank")
             .subscribe(onNext: { value in
                 guard let value = value else { return }
-                self.bankTextField.text = value != "" ? value : "선택해주세요"
+                self.bankTextField.text = value != "" ? value : "은행을 선택해주세요"
             })
             .disposed(by: disposeBag)
         
@@ -513,7 +513,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         }
         
         bankTextField.do {
-            $0.placeholder = "선택해주세요"
+            $0.placeholder = "은행을 선택해주세요"
             $0.applyStyle(.normal)
             $0.textColor = .TextPrimary
             if userDefault.string(forKey: "userBank") != nil || userDefault.string(forKey: "userBank") != "" {
@@ -581,18 +581,18 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         }
         
         leftBar.do {
-            $0.backgroundColor = .gray
+            $0.backgroundColor = .BorderDeactivate
         }
         
         rightBar.do {
-            $0.backgroundColor = .gray
+            $0.backgroundColor = .BorderDeactivate
         }
         
         payView.do {
             $0.backgroundColor = .clear
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             
         }
         tossPayBtn.do {
@@ -608,7 +608,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         }
         
         tossLabel.do {
-            $0.text = "토스뱅크"
+            $0.text = "토스"
             $0.font = .KoreanCaption2
             $0.textAlignment = .center
             $0.textColor = .TextPrimary
@@ -672,7 +672,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         }
         
         bankLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(30)
+            $0.top.equalToSuperview().offset(18)
             $0.leading.equalTo(bankTextField.snp.leading).inset(6)
         }
         
