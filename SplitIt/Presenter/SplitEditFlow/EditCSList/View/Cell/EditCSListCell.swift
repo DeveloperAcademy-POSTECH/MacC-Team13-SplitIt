@@ -54,7 +54,7 @@ final class EditCSListCell: UITableViewCell, Reusable {
         contentView.do {
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.BorderPrimary.cgColor
+            $0.layer.borderColor = UIColor.BorderSecondary.cgColor
             $0.backgroundColor = .SurfaceWhite
         }
         

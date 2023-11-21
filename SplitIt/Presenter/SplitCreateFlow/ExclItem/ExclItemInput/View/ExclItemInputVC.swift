@@ -123,14 +123,14 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
         }
         
         exclItemAddButton.snp.makeConstraints {
-            $0.bottom.equalTo(exclListLabel.snp.bottom)
+            $0.centerY.equalTo(exclListLabel).offset(-3)
             $0.trailing.equalToSuperview().inset(38)
             $0.height.equalTo(24)
             $0.width.equalTo(exclItemAddButton.snp.height).multipliedBy(4)
         }
         
         tableView.snp.makeConstraints {
-            $0.top.equalTo(exclListLabel.snp.bottom).offset(18)
+            $0.top.equalTo(exclListLabel.snp.bottom).offset(19)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.bottom.equalTo(nextButton.snp.top).offset(-24)
         }

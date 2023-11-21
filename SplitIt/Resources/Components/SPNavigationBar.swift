@@ -367,9 +367,13 @@ final class SPNavigationBar: UIView {
     
     func setReceiptsButton(vc: UIViewController, action: Bool) {
         rightButton.do {
-            $0.setImage(UIImage(systemName: "newspaper"), for: .normal)
-            $0.imageView?.tintColor = UIColor.TextPrimary
-            $0.sizeToFit()
+            if let symbolImage = UIImage(systemName: "newspaper") {
+                let resizedImage = symbolImage.withConfiguration(UIImage.SymbolConfiguration(pointSize: 30, weight: .regular))
+                
+                // resizedImage를 사용하여 원하는 작업 수행
+                $0.setImage(resizedImage, for: .normal)
+                $0.imageView?.tintColor = UIColor.TextPrimary
+            }
         }
         
         self.addSubview(rightButton)
