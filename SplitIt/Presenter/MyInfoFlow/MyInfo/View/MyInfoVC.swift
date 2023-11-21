@@ -467,7 +467,7 @@ class MyInfoVC: UIViewController {
         }
         
         myInfoLabel.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(30)
+            $0.top.equalTo(header.snp.bottom).offset(18)
             $0.leading.equalToSuperview().offset(38)
         }
         
@@ -477,7 +477,7 @@ class MyInfoVC: UIViewController {
         }
         
         userName.snp.makeConstraints {
-            $0.top.equalTo(nameInfoLabel.snp.bottom).offset(4)
+            $0.top.equalTo(nameInfoLabel.snp.bottom).offset(6)
             $0.leading.equalTo(accountView).offset(16)
         }
         
@@ -487,7 +487,7 @@ class MyInfoVC: UIViewController {
         }
         
         accountBankLabel.snp.makeConstraints {
-            $0.top.equalTo(accountInfoLabel.snp.bottom).offset(4)
+            $0.top.equalTo(accountInfoLabel.snp.bottom).offset(6)
             $0.leading.equalTo(accountView.snp.leading).offset(16)
         }
         
@@ -503,19 +503,19 @@ class MyInfoVC: UIViewController {
         }
         
         accountEditChevron.snp.makeConstraints {
-            $0.height.equalTo(14)
-            $0.width.equalTo(8)
-            $0.bottom.equalToSuperview().inset(20)
+//            $0.height.equalTo(14)
+//            $0.width.equalTo(8)
+            $0.bottom.equalToSuperview().inset(18)
             $0.trailing.equalToSuperview().inset(16)
         }
         
         socialPayLabel.snp.makeConstraints {
-            $0.top.equalTo(accountBankLabel.snp.bottom).offset(16)
+            $0.top.equalTo(accountBankLabel.snp.bottom).offset(20)
             $0.leading.equalTo(accountView.snp.leading).offset(16)
         }
         
         historyLabel.snp.makeConstraints {
-            $0.top.equalTo(backView.snp.bottom).offset(16)
+            $0.top.equalTo(backView.snp.bottom).offset(20)
             $0.leading.equalToSuperview().offset(38)
         }
         
@@ -581,7 +581,7 @@ class MyInfoVC: UIViewController {
         
         madeByWCCTBtn.snp.makeConstraints {
             $0.bottom.equalToSuperview().inset(50)
-            $0.leading.equalToSuperview().offset(93)
+            $0.leading.equalToSuperview().offset(111)
         }
         
         privacyBtn.snp.makeConstraints {
@@ -661,7 +661,7 @@ class MyInfoVC: UIViewController {
         
  
         accountView.do {
-            $0.layer.cornerRadius = 16
+            $0.layer.cornerRadius = 8
             $0.layer.borderColor = UIColor.BorderPrimary.cgColor
             $0.layer.borderWidth = 1
             $0.backgroundColor = .clear
@@ -697,7 +697,8 @@ class MyInfoVC: UIViewController {
         }
         
         accountEditChevron.do {
-            $0.image = UIImage(systemName: "chevron.right")
+            //$0.image = UIImage(systemName: "chevron.right")
+            $0.image = UIImage(named: "ChevronRightIconDefault")
             $0.tintColor = .SurfaceSecondary
         }
         
@@ -777,7 +778,7 @@ class MyInfoVC: UIViewController {
         }
         
         privacyBtn.do {
-            $0.titleLabel?.font = UIFont.KoreanCaption1
+            $0.titleLabel?.font = UIFont.KoreanCaption2
             $0.titleLabel?.textColor = UIColor.TextSecondary
             $0.clipsToBounds = true
             $0.backgroundColor = .clear
@@ -786,7 +787,7 @@ class MyInfoVC: UIViewController {
         }
         
         madeByWCCTBtn.do {
-            $0.titleLabel?.font = UIFont.KoreanCaption1
+            $0.titleLabel?.font = UIFont.KoreanCaption2
             $0.titleLabel?.textColor = UIColor.TextSecondary
             $0.clipsToBounds = true
             $0.backgroundColor = .clear

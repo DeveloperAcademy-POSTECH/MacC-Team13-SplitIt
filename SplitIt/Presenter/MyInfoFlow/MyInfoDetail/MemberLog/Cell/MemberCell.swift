@@ -25,6 +25,8 @@ class MemberCell: UITableViewCell {
         addView()
         setAttribute()
         setLayout()
+
+        self.selectionStyle = .none
     }
     
     override func prepareForReuse() {
@@ -63,6 +65,7 @@ class MemberCell: UITableViewCell {
        
         
         deleteBtn.do {
+            $0.isEnabled = true
             $0.setImage(UIImage(systemName: "x.circle.fill"), for: .normal)
             $0.tintColor = .AppColorGrayscale200
             $0.clipsToBounds = true
