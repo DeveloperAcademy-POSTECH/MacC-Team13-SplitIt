@@ -47,7 +47,7 @@ class MemberCell: UITableViewCell {
         
         deleteBtn.snp.makeConstraints {
             $0.width.height.equalTo(20)
-            $0.top.equalToSuperview().offset(10)
+            $0.top.bottom.equalToSuperview().inset(12)
             $0.trailing.equalToSuperview().offset(-15)
         }
         
