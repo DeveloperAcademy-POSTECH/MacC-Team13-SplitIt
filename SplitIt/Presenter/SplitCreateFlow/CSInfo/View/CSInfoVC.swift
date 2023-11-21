@@ -72,7 +72,7 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
         titleTextFiled.do {
             $0.returnKeyType = .next
             self.titleTextFiled.applyStyle(.editingDidEndNormal)
-            $0.placeholder = "ex) 회식, 노래방, 생일파티"
+            $0.placeholder = "ex) 고깃집, 장보기, 노래방"
         }
         
         textFiledCounter.do {
