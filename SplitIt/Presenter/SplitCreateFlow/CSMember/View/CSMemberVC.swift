@@ -20,10 +20,12 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     
     let header = SPNavigationBar()
     let addLabel = UILabel()
+    let verticalBar = UILabel()
     let memberCount = UILabel()
     let addCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     let lineView = UIView()
     let searchTextFieldLabel = UILabel()
+    let textCountVerticalBar = UILabel()
     let textCount = UILabel()
     let searchTextField = SPTextField()
     let addButton = UIButton()
@@ -65,14 +67,20 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         }
         
         addLabel.do {
-            $0.text = "함께한 멤버 | "
+            $0.text = "함께한 멤버"
             $0.font = .KoreanCaption1
             $0.textColor = .TextPrimary
         }
         
+        verticalBar.do {
+            $0.text = "|"
+            $0.font = .KoreanCaption1
+            $0.textColor = .TextSecondary
+        }
+        
         memberCount.do {
             $0.font = .KoreanCaption2
-            $0.textColor = .TextPrimary
+            $0.textColor = .TextSecondary
         }
         
         addCollectionView.do {
@@ -94,6 +102,12 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             $0.text = "누구누구와 함께했나요?"
             $0.font = .KoreanBody
             $0.textColor = .TextPrimary
+        }
+        
+        textCountVerticalBar.do {
+            $0.text = "|"
+            $0.font = .KoreanBody
+            $0.textColor = .TextSecondary
         }
         
         textCount.do {
@@ -147,7 +161,7 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     }
     
     private func setLayout() {
-        [header,addLabel,memberCount,addCollectionView,lineView,searchTextFieldLabel,textCount,searchTextField,addButton,searchView,nextButton,backgroundView].forEach {
+        [header,addLabel,verticalBar,memberCount,addCollectionView,lineView,searchTextFieldLabel,textCountVerticalBar,textCount,searchTextField,addButton,searchView,nextButton,backgroundView].forEach {
             view.addSubview($0)
         }
         
@@ -162,13 +176,18 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         }
         
         addLabel.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(24)
+            $0.top.equalTo(header.snp.bottom).offset(30)
             $0.leading.equalToSuperview().offset(38)
+        }
+        
+        verticalBar.snp.makeConstraints {
+            $0.centerY.equalTo(addLabel)
+            $0.leading.equalTo(addLabel.snp.trailing).offset(4)
         }
         
         memberCount.snp.makeConstraints {
             $0.centerY.equalTo(addLabel)
-            $0.leading.equalTo(addLabel.snp.trailing)
+            $0.leading.equalTo(verticalBar.snp.trailing).offset(4)
         }
         
         addCollectionView.snp.makeConstraints {
@@ -188,9 +207,14 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             $0.leading.equalToSuperview().offset(38)
         }
         
-        textCount.snp.makeConstraints {
+        textCountVerticalBar.snp.makeConstraints {
             $0.centerY.equalTo(searchTextFieldLabel)
             $0.leading.equalTo(searchTextFieldLabel.snp.trailing).offset(4)
+        }
+        
+        textCount.snp.makeConstraints {
+            $0.centerY.equalTo(searchTextFieldLabel)
+            $0.leading.equalTo(textCountVerticalBar.snp.trailing).offset(4)
         }
          
         searchTextField.snp.makeConstraints {
@@ -209,21 +233,22 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         searchView.snp.makeConstraints {
             $0.top.equalTo(searchTextField.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(30)
-            $0.bottom.equalTo(nextButton.snp.top).offset(-24)
+            $0.bottom.equalTo(nextButton.snp.top).offset(-16)
         }
         
         searchLabel.snp.makeConstraints {
-            $0.top.leading.equalToSuperview().offset(16)
+            $0.top.equalToSuperview().offset(16)
+            $0.leading.equalToSuperview().offset(20)
         }
         
         searchTableView.snp.makeConstraints {
-            $0.top.equalTo(searchLabel.snp.bottom).offset(8)
+            $0.top.equalTo(searchLabel.snp.bottom).offset(12)
             $0.horizontalEdges.equalToSuperview().inset(16)
             $0.bottom.equalToSuperview().offset(-16)
         }
         
         nextButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-40)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-33)
             $0.height.equalTo(48)
             $0.horizontalEdges.equalToSuperview().inset(30)
         }
