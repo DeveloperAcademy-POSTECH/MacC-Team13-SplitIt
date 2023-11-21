@@ -114,10 +114,14 @@ final class SPAlertController: UIViewController {
     private func setLayout() {
         let alertHeight: CGFloat = getAlertHeight(type: alertType)
         let alertWidht = CGFloat(view.bounds.width - 70)
-        let buttonHeight = CGFloat(view.bounds.height * 202/844 * 48/202)
-        let buttonWidth = CGFloat((view.bounds.width - 12 - 70 - 48) / 2)
-        let topBottomInset = CGFloat(alertHeight * 30/202)
         let leadingTrailingInset = CGFloat(alertWidht * 24/320)
+        let topBottomInset: CGFloat
+        let itemBottomInset: CGFloat
+        let alertTitleHeight: CGFloat
+        let descriptionHeight: CGFloat
+        let descriptionTopInset: CGFloat
+        let buttonHeight = CGFloat(view.bounds.height * 48 / 844)
+        let buttonWidth = CGFloat((view.bounds.width - 12 - 70 - leadingTrailingInset * 2) / 2)
         
         [alertView].forEach {
             view.addSubview($0)
@@ -135,29 +139,49 @@ final class SPAlertController: UIViewController {
         
         switch alertType {
         case .warnNormal, .confirmNormal:
+            topBottomInset = (alertHeight * 30/176)
+            descriptionTopInset = CGFloat(alertHeight * 12/176)
+            alertTitleHeight = alertHeight * 22/176
+            descriptionHeight = alertHeight * 19/176
             alertTitleLabel.snp.makeConstraints {
                 $0.top.equalToSuperview().inset(topBottomInset)
+                $0.height.equalTo(alertTitleHeight)
+                $0.centerX.equalToSuperview()
+            }
+            
+            alertDescriptionLabel.snp.makeConstraints {
+                $0.top.equalTo(alertTitleLabel.snp.bottom).offset(descriptionTopInset)
+                $0.height.equalTo(descriptionHeight)
                 $0.centerX.equalToSuperview()
             }
         case .warnWithItem, .confirmWithItem:
+            let itemHeight: CGFloat = alertHeight * 22/202
+            alertTitleHeight = alertHeight * 22/202
+            descriptionHeight = alertHeight * 19/202
+            itemBottomInset = (alertHeight * 4 / 202)
+            topBottomInset = (alertHeight * 30/202)
+            descriptionTopInset = CGFloat(alertHeight * 10/202)
             alertView.addSubview(itemLabel)
             
             itemLabel.snp.makeConstraints {
                 $0.top.equalToSuperview().inset(topBottomInset)
+                $0.height.equalTo(itemHeight)
                 $0.centerX.equalToSuperview()
             }
             
             alertTitleLabel.snp.makeConstraints {
-                $0.top.equalTo(itemLabel.snp.bottom).offset(4)
+                $0.top.equalTo(itemLabel.snp.bottom).offset(itemBottomInset)
+                $0.height.equalTo(alertTitleHeight)
+                $0.centerX.equalToSuperview()
+            }
+            
+            alertDescriptionLabel.snp.makeConstraints {
+                $0.top.equalTo(alertTitleLabel.snp.bottom).offset(descriptionTopInset)
+                $0.height.equalTo(descriptionHeight)
                 $0.centerX.equalToSuperview()
             }
         }
-        
-        alertDescriptionLabel.snp.makeConstraints {
-            $0.top.equalTo(alertTitleLabel.snp.bottom).offset(12)
-            $0.centerX.equalToSuperview()
-        }
-        
+
         leftButton.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(leadingTrailingInset)
             $0.bottom.equalToSuperview().offset(-topBottomInset)
