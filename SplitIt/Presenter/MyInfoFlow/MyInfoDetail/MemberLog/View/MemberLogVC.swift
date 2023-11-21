@@ -221,6 +221,8 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
 
 
 extension MemberLogVC: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            return 50
+        }
 }
 
