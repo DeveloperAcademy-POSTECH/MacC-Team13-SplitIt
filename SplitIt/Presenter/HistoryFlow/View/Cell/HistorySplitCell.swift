@@ -40,7 +40,7 @@ class HistorySplitCell: UICollectionViewCell, Reusable {
     
     private func setAtrribute() {
         contentView.do {
-            $0.backgroundColor = .SurfacePrimary
+            $0.backgroundColor = .SurfaceWhite
             $0.layer.borderColor = UIColor.BorderSecondary.cgColor
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 8
@@ -59,13 +59,13 @@ class HistorySplitCell: UICollectionViewCell, Reusable {
         
         totalAmountLabel.do {
             $0.textColor = .TextPrimary
-            $0.font = .NumBody
+            $0.font = .NumRoundedBody
         }
         
         krwLabel.do {
             $0.text = "₩"
             $0.textColor = .TextPrimary
-            $0.font = .NumCaption1
+            $0.font = .NumRoundedCaption1
         }
         
         enterEditLabel.do {

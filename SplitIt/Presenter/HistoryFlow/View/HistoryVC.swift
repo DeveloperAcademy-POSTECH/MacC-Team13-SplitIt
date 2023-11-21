@@ -36,6 +36,12 @@ class HistoryVC: UIViewController {
         setBinding()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+    }
+    
     private func setAttribute() {
         view.backgroundColor = .SurfaceBrandCalmshell 
         

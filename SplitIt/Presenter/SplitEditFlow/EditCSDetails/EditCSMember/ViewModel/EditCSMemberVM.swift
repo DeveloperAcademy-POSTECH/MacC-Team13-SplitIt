@@ -38,6 +38,7 @@ final class EditCSMemberVM {
         let textFieldValue: BehaviorRelay<String>
         let showExclItemVC: ControlEvent<Void>
         let showBackAlert: Observable<Void>
+        let textCount: BehaviorRelay<String>
     }
     
     func transform(input: Input) -> Output {
@@ -51,6 +52,7 @@ final class EditCSMemberVM {
         let deleteIndexRelay = BehaviorRelay(value: 0)
         let textFieldIsValid = BehaviorRelay<Bool>(value: true)
         let textFieldValue = BehaviorRelay(value: "")
+        let textCount = BehaviorRelay(value: "| 0/8자")
         
         let showExclItemVC = input.saveButtonTapped
         
@@ -86,6 +88,15 @@ final class EditCSMemberVM {
                 return fixText
             }
             .drive(textFieldValue)
+            .disposed(by: disposeBag)
+        
+        input.textFieldValue
+            .map { text -> String in
+                let count = text.count
+                
+                return "| \(count)/8자"
+            }
+            .drive(textCount)
             .disposed(by: disposeBag)
         
         // inputText와 allMemberArr 중 변경이 일어났을 때 해당 내용을 searchMemberArr에 반영
@@ -219,7 +230,8 @@ final class EditCSMemberVM {
                       textFieldIsValid: textFieldIsValid,
                       textFieldValue: textFieldValue,
                       showExclItemVC: showExclItemVC,
-                      showBackAlert: showBackAlert)
+                      showBackAlert: showBackAlert,
+                      textCount: textCount)
     }
     
     private func tranformIsCheckInSelectMemberArr(allMemberArrValue: [MemberCheck], name: String) -> [MemberCheck] {
