@@ -22,6 +22,7 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
     let emptyLabel = UILabel()
     
     let friendLabel = UILabel()
+    let friendBar = UILabel()
     let friendCount = UILabel()
     let allDeleteBtn = UIButton()
     
@@ -47,7 +48,7 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
     }
     
     func setAddView() {
-        [header,tableView, emptyLabel, friendLabel, friendCount, allDeleteBtn].forEach {
+        [header,tableView, emptyLabel, friendLabel, friendCount, allDeleteBtn, friendBar].forEach {
             view.addSubview($0)
         }
     }
@@ -81,8 +82,12 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
             $0.leading.equalToSuperview().offset(34)
         }
         
+        friendBar.snp.makeConstraints {
+            $0.leading.equalTo(friendLabel.snp.trailing).offset(4)
+            $0.top.equalTo(header.snp.bottom).offset(24)
+        }
         friendCount.snp.makeConstraints {
-            $0.leading.equalTo(friendLabel.snp.trailing).offset(8)
+            $0.leading.equalTo(friendBar.snp.trailing).offset(8)
             $0.top.equalTo(header.snp.bottom).offset(26)
         }
         
@@ -92,14 +97,15 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
         }
         
         tableView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.trailing.equalToSuperview().inset(20)
+            $0.leading.equalToSuperview().inset(14)
             $0.top.equalTo(friendLabel.snp.bottom).offset(16)
             $0.bottom.equalToSuperview().inset(30)
         }
         
         
         emptyLabel.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(77)
+            $0.centerX.equalToSuperview()
             $0.centerY.equalToSuperview()
         }
         
@@ -116,10 +122,17 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
         }
         
         friendLabel.do {
-            $0.text = "함께한 멤버 |"
+            $0.text = "함께한 멤버 "
             $0.font = .KoreanBody
             $0.textColor = .TextPrimary
         }
+        
+        friendBar.do {
+            $0.text = "|"
+            $0.font = .KoreanBody
+            $0.textColor = .TextSecondary
+        }
+        
         
         friendCount.do {
             $0.font = .KoreanCaption1
@@ -127,7 +140,7 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
         }
         
         emptyLabel.do {
-            $0.text = "아직 친구 검색 내역이 없습니다"
+            $0.text = "아직 멤버 내역이 없어요"
             $0.font = .KoreanBody
             $0.textColor = .TextSecondary
             $0.isHidden = false
@@ -180,7 +193,7 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
         
         viewModel.memberList
             .bind(to: tableView.rx.items(cellIdentifier: "MemberCell", cellType: MemberCell.self)) { (row, member, cell) in
-                cell.nameLabel.text = member.name
+                cell.nameLabel.text = " \(member.name)"
                 //삭제버튼 눌렀을 때
                 cell.deleteBtn.rx.tap
                     .observe(on: MainScheduler.asyncInstance)

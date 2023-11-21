@@ -36,20 +36,19 @@ class MemberCell: UITableViewCell {
     func addView() {
         contentView.addSubview(nameLabel)
         contentView.addSubview(deleteBtn)
-        
     }
 
     
     func setLayout() {
-        nameLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(10)
-            make.leading.equalToSuperview().offset(20)
+        nameLabel.snp.makeConstraints {
+            $0.top.bottom.equalToSuperview().inset(12)
+            $0.leading.trailing.equalToSuperview().inset(20)
         }
         
-        deleteBtn.snp.makeConstraints { make in
-            make.width.height.equalTo(20)
-            make.top.equalToSuperview().offset(10)
-            make.trailing.equalToSuperview().offset(-15)
+        deleteBtn.snp.makeConstraints {
+            $0.width.height.equalTo(20)
+            $0.top.equalToSuperview().offset(10)
+            $0.trailing.equalToSuperview().offset(-15)
         }
         
     }
