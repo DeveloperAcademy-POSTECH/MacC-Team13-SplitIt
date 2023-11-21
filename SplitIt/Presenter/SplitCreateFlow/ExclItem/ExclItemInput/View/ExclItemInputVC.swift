@@ -142,7 +142,7 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
         }
         
         nextButton.snp.makeConstraints {
-            $0.bottom.equalToSuperview().inset(40)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(33)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(48)
         }
