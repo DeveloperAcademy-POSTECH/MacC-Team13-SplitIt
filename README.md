@@ -14,7 +14,7 @@
 
 ![screenshots](https://github.com/DeveloperAcademy-POSTECH/MacC-Team13-SplitIt/assets/91787174/6b42f744-ca5c-4158-987c-5324b1d3a31f)
 
-# Introduction
+## Introduction
 >
 >혹시 정산을 하면서 이런 고민을 해보신적 있나요? 
 > 
@@ -31,7 +31,7 @@
 <br/>
 <br />
 
-# Key
+## Key Point
 1. 쉽고 빠른 정산
     - 앱의 안내를 따라 정산할 내용을 간단하게 입력하면 흔들리는 택시 안에서도, 시끄러운 회식장소에서도 언제나 쉽고 빠르게 정산을 마칠 수 있어요.
 2. 똑똑한 정산
