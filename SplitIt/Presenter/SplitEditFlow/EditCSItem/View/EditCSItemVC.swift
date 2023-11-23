@@ -23,14 +23,17 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
     let titleLabel = UILabel()
     let totalAmountLabel = UILabel()
     let titlePriceEditBtn = DefaultEditButton()
+    let titlePriceTap = UITapGestureRecognizer()
     let subtitle = UILabel()
     let titleView = UIView()
     let memberLabel = UILabel()
     let memberEditBtn = DefaultEditButton()
+    let memberTap = UITapGestureRecognizer()
     let subMember = UILabel()
     let memberView = UIView()
     let exclLabel = UILabel()
     let exclEditBtn = DefaultEditButton()
+    let exclTap = UITapGestureRecognizer()
     let subExcl = UILabel()
     let exclView = UIView()
     let delButton = UILabel()
@@ -90,6 +93,7 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.BorderSecondary.cgColor
             $0.backgroundColor = .SurfaceWhite
+            $0.addGestureRecognizer(titlePriceTap)
         }
         
         subMember.do {
@@ -105,6 +109,7 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.BorderSecondary.cgColor
             $0.backgroundColor = .SurfaceWhite
+            $0.addGestureRecognizer(memberTap)
         }
         
         subExcl.do {
@@ -120,6 +125,7 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.BorderSecondary.cgColor
             $0.backgroundColor = .SurfaceWhite
+            $0.addGestureRecognizer(exclTap)
         }
         
         delButton.do {
@@ -220,9 +226,9 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
     
     func setBinding() {
         let input = EditCSItemVM.Input(viewDidAppear: self.rx.viewDidAppear,
-                                       titlePriceEditTapped: titlePriceEditBtn.rx.tap,
-                                       memberEditTapped: memberEditBtn.rx.tap,
-                                       exclItemEditTapped: exclEditBtn.rx.tap,
+                                       titlePriceEditTapped: titlePriceTap.rx.event,
+                                       memberEditTapped: memberTap.rx.event,
+                                       exclItemEditTapped: exclTap.rx.event,
                                        delButtonTapped: delBtnTap.rx.event)
         
         let output = viewModel.transform(input: input)
@@ -257,7 +263,7 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
             .disposed(by: disposeBag)
         
         output.pushCSEditTitlePriceView
-            .drive(onNext: { [weak self] in
+            .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 let vc = EditCSInfoVC()
                 self.navigationController?.pushViewController(vc, animated: true)
@@ -265,7 +271,7 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
             .disposed(by: disposeBag)
         
         output.pushCSMemberEditView
-            .drive(onNext: { [weak self] in
+            .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 let vc = EditCSMemberVC()
                 self.navigationController?.pushViewController(vc, animated: true)
@@ -273,7 +279,7 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
             .disposed(by: disposeBag)
         
         output.pushCSExclItemEditView
-            .drive(onNext: { [weak self] in
+            .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 let vc = EditExclItemInputVC()
                 self.navigationController?.pushViewController(vc, animated: true)
