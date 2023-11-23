@@ -13,9 +13,7 @@ import UIKit
 final class EditCSMemberVM {
     
     let disposeBag = DisposeBag()
-    
     let maxTextCount = 8
-    var isEdited = BehaviorRelay<Bool>(value: false)
     
     struct Input {
         let viewWillAppear: Observable<Bool>
@@ -39,9 +37,11 @@ final class EditCSMemberVM {
         let showExclItemVC: ControlEvent<Void>
         let showBackAlert: Observable<Void>
         let textCount: BehaviorRelay<String>
+        let isEdited: BehaviorRelay<Bool>
     }
     
     func transform(input: Input) -> Output {
+        var isEdited = BehaviorRelay<Bool>(value: false)
         let repo = SplitRepository.share
         let allMemberArr = BehaviorRelay<[MemberCheck]>(value: [])
         let searchMemberArr = BehaviorRelay<[MemberCheck]>(value: [])
@@ -231,7 +231,8 @@ final class EditCSMemberVM {
                       textFieldValue: textFieldValue,
                       showExclItemVC: showExclItemVC,
                       showBackAlert: showBackAlert,
-                      textCount: textCount)
+                      textCount: textCount,
+                      isEdited: isEdited)
     }
     
     private func tranformIsCheckInSelectMemberArr(allMemberArrValue: [MemberCheck], name: String) -> [MemberCheck] {

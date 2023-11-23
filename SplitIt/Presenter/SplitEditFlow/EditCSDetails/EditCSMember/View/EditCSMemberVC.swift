@@ -395,13 +395,14 @@ final class EditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         
         output.showExclItemVC
             .asDriver()
-            .drive(onNext: {
+            .drive(onNext: { [weak self] _ in
+                guard let self = self else { return }
                 SplitRepository.share.editCSMemberAndExclMember()
                 self.sendConfirmToastMessage()
             })
             .disposed(by: disposeBag)
         
-        viewModel.isEdited
+        output.isEdited
             .asDriver()
             .drive(onNext: { [weak navigationController] isEdited in
                 navigationController?.interactivePopGestureRecognizer?.isEnabled = !isEdited
@@ -412,7 +413,7 @@ final class EditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                if self.viewModel.isEdited.value {
+                if output.isEdited.value {
                     self.showAlert(view: self.backAlert,
                                    type: .warnNormal,
                                    title: "수정을 중단하시겠어요?",
@@ -452,13 +453,8 @@ extension EditCSMemberVC: UISearchTextFieldDelegate {
     }
 }
 
-// MARK: Send ToastMessage
 extension EditCSMemberVC {
-    fileprivate func sendConfirmToastMessage() {
-        if let vc = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 1] as? EditCSItemVC {
-            Observable.just(self.viewModel.isEdited.value)
-                .bind(to: vc.viewModel.isEdit)
-                .disposed(by: disposeBag)
-        }
+    func sendConfirmToastMessage() {
+        NotificationCenter.default.post(name: Notification.Name("ToeastMessage"), object: nil)
     }
 }

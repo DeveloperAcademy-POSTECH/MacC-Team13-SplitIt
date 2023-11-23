@@ -313,17 +313,6 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
             })
             .disposed(by: disposeBag)
         
-        viewModel.isEdit.asDriver()
-            .drive(onNext: {[weak self] bool in
-                guard let self = self else { return }
-                if bool {
-                    var style = ToastStyle()
-                    style.messageFont = .KoreanCaption1
-                    self.view.makeToast("  ✓  수정 완료되었습니다!  ", duration: 3.0, position: .bottom, style: style)
-                }
-            })
-            .disposed(by: disposeBag)
-        
         headerView.rightButton.rx.tap.asDriver()
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
@@ -335,6 +324,15 @@ class EditCSItemVC: UIViewController, SPAlertDelegate {
             })
             .disposed(by: disposeBag)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(receivedToeastMessage), name: Notification.Name("ToeastMessage"), object: nil)
+        
     }
 }
 
+extension EditCSItemVC {
+    @objc func receivedToeastMessage() {
+        var style = ToastStyle()
+        style.messageFont = .KoreanCaption1
+        self.view.makeToast("  ✓  수정 완료되었습니다!  ", duration: 3.0, position: .bottom, style: style)
+    }
+}
