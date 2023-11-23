@@ -22,9 +22,9 @@ final class EditCSItemVM {
     
     struct Input {
         let viewDidAppear: Observable<Bool>
-        let titlePriceEditTapped: ControlEvent<Void>
-        let memberEditTapped: ControlEvent<Void>
-        let exclItemEditTapped: ControlEvent<Void>
+        let titlePriceEditTapped: ControlEvent<UITapGestureRecognizer>
+        let memberEditTapped: ControlEvent<UITapGestureRecognizer>
+        let exclItemEditTapped: ControlEvent<UITapGestureRecognizer>
         let delButtonTapped: ControlEvent<UITapGestureRecognizer>
     }
     
@@ -33,9 +33,9 @@ final class EditCSItemVM {
         let csTotalAmount: Driver<NSMutableAttributedString>
         let csMember: Driver<NSMutableAttributedString>
         let csExclItemString: Driver<NSMutableAttributedString>
-        let pushCSEditTitlePriceView: Driver<Void>
-        let pushCSMemberEditView: Driver<Void>
-        let pushCSExclItemEditView: Driver<Void>
+        let pushCSEditTitlePriceView: Driver<UITapGestureRecognizer>
+        let pushCSMemberEditView: Driver<UITapGestureRecognizer>
+        let pushCSExclItemEditView: Driver<UITapGestureRecognizer>
         let popDeleteCSInfo: Driver<UITapGestureRecognizer>
         let deleteBtnHidden: Driver<Bool>
     }
