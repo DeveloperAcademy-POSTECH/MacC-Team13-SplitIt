@@ -12,170 +12,247 @@ import SnapKit
 class MyBankAccountVM {
     
     var disposeBag = DisposeBag()
-    var bankModalListVC: BankListModalVC?
-    let userDefault = UserDefaults.standard
-    var isEdited = BehaviorRelay<Bool>(value: false)
-    
-    var isTossPayToggled = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "tossPay"))
-    var isKakaoPayToggled = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "kakaoPay"))
-    var isNaverPayToggled = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "naverPay"))
-    
-    var inputRealName: String = ""
-    var inputAccount: String = ""
-    var inputBankName: String = ""
-    
-    var checkAccount: Int = 0
-    var checkRealName: Int = 0
-    var checkBank: Int = 0
- 
-    var inputAccountRelay = BehaviorRelay<String?>(value: nil)
-    
-    
+        
     struct Input {
-        let inputRealNameText: ControlEvent<String>
+        let inputRealNameText: Driver<String>
         let editDoneBtnTapped: Driver<Void>
         let selectBackTapped: Observable<Void>
-        let inputAccountText: ControlEvent<String>
+        let inputAccountText: Driver<String>
         let tossTapped: Observable<Void>
         let kakaoTapeed: Observable<Void>
         let naverTapped: Observable<Void>
-        let deleteBtnTapped: Driver<Void>
+        let deleteBtnTapped: Observable<Void>
         let cancelBtnTapped: Observable<Void>
-        let swipeBack: Observable<UIPanGestureRecognizer>
+        let inputUserBankName: BehaviorRelay<String>
     }
-    
     
     struct Output {
         let popToMyInfoView: Driver<Void>
         let showBankModel: Observable<Void>
-        let toggleTossPay: Observable<Void>
-        let toggleKakaoPay: Observable<Void>
-        let togglenaverPay: Observable<Void>
-        let showAlertView: Driver<Void>
+        let toggleTossPay: BehaviorRelay<Bool>
+        let toggleKakaoPay: BehaviorRelay<Bool>
+        let toggleNaverPay: BehaviorRelay<Bool>
         let cancelBackToView: Observable<Void>
-
+        let isSaveButtonEnable: BehaviorRelay<Bool>
+        let isChangedRelay: BehaviorRelay<Bool>
+        let inputBankName: BehaviorRelay<String>
+        let deleteButtonTapped: Observable<Void>
+        let nameTextCount: BehaviorRelay<String>
+        let accountTextCount: BehaviorRelay<String>
+        let inputRealNameText: BehaviorRelay<String>
+        let inputRealNameTextColor: BehaviorRelay<UIColor>
+        let inputAccountTextColor: BehaviorRelay<UIColor>
+        let inputAccountText: BehaviorRelay<String>
     }
     
     func transform(input: Input) -> Output {
+        let toggleTossPay = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "tossPay"))
+        let toggleKakaoPay = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "kakaoPay"))
+        let toggleNaverPay = BehaviorRelay<Bool>(value: UserDefaults.standard.bool(forKey: "naverPay"))
+        let inputBankName = BehaviorRelay<String>(value: UserDefaults.standard.string(forKey: "userBank") ?? "")
+        let inputRealName = BehaviorRelay<String>(value: UserDefaults.standard.string(forKey: "userName") ?? "")
+        let inputAccount = BehaviorRelay<String>(value: UserDefaults.standard.string(forKey: "userAccount") ?? "")
         
-        let inputRealNameText = input.inputRealNameText
+        let isSaveButtonEnable = BehaviorRelay<Bool>(value: false)
+        let isChangedRelay = BehaviorRelay<Bool>(value: false)
+        let nameTextCount = BehaviorRelay<String>(value: "")
+        let accountTextCount = BehaviorRelay<String>(value: "")
+        let inputRealNameTextColor = BehaviorRelay<UIColor>(value: .TextSecondary)
+        let inputAccountTextColor = BehaviorRelay<UIColor>(value: .TextSecondary)
+        let inputRealNameText = BehaviorRelay<String>(value: "")
+        let inputAccountText = BehaviorRelay<String>(value: "")
+        
         let editDoneBtnTapped = input.editDoneBtnTapped
         let selectBackTapped = input.selectBackTapped
-        let inputAccountText = input.inputAccountText
         let tossTapped = input.tossTapped
         let kakaoTapped = input.kakaoTapeed
         let naverTapped = input.naverTapped
         let deleteBtnTapped = input.deleteBtnTapped
         let cancelBtnTapped = input.cancelBtnTapped
+        let inputUserBankName = input.inputUserBankName
         
-
-        editDoneBtnTapped
+        let maxTextCount = 8
+        
+        input.editDoneBtnTapped
             .drive(onNext: {
-                if self.inputBankName == "선택 안함" {
+                if inputBankName.value == "선택 안함" {
                     UserDefaults.standard.set("선택 안함", forKey: "userBank")
                     UserDefaults.standard.set("", forKey: "userAccount")
                     UserDefaults.standard.set("", forKey: "userName")
                 } else {
-                    if !self.inputBankName.isEmpty || self.checkBank == 1 {
-                        UserDefaults.standard.set(self.inputBankName, forKey: "userBank")
-                        self.checkBank = 0
+                    if !inputBankName.value.isEmpty {
+                        UserDefaults.standard.set(inputBankName.value, forKey: "userBank")
                     }
-                    
-                    if !self.inputAccount.isEmpty || self.checkAccount == 1 {
-                        UserDefaults.standard.set(self.inputAccount, forKey: "userAccount")
-                        self.checkAccount = 0
+                    if !inputAccount.value.isEmpty {
+                        UserDefaults.standard.set(inputAccount.value, forKey: "userAccount")
                     }
-                    
-                    if !self.inputRealName.isEmpty || self.checkRealName == 1 {
-                        UserDefaults.standard.set(self.inputRealName, forKey: "userName")
-                        self.checkRealName = 0
+                    if !inputRealName.value.isEmpty {
+                        UserDefaults.standard.set(inputRealName.value, forKey: "userName")
                     }
                 }
-                
-                
-                
-                self.isTossPayToggled
+                toggleTossPay
                     .subscribe(onNext: { toggled in
                         UserDefaults.standard.set(toggled, forKey: "tossPay")
                     })
                     .disposed(by: self.disposeBag)
                 
-                self.isKakaoPayToggled
+                toggleKakaoPay
                     .subscribe(onNext: { toggled in
                         UserDefaults.standard.set(toggled, forKey: "kakaoPay")
                     })
                     .disposed(by: self.disposeBag)
                 
-                self.isNaverPayToggled
+                toggleNaverPay
                     .subscribe(onNext: { toggled in
                         UserDefaults.standard.set(toggled, forKey: "naverPay")
                     })
                     .disposed(by: self.disposeBag)
-                
             })
             .disposed(by: disposeBag)
 
-        
-        
         tossTapped
             .subscribe(onNext: {
-                self.isTossPayToggled.accept(!self.isTossPayToggled.value)
+                toggleTossPay.accept(!toggleTossPay.value)
             })
             .disposed(by: disposeBag)
-
+        
         kakaoTapped
             .subscribe(onNext: {
-                self.isKakaoPayToggled.accept(!self.isKakaoPayToggled.value)
+                toggleKakaoPay.accept(!toggleKakaoPay.value)
             })
             .disposed(by: disposeBag)
-
+        
         naverTapped
             .subscribe(onNext: {
-                self.isNaverPayToggled.accept(!self.isNaverPayToggled.value)
+                toggleNaverPay.accept(!toggleNaverPay.value)
             })
+            .disposed(by: disposeBag)
+        
+        inputUserBankName
+            .subscribe(onNext: { newValue in
+                inputBankName.accept(newValue)
+            })
+            .disposed(by: disposeBag)
+        
+        input.inputRealNameText
+            .drive(onNext: { newValue in
+                inputRealName.accept(newValue)
+            })
+            .disposed(by: disposeBag)
+        
+        input.inputRealNameText
+            .map { text in
+                if text.count == 0 {
+                    isSaveButtonEnable.accept(false)
+                } else {
+                    isSaveButtonEnable.accept(true)
+                }
+                let count = min(text.count, 8)
+                return "\(count)/8"
+            }
+            .drive(nameTextCount)
+            .disposed(by: disposeBag)
+        
+        input.inputRealNameText
+            .map { text -> UIColor in
+                return text.count >= maxTextCount ? .AppColorStatusWarnRed : .TextSecondary
+            }
+            .drive(inputRealNameTextColor)
+            .disposed(by: disposeBag)
+        
+        input.inputRealNameText
+            .map { text in
+                if text.count >= 8 {
+                    let endIndex = text.index(text.startIndex, offsetBy: 8)
+                    return String(text[..<endIndex])
+                } else {
+                    return text
+                }
+            }
+            .drive(inputRealNameText)
             .disposed(by: disposeBag)
 
-        inputRealNameText
-            .bind(onNext: { text in
-                if text.isEmpty {
-                    self.inputRealName = ""
-                    self.checkRealName = 1
-                } else {
-                    self.inputRealName = text
-                }
+        input.inputAccountText
+            .drive(onNext: { newValue in
+                inputAccount.accept(newValue)
             })
+            .disposed(by: disposeBag)
+        
+        input.inputAccountText
+            .map { text in
+                let filtered = text.filter { $0.isNumber || $0 == "-" }
+                let count = min(filtered.count, 17)
+                return "\(count)/17"
+            }
+            .drive(accountTextCount)
+            .disposed(by: disposeBag)
+        
+        input.inputAccountText
+            .map { text -> UIColor in
+                return text.count >= 17 ? .AppColorStatusWarnRed : .TextSecondary
+            }
+            .drive(inputAccountTextColor)
+            .disposed(by: disposeBag)
+        
+        input.inputAccountText
+            .map { text in
+                let filtered = text.filter { $0.isNumber || $0 == "-" }
+                if filtered.count >= 17 {
+                    let endIndex = filtered.index(filtered.startIndex, offsetBy: 17)
+                    return String(filtered[..<endIndex])
+                } else {
+                    return filtered
+                }
+            }
+            .drive(inputAccountText)
+            .disposed(by: disposeBag)
+        
+        Observable.combineLatest(inputRealNameText, inputAccountText, inputBankName)
+            .map { nameText, accountText, bank in
+                if bank == "선택 안함" {
+                    return true
+                } else {
+                    return nameText.count > 0 && accountText.count > 0
+                }
+            }
+            .bind(to: isSaveButtonEnable)
             .disposed(by: disposeBag)
 
         
-        inputAccountText
-            .bind(onNext: { text in
-                if text.isEmpty {
-                    self.inputAccount = ""
-                    self.checkAccount = 1
-                } else {
-                    self.inputAccount = text
-                }
-            })
+//                print(preName, preAccount, preBank, preToss, preKakao, preNaver)
+//                print(name, account, bank, toss, kakao, naver)
+        
+        Observable.combineLatest(inputBankName, inputRealName, inputAccount, toggleTossPay, toggleKakaoPay, toggleNaverPay)
+            .map { bank, name, account, toss, kakao, naver in
+                let preName = UserDefaults.standard.string(forKey: "userName")
+                let preAccount = UserDefaults.standard.string(forKey: "userAccount")
+                let preBank = UserDefaults.standard.string(forKey: "userBank")
+                let preToss = UserDefaults.standard.bool(forKey: "tossPay")
+                let preKakao = UserDefaults.standard.bool(forKey: "kakaoPay")
+                let preNaver = UserDefaults.standard.bool(forKey: "naverPay")
+               
+                //하나라도 다르면 true, 변화가 없었다면 false return
+                return preName != name || preAccount != account || preBank != bank || preToss != toss || preKakao != kakao || preNaver != naver
+            }
+            .bind(to: isChangedRelay)
             .disposed(by: disposeBag)
-      
         
-//        let showBackAlert = Observable.merge(input.deleteBtnTapped.asObservable(),
-//                                             input.swipeBack.map{ _ in }.asObservable())
-        
-        let output = Output(popToMyInfoView: editDoneBtnTapped,
-                            showBankModel: selectBackTapped,
-                            toggleTossPay: tossTapped,
-                            toggleKakaoPay: kakaoTapped,
-                            togglenaverPay: naverTapped,
-                            showAlertView: deleteBtnTapped,
-                            cancelBackToView: cancelBtnTapped
-        )
-        
-        return output
+        return Output(popToMyInfoView: editDoneBtnTapped,
+                      showBankModel: selectBackTapped,
+                      toggleTossPay: toggleTossPay,
+                      toggleKakaoPay: toggleKakaoPay,
+                      toggleNaverPay: toggleNaverPay,
+                      cancelBackToView: cancelBtnTapped,
+                      isSaveButtonEnable: isSaveButtonEnable,
+                      isChangedRelay: isChangedRelay,
+                      inputBankName: inputBankName,
+                      deleteButtonTapped: deleteBtnTapped,
+                      nameTextCount: nameTextCount,
+                      accountTextCount: accountTextCount,
+                      inputRealNameText: inputRealNameText,
+                      inputRealNameTextColor: inputRealNameTextColor,
+                      inputAccountTextColor: inputAccountTextColor,
+                      inputAccountText: inputAccountText)
     }
-    
-    
-  
-    
 }
 
