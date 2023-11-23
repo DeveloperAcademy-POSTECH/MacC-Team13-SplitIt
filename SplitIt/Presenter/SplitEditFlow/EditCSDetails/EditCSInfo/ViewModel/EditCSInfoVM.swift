@@ -12,11 +12,7 @@ import UIKit
 class EditCSInfoVM {
     
     var disposeBag = DisposeBag()
-    
     let maxTextCount = 8
-    var isEdited = BehaviorRelay(value: false)
-    
-    
     
     struct Input {
         let confirmButtonTapped: ControlEvent<Void> // 다음 버튼
@@ -40,9 +36,11 @@ class EditCSInfoVM {
         let titleTextFieldControlEvent: Driver<UIControl.Event>
         let showBackAlert: Observable<Void>
         let saveCSInfo: Observable<Void>
+        let isEdited: BehaviorRelay<Bool>
     }
     
     func transform(input: Input) -> Output {
+        var isEdited = BehaviorRelay(value: false)
         let csinfo = SplitRepository.share.csInfoArr.value.first
         let inputTitle = input.title
         let saveCSInfo = input.confirmButtonTapped
@@ -211,7 +209,8 @@ class EditCSInfoVM {
                       confirmButtonIsEnable: confirmButtonIsEnable,
                       titleTextFieldControlEvent: titleTFControlEvent,
                       showBackAlert: showBackAlert,
-                      saveCSInfo: input.confirmButtonTapped.asObservable())
+                      saveCSInfo: input.confirmButtonTapped.asObservable(),
+                      isEdited: isEdited)
     }
     
     func calculateMinTotalAmount(_ value: Int) -> Bool {

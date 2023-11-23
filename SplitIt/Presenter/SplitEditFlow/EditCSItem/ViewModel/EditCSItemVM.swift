@@ -13,8 +13,6 @@ import UIKit
 final class EditCSItemVM {
     var disposeBag = DisposeBag()
     
-    
-    let isEdit = BehaviorRelay(value: false)
     let maxTextCount = 8
     let csInfoIdx: String
     
@@ -79,12 +77,12 @@ final class EditCSItemVM {
         let exclEditView = input.exclItemEditTapped.asDriver()
         let delbtn = input.delButtonTapped.asDriver()
         
-        input.viewDidAppear
-            .subscribe { [weak self]_ in
-                guard let self = self else { return }
-//                dataModel.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: self.csInfoIdx)
-            }
-            .disposed(by: disposeBag)
+//        input.viewDidAppear
+//            .subscribe { [weak self]_ in
+//                guard let self = self else { return }
+////                dataModel.fetchCSInfoArrFromDBWithCSInfoIdx(csInfoIdx: self.csInfoIdx)
+//            }
+//            .disposed(by: disposeBag)
         
         return Output(csTitle: title,
                       csTotalAmount: totalAmount,
