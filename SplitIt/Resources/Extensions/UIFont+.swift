@@ -16,9 +16,9 @@ enum AppFontName: String {
 }
 
 extension UIFont {
-    
+
     // MARK: Number Typeface
-    
+
     /**
      32pt / Num / Light / Title 1
      - parameters:
@@ -26,13 +26,13 @@ extension UIFont {
      */
     class var NumTitle1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 30, weight: .light)
         case .defaultDevice:
             return systemFont(ofSize: 32, weight: .light)
         }
     }
-    
+
     /**
      32pt / Num / SemiBold / Title 1
      - parameters:
@@ -40,13 +40,13 @@ extension UIFont {
      */
     class var NumBoldTitle1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 30, weight: .semibold)
         case .defaultDevice:
             return systemFont(ofSize: 32, weight: .semibold)
         }
     }
-    
+
     /**
      32pt / Num / UltraLight / Title 1
      - parameters:
@@ -54,13 +54,13 @@ extension UIFont {
      */
     class var NumLightTitle1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 30, weight: .ultraLight)
         case .defaultDevice:
             return systemFont(ofSize: 32, weight: .ultraLight)
         }
     }
-    
+
     /**
      29pt / Num / Light / Title 2
      - parameters:
@@ -68,13 +68,13 @@ extension UIFont {
      */
     class var NumTitle2: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 27, weight: .light)
         case .defaultDevice:
             return systemFont(ofSize: 29, weight: .light)
         }
     }
-    
+
     /**
      29pt / Num / SemiBold / Title 2
      - parameters:
@@ -82,13 +82,13 @@ extension UIFont {
      */
     class var NumBoldTitle2: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 27, weight: .semibold)
         case .defaultDevice:
             return systemFont(ofSize: 29, weight: .semibold)
         }
     }
-    
+
     /**
      29pt / Num / UltraLight / Title 2
      - parameters:
@@ -96,13 +96,13 @@ extension UIFont {
      */
     class var NumLightTitle2: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 27, weight: .ultraLight)
         case .defaultDevice:
             return systemFont(ofSize: 29, weight: .ultraLight)
         }
     }
-    
+
     /**
      26pt / Num / Light / Title 3
      - parameters:
@@ -110,13 +110,13 @@ extension UIFont {
      */
     class var NumTitle3: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 24, weight: .light)
         case .defaultDevice:
             return systemFont(ofSize: 26, weight: .light)
         }
     }
-    
+
     /**
      26pt / Num / SemiBold / Title 3
      - parameters:
@@ -124,13 +124,13 @@ extension UIFont {
      */
     class var NumBoldTitle3: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 24, weight: .semibold)
         case .defaultDevice:
             return systemFont(ofSize: 26, weight: .semibold)
         }
     }
-    
+
     /**
      26pt / Num / UltraLight / Title 3
      - parameters:
@@ -138,13 +138,13 @@ extension UIFont {
      */
     class var NumLightTitle3: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 24, weight: .ultraLight)
         case .defaultDevice:
             return systemFont(ofSize: 26, weight: .ultraLight)
         }
     }
-    
+
     /**
      23pt / Num / Light / Subtitle
      - parameters:
@@ -152,13 +152,13 @@ extension UIFont {
      */
     class var NumSubtitle: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 21, weight: .light)
         case .defaultDevice:
             return systemFont(ofSize: 23, weight: .light)
         }
     }
-    
+
     /**
      23pt / Num / SemiBold / Subtitle
      - parameters:
@@ -166,13 +166,13 @@ extension UIFont {
      */
     class var NumBoldSubtitle: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 21, weight: .semibold)
         case .defaultDevice:
             return systemFont(ofSize: 23, weight: .semibold)
         }
     }
-    
+
     /**
      23pt / Num / UltraLight / Subtitle
      - parameters:
@@ -180,13 +180,13 @@ extension UIFont {
      */
     class var NumLightSubtitle: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 21, weight: .ultraLight)
         case .defaultDevice:
             return systemFont(ofSize: 23, weight: .ultraLight)
         }
     }
-    
+
     /**
      20pt / Num / Light / Body
      - parameters:
@@ -194,13 +194,13 @@ extension UIFont {
      */
     class var NumBody: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 18, weight: .light)
         case .defaultDevice:
             return systemFont(ofSize: 20, weight: .light)
         }
     }
-    
+
     /**
      20pt / Num / SemiBold / Body
      - parameters:
@@ -208,13 +208,13 @@ extension UIFont {
      */
     class var NumBoldBody: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 18, weight: .semibold)
         case .defaultDevice:
             return systemFont(ofSize: 20, weight: .semibold)
         }
     }
-    
+
     /**
      20pt / Num / UltraLight / Body
      - parameters:
@@ -222,13 +222,13 @@ extension UIFont {
      */
     class var NumLightBody: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 18, weight: .ultraLight)
         case .defaultDevice:
             return systemFont(ofSize: 20, weight: .ultraLight)
         }
     }
-    
+
     /**
      18pt / Num / Light / Caption 1
      - parameters:
@@ -236,13 +236,13 @@ extension UIFont {
      */
     class var NumCaption1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 16, weight: .light)
         case .defaultDevice:
             return systemFont(ofSize: 18, weight: .light)
         }
     }
-    
+
     /**
      18pt / Num / SemiBold / Caption 1
      - parameters:
@@ -250,13 +250,13 @@ extension UIFont {
      */
     class var NumBoldCaption1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 16, weight: .semibold)
         case .defaultDevice:
             return systemFont(ofSize: 18, weight: .semibold)
         }
     }
-    
+
     /**
      18pt / Num / UltraLight / Caption 1
      - parameters:
@@ -264,13 +264,13 @@ extension UIFont {
      */
     class var NumLightCaption1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 16, weight: .ultraLight)
         case .defaultDevice:
             return systemFont(ofSize: 18, weight: .ultraLight)
         }
     }
-    
+
     /**
      14pt / Num / UltraLight / Caption 2
      - parameters:
@@ -279,7 +279,7 @@ extension UIFont {
     class var NumCaption2: UIFont {
         return systemFont(ofSize: 14, weight: .ultraLight)
     }
-    
+
     /**
      14pt / Num / SemiBold / Caption 2
      - parameters:
@@ -288,18 +288,18 @@ extension UIFont {
     class var NumBoldCaption2: UIFont {
         return systemFont(ofSize: 14, weight: .semibold)
     }
-    
-    
+
+
     // MARK: Number Rounded Typeface
-    
+
     func rounded() -> UIFont {
         guard let descriptor = fontDescriptor.withDesign(.rounded) else {
             return self
         }
-        
+
         return UIFont(descriptor: descriptor, size: pointSize)
     }
-    
+
     /**
      32pt / NumRounded / Light / Title 1
      - parameters:
@@ -307,13 +307,13 @@ extension UIFont {
      */
     class var NumRoundedTitle1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 30, weight: .light).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 32, weight: .light).rounded()
         }
     }
-    
+
     /**
      32pt / NumRounded / SemiBold / Title 1
      - parameters:
@@ -321,13 +321,13 @@ extension UIFont {
      */
     class var NumRoundedBoldTitle1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 30, weight: .semibold).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 32, weight: .semibold).rounded()
         }
     }
-    
+
     /**
      32pt / NumRounded / UltraLight / Title 1
      - parameters:
@@ -335,13 +335,13 @@ extension UIFont {
      */
     class var NumRoundedLightTitle1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 30, weight: .ultraLight).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 32, weight: .ultraLight).rounded()
         }
     }
-    
+
     /**
      29pt / NumRounded / Light / Title 2
      - parameters:
@@ -349,7 +349,7 @@ extension UIFont {
      */
     class var NumRoundedTitle2: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 27, weight: .light).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 29, weight: .light).rounded()
@@ -363,13 +363,13 @@ extension UIFont {
      */
     class var NumRoundedBoldTitle2: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 27, weight: .semibold).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 29, weight: .semibold).rounded()
         }
     }
-    
+
     /**
      29pt / NumRounded / UltraLight / Title 2
      - parameters:
@@ -377,13 +377,13 @@ extension UIFont {
      */
     class var NumRoundedLightTitle2: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 27, weight: .ultraLight).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 29, weight: .ultraLight).rounded()
         }
     }
-    
+
     /**
      26pt / NumRounded / Light / Title 3
      - parameters:
@@ -391,13 +391,13 @@ extension UIFont {
      */
     class var NumRoundedTitle3: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 24, weight: .light).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 26, weight: .light).rounded()
         }
     }
-    
+
     /**
      26pt / NumRounded / SemiBold / Title 3
      - parameters:
@@ -405,13 +405,13 @@ extension UIFont {
      */
     class var NumRoundedBoldTitle3: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 24, weight: .semibold).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 26, weight: .semibold).rounded()
         }
     }
-    
+
     /**
      26pt / NumRounded / UltraLight / Title 3
      - parameters:
@@ -419,13 +419,13 @@ extension UIFont {
      */
     class var NumRoundedLightTitle3: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 24, weight: .ultraLight).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 26, weight: .ultraLight).rounded()
         }
     }
-    
+
     /**
      23pt / NumRounded / Light / Subtitle
      - parameters:
@@ -433,13 +433,13 @@ extension UIFont {
      */
     class var NumRoundedSubtitle: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 21, weight: .light).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 23, weight: .light).rounded()
         }
     }
-    
+
     /**
      23pt / NumRounded / SemiBold / Subtitle
      - parameters:
@@ -447,13 +447,13 @@ extension UIFont {
      */
     class var NumRoundedBoldSubtitle: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 21, weight: .semibold).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 23, weight: .semibold).rounded()
         }
     }
-    
+
     /**
      23pt / NumRounded / UltraLight / Subtitle
      - parameters:
@@ -461,13 +461,13 @@ extension UIFont {
      */
     class var NumRoundedLightSubtitle: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 21, weight: .ultraLight).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 23, weight: .ultraLight).rounded()
         }
     }
-    
+
     /**
      20pt / NumRounded / Light / Body
      - parameters:
@@ -475,13 +475,13 @@ extension UIFont {
      */
     class var NumRoundedBody: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 18, weight: .light).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 20, weight: .light).rounded()
         }
     }
-    
+
     /**
      20pt / NumRounded / SemiBold / Body
      - parameters:
@@ -489,13 +489,13 @@ extension UIFont {
      */
     class var NumRoundedBoldBody: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 18, weight: .semibold).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 20, weight: .semibold).rounded()
         }
     }
-    
+
     /**
      20pt / NumRounded / UltraLight / Body
      - parameters:
@@ -503,13 +503,13 @@ extension UIFont {
      */
     class var NumRoundedLightBody: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 18, weight: .ultraLight).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 20, weight: .ultraLight).rounded()
         }
     }
-    
+
     /**
      18pt / NumRounded / Light / Caption 1
      - parameters:
@@ -517,13 +517,13 @@ extension UIFont {
      */
     class var NumRoundedCaption1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 16, weight: .light).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 18, weight: .light).rounded()
         }
     }
-    
+
     /**
      18pt / NumRounded / SemiBold / Caption 1
      - parameters:
@@ -531,13 +531,13 @@ extension UIFont {
      */
     class var NumRoundedBoldCaption1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 16, weight: .semibold).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 18, weight: .semibold).rounded()
         }
     }
-    
+
     /**
      18pt / NumRounded / UltraLight / Caption 1
      - parameters:
@@ -545,13 +545,13 @@ extension UIFont {
      */
     class var NumRoundedLightCaption1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return systemFont(ofSize: 16, weight: .ultraLight).rounded()
         case .defaultDevice:
             return systemFont(ofSize: 18, weight: .ultraLight).rounded()
         }
     }
-    
+
     /**
      14pt / NumRounded / Caption 2
      - parameters:
@@ -560,7 +560,7 @@ extension UIFont {
     class var NumRoundedCaption2: UIFont {
         return systemFont(ofSize: 14, weight: .ultraLight).rounded()
     }
-    
+
     /**
      14pt / NumRounded / SemiBold / Caption 2
      - parameters:
@@ -569,10 +569,10 @@ extension UIFont {
     class var NumRoundedBoldCaption2: UIFont {
         return systemFont(ofSize: 14, weight: .semibold).rounded()
     }
-    
-    
+
+
     // MARK: Receipt Typeface
-    
+
     /**
      30pt / Receipt / Regular / Title 1
      - parameters:
@@ -580,13 +580,13 @@ extension UIFont {
      */
     class var ReceiptTitle1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.EdcR.rawValue, size: 28)!
         case .defaultDevice:
             return UIFont(name: AppFontName.EdcR.rawValue, size: 30)!
         }
     }
-    
+
     /**
      27pt / Receipt / Regular / Title 2
      - parameters:
@@ -594,13 +594,13 @@ extension UIFont {
      */
     class var ReceiptTitle2: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.EdcR.rawValue, size: 25)!
         case .defaultDevice:
             return UIFont(name: AppFontName.EdcR.rawValue, size: 27)!
         }
     }
-    
+
     /**
      24pt / Receipt / Regular / Title 3
      - parameters:
@@ -608,13 +608,13 @@ extension UIFont {
      */
     class var ReceiptTitle3: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.EdcR.rawValue, size: 22)!
         case .defaultDevice:
             return UIFont(name: AppFontName.EdcR.rawValue, size: 24)!
         }
     }
-    
+
     /**
      21pt / Receipt / Regular / Subtitle
      - parameters:
@@ -622,13 +622,13 @@ extension UIFont {
      */
     class var ReceiptSubtitle: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.EdcR.rawValue, size: 19)!
         case .defaultDevice:
             return UIFont(name: AppFontName.EdcR.rawValue, size: 21)!
         }
     }
-    
+
     /**
      18pt / Receipt / Regular / Body
      - parameters:
@@ -636,13 +636,13 @@ extension UIFont {
      */
     class var ReceiptBody: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.EdcR.rawValue, size: 16)!
         case .defaultDevice:
             return UIFont(name: AppFontName.EdcR.rawValue, size: 18)!
         }
     }
-    
+
     /**
      15pt / Receipt / Regular / Caption 1
      - parameters:
@@ -650,13 +650,13 @@ extension UIFont {
      */
     class var ReceiptCaption1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.EdcR.rawValue, size: 14)!
         case .defaultDevice:
             return UIFont(name: AppFontName.EdcR.rawValue, size: 15)!
         }
     }
-    
+
     /**
      12pt / Receipt / Regular / Caption 2
      - parameters:
@@ -665,7 +665,7 @@ extension UIFont {
     class var ReceiptCaption2: UIFont {
         return UIFont(name: AppFontName.EdcR.rawValue, size: 12)!
     }
-    
+
     /**
      8pt / Receipt / Bold / Footer 1
      - parameters:
@@ -674,35 +674,35 @@ extension UIFont {
     class var ReceiptFooter1: UIFont {
         return UIFont(name: AppFontName.EdcB.rawValue, size: 8)!
     }
-    
+
     /**
      8pt / Receipt / Regular / Footer 2
      - parameters:
      - property: $receipt-footer2
      */
-    
+
     class var ReceiptFooter2: UIFont {
         return UIFont(name: AppFontName.EdcR.rawValue, size: 8)!
     }
-    
-    
+
+
     // MARK: Korean Typeface
-    
+
     /**
      30pt / Korean / Title 1
      - parameters:
      - property: $korean-title1
      */
-    
+
     class var KoreanTitle1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneR.rawValue, size: 28)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneR.rawValue, size: 30)!
         }
     }
-    
+
     /**
      30pt / Korean / Bold / Title 1
      - parameters:
@@ -710,13 +710,13 @@ extension UIFont {
      */
     class var KoreanBoldTitle1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneB.rawValue, size: 28)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneB.rawValue, size: 30)!
         }
     }
-    
+
     /**
      30pt / Korean / Light / Title 1
      - parameters:
@@ -724,13 +724,13 @@ extension UIFont {
      */
     class var KoreanLightTitle1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneL.rawValue, size: 28)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneL.rawValue, size: 30)!
         }
     }
-    
+
     /**
      27pt / Korean / Regular / Title 2
      - parameters:
@@ -738,13 +738,13 @@ extension UIFont {
      */
     class var KoreanTitle2: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneR.rawValue, size: 25)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneR.rawValue, size: 27)!
         }
     }
-    
+
     /**
      27pt / Korean / Bold / Title 2
      - parameters:
@@ -752,13 +752,13 @@ extension UIFont {
      */
     class var KoreanBoldTitle2: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneB.rawValue, size: 25)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneB.rawValue, size: 27)!
         }
     }
-    
+
     /**
      27pt / Korean / Light / Title 2
      - parameters:
@@ -766,13 +766,13 @@ extension UIFont {
      */
     class var KoreanLightTitle2: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneL.rawValue, size: 25)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneL.rawValue, size: 27)!
         }
     }
-    
+
     /**
      24pt / Korean / Regular / Title 3
      - parameters:
@@ -780,13 +780,13 @@ extension UIFont {
      */
     class var KoreanTitle3: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneR.rawValue, size: 22)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneR.rawValue, size: 24)!
         }
     }
-    
+
     /**
      24pt / Korean / Bold / Title 3
      - parameters:
@@ -794,13 +794,13 @@ extension UIFont {
      */
     class var KoreanBoldTitle3: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneB.rawValue, size: 22)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneB.rawValue, size: 24)!
         }
     }
-    
+
     /**
      24pt / Korean / Light / Title 3
      - parameters:
@@ -808,13 +808,13 @@ extension UIFont {
      */
     class var KoreanLightTitle3: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneL.rawValue, size: 22)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneL.rawValue, size: 24)!
         }
     }
-    
+
     /**
      21pt / Korean / Regular / Subtitle
      - parameters:
@@ -822,13 +822,13 @@ extension UIFont {
      */
     class var KoreanSubtitle: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneR.rawValue, size: 19)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneR.rawValue, size: 21)!
         }
     }
-    
+
     /**
      21pt / Korean / Bold / Subtitle
      - parameters:
@@ -836,13 +836,13 @@ extension UIFont {
      */
     class var KoreanBoldSubtitle: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneB.rawValue, size: 19)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneB.rawValue, size: 21)!
         }
     }
-    
+
     /**
      21pt / Korean / Light / Subtitle
      - parameters:
@@ -850,13 +850,13 @@ extension UIFont {
      */
     class var KoreanLightSubtitle: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneL.rawValue, size: 19)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneL.rawValue, size: 21)!
         }
     }
-    
+
     /**
      18pt / Korean / Regular / Body
      - parameters:
@@ -864,13 +864,13 @@ extension UIFont {
      */
     class var KoreanBody: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneR.rawValue, size: 16)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneR.rawValue, size: 18)!
         }
     }
-    
+
     /**
      18pt / Korean / Bold / Body
      - parameters:
@@ -878,13 +878,13 @@ extension UIFont {
      */
     class var KoreanBoldBody: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneB.rawValue, size: 16)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneB.rawValue, size: 18)!
         }
     }
-    
+
     /**
      18pt / Korean / Light / Body
      - parameters:
@@ -892,13 +892,13 @@ extension UIFont {
      */
     class var KoreanLightBody: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneL.rawValue, size: 16)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneL.rawValue, size: 18)!
         }
     }
-    
+
     /**
      16pt / Korean / Bold / ButtonText
      - parameters:
@@ -907,7 +907,7 @@ extension UIFont {
     class var KoreanButtonText: UIFont {
         return UIFont(name: AppFontName.OneB.rawValue, size: 16)!
     }
-    
+
     /**
      12pt / Korean / Bold / SmallButtonText
      - parameters:
@@ -916,7 +916,7 @@ extension UIFont {
     class var KoreanSmallButtonText: UIFont {
         return UIFont(name: AppFontName.OneB.rawValue, size: 12)!
     }
-    
+
     /**
      15pt / Korean / Regular / Caption 1
      - parameters:
@@ -924,13 +924,13 @@ extension UIFont {
      */
     class var KoreanCaption1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneR.rawValue, size: 14)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneR.rawValue, size: 15)!
         }
     }
-    
+
     /**
      15pt / Korean / Bold / Caption 1
      - parameters:
@@ -938,13 +938,13 @@ extension UIFont {
      */
     class var KoreanBoldCaption1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneB.rawValue, size: 14)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneB.rawValue, size: 15)!
         }
     }
-    
+
     /**
      15pt / Korean / Light / Caption 1
      - parameters:
@@ -952,13 +952,13 @@ extension UIFont {
      */
     class var KoreanLightCaption1: UIFont {
         switch UIDevice().screenType {
-        case .iPhoneSE:
+        case .iPhoneSEAndMini:
             return UIFont(name: AppFontName.OneL.rawValue, size: 14)!
         case .defaultDevice:
             return UIFont(name: AppFontName.OneL.rawValue, size: 15)!
         }
     }
-    
+
     /**
      12pt / Korean / Light / Caption 2
      - parameters:
@@ -967,7 +967,7 @@ extension UIFont {
     class var KoreanCaption2: UIFont {
         return UIFont(name: AppFontName.OneL.rawValue, size: 12)!
     }
-    
+
     /**
      12pt / Korean / Bold / Caption 2
      - parameters:
