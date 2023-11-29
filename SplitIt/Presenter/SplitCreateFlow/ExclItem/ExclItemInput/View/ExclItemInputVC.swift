@@ -32,6 +32,8 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
     let tableView = UITableView(frame: .zero)
     
     let nextButton = SPButton()
+    
+    let backLeftEdgePanGesture = UIScreenEdgePanGestureRecognizer()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,6 +82,10 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
         nextButton.do {
             $0.setTitle("정산 결과 확인하기", for: .normal)
             $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
+        }
+        
+        backLeftEdgePanGesture.do {
+            $0.edges = .left
         }
         
         setTableView()
@@ -150,13 +156,8 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
     
     func setBinding() {
         // MARK: Alert가 존재할 때 Swipe Back Left Side 감지
-        let swipeBackLeftSideObservable = self.view.rx.panGesture()
-            .when(.began)
-            .filter { gesture in
-                let location = gesture.location(in: self.view)
-                return location.x < 20
-                && !(self.navigationController?.interactivePopGestureRecognizer!.isEnabled)!
-            }
+        let swipeBackLeftSideObservable = backLeftEdgePanGesture.rx.event
+            .when(.recognized)
 
         let input = ExclItemInputVM.Input(viewDidDisappear: self.rx.viewDidDisappear,
                                           nextButtonTapped: nextButton.rx.tap,
@@ -220,8 +221,15 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
         output.exclItemsRelay
             .asDriver()
             .map { $0.count == 0 }
-            .drive(onNext: { [weak navigationController] shouldPop in
-                navigationController?.interactivePopGestureRecognizer?.isEnabled = shouldPop
+            .drive(onNext: { [weak self] shouldPop in
+                guard let self = self else { return }
+                self.navigationController?.interactivePopGestureRecognizer?.isEnabled = shouldPop
+                
+                if !shouldPop {
+                    view.addGestureRecognizer(self.backLeftEdgePanGesture)
+                } else {
+                    view.removeGestureRecognizer(self.backLeftEdgePanGesture)
+                }
             })
             .disposed(by: disposeBag)
 

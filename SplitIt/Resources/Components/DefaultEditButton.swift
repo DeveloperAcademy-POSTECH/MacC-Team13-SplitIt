@@ -31,5 +31,6 @@ final class DefaultEditButton: UIButton {
         titleLabel?.font = .KoreanCaption2
         titleLabel?.textColor = .TextPrimary
         semanticContentAttribute = .forceRightToLeft
+        isUserInteractionEnabled = false
     }
 }

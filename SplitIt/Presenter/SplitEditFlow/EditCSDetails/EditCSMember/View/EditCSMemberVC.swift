@@ -41,6 +41,8 @@ final class EditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     
     var selectedMemberArr: [MemberCheck] = []
     
+    let backLeftEdgePanGesture = UIScreenEdgePanGestureRecognizer()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -155,6 +157,9 @@ final class EditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             $0.showsVerticalScrollIndicator = false
         }
         
+        backLeftEdgePanGesture.do {
+            $0.edges = .left
+        }
     }
     
     private func setLayout() {
@@ -251,13 +256,8 @@ final class EditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     }
     
     private func setBinding() {
-        let swipeBackLeftSideObservable = self.view.rx.panGesture()
-            .when(.began)
-            .filter { gesture in
-                let location = gesture.location(in: self.view)
-                return location.x < 20
-                && !(self.navigationController?.interactivePopGestureRecognizer!.isEnabled)!
-            }
+        let swipeBackLeftSideObservable = backLeftEdgePanGesture.rx.event
+            .when(.recognized)
         
         let input = EditCSMemberVM.Input(viewWillAppear: self.rx.viewWillAppear,
                                             textFieldValue: searchTextField.rx.text.orEmpty.asDriver(),
@@ -404,8 +404,15 @@ final class EditCSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         
         output.isEdited
             .asDriver()
-            .drive(onNext: { [weak navigationController] isEdited in
-                navigationController?.interactivePopGestureRecognizer?.isEnabled = !isEdited
+            .drive(onNext: { [weak self] isEdited in
+                guard let self = self else { return }
+                self.navigationController?.interactivePopGestureRecognizer?.isEnabled = !isEdited
+                
+                if isEdited {
+                    view.addGestureRecognizer(self.backLeftEdgePanGesture)
+                } else {
+                    view.removeGestureRecognizer(self.backLeftEdgePanGesture)
+                }
             })
             .disposed(by: disposeBag)
         

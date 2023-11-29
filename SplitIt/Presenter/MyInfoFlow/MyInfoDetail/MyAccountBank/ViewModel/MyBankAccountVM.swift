@@ -24,6 +24,7 @@ class MyBankAccountVM {
         let deleteBtnTapped: Observable<Void>
         let cancelBtnTapped: Observable<Void>
         let inputUserBankName: BehaviorRelay<String>
+        let swipeBack: Observable<UIScreenEdgePanGestureRecognizer>
     }
     
     struct Output {
@@ -237,12 +238,15 @@ class MyBankAccountVM {
             .bind(to: isChangedRelay)
             .disposed(by: disposeBag)
         
+        let showBackAlert = Observable.merge(input.cancelBtnTapped.asObservable(),
+                                             input.swipeBack.map{ _ in }.asObservable())
+        
         return Output(popToMyInfoView: editDoneBtnTapped,
                       showBankModel: selectBackTapped,
                       toggleTossPay: toggleTossPay,
                       toggleKakaoPay: toggleKakaoPay,
                       toggleNaverPay: toggleNaverPay,
-                      cancelBackToView: cancelBtnTapped,
+                      cancelBackToView: showBackAlert,
                       isSaveButtonEnable: isSaveButtonEnable,
                       isChangedRelay: isChangedRelay,
                       inputBankName: inputBankName,

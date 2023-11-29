@@ -29,6 +29,9 @@ class SplitMethodCell: UICollectionViewCell, Reusable {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        setAttribute()
+        setLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -37,9 +40,6 @@ class SplitMethodCell: UICollectionViewCell, Reusable {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        setAttribute()
-        setLayout()
     }
     
     func setAttribute() {
