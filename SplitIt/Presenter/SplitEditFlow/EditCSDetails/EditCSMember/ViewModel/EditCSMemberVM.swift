@@ -24,7 +24,7 @@ final class EditCSMemberVM {
         let backButtonTapped: ControlEvent<Void>
         let addButtonTapped: ControlEvent<Void>
         let saveButtonTapped: ControlEvent<Void>
-        let swipeBack: Observable<UIPanGestureRecognizer>
+        let swipeBack: Observable<UIScreenEdgePanGestureRecognizer>
     }
     
     struct Output {
