@@ -21,7 +21,7 @@ class EditCSInfoVM {
         let titleTextFieldControlEvent: Observable<UIControl.Event>
         let totalAmountTextFieldControlEvent: Observable<UIControl.Event>
         let backButtonTapped: ControlEvent<Void>
-        let swipeBack: Observable<UIPanGestureRecognizer>
+        let swipeBack: Observable<UIScreenEdgePanGestureRecognizer>
     }
     
     struct Output {

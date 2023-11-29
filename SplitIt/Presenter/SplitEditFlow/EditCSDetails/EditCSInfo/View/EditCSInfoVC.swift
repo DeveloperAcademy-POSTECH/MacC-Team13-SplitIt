@@ -31,6 +31,7 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
     let totalAmountTextFiled = SPTextField()
     let totalAmountTextFiledNotice = UILabel()
     let backAlert = SPAlertController()
+    let backLeftEdgePanGesture = UIScreenEdgePanGestureRecognizer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,6 +102,10 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
             $0.textColor = .SurfaceWarnRed
             $0.isHidden = true
         }
+        
+        backLeftEdgePanGesture.do {
+            $0.edges = .left
+        }
     }
     
     func setLayout() {
@@ -166,13 +171,8 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
     
     func setBinding() {
         // MARK: Alert가 존재할 때 Swipe Back Left Side 감지
-        let swipeBackLeftSideObservable = self.view.rx.panGesture()
-            .when(.began)
-            .filter { gesture in
-                let location = gesture.location(in: self.view)
-                return location.x < 20
-                && !(self.navigationController?.interactivePopGestureRecognizer!.isEnabled)!
-            }
+        let swipeBackLeftSideObservable = backLeftEdgePanGesture.rx.event
+            .when(.recognized)
         
         let titleTFEvent = Observable.merge(
             titleTextFiled.rx.controlEvent(.editingDidBegin).map { UIControl.Event.editingDidBegin},
@@ -261,8 +261,15 @@ class EditCSInfoVC: UIViewController, SPAlertDelegate {
         
         output.isEdited
             .asDriver()
-            .drive(onNext: { [weak navigationController] isEdited in
-                navigationController?.interactivePopGestureRecognizer?.isEnabled = !isEdited
+            .drive(onNext: { [weak self] isEdited in
+                guard let self = self else { return }
+                self.navigationController?.interactivePopGestureRecognizer?.isEnabled = !isEdited
+                
+                if isEdited {
+                    view.addGestureRecognizer(self.backLeftEdgePanGesture)
+                } else {
+                    view.removeGestureRecognizer(self.backLeftEdgePanGesture)
+                }
             })
             .disposed(by: disposeBag)
         
