@@ -15,7 +15,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
 
     let bankValue = BehaviorRelay<String>(value: UserDefaults.standard.string(forKey: "userBank")!)
     let accountTextRelay = BehaviorRelay<String?>(value: UserDefaults.standard.string(forKey: "userAccount"))
-    let isChanged = BehaviorRelay<Bool>(value: false)
+    //let isChanged = BehaviorRelay<Bool>(value: false)
     var changedToss = false
     var changedKakao = false
     var changedNaver = false
@@ -69,6 +69,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
     
     let deleteBtn = UIButton()
     
+    let backLeftEdgePanGesture = UIScreenEdgePanGestureRecognizer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -177,12 +178,9 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
 
     func setBinding() {
         
-        let swipeBackLeftSideObservable = self.view.rx.panGesture()
-            .when(.began)
-            .filter { gesture in
-                let location = gesture.location(in: self.view)
-                return location.x < 20
-            }
+        let swipeBackLeftSideObservable = backLeftEdgePanGesture.rx.event
+            .when(.recognized)
+        
        
         let selectedBankTap = addTapGesture(to: bankTextField)
         let tossTap = addTapGesture(to: tossPayView)
@@ -199,12 +197,21 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
                                           naverTapped: naverTap.rx.event.asObservable().map { _ in () },
                                           deleteBtnTapped: deleteBtn.rx.tap.asObservable(),
                                           cancelBtnTapped: header.leftButton.rx.tap.asObservable(),
-                                          inputUserBankName: bankValue)
+                                          inputUserBankName: bankValue,
+                                          swipeBack: swipeBackLeftSideObservable)
         let output = viewModel.transform(input: input)
-        
+
         output.isChangedRelay
             .asDriver()
-            .drive(isChanged)
+            .drive(onNext: { [weak self] shouldPop in
+                guard let self = self else { return }
+                self.navigationController?.interactivePopGestureRecognizer?.isEnabled = !shouldPop
+                if shouldPop {
+                    view.addGestureRecognizer(self.backLeftEdgePanGesture)
+                } else {
+                    view.removeGestureRecognizer(self.backLeftEdgePanGesture)
+                }
+            })
             .disposed(by: disposeBag)
         
         deleteBtn.rx.controlEvent([.touchDown])
@@ -246,18 +253,6 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
             })
             .disposed(by: disposeBag)
         
-        swipeBackLeftSideObservable
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.navigationController?.interactivePopGestureRecognizer?.isEnabled = !isChanged.value
-                if isChanged.value {
-                    self.setBackAlert()
-                } else {
-                    self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-                }
-            })
-            .disposed(by: disposeBag)
-        
         output.toggleTossPay
             .subscribe(onNext: { [weak self] isToggled in
                 guard let self = self else { return }
@@ -293,7 +288,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         output.cancelBackToView
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
-                if isChanged.value {
+                if output.isChangedRelay.value {
                     self.setBackAlert()
                 } else {
                     self.navigationController?.popViewController(animated: true)
@@ -515,6 +510,10 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 0
             $0.setAttributedTitle(deleteString, for: .normal)
+        }
+        
+        backLeftEdgePanGesture.do {
+            $0.edges = .left
         }
     }
     
