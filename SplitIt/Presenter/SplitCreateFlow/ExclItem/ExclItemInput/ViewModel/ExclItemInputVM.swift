@@ -19,7 +19,8 @@ class ExclItemInputVM {
         let exclItemAddButtonTapped: ControlEvent<Void>
         let exitButtonTapped: ControlEvent<Void>
         let backButtonTapped: ControlEvent<Void>
-        let swipeBack: Observable<UIPanGestureRecognizer>
+//        let swipeBack: Observable<UIPanGestureRecognizer>
+        let swipeBack: Observable<UIScreenEdgePanGestureRecognizer>
     }
     
     struct Output {
