@@ -45,7 +45,7 @@ class SplitShareVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if UserDefaults.standard.string(forKey: "userBank") == "" {
+        if UserDefaults.standard.string(forKey: "userBank") == "" || UserDefaults.standard.string(forKey: "userBank") == nil {
             UserDefaults.standard.set("PopUp", forKey: "MyInfoFlow")
             setPopUp()
         } else {

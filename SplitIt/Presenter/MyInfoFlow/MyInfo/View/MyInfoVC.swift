@@ -91,6 +91,9 @@ class MyInfoVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        UserDefaults.standard.set("Setting", forKey: "MyInfoFlow")
+        
         userNewInfo()
     }
 
@@ -98,7 +101,7 @@ class MyInfoVC: UIViewController {
         let tossValue = UserDefaults.standard.bool(forKey: "tossPay")
         let kakaoValue = UserDefaults.standard.bool(forKey: "kakaoPay")
         let naverValue = UserDefaults.standard.bool(forKey: "naverPay")        
-        var viewValue = userDefault.object(forKey: "userBank") != nil
+        let viewValue = userDefault.object(forKey: "userBank") != nil
 
         let bank: Bool = userDefault.string(forKey: "userBank") == "선택 안함" ? false : true
         let checkPay = tossValue || kakaoValue || naverValue //하나라도 참이면 checkPay는 참
@@ -149,7 +152,6 @@ class MyInfoVC: UIViewController {
             naverPayBtn.isHidden = !naverValue
             backViewHeight = 171
             tossPos = tossValue ? 12 : 0
-            
             if tossValue { //토스가 true
                 kakaoPos = 70
                 if kakaoValue { //카카오가 참
@@ -182,6 +184,8 @@ class MyInfoVC: UIViewController {
                 $0.top.equalTo(socialPayLabel.snp.bottom).offset(8)
             }
             kakaoPayBtn.snp.updateConstraints {
+                $0.width.height.equalTo(50)
+                $0.leading.equalTo(accountView.snp.leading).offset(kakaoPos)
                 $0.top.equalTo(socialPayLabel.snp.bottom).offset(8)
             }
             naverPayBtn.snp.updateConstraints {

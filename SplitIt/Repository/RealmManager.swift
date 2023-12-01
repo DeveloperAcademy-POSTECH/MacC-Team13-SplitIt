@@ -20,8 +20,6 @@ final class RealmManager {
             arr.forEach { object in
                 let rmObject = object.asRealm() as! Object
                 
-                print(rmObject)
-                
                 try! realm.write {
                     realm.add(rmObject, update: .all)
                 }
@@ -81,7 +79,7 @@ final class RealmManager {
                 return transformSplits
             }
         } catch {
-            print("UpdateDate To Realm Error")
+            print("BringData From Realm Error")
             return []
         }
     }
@@ -95,7 +93,7 @@ final class RealmManager {
             
             return transformCSInfos
         } catch {
-            print("UpdateDate To Realm Error")
+            print("BringData From Realm Error")
             return []
         }
     }
@@ -109,7 +107,7 @@ final class RealmManager {
             
             return transformCSMembers
         } catch {
-            print("UpdateDate To Realm Error")
+            print("BringData From Realm Error")
             return []
         }
     }
@@ -123,7 +121,7 @@ final class RealmManager {
             
             return transformExclItems
         } catch {
-            print("UpdateDate To Realm Error")
+            print("BringData From Realm Error")
             return []
         }
     }
@@ -137,7 +135,7 @@ final class RealmManager {
             
             return transformExclMembers
         } catch {
-            print("UpdateDate To Realm Error")
+            print("BringData From Realm Error")
             return []
         }
     }
@@ -156,7 +154,7 @@ final class RealmManager {
             
             return []
         } catch {
-            print("UpdateDate To Realm Error")
+            print("BringData From Realm Error")
             return []
         }
     }
@@ -175,7 +173,7 @@ final class RealmManager {
             
             return []
         } catch {
-            print("UpdateDate To Realm Error")
+            print("BringData From Realm Error")
             return []
         }
     }
@@ -187,7 +185,7 @@ final class RealmManager {
             let realmMemberLogArr = realm.objects(RMMemberLog.self)
             return realmMemberLogArr.map { $0.asLocal() }
         } catch {
-            print("UpdateDate To Realm Error")
+            print("BringData From Realm Error")
             return []
         }
     }

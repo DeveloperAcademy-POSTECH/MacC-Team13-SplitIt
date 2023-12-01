@@ -31,12 +31,6 @@ class HomeVM {
                 SplitRepository.share.createDatasForCreateFlow()
             })
             .disposed(by: disposeBag)
-        
-        showInfoView
-            .drive(onNext: {
-                UserDefaults.standard.set("Setting", forKey: "MyInfoFlow")
-            })
-            .disposed(by: disposeBag)
 
         return Output(showCreateSplit: showCreateSplit,
                       showInfoView: showInfoView)

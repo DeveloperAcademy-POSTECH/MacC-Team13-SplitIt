@@ -13,7 +13,7 @@ import Then
 
 class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate {
 
-    let bankValue = BehaviorRelay<String>(value: UserDefaults.standard.string(forKey: "userBank")!)
+    let bankValue = BehaviorRelay<String>(value: UserDefaults.standard.string(forKey: "userBank") ?? "")
     let accountTextRelay = BehaviorRelay<String?>(value: UserDefaults.standard.string(forKey: "userAccount"))
     //let isChanged = BehaviorRelay<Bool>(value: false)
     var changedToss = false
@@ -80,6 +80,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         selectedBankViewAttribute()
         setBinding()
         accountTextFieldCustomKeyboard()
+        updateViewLayout(text: UserDefaults.standard.string(forKey: "userBank") ?? "")
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)

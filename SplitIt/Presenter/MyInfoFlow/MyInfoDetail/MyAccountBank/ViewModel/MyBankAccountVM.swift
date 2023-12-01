@@ -218,10 +218,6 @@ class MyBankAccountVM {
             }
             .bind(to: isSaveButtonEnable)
             .disposed(by: disposeBag)
-
-        
-//                print(preName, preAccount, preBank, preToss, preKakao, preNaver)
-//                print(name, account, bank, toss, kakao, naver)
         
         Observable.combineLatest(inputBankName, inputRealName, inputAccount, toggleTossPay, toggleKakaoPay, toggleNaverPay)
             .map { bank, name, account, toss, kakao, naver in

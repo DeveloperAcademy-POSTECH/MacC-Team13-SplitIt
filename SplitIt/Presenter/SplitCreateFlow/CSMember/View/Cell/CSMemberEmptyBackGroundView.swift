@@ -59,7 +59,6 @@ class CSMemberEmptyBackGroundView: UIView {
     }
     
     func configure(item: String) {
-        print(item)
         if item == "" {
             mainLabel.text = "멤버 내역이 없어요"
             subLabel.text = "멤버명을 입력하여 멤버를 추가하세요"
