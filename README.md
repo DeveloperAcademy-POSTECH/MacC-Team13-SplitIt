@@ -79,6 +79,8 @@
 ![snapkit](https://github.com/DeveloperAcademy-POSTECH/MacC-Team13-SplitIt/assets/91787174/418ee4a7-f412-4754-ad2e-eae0052cb7fd)
 ![rxswift](https://github.com/DeveloperAcademy-POSTECH/MacC-Team13-SplitIt/assets/91787174/77347c2e-492e-4458-a3c7-5010c7705c2a)
 ![realm](https://github.com/DeveloperAcademy-POSTECH/MacC-Team13-SplitIt/assets/91787174/4a7ba6dd-9e6e-4b9a-a6d4-4e7f88d90c8e)
+
+<a target="_blank" href="https://jincode93.notion.site/Split-it-484ca22c0670488fb8f07643ea2b05a4?pvs=4"><img width="auto" height="70px" src="https://github.com/DeveloperAcademy-POSTECH/MacC-Team13-SplitIt/assets/111134273/ac3b0156-a4aa-4e36-af26-bc80f3090c5b"></a>
 <br />
 <br />
 
