@@ -41,7 +41,7 @@ final class EditCSMemberVM {
     }
     
     func transform(input: Input) -> Output {
-        var isEdited = BehaviorRelay<Bool>(value: false)
+        let isEdited = BehaviorRelay<Bool>(value: false)
         let repo = SplitRepository.share
         let allMemberArr = BehaviorRelay<[MemberCheck]>(value: [])
         let searchMemberArr = BehaviorRelay<[MemberCheck]>(value: [])

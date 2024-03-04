@@ -10,17 +10,19 @@ import RxCocoa
 import UIKit
 
 class ExclItemInputVM {
-    
+    var createService: CreateServiceType
     var disposeBag = DisposeBag()
     
+    init(createService: CreateServiceType) {
+        self.createService = createService
+    }
+    
     struct Input {
-        let viewDidDisappear: Observable<Bool>
         let nextButtonTapped: ControlEvent<Void> // 다음 버튼
         let exclItemAddButtonTapped: ControlEvent<Void>
         let exitButtonTapped: ControlEvent<Void>
         let backButtonTapped: ControlEvent<Void>
-//        let swipeBack: Observable<UIPanGestureRecognizer>
-        let swipeBack: Observable<UIScreenEdgePanGestureRecognizer>
+        let swipeBack: ControlEvent<UIScreenEdgePanGestureRecognizer>
     }
     
     struct Output {
@@ -30,7 +32,8 @@ class ExclItemInputVM {
         let showExclItemInfoModal: Driver<Void>
         let showEmptyView: Driver<Bool>
         let showExitAlert: Driver<Void>
-        let showBackAlert: Observable<Void>
+        let showBackAlert: Driver<Void>
+        let backToPreVC: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -39,18 +42,14 @@ class ExclItemInputVM {
         let nextButtonIsEnable: Driver<Bool>
         let showEmptyView = BehaviorRelay<Bool>(value: false)
 
-        let exclItemRepository = SplitRepository.share.exclItemArr
-        let exclMemberRepository = SplitRepository.share.exclMemberArr
+        let exclItemRepository = createService.exclItemRelay
+        let exclMemberRepository = createService.exclMemberRelay
         let exclItemsRelay = BehaviorRelay<[ExclItemInfo]>(value: [
             ExclItemInfo(exclItem: ExclItem(name: "", price: 0, csInfoIdx: ""), items: [])
         ])
         
-        input.viewDidDisappear
-            .asDriver(onErrorJustReturn: false)
-            .drive(onNext: { _ in 
-                SplitRepository.share.deleteCurrentExclItemAndExclMember()
-            })
-            .disposed(by: disposeBag)
+        let showBackAlert = PublishRelay<Void>()
+        let backToPreVC = PublishRelay<Void>()
         
         Observable.combineLatest(exclItemRepository, exclMemberRepository)
             .map{ (exclItems, exclMembers) -> [ExclItemInfo] in
@@ -75,8 +74,22 @@ class ExclItemInputVM {
             .map{ $0.count > 0 }
             .asDriver(onErrorJustReturn: false)
         
-        let showBackAlert = Observable.merge(input.backButtonTapped.asObservable(),
-                                             input.swipeBack.map{ _ in }.asObservable())
+        let backAction = Driver.merge(input.backButtonTapped.asDriver(),
+                         input.swipeBack.map{ _ in }.asDriver(onErrorJustReturn: ()))
+        
+        backAction
+            .withLatestFrom(exclItemsRelay.asDriver())
+            .map { exclItems in
+                return exclItems.count > 0
+            }
+            .drive(onNext: { shouldShowAlert in
+                if shouldShowAlert {
+                    showBackAlert.accept(())
+                } else {
+                    backToPreVC.accept(())
+                }
+            })
+            .disposed(by: disposeBag)
         
         return Output(showResultView: showResultView.asDriver(),
                       exclItemsRelay: exclItemsRelay,
@@ -84,8 +97,8 @@ class ExclItemInputVM {
                       showExclItemInfoModal: showExclItemInfoModal.asDriver(),
                       showEmptyView: showEmptyView.asDriver(onErrorJustReturn: false),
                       showExitAlert: input.exitButtonTapped.asDriver(),
-                      showBackAlert: showBackAlert)
+                      showBackAlert: showBackAlert.asDriver(onErrorJustReturn: ()),
+                      backToPreVC: backToPreVC.asDriver(onErrorJustReturn: ()))
     }
-
 }
 

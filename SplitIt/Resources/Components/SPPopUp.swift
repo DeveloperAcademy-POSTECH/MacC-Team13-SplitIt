@@ -36,7 +36,6 @@ class SPPopUp: UIView {
     func applyStyle(style: PopUpType, vc: UIViewController) {
         switch style {
         case .goToMyInfo:
-            
             self.backgroundColor = .SurfaceBrandCalmshell
             
             title.text = "입금 정보가 있으면 더 편해요"
@@ -48,14 +47,6 @@ class SPPopUp: UIView {
                 $0.applyStyle(style: .primaryWatermelon, shape: .square)
                 $0.buttonState.accept(true)
             }
-            
-            let buttonAction = UIAction { action in
-                let popView = MyBankAccountVC()
-                popView.modalPresentationStyle = UIModalPresentationStyle.fullScreen
-                vc.present(popView, animated: true, completion: nil)
-            }
-            
-            bottomButton.addAction(buttonAction, for: .touchUpInside)
         }
     }
     

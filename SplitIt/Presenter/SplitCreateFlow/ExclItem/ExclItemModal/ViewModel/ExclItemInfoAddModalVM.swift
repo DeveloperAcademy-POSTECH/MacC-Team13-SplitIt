@@ -9,13 +9,15 @@ import RxSwift
 import RxCocoa
 import UIKit
 
-class ExclItemInfoAddModalVM {
+final class ExclItemInfoAddModalVM {
     
-    var disposeBag = DisposeBag()
-    
+    private var disposeBag = DisposeBag()
+    private var createService: CreateServiceType
     let maxTextCount = 8
     
-    let sections = BehaviorRelay<[ExclItemInfoModalSection]>(value: [])
+    init(createService: CreateServiceType) {
+        self.createService = createService
+    }
     
     struct Input {
         let viewWillAppear: Observable<Bool>
@@ -25,6 +27,8 @@ class ExclItemInfoAddModalVM {
         let priceTextFieldControlEvent: Observable<UIControl.Event>
         let cancelButtonTapped: ControlEvent<Void>
         let addButtonTapped: ControlEvent<Void>
+        let isActiveRelay: BehaviorRelay<Bool>
+        let tableItemSelected: ControlEvent<IndexPath>
     }
     
     struct Output {
@@ -37,9 +41,11 @@ class ExclItemInfoAddModalVM {
         let priceTextFieldControlEvent: Driver<UIControl.Event>
         let cancelButtonTapped: Driver<Void>
         let addButtonTapped: Driver<Void>
+        let sections: BehaviorRelay<[ExclItemInfoModalSection]>
     }
     
     func transform(input: Input) -> Output {
+        let sections = BehaviorRelay<[ExclItemInfoModalSection]>(value: [])
         let title = input.title
         let titleTextFieldCount = BehaviorRelay<String>(value: "")
         let titleTextFieldIsValid = BehaviorRelay<Bool>(value: true)
@@ -47,7 +53,6 @@ class ExclItemInfoAddModalVM {
         let priceResult = BehaviorRelay<Int>(value: 0)
         let numberFormatter = NumberFormatterHelper()
         
-        let maxCurrency = 10000000
         let priceLimit = BehaviorRelay<Int>(value: 0)
         let priceIsLimited = input.price
             .map { price in
@@ -106,7 +111,7 @@ class ExclItemInfoAddModalVM {
             .drive(onNext: { [weak self] title, price in
                 guard let self = self else { return }
                 let currentExclMember = sections.value.first!.items
-                SplitRepository.share.createExclItem(name: title, price: price, exclMember: currentExclMember)
+                createService.createExclItem(name: title, price: price, exclMember: currentExclMember)
             })
             .disposed(by: disposeBag)
         
@@ -158,7 +163,8 @@ class ExclItemInfoAddModalVM {
             }
             .asDriver(onErrorJustReturn: UIControl.Event())
         
-        let currentMembers = SplitRepository.share.csMemberArr
+        let currentMembers = BehaviorRelay<[CSMember]>(value: createService.csMemberArr)
+        
         currentMembers
             .map { $0.map { csMember -> ExclItemTable in
                 let item = ExclItemTable(name: csMember.name, isTarget: false)
@@ -171,6 +177,28 @@ class ExclItemInfoAddModalVM {
             .bind(to: sections)
             .disposed(by: disposeBag)
         
+        input.isActiveRelay
+            .asDriver()
+            .drive(onNext: { isActive in
+                var sectionValue = sections.value
+                sectionValue[0].isActive = isActive
+                sections.accept(sectionValue)
+            })
+            .disposed(by: disposeBag)
+        
+        input.tableItemSelected
+//            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(onNext: { indexPath in
+                
+                var sectionArr = sections.value
+
+                var target = sectionArr[indexPath.section].items[indexPath.row]
+                target.isTarget.toggle()
+                sectionArr[indexPath.section].items[indexPath.row] = target
+                sections.accept(sectionArr)
+            })
+            .disposed(by: disposeBag)
+        
         return Output(titleCount: titleTextFieldCount.asDriver(),
                       price: priceString,
                       titleTextFieldIsValid: titleTextFieldIsValid,
@@ -179,19 +207,18 @@ class ExclItemInfoAddModalVM {
                       titleTextFieldControlEvent: titleTFControlEvent,
                       priceTextFieldControlEvent: priceTFControlEvent,
                       cancelButtonTapped: input.cancelButtonTapped.asDriver(),
-                      addButtonTapped: input.addButtonTapped.asDriver())
+                      addButtonTapped: input.addButtonTapped.asDriver(),
+                      sections: sections)
     }
 
     func calculatePriceLimit() -> Driver<Int> {
-        
-        var priceLimitValue = SplitRepository.share.csInfoArr.value.first!.totalAmount
-        for item in SplitRepository.share.exclItemArr.value {
+        var priceLimitValue = createService.csInfo.totalAmount
+        for item in createService.exclItemRelay.value {
             priceLimitValue -= item.price
         }
         
         let priceLimitDriver = Driver<Int>.just(priceLimitValue)
         return priceLimitDriver
     }
-
 }
 

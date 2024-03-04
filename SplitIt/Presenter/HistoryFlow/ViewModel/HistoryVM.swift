@@ -9,57 +9,69 @@ import RxSwift
 import RxCocoa
 
 class HistoryVM {
-    
+    var historyService: HistoryServiceType
     let disposeBag = DisposeBag()
-    let repo = SplitRepository.share
     
-    struct Input {
-        let viewWillAppear: Observable<Bool>
-        let viewWillDisappear: Observable<Bool>
+    init(historyService: HistoryServiceType
+    ) {
+        self.historyService = historyService
+    }
+    
+    struct Input { 
+        let selectedIndexPath: ControlEvent<IndexPath>
+        let backButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
         let sectionRelay: BehaviorRelay<[CreateDateSection]>
         let isNotEmpty: BehaviorRelay<Bool>
+        let selectedSplitIdx: BehaviorRelay<String>
+        let moveToBackView: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
+        var splits: [Split] = []
         let sectionRelay = BehaviorRelay(value: [CreateDateSection]())
         let isNotEmpty = BehaviorRelay(value: true)
+        let selectedSplitIdx = BehaviorRelay<String>(value: "")
+        let moveToBackView = input.backButtonTapped.asDriver()
         
-        input.viewWillAppear
-            .asDriver(onErrorJustReturn: true)
-            .drive(onNext: { [weak self] _ in
+        historyService.fetchAllSplit()
+            .asDriver(onErrorJustReturn: [])
+            .drive(onNext: { [weak self] splitArr in
                 guard let self = self else { return }
-                self.repo.fetchSplitArrFromDBForHistoryView()
-                UserDefaults.standard.set("History", forKey: "ShareFlow")
+                splits = splitArr
+                isNotEmpty.accept(splitArr.count != 0)
+                sectionRelay.accept(self.createSection(splitArr: splitArr))
             })
             .disposed(by: disposeBag)
         
-        repo.splitArr.asDriver()
-            .drive(onNext: { _ in
-                sectionRelay.accept(self.createSection())
-            })
+        input.selectedIndexPath
+            .asDriver()
+            .drive { indexPath in
+                let splitIdx = splits[indexPath.row].splitIdx
+                selectedSplitIdx.accept(splitIdx)
+            }
             .disposed(by: disposeBag)
         
-        repo.splitArr
-            .map { $0.count != 0 }
-            .bind(to: isNotEmpty)
-            .disposed(by: disposeBag)
         
-        return Output(sectionRelay: sectionRelay, isNotEmpty: isNotEmpty)
+        
+        return Output(sectionRelay: sectionRelay, 
+                      isNotEmpty: isNotEmpty,
+                      selectedSplitIdx: selectedSplitIdx,
+                      moveToBackView: moveToBackView)
     }
     
-    private func createSection() -> [CreateDateSection] {
+    private func createSection(splitArr: [Split]) -> [CreateDateSection] {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy. MM. dd"
         var section: [CreateDateSection] = []
         
-        if let firstSplit = repo.splitArr.value.first {
+        if let firstSplit = splitArr.first {
             var currentDate = dateFormatter.string(from: firstSplit.createDate)
             var currentGroup: [Split] = []
             
-            for split in repo.splitArr.value {
+            for split in splitArr {
                 let splitCreateDate = dateFormatter.string(from: split.createDate)
                 
                 if currentDate == splitCreateDate {
@@ -75,6 +87,25 @@ class HistoryVM {
             let newDateSection = CreateDateSection(items: currentGroup)
             section.append(newDateSection)
         }
+        
         return section
+    }
+    
+    func transformToHistoryModel(split: Split) -> HistoryModel {
+        let csInfoArr: [CSInfo] = historyService.getCSInfoWithSplitIdx(splitIdx: split.splitIdx)
+        let csMemberArr: [CSMember] = historyService.getCSMemberWithCSInfoIdx(csInfoIdxArr: csInfoArr.map { $0.csInfoIdx })
+        
+        var title: String {
+            if split.title == "" {
+                return csInfoArr.map { $0.title }.joined(separator: ", ")
+            } else {
+                return split.title
+            }
+        }
+        
+        let csMembers: String = csMemberArr.map { $0.name }.joined(separator: ", ")
+        let totalAmount: String = NumberFormatterHelper().formattedString(from: csInfoArr.map { $0.totalAmount }.reduce(0, +))
+        
+        return HistoryModel(title: title, csMembers: csMembers, totalAmount: totalAmount)
     }
 }

@@ -152,15 +152,15 @@ class EditExclItemInputVC: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        output.showExclItemInfoModal
-            .drive(onNext: { [weak self] in
-                guard let self = self else { return }
-                let vc = ExclItemInfoAddModalVC()
-                vc.modalPresentationStyle = .formSheet
-                vc.modalTransitionStyle = .coverVertical
-                self.present(vc, animated: true)
-            })
-            .disposed(by: disposeBag)
+//        output.showExclItemInfoModal
+//            .drive(onNext: { [weak self] in
+//                guard let self = self else { return }
+//                let vc = ExclItemInfoAddModalVC(viewModel: ExclItemInfoAddModalVM(createService: ))
+//                vc.modalPresentationStyle = .formSheet
+//                vc.modalTransitionStyle = .coverVertical
+//                self.present(vc, animated: true)
+//            })
+//            .disposed(by: disposeBag)
         
         output.showEmptyView
             .drive(onNext: { [weak self] tableViewisEmpty in
@@ -170,20 +170,20 @@ class EditExclItemInputVC: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        tableView.rx.itemSelected
-            .asDriver()
-            .drive(onNext: { [weak self] indexPath in
-                guard let self = self else { return }
-                let exclItemIdx = output.exclItemsRelay.value[indexPath.row].exclItem.exclItemIdx
-                let vm = ExclItemInfoEditModalVM()
-                vm.exclItemIdx = exclItemIdx
-                let vc = ExclItemInfoEditModalVC(viewModel: vm)
-                
-                vc.modalPresentationStyle = .formSheet
-                vc.modalTransitionStyle = .coverVertical
-                self.present(vc, animated: true)
-            })
-            .disposed(by: disposeBag)
+//        tableView.rx.itemSelected
+//            .asDriver()
+//            .drive(onNext: { [weak self] indexPath in
+//                guard let self = self else { return }
+//                let exclItemIdx = output.exclItemsRelay.value[indexPath.row].exclItem.exclItemIdx
+//                let vm = ExclItemInfoEditModalVM(createService: )
+//                vm.exclItemIdx = exclItemIdx
+//                let vc = ExclItemInfoEditModalVC(viewModel: vm)
+//                
+//                vc.modalPresentationStyle = .formSheet
+//                vc.modalTransitionStyle = .coverVertical
+//                self.present(vc, animated: true)
+//            })
+//            .disposed(by: disposeBag)
         
         output.showSplitShareView
             .drive(onNext: { [weak self] _ in

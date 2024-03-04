@@ -11,32 +11,50 @@ import RxCocoa
 
 class MemberLogVM {
     
-    let repo = SplitRepository.share
-    var memberList: BehaviorRelay<[MemberLog]>
     var disposeBag = DisposeBag()
+    var memberLogService: MemberLogServiceType
     
-
-    init() {
-        memberList = BehaviorRelay<[MemberLog]>(value: SplitRepository.share.memberLogArr.value.sorted { $0.name < $1.name })
+    init(memberLogService: MemberLogServiceType) {
+        self.memberLogService = memberLogService
     }
-
+    
     struct Input {
-        let deleteBtnTapped: Driver<Void>
-        
+        let removeLogIdx: BehaviorRelay<String>
+        let backButtonTapped: ControlEvent<Void>
+        let alertRightButtonTapped: Driver<Void>
     }
     
     struct Output {
-        let showAlertAllDelete: Driver<Void>
+        let memberList: BehaviorRelay<[MemberLog]>
+        let moveToBackView: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
-        let deleteBtnTapped = input.deleteBtnTapped
-        repo.fetchMemberLog()
-
+        let memberList = BehaviorRelay<[MemberLog]>(value: [])
+        let moveToBackView = input.backButtonTapped.asDriver()
         
-        let output = Output(showAlertAllDelete: deleteBtnTapped)
-        return output
-    }
+        memberLogService.fetchMemberLog()
+            .asDriver(onErrorJustReturn: [])
+            .drive(memberList)
+            .disposed(by: disposeBag)
+        
+        input.alertRightButtonTapped
+            .drive { [weak self] _ in
+                self?.memberLogService.deleteAllMemberLog()
+            }
+            .disposed(by: disposeBag)
+        
+        input.removeLogIdx
+            .asDriver()
+            .drive(onNext: { [weak self] idx in
+                if idx != "" {
+                    self?.memberLogService.deleteMemberLog(memberLogIdx: idx)
+                }
+            })
+            .disposed(by: disposeBag)
 
+        return Output(memberList: memberList,
+                      moveToBackView: moveToBackView)
+    }
 }
 

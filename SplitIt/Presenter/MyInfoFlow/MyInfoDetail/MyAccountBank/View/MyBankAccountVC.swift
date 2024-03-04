@@ -178,11 +178,9 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
     }
 
     func setBinding() {
-        
+
         let swipeBackLeftSideObservable = backLeftEdgePanGesture.rx.event
             .when(.recognized)
-        
-       
         let selectedBankTap = addTapGesture(to: bankTextField)
         let tossTap = addTapGesture(to: tossPayView)
         let kakaoTap = addTapGesture(to: kakaoPayView)
@@ -212,18 +210,6 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
                 } else {
                     view.removeGestureRecognizer(self.backLeftEdgePanGesture)
                 }
-            })
-            .disposed(by: disposeBag)
-        
-        deleteBtn.rx.controlEvent([.touchDown])
-            .subscribe(onNext: {
-                self.deleteBtn.backgroundColor = UIColor(hex: 0xF8F0ED)
-            })
-            .disposed(by: disposeBag)
-        
-        deleteBtn.rx.controlEvent(.touchUpInside)
-            .subscribe(onNext: {
-                self.deleteBtn.backgroundColor = .clear
             })
             .disposed(by: disposeBag)
         
@@ -311,7 +297,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         
         alert.rightButtonTapSubject
               .asDriver(onErrorJustReturn: ())
-              .drive(onNext: {
+              .drive(onNext: { [weak self] _ in
                   UserDefaults.standard.set(false, forKey: "tossPay")
                   UserDefaults.standard.set(false, forKey: "kakaoPay")
                   UserDefaults.standard.set(false, forKey: "naverPay")
@@ -319,7 +305,7 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
                   UserDefaults.standard.set("", forKey: "userName")
                   UserDefaults.standard.set("", forKey: "userBank")
                   
-                  self.navigationController?.popViewController(animated: true)
+                  self?.navigationController?.popViewController(animated: true)
               })
               .disposed(by: disposeBag)
         
@@ -511,6 +497,8 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 0
             $0.setAttributedTitle(deleteString, for: .normal)
+            $0.setBackgroundColor(UIColor(hex: 0xF8F0ED), for: .highlighted)
+            $0.setBackgroundColor(.clear, for: .normal)
         }
         
         backLeftEdgePanGesture.do {
@@ -680,27 +668,33 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         [header, scrollView].forEach {
             view.addSubview($0)
         }
+        
         scrollView.addSubview(contentView)
+        
         [accountLabel,accountTextField, nameLabel, nameTextField, nameCountLabel, accountCountLabel].forEach {
             bankSelectedView.addSubview($0)
         }
-        [bankLabel, bankTextField,bankSelectedView, deleteBtn, payLabel,
-         payView].forEach {
+        
+        [bankLabel, bankTextField,bankSelectedView, deleteBtn, payLabel, payView].forEach {
             contentView.addSubview($0)
         }
         
         [bankArrowImage].forEach {
             bankTextField.addSubview($0)
         }
+        
         [leftBar, rightBar, tossPayView, kakaoPayView, naverPayView].forEach {
             payView.addSubview($0)
         }
+        
         [tossLabel, tossPayBtn].forEach {
             tossPayView.addSubview($0)
         }
+        
         [kakaoLabel, kakaoPayBtn].forEach {
             kakaoPayView.addSubview($0)
         }
+        
         [naverLabel, naverPayBtn].forEach {
             naverPayView.addSubview($0)
         }
@@ -715,7 +709,6 @@ class MyBankAccountVC: UIViewController, SPAlertDelegate, CustomKeyboardDelegate
         scrollView.contentInset.bottom = keyboardHeight
         scrollView.verticalScrollIndicatorInsets.bottom = keyboardHeight
         scrollView.isScrollEnabled = true
-        
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {

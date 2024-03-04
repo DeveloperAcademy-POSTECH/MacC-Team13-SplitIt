@@ -13,12 +13,20 @@ import RxCocoa
 import RxAppState
 import Reusable
 
+protocol CSMemberVCRouter {
+    func showNextVC()
+    func backFromCSMember()
+    func quitCreateFlow()
+}
+
 class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     let disposeBag = DisposeBag()
-    let viewModel = CSMemberVM()
     let exitAlert = SPAlertController()
     
-    let header = SPNavigationBar()
+    var router: CSMemberVCRouter?
+    let viewModel: CSMemberVM
+    let header: SPNaviBar
+    
     let addLabel = UILabel()
     let verticalBar = UILabel()
     let memberCount = UILabel()
@@ -42,6 +50,16 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     
     var selectedMemberArr: [MemberCheck] = []
     
+    init(viewModel: CSMemberVM, header: SPNaviBar) {
+        self.viewModel = viewModel
+        self.header = header
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -61,10 +79,6 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     
     private func setAttribute() {
         view.backgroundColor = .SurfacePrimary
-        
-        header.do {
-            $0.applyStyle(style: .csMemberCreate, vc: self)
-        }
         
         addLabel.do {
             $0.text = "함께한 멤버"
@@ -161,7 +175,9 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     }
     
     private func setLayout() {
-        [header,addLabel,verticalBar,memberCount,addCollectionView,lineView,searchTextFieldLabel,textCountVerticalBar,textCount,searchTextField,addButton,searchView,nextButton,backgroundView].forEach {
+        [header,addLabel,verticalBar,memberCount,addCollectionView,
+         lineView,searchTextFieldLabel,textCountVerticalBar,textCount,
+         searchTextField,addButton,searchView,nextButton,backgroundView].forEach {
             view.addSubview($0)
         }
         
@@ -261,13 +277,14 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     
     private func setBinding() {
         let input = CSMemberVM.Input(viewWillAppear: self.rx.viewWillAppear,
-                                        textFieldValue: searchTextField.rx.text.orEmpty.asDriver(),
-                                        textFieldReturnKeyTapped: searchTextFieldReturnKeyTapped,
-                                        searchCellTapped: searchTableView.rx.itemSelected,
-                                        selectedCellTapped: addCollectionView.rx.itemSelected,
-                                        addButtonTapped: addButton.rx.tap,
+                                     textFieldValue: searchTextField.rx.text.orEmpty.asDriver(),
+                                     textFieldReturnKeyTapped: searchTextFieldReturnKeyTapped,
+                                     searchCellTapped: searchTableView.rx.itemSelected,
+                                     selectedCellTapped: addCollectionView.rx.itemSelected,
+                                     addButtonTapped: addButton.rx.tap,
                                      nextButtonTapped: nextButton.rx.tap,
-                                     exitButtonTapped: header.rightButton.rx.tap)
+                                     exitButtonTapped: header.rightButton.rx.tap,
+                                     backButtonTapped: header.leftButton.rx.tap)
         let output = viewModel.transform(input: input)
         
         output.searchMemberArr
@@ -294,8 +311,7 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         output.textFieldValue
             .asDriver()
             .drive(onNext: { [weak self] text in
-                guard let self = self else { return }
-                self.backgroundView.configure(item: text)
+                self?.backgroundView.configure(item: text)
             })
             .disposed(by: disposeBag)
         
@@ -320,8 +336,7 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         output.selectedMemberArr
             .asDriver()
             .drive(onNext: { [weak self] memberArr in
-                guard let self = self else { return }
-                self.selectedMemberArr = memberArr
+                self?.selectedMemberArr = memberArr
             })
             .disposed(by: disposeBag)
         
@@ -366,18 +381,14 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         
         searchTableView.rx.didScroll.asDriver()
             .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.searchTextField.resignFirstResponder()
+                self?.searchTextField.resignFirstResponder()
             })
             .disposed(by: disposeBag)
         
-        output.showExclItemVC
+        output.showNextVC
             .asDriver()
             .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                
-                let vc = UserDefaults.standard.string(forKey: "CreateFlow") == "Smart" ? ExclItemInputVC() : SplitShareVC()
-                self.navigationController?.pushViewController(vc, animated: true)
+                self?.router?.showNextVC()
             })
             .disposed(by: disposeBag)
         
@@ -392,20 +403,15 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         exitAlert.rightButtonTapSubject
             .asDriver(onErrorJustReturn: ())
             .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.handleExitAlertButtonTap()
+                self?.router?.quitCreateFlow()
             })
             .disposed(by: disposeBag)
-    }
-    
-    private func handleExitAlertButtonTap() {
-        guard let navigationController = navigationController else { return }
-
-        if let splitShareVC = navigationController.viewControllers.first(where: { $0 is SplitShareVC }) as? SplitShareVC {
-            navigationController.popToViewController(splitShareVC, animated: true)
-        } else {
-            navigationController.popToRootViewController(animated: true)
-        }
+        
+        output.backToPreVC
+            .drive(onNext: { [weak self] _ in
+                self?.router?.backFromCSMember()
+            })
+            .disposed(by: disposeBag)
     }
 }
 

@@ -57,7 +57,7 @@
     {
       "identity" : "rxrealm",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/RxSwiftCommunity/RxRealm.git",
+      "location" : "https://github.com/RxSwiftCommunity/RxRealm",
       "state" : {
         "branch" : "main",
         "revision" : "5431fe18e341c41b9eeb56cf68e709ba8e54d4c9"

@@ -12,16 +12,34 @@ import RxCocoa
 import RxSwift
 import Reusable
 
+protocol SplitMethodSelectVCRouter {
+    func showSmartCreateFlow()
+    func showEqualCreateFlow()
+    func dismissSplitMethodSelectVC()
+}
+
 class SplitMethodSelectVC: UIViewController, Reusable {
     
+    var router: SplitMethodSelectVCRouter?
     let disposeBag = DisposeBag()
+    let viewModel: SplitMethodSelectVM
+    let header: SPNaviBar
     
-    let viewModel = SplitMethodSelectVM()
-    
-    let header = SPNavigationBar()
     let titleLabel = UILabel()
     let subTitleLabel = UILabel()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+    
+    init(viewModel: SplitMethodSelectVM,
+         header: SPNaviBar
+    ) {
+        self.viewModel = viewModel
+        self.header = header
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,15 +52,10 @@ class SplitMethodSelectVC: UIViewController, Reusable {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        UserDefaults.standard.set("Create", forKey: "ShareFlow")
     }
     
     private func setAttribute() {
         view.backgroundColor = .SurfacePrimary
-        
-        header.do {
-            $0.applyStyle(style: .selectSplitMethod, vc: self)
-        }
         
         titleLabel.do {
             $0.font = .KoreanLightTitle1
@@ -98,11 +111,11 @@ class SplitMethodSelectVC: UIViewController, Reusable {
     }
     
     private func setBinding() {
-        let input = SplitMethodSelectVM.Input(methodBtnTapped: collectionView.rx.itemSelected)
+        let input = SplitMethodSelectVM.Input(methodBtnTapped: collectionView.rx.itemSelected,
+                                              backButtonTapped: header.leftButton.rx.tap)
         let output = viewModel.transform(input: input)
         
-        output
-            .csInfoCount
+        output.csInfoCount
             .map{"\($0) 정산"}
             .drive(titleLabel.rx.text)
             .disposed(by: disposeBag)
@@ -116,16 +129,20 @@ class SplitMethodSelectVC: UIViewController, Reusable {
         
         output.showMethodTapped
             .asDriver()
-            .drive(onNext: { indexPath in
+            .drive(onNext: { [weak self] indexPath in
                 let splitType: SplitType = SplitType(rawValue: indexPath.row)!
                 switch splitType {
                 case .smart:
-                    UserDefaults.standard.set("Smart", forKey: "CreateFlow")
+                    self?.router?.showSmartCreateFlow()
                 case .equal:
-                    UserDefaults.standard.set("Equal", forKey: "CreateFlow")
+                    self?.router?.showEqualCreateFlow()
                 }
-                let vc = CSInfoVC()
-                self.navigationController?.pushViewController(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        output.backToPreVC
+            .drive(onNext: { [weak self] _ in
+                self?.router?.dismissSplitMethodSelectVC()
             })
             .disposed(by: disposeBag)
     }

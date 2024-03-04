@@ -12,23 +12,36 @@ import RxDataSources
 import SnapKit
 import Then
 
+protocol MemberLogVCRouter {
+    func moveToBackView()
+}
+
 class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
     
-    let repo = SplitRepository.share
+    var router: MemberLogVCRouter?
+    let disposeBag = DisposeBag()
+    let viewModel: MemberLogVM
+    let header: SPNaviBar
+    
     let alert = SPAlertController()
-    
-    let header = SPNavigationBar()
-    var tableView = UITableView()
+    let tableView = UITableView()
     let emptyLabel = UILabel()
-    
     let friendLabel = UILabel()
     let friendBar = UILabel()
     let friendCount = UILabel()
     let allDeleteBtn = UIButton()
     
-    var viewModel = MemberLogVM()
-    var disposeBag = DisposeBag()
+    init(viewModel: MemberLogVM,
+         header: SPNaviBar
+    ) {
+        self.viewModel = viewModel
+        self.header = header
+        super.init(nibName: nil, bundle: nil)
+    }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +54,6 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
     }
     
     func setTableView() {
-        
         tableView.register(MemberCell.self, forCellReuseIdentifier: "MemberCell")
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
@@ -60,14 +72,6 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
                 descriptions: "지금까지 추가하신 내역들이 사라져요",
                 leftButtonTitle: "취 소",
                 rightButtonTitle: "모두 지우기")
-        
-        alert.rightButtonTapSubject
-              .asDriver(onErrorJustReturn: ())
-              .drive(onNext: {
-                  SplitRepository.share.deleteAllMemberLog()
-                  self.viewModel.memberList.accept(self.repo.memberLogArr.value)
-              })
-              .disposed(by: disposeBag)
     }
   
     func setLayout() {
@@ -77,6 +81,7 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(8)
             $0.leading.trailing.equalToSuperview()
         }
+        
         friendLabel.snp.makeConstraints {
             $0.top.equalTo(header.snp.bottom).offset(24)
             $0.leading.equalToSuperview().offset(34)
@@ -86,6 +91,7 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
             $0.leading.equalTo(friendLabel.snp.trailing).offset(4)
             $0.top.equalTo(header.snp.bottom).offset(24)
         }
+        
         friendCount.snp.makeConstraints {
             $0.leading.equalTo(friendBar.snp.trailing).offset(8)
             $0.top.equalTo(header.snp.bottom).offset(26)
@@ -103,23 +109,15 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
             $0.bottom.equalToSuperview().inset(30)
         }
         
-        
         emptyLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.centerY.equalToSuperview()
         }
-        
-
-        
     }
     
     func setAttribute() {
         tableView.backgroundColor = .SurfaceBrandCalmshell
         view.backgroundColor = .SurfaceBrandCalmshell
-        
-        header.do {
-            $0.applyStyle(style: .memberSearchHistory, vc: self)
-        }
         
         friendLabel.do {
             $0.text = "함께한 멤버 "
@@ -132,7 +130,6 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
             $0.font = .KoreanBody
             $0.textColor = .TextSecondary
         }
-        
         
         friendCount.do {
             $0.font = .KoreanCaption1
@@ -157,72 +154,61 @@ class MemberLogVC: UIViewController, SPAlertDelegate, UIScrollViewDelegate {
             $0.backgroundColor = .clear
             $0.layer.borderWidth = 0
             $0.setAttributedTitle(string, for: .normal)
-            
-            
+            $0.setBackgroundColor(.AppColorGrayscale50K, for: .highlighted)
+            $0.setBackgroundColor(.clear, for: .normal)
         }
     }
     
     func setBinding() {
-    
-        let input = MemberLogVM.Input(deleteBtnTapped: allDeleteBtn.rx.tap.asDriver())
+        let removeLogIdx = BehaviorRelay<String>(value: "")
         
+        let input = MemberLogVM.Input(removeLogIdx: removeLogIdx,
+                                      backButtonTapped: header.leftButton.rx.tap,
+                                      alertRightButtonTapped: alert.rightButtonTapSubject.asDriver(onErrorJustReturn: ()))
         let output = viewModel.transform(input: input)
         
-        
-        allDeleteBtn.rx.controlEvent([.touchDown])
-            .subscribe(onNext: {
-                self.allDeleteBtn.backgroundColor = UIColor.AppColorGrayscale50K
-                                                                    
-            })
-            .disposed(by: disposeBag)
-        
-        allDeleteBtn.rx.controlEvent(.touchUpInside)
-            .subscribe(onNext: {
-                self.allDeleteBtn.backgroundColor = .clear
-            })
-            .disposed(by: disposeBag)
-        
-        
-        output.showAlertAllDelete
-            .drive(onNext: { [weak self] in
-                self?.setAlert()
-            })
-            .disposed(by: disposeBag)
-        
-            
-        
-        viewModel.memberList
+        output.memberList
             .bind(to: tableView.rx.items(cellIdentifier: "MemberCell", cellType: MemberCell.self)) { (row, member, cell) in
                 cell.nameLabel.text = " \(member.name)"
-                //삭제버튼 눌렀을 때
+                
                 cell.deleteBtn.rx.tap
                     .observe(on: MainScheduler.asyncInstance)
-                    .subscribe(onNext: { [self] in
-                        repo.deleteMemberLog(memberLogIdx: member.memberLogIdx)
-                        self.viewModel.memberList.accept(self.repo.memberLogArr.value.sorted { $0.name < $1.name })
+                    .subscribe(onNext: { _ in
+                        removeLogIdx.accept(member.memberLogIdx)
                     })
                     .disposed(by: cell.disposeBag)
-                
             }
             .disposed(by: disposeBag)
         
-        viewModel.memberList
+        output.memberList
             .map { !$0.isEmpty }
             .bind(to: emptyLabel.rx.isHidden)
             .disposed(by: disposeBag)
         
-        viewModel.memberList
+        output.memberList
             .map { "\($0.count)명" }
             .bind(to: friendCount.rx.text)
             .disposed(by: disposeBag)
-
+        
+        output.moveToBackView
+            .drive(onNext: { [weak self] _ in
+                self?.router?.moveToBackView()
+            })
+            .disposed(by: disposeBag)
+        
+        allDeleteBtn.rx.tap
+            .asDriver()
+            .drive(onNext: { [weak self] _ in
+                self?.setAlert()
+            })
+            .disposed(by: disposeBag)
     }
 }
 
 
 extension MemberLogVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-            return 50
-        }
+        return 50
+    }
 }
 

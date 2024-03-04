@@ -11,46 +11,42 @@ import RxCocoa
 
 class SplitShareVM {
     let disposeBag = DisposeBag()
-    let repo = SplitRepository.share
+    var service: ShareServiceType
+    
+    init(service: ShareServiceType) {
+        self.service = service
+    }
     
     struct Input {
-        let viewDidAppear: Observable<Bool>
         let shareButtonTapped: ControlEvent<Void>
         let csAddButtonTapped: ControlEvent<Void>
         let editButtonTapped: ControlEvent<Void>
+        let backButtonTapped: ControlEvent<Void>
+        let quitButtonTapped: ControlEvent<Void>
+        let popUpButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
-        let split: BehaviorRelay<[Split]>
+        let split: BehaviorRelay<Split>
         let csInfos: BehaviorRelay<[CSInfo]>
         let splitResult: BehaviorRelay<[SplitMemberResult]>
         let sendPayString: Driver<String>
         let showNewCSCreateFlow: ControlEvent<Void>
         let showCSEditView: ControlEvent<Void>
+        let showBackView: ControlEvent<Void>
+        let showRootView: ControlEvent<Void>
+        let showMyBankAccountView: ControlEvent<Void>
     }
     
     func transform(input: Input) -> Output {
-        let split: BehaviorRelay<[Split]> = repo.splitArr
-        let csInfos: BehaviorRelay<[CSInfo]> = repo.csInfoArr
+        let split: BehaviorRelay<Split> = BehaviorRelay(value: service.split)
+        let csInfos: BehaviorRelay<[CSInfo]> = BehaviorRelay(value: service.csInfoArr)
         let splitResult: BehaviorRelay<[SplitMemberResult]> = BehaviorRelay(value: self.calcSplitResult())
         let showNewCSCreateFlow = input.csAddButtonTapped
         let showCSEditView = input.editButtonTapped
-        
-        input.viewDidAppear
-            .asDriver(onErrorJustReturn: true)
-            .drive (onNext: { _ in
-                let idx = SplitRepository.share.splitArr.value.first!.splitIdx
-                SplitRepository.share.fetchSplitArrFromDBWithSplitIdx(splitIdx: idx)
-                splitResult.accept (self.calcSplitResult ())
-            })
-            .disposed(by: disposeBag)
-        
-        showNewCSCreateFlow
-            .asDriver()
-            .drive(onNext: {
-                self.repo.createNewCS()
-            })
-            .disposed(by: disposeBag)
+        let showBackView = input.backButtonTapped
+        let showRootView = input.quitButtonTapped
+        let showMyBankAccountView = input.popUpButtonTapped
         
         let sendPayString: Driver<String> = input.shareButtonTapped
             .map { [weak self] _ in
@@ -59,19 +55,27 @@ class SplitShareVM {
             }
             .asDriver(onErrorJustReturn: "")
 
-        return Output(split: split, csInfos: csInfos, splitResult: splitResult, sendPayString: sendPayString, showNewCSCreateFlow: showNewCSCreateFlow, showCSEditView: showCSEditView)
+        return Output(split: split, 
+                      csInfos: csInfos,
+                      splitResult: splitResult,
+                      sendPayString: sendPayString,
+                      showNewCSCreateFlow: showNewCSCreateFlow,
+                      showCSEditView: showCSEditView,
+                      showBackView: showBackView,
+                      showRootView: showRootView,
+                      showMyBankAccountView: showMyBankAccountView)
     }
     
     // 결과 계산 로직 메서드
     private func calcSplitResult() -> [SplitMemberResult] {
         
         var splitResultArr: [SplitMemberResult] = []
-        let csInfos = repo.csInfoArr.value
+        let csInfos = service.csInfoArr
         
         for csInfo in csInfos {
             // 현재 차수의 member, 제외 아이템
-            let currentCSMembers = repo.csMemberArr.value.filter { $0.csInfoIdx == csInfo.csInfoIdx }
-            let currentExclItems = repo.exclItemArr.value.filter { $0.csInfoIdx == csInfo.csInfoIdx }
+            let currentCSMembers = service.csMemberArr.filter { $0.csInfoIdx == csInfo.csInfoIdx }
+            let currentExclItems = service.exclItemArr.filter { $0.csInfoIdx == csInfo.csInfoIdx }
             
             // 제외 아이템을 빼지 않은 인당 금액\
             let personPrice: Int = (csInfo.totalAmount - currentExclItems.map { $0.price }.reduce(0, +)) / currentCSMembers.count
@@ -90,7 +94,7 @@ class SplitShareVM {
                 let currentExclItemPrice = exclItem.price
                 
                 // 현재 제외 멤버 (먹은 사람, 안먹은 사람 둘 다 있음)
-                let currentExclMembers = repo.exclMemberArr.value.filter { $0.exclItemIdx == exclItem.exclItemIdx }
+                let currentExclMembers = service.exclMemberArr.filter { $0.exclItemIdx == exclItem.exclItemIdx }
                 
                 // 먹은 멤버의 이름만 모은 배열
                 let exclMemberNames = currentExclMembers.filter { $0.isTarget == false }.map { $0.name }
@@ -136,7 +140,7 @@ class SplitShareVM {
         
         for i in 0...splitResultArr.count-1 {
             for csInfo in csInfos {
-                let csMemberNames = repo.csMemberArr.value.filter { $0.csInfoIdx == csInfo.csInfoIdx }.map { $0.name }
+                let csMemberNames = service.csMemberArr.filter { $0.csInfoIdx == csInfo.csInfoIdx }.map { $0.name }
                 if !csMemberNames.contains(splitResultArr[i].memberName) {
                     let exclData = "\(csInfo.title) [참여 X]"
                     splitResultArr[i].exclDatas.append(exclData)

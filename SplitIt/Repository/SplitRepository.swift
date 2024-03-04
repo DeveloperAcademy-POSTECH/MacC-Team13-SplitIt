@@ -200,7 +200,7 @@ final class SplitRepository {
     func editExclItemName(exclItemIdx: String, name: String) {
         var exclItems: [ExclItem] = exclItemArr.value
         
-        for i in 0...exclItems.count-1 {
+        for i in 0..<exclItems.count {
             if exclItems[i].exclItemIdx == exclItemIdx {
                 exclItems[i].name = name
             }

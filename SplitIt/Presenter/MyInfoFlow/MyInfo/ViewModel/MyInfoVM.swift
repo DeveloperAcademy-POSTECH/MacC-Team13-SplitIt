@@ -13,9 +13,7 @@ import SafariServices
 class MyInfoVM: UIViewController {
     
     let disposeBag = DisposeBag()
-    let repo = SplitRepository.share
     let userDefault = UserDefaults.standard
-    
     
     struct Input {
         let privacyBtnTapped: Driver<Void>
@@ -24,6 +22,7 @@ class MyInfoVM: UIViewController {
         let editAccountViewTapped: Observable<Void>
         let emptyEditAccountViewTapped: Observable<Void>
         let madeByWCCTBtnTapped: Driver<Void>
+        let backButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
@@ -33,6 +32,7 @@ class MyInfoVM: UIViewController {
         let moveToEditAccountView: Observable<Void>
         let moveToInitAccountView: Observable<Void>
         let moveToMadeByWCCT: Driver<Void>
+        let moveToBackView: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -42,21 +42,17 @@ class MyInfoVM: UIViewController {
         let editAccountViewTap = input.editAccountViewTapped
         let emptyEditAccountViewTapped = input.emptyEditAccountViewTapped
         let madeByWCCTBtnTapped = input.madeByWCCTBtnTapped
-        repo.fetchMemberLog()
-
+        let moveToBackView = input.backButtonTapped.asDriver()
         
-        let output = Output(moveToPrivacyView: privacyBtnTapped,
-                            moveTofriendListView: friendListViewTapped,
-                            moveToHistoryListView: historyListViewTapped,
-                            moveToEditAccountView: editAccountViewTap,
-                            moveToInitAccountView: emptyEditAccountViewTapped,
-                            moveToMadeByWCCT: madeByWCCTBtnTapped
-        )
         
-        return output
+        return Output(moveToPrivacyView: privacyBtnTapped,
+                      moveTofriendListView: friendListViewTapped,
+                      moveToHistoryListView: historyListViewTapped,
+                      moveToEditAccountView: editAccountViewTap,
+                      moveToInitAccountView: emptyEditAccountViewTapped,
+                      moveToMadeByWCCT: madeByWCCTBtnTapped,
+                      moveToBackView: moveToBackView)
     }
-    
-    
 }
 
 

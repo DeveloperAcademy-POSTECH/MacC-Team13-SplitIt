@@ -13,14 +13,15 @@ import Then
 import RxDataSources
 import RxAppState
 
-class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
+final class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
     
     let inputTextRelay = BehaviorRelay<Int?>(value: 0)
+    let isActiveRelay = BehaviorRelay<Bool>(value: false)
     let customKeyboard = CustomKeyboard()
     
     var disposeBag = DisposeBag()
     
-    let viewModel = ExclItemInfoAddModalVM()
+    let viewModel: ExclItemInfoAddModalVM
     
     let header = SPNavigationBar()
     let scrollView = UIScrollView(frame: .zero)
@@ -42,6 +43,16 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
     
     let cellHeight: CGFloat = 40.0
     let tableInset: CGFloat = 12.0
+    
+    init(viewModel: ExclItemInfoAddModalVM) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -252,7 +263,9 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
                                                  titleTextFieldControlEvent: titleTFEvent,
                                                  priceTextFieldControlEvent: priceTFEvent,
                                                  cancelButtonTapped: header.leftButton.rx.tap,
-                                                 addButtonTapped: header.rightButton.rx.tap)
+                                                 addButtonTapped: header.rightButton.rx.tap,
+                                                 isActiveRelay: isActiveRelay,
+                                                 tableItemSelected: tableView.rx.itemSelected)
         let output = viewModel.transform(input: input)
         
         output.addButtonTapped
@@ -289,7 +302,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
             .map { [weak self] isValid -> String in
                 guard let self = self else { return "" }
                 if !isValid {
-                    return String(self.titleTextFiled.text?.prefix(self.viewModel.maxTextCount) ?? "")
+                    return String(self.titleTextFiled.text?.prefix(viewModel.maxTextCount) ?? "")
                 } else {
                     return self.titleTextFiled.text ?? ""
                 }
@@ -339,7 +352,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
             })
             .disposed(by: disposeBag)
         
-        viewModel.sections
+        output.sections
             .asDriver()
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
@@ -352,7 +365,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
                     let keyboardHeight: CGFloat
                     keyboardHeight = keyboardSize.height
                     
-                    let items = viewModel.sections.value
+                    let items = output.sections.value
 
                     let topArea = tableView.frame.minY
                     let bottomArea = CGFloat(33.0) // bottom_offset
@@ -375,7 +388,7 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
             })
             .disposed(by: disposeBag)
 
-        viewModel.sections
+        output.sections
             .asDriver()
             .drive(onNext: { [weak self] items in
                 guard let self = self else { return }
@@ -448,19 +461,6 @@ class ExclItemInfoAddModalVC: UIViewController, UIScrollViewDelegate {
             })
             .disposed(by: disposeBag)
         
-        tableView.rx.itemSelected
-            .observe(on: MainScheduler.asyncInstance)
-            .subscribe(onNext: { [weak self] indexPath in
-                guard let self = self else { return }
-                var sections = viewModel.sections.value
-
-                var target = sections[indexPath.section].items[indexPath.row]
-                target.isTarget.toggle()
-                sections[indexPath.section].items[indexPath.row] = target
-                viewModel.sections.accept(sections)
-            })
-            .disposed(by: disposeBag)
-        
         output.priceIsLimited
             .drive(onNext: { [weak self] isLimited in
                 guard let self = self else { return }
@@ -484,9 +484,7 @@ extension ExclItemInfoAddModalVC {
             self.priceTextFiledNotice.isHidden = true
         }
         
-        var sections = viewModel.sections.value
-        sections[0].isActive = true
-        viewModel.sections.accept(sections)
+        isActiveRelay.accept(true)
     }
     
     func unfocusExclMember() {
@@ -498,9 +496,7 @@ extension ExclItemInfoAddModalVC {
             self.exclMemberMessage.textColor = .TextDeactivate
         }
         
-        var sections = viewModel.sections.value
-        sections[0].isActive = false
-        viewModel.sections.accept(sections)
+        isActiveRelay.accept(false)
     }
     
     func focusTitleTF(output: ExclItemInfoAddModalVM.Output) {

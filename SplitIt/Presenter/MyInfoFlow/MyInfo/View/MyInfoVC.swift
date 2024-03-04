@@ -13,12 +13,23 @@ import SnapKit
 import Then
 import RealmSwift
 
+protocol MyInfoVCRouter {
+    func backFromMyInfoVC()
+    func moveToPrivacyVC()
+    func moveTofriendListVC()
+    func moveToHistoryListVC()
+    func moveToMyBackAccountVC()
+    func moveToMadeByWCCT()
+}
+
+// TODO: - 해당 VC에 View를 구성하는 코드가 너무 비대해요. 지금 SwiftUI의 레이아웃 개념이 너무 많이 사용되서 그런 것 같아요. 수정해서 코드를 줄여보면 좋을 것 같습니다.
 class MyInfoVC: UIViewController {
     
-    let header = SPNavigationBar()
+    var router: MyInfoVCRouter?
+    let disposeBag = DisposeBag()
+    let viewModel: MyInfoVM
+    let header: SPNaviBar
     
-    var viewModel = MyInfoVM()
-    var disposeBag = DisposeBag()
     let userDefault = UserDefaults.standard
     
     let backView = UIView() //emptyView와 accountView 생성되는 뷰
@@ -80,6 +91,18 @@ class MyInfoVC: UIViewController {
     
     let privacyBtn = UIButton()
     let madeByWCCTBtn = UIButton()
+    
+    init(viewModel: MyInfoVM,
+         header: SPNaviBar
+    ) {
+        self.viewModel = viewModel
+        self.header = header
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
   
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -289,53 +312,52 @@ class MyInfoVC: UIViewController {
                                    historyListViewTapped: historyListTap.rx.event.asObservable().map { _ in () },
                                    editAccountViewTapped: editBtnTap.rx.event.asObservable().map{ _ in () },
                                    emptyEditAccountViewTapped: startBtnTap.rx.event.asObservable().map{ _ in () },
-                                   madeByWCCTBtnTapped: madeByWCCTBtn.rx.tap.asDriver()
-        )
+                                   madeByWCCTBtnTapped: madeByWCCTBtn.rx.tap.asDriver(),
+                                   backButtonTapped: header.leftButton.rx.tap)
         
         let output = viewModel.transform(input: input)
         
         output.moveToPrivacyView
-            .drive(onNext:{
-                let url = NSURL(string: "https://kori-collab.notion.site/e3407a6ca4724b078775fd13749741b1?pvs=4")
-                let privacyWebView: SFSafariViewController = SFSafariViewController(url: url! as URL)
-                self.present(privacyWebView, animated: true, completion: nil)
+            .drive(onNext: { [weak self] _ in
+                self?.router?.moveToPrivacyVC()
             })
             .disposed(by: disposeBag)
         
         output.moveTofriendListView
-            .subscribe(onNext: {
-                let memberLogVC = MemberLogVC()
-                self.navigationController?.pushViewController(memberLogVC, animated: true)
+            .subscribe(onNext: { [weak self] _ in
+                self?.router?.moveTofriendListVC()
             })
             .disposed(by: disposeBag)
         
         output.moveToHistoryListView
-            .subscribe(onNext: {
-                let historyVC = HistoryVC()
-                self.navigationController?.pushViewController(historyVC, animated: true)
+            .subscribe(onNext: { [weak self] _ in
+                self?.router?.moveToHistoryListVC()
             })
             .disposed(by: disposeBag)
         
+        // MARK: - input에서는 editAccountView랑 emptyEditAccountView가 다르기때문에 각자 input을 넣어준건 좋아요. 대신 viewModel에서는 2개를 합쳐서 하나의 output으로 만들어주는게 코드 중복이 없기때문에 더 좋을 것 같습니다.
+        // TODO: output의 moveToEditAccountView + moveToInitAccountView => moveToMyBankAccountVC로 변경하기
         output.moveToEditAccountView
-            .subscribe(onNext: {
-                let bankVC = MyBankAccountVC()
-                self.navigationController?.pushViewController(bankVC, animated: true)
+            .subscribe(onNext: { [weak self] _ in
+                self?.router?.moveToMyBackAccountVC()
             })
             .disposed(by: disposeBag)
         
         output.moveToInitAccountView
-            .subscribe(onNext: {
-                //정보 초기설정하는 뷰로 이동
-                let bankVC = MyBankAccountVC()
-                self.navigationController?.pushViewController(bankVC, animated: true)
+            .subscribe(onNext: { [weak self] _ in
+                self?.router?.moveToMyBackAccountVC()
             })
             .disposed(by: disposeBag)
         
         output.moveToMadeByWCCT
-            .drive(onNext:{
-                let url = NSURL(string: "https://github.com/DeveloperAcademy-POSTECH/MacC-Team13-SplitIt")
-                let WCCTWebView: SFSafariViewController = SFSafariViewController(url: url! as URL)
-                self.present(WCCTWebView, animated: true, completion: nil)
+            .drive(onNext: { [weak self] _ in
+                self?.router?.moveToMadeByWCCT()
+            })
+            .disposed(by: disposeBag)
+        
+        output.moveToBackView
+            .drive(onNext: { [weak self] _ in
+                self?.router?.backFromMyInfoVC()
             })
             .disposed(by: disposeBag)
     }
@@ -345,9 +367,11 @@ class MyInfoVC: UIViewController {
         [header, backView, listView, privacyBtn, madeByWCCTBtn, myInfoLabel, historyLabel].forEach {
             view.addSubview($0)
         }
+        
         [emptyView, accountView].forEach {
             backView.addSubview($0)
         }
+        
         [friendListView, historyListView, listBar].forEach {
             listView.addSubview($0)
         }
@@ -368,7 +392,6 @@ class MyInfoVC: UIViewController {
         [mainLabel, subLabel, emptyAccountEditLabel, emptyAccountEditChevron].forEach{
             emptyView.addSubview($0)
         }
-        
     }
     
     func setLayout() {
@@ -435,8 +458,6 @@ class MyInfoVC: UIViewController {
         }
         
         accountEditChevron.snp.makeConstraints {
-//            $0.height.equalTo(14)
-//            $0.width.equalTo(8)
             $0.bottom.equalToSuperview().inset(14)
             $0.trailing.equalToSuperview().inset(16)
         }
@@ -538,8 +559,6 @@ class MyInfoVC: UIViewController {
         }
         
         emptyAccountEditChevron.snp.makeConstraints {
-//            $0.height.equalTo(18)
-//            $0.width.equalTo(9)
             $0.bottom.equalToSuperview().inset(8)
             $0.trailing.equalToSuperview().inset(16)
         }
@@ -574,12 +593,6 @@ class MyInfoVC: UIViewController {
         let attributedString = NSMutableAttributedString(string: "수정하기")
         attributedString.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: attributedString.length))
         
-        
-        header.do {
-            $0.applyStyle(style: .setting, vc: self)
-        }
-        
-        
         myInfoLabel.do {
             $0.text = "계좌 설정"
             $0.font = .KoreanCaption2
@@ -598,7 +611,6 @@ class MyInfoVC: UIViewController {
             $0.layer.borderWidth = 1
             $0.backgroundColor = .clear
         }
-        
         
         nameInfoLabel.do {
             $0.text = "예금주 성함"
@@ -629,7 +641,6 @@ class MyInfoVC: UIViewController {
         }
         
         accountEditChevron.do {
-            //$0.image = UIImage(systemName: "chevron.right")
             $0.image = UIImage(named: "ChevronRightIconDefault")
             $0.tintColor = .SurfaceSecondary
         }

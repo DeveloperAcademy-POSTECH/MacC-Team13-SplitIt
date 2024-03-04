@@ -44,12 +44,12 @@ final class EditCSListVM {
         let exclList: BehaviorRelay<[ExclItem]> = dataModel.exclItemArr
         let csMemberList: BehaviorRelay<[CSMember]> = dataModel.csMemberArr
         
-        input.viewDidAppear
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
+//        input.viewDidAppear
+//            .subscribe(onNext: { [weak self] _ in
+//                guard let self = self else { return }
 //                dataModel.fetchSplitArrFromDBWithSplitIdx(splitIdx: self.splitIdx)
-            })
-            .disposed(by: disposeBag)
+//            })
+//            .disposed(by: disposeBag)
         
         let pushEditView = csinfoIndex
             .withLatestFrom(csinfoList) { indexPath, data in

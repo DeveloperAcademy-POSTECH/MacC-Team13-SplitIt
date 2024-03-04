@@ -10,17 +10,20 @@ import RxCocoa
 import UIKit
 
 class CSInfoVM {
-    
+    var createService: CreateServiceType
     var disposeBag = DisposeBag()
-    
     let maxTextCount = 12
+    
+    init(createService: CreateServiceType) {
+        self.createService = createService
+    }
     
     struct Input {
         let nextButtonTapped: ControlEvent<Void> // 다음 버튼
         let title: Driver<String> // TitleTextField의 text
         let totalAmount: Driver<String>
-        let titleTextFieldControlEvent: Observable<UIControl.Event>
-        let totalAmountTextFieldControlEvent: Observable<UIControl.Event>
+//        let titleTextFieldControlEvent: Observable<UIControl.Event>
+//        let totalAmountTextFieldControlEvent: Observable<UIControl.Event>
         let exitButtonTapped: ControlEvent<Void>
         let backButtonTapped: ControlEvent<Void>
     }
@@ -34,14 +37,14 @@ class CSInfoVM {
         let titleTextFieldIsEnable: Driver<Bool>
         let totalAmountTextFieldIsValid: Driver<Bool>
         let nextButtonIsEnable: Driver<Bool>
-        let titleTextFieldControlEvent: Driver<UIControl.Event>
+//        let titleTextFieldControlEvent: Driver<UIControl.Event>
         let showExitAlert: Driver<Void>
-        let showBackAlert: Driver<Void>
+        let backToPreVC: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
-        let titleInitialValue = SplitRepository.share.csInfoArr.value.first!.title
-        let initialTitleRelay = BehaviorRelay<String>(value: titleInitialValue)
+//        let titleInitialValue = createService.csInfo.title
+        let initialTitleRelay = BehaviorRelay<String>(value: createService.csInfo.title)
         let title = input.title
         let showCSTotalAmountView = input.nextButtonTapped
         let textFieldCount = BehaviorRelay<String>(value: "")
@@ -83,13 +86,14 @@ class CSInfoVM {
         showCSTotalAmountView
             .asDriver()
             .withLatestFrom(csInfoDriver)
-            .drive(onNext: { title, totalAmount in
-                SplitRepository.share.inputCSInfoDatas(title: title, totalAmount: totalAmount)
+            .drive(onNext: { [weak self] title, totalAmount in
+                self?.createService.inputCSInfoDatas(title: title, totalAmount: totalAmount)
             })
             .disposed(by: disposeBag)
         
         title
-            .map { title in
+            .map { [weak self] title in
+                guard let self = self else { return "" }
                 let currentTextCount = title.count > self.maxTextCount ? title.count - 1 : title.count
                 return "\(currentTextCount)/\(self.maxTextCount)"
             }
@@ -108,18 +112,18 @@ class CSInfoVM {
             .map{ $0 && $1 }
             .asDriver()
         
-        let titleTFControlEvent: Driver<UIControl.Event> = input.titleTextFieldControlEvent
-            .map { event -> UIControl.Event in
-                switch event {
-                case .editingDidBegin:
-                    return UIControl.Event.editingDidBegin
-                case .editingDidEnd:
-                    return UIControl.Event.editingDidEnd
-                default:
-                    return UIControl.Event()
-                }
-            }
-            .asDriver(onErrorJustReturn: UIControl.Event())
+//        let titleTFControlEvent: Driver<UIControl.Event> = input.titleTextFieldControlEvent
+//            .map { event -> UIControl.Event in
+//                switch event {
+//                case .editingDidBegin:
+//                    return UIControl.Event.editingDidBegin
+//                case .editingDidEnd:
+//                    return UIControl.Event.editingDidEnd
+//                default:
+//                    return UIControl.Event()
+//                }
+//            }
+//            .asDriver(onErrorJustReturn: UIControl.Event())
         
         totalAmountResult
             .asDriver()
@@ -135,10 +139,9 @@ class CSInfoVM {
                       titleTextFieldIsEnable: titleTextFieldCountIsEmpty,
                       totalAmountTextFieldIsValid: totalAmountIsValid.asDriver(),
                       nextButtonIsEnable: nextButtonIsEnable,
-                      titleTextFieldControlEvent: titleTFControlEvent,
+//                      titleTextFieldControlEvent: titleTFControlEvent,
                       showExitAlert: input.exitButtonTapped.asDriver(),
-                      showBackAlert: input.backButtonTapped.asDriver())
+                      backToPreVC: input.backButtonTapped.asDriver())
     }
-
 }
 
