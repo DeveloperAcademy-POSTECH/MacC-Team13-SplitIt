@@ -13,15 +13,16 @@ import Then
 import RxDataSources
 import RxAppState
 
-class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDelegate {
+final class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDelegate {
     
     let inputTextRelay = BehaviorRelay<Int?>(value: 0)
+    let isActiveRelay = BehaviorRelay<Bool>(value: false)
     var currentExclItemIdx: String = ""
     let customKeyboard = CustomKeyboard()
     
     var disposeBag = DisposeBag()
     
-    var viewModel: ExclItemInfoEditModalVM!
+    var viewModel: ExclItemInfoEditModalVM
     
     let alert = SPAlertController()
     let header = SPNavigationBar()
@@ -47,10 +48,9 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
     let cellHeight: CGFloat = 40.0
     let tableInset: CGFloat = 12.0
     
-    init(viewModel: ExclItemInfoEditModalVM!) {
-        super.init(nibName: nil, bundle: nil)
-        
+    init(viewModel: ExclItemInfoEditModalVM) {
         self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -299,7 +299,8 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
                                                   priceTextFieldControlEvent: priceTFEvent,
                                                   cancelButtonTapped: header.leftButton.rx.tap,
                                                   editButtonTapped: header.rightButton.rx.tap,
-                                                  deleteButtonTapped: deleteButton.rx.tap)
+                                                  deleteButtonTapped: deleteButton.rx.tap,
+                                                  isActiveRelay: isActiveRelay)
         let output = viewModel.transform(input: input)
         
         titleTextFiled.rx.text.orEmpty
@@ -344,7 +345,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
             .map { [weak self] isValid -> String in
                 guard let self = self else { return "" }
                 if !isValid {
-                    return String(self.titleTextFiled.text?.prefix(self.viewModel.maxTextCount) ?? "")
+                    return String(self.titleTextFiled.text?.prefix(viewModel.maxTextCount) ?? "")
                 } else {
                     return self.titleTextFiled.text ?? ""
                 }
@@ -394,7 +395,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
             })
             .disposed(by: disposeBag)
         
-        viewModel.sections
+        output.sections
             .asDriver()
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
@@ -450,14 +451,13 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
         
         tableView.rx.itemSelected
             .observe(on: MainScheduler.asyncInstance)
-            .subscribe(onNext: { [weak self] indexPath in
-                guard let self = self else { return }
-                var sections = viewModel.sections.value
+            .subscribe(onNext: { indexPath in
+                var sections = output.sections.value
 
                 var target = sections[indexPath.section].items[indexPath.row]
                 target.isTarget.toggle()
                 sections[indexPath.section].items[indexPath.row] = target
-                viewModel.sections.accept(sections)
+                output.sections.accept(sections)
             })
             .disposed(by: disposeBag)
         
@@ -470,7 +470,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
             })
             .disposed(by: disposeBag)
         
-        viewModel.exclInfo
+        output.exclInfo
             .observe(on: MainScheduler.asyncInstance)
             .map { exclItem -> (String, String) in
                 let numberFormatter = NumberFormatterHelper()
@@ -494,7 +494,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
                     let keyboardHeight: CGFloat
                     keyboardHeight = keyboardSize.height
                     
-                    let items = viewModel.sections.value
+                    let items = output.sections.value
 
                     let topArea = tableView.frame.minY
                     let bottomArea = CGFloat(24.0 + 48.0 + 33.0) // top_offset + deleteBtnHeight + bottom_offset
@@ -517,7 +517,7 @@ class ExclItemInfoEditModalVC: UIViewController, UIScrollViewDelegate, SPAlertDe
             })
             .disposed(by: disposeBag)
 
-        viewModel.sections
+        output.sections
             .asDriver()
             .drive(onNext: { [weak self] items in
                 guard let self = self else { return }
@@ -579,9 +579,7 @@ extension ExclItemInfoEditModalVC {
             self.priceTextFiledNotice.isHidden = true
         }
         
-        var sections = viewModel.sections.value
-        sections[0].isActive = true
-        viewModel.sections.accept(sections)
+        isActiveRelay.accept(true)
     }
     
     func unfocusExclMember() {
@@ -593,9 +591,7 @@ extension ExclItemInfoEditModalVC {
             self.exclMemberMessage.textColor = .TextDeactivate
         }
         
-        var sections = viewModel.sections.value
-        sections[0].isActive = false
-        viewModel.sections.accept(sections)
+        isActiveRelay.accept(false)
     }
     
     func focusTitleTF(output: ExclItemInfoEditModalVM.Output) {

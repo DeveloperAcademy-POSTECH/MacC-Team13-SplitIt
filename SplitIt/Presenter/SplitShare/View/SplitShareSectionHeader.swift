@@ -136,7 +136,6 @@ class SplitShareSectionHeader: UIView {
         var count = 0
         
         for csInfo in item {
-            
             let titleView = UIView()
             let dotView = UIView()
             let csTitle = UILabel()
@@ -173,6 +172,8 @@ class SplitShareSectionHeader: UIView {
                 $0.setKernSpacing()
             }
             
+            self.stackView.addArrangedSubview(titleView)
+            
             [dotView,csTitle,krwLabel,csPrice].forEach {
                 titleView.addSubview($0)
             }
@@ -180,23 +181,23 @@ class SplitShareSectionHeader: UIView {
             titleView.snp.makeConstraints {
                 $0.top.equalTo(csTitle).offset(-2)
                 $0.bottom.equalTo(csTitle).offset(2)
-                $0.leading.equalTo(dotView)
-                $0.trailing.equalTo(csPrice).inset(-8)
+                $0.leading.equalToSuperview()
+                $0.trailing.equalToSuperview()
             }
             
             dotView.snp.makeConstraints {
                 $0.centerY.equalToSuperview()
-                $0.leading.equalToSuperview().inset(12)
+                $0.leading.equalToSuperview().offset(10)
                 $0.size.equalTo(8)
             }
             
             csTitle.snp.makeConstraints {
                 $0.centerY.equalToSuperview()
-                $0.leading.equalTo(dotView.snp.trailing).offset(4)
+                $0.leading.equalTo(dotView.snp.trailing).offset(10)
             }
             
             krwLabel.snp.makeConstraints {
-                $0.trailing.equalTo(csPrice.snp.leading).offset(-4)
+                $0.trailing.equalTo(csPrice.snp.leading).offset(-10)
                 $0.bottom.equalToSuperview().offset(-2)
             }
             
@@ -204,8 +205,6 @@ class SplitShareSectionHeader: UIView {
                 $0.bottom.equalToSuperview()
                 $0.trailing.equalToSuperview()
             }
-            
-            self.stackView.addArrangedSubview(titleView)
             
             count += 1
         }

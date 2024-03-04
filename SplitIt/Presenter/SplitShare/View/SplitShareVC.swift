@@ -15,11 +15,20 @@ import Reusable
 import SnapshotKit
 import Toast
 
+protocol SplitShareVCRouter {
+    func addNewCS()
+    func editSplit()
+    func showBackView()
+    func showRootView()
+    func showMyBankAccountView()
+}
+
 class SplitShareVC: UIViewController {
+    var router: SplitShareVCRouter?
     let disposeBag = DisposeBag()
-    let viewModel = SplitShareVM()
+    let viewModel: SplitShareVM
+    let header: SPNaviBar
     
-    let header = SPNavigationBar()
     let tableView = UITableView(frame: .zero, style: .grouped)
     let csAddButton = SPButton()
     let editButton = SPButton()
@@ -34,6 +43,16 @@ class SplitShareVC: UIViewController {
     var resultArr: [SplitMemberResult] = []
     var csInfos: [CSInfo] = []
     
+    init(viewModel: SplitShareVM, header: SPNaviBar) {
+        self.viewModel = viewModel
+        self.header = header
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -45,34 +64,17 @@ class SplitShareVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if UserDefaults.standard.string(forKey: "userBank") == "" || UserDefaults.standard.string(forKey: "userBank") == nil {
-            UserDefaults.standard.set("PopUp", forKey: "MyInfoFlow")
+        let userBank = UserDefaults.standard.string(forKey: "userBank")
+        
+        if userBank == "" || userBank == nil {
             setPopUp()
         } else {
             removePopUp()
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if UserDefaults.standard.string(forKey: "ShareFlow") == "Create" {
-            navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-        } else {
-            navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        }
-    }
-    
     private func setAttribute() {
         view.backgroundColor = .SurfacePrimary
-        
-        header.do {
-            if UserDefaults.standard.string(forKey: "ShareFlow") == "Create" {
-                $0.applyStyle(style: .createToShare, vc: self)
-            } else {
-                $0.applyStyle(style: .historyToShare, vc: self)
-            }
-        }
         
         tableView.do {
             $0.separatorStyle = .none
@@ -148,10 +150,12 @@ class SplitShareVC: UIViewController {
     }
     
     private func setBind() {
-        let input = SplitShareVM.Input(viewDidAppear: self.rx.viewDidAppear,
-                                       shareButtonTapped: shareButton.rx.tap,
+        let input = SplitShareVM.Input(shareButtonTapped: shareButton.rx.tap,
                                        csAddButtonTapped: csAddButton.rx.tap,
-                                       editButtonTapped: editButton.rx.tap)
+                                       editButtonTapped: editButton.rx.tap,
+                                       backButtonTapped: header.leftButton.rx.tap,
+                                       quitButtonTapped: header.rightButton.rx.tap,
+                                       popUpButtonTapped: popUpView.bottomButton.rx.tap)
         let output = viewModel.transform(input: input)
         
         output.splitResult
@@ -173,9 +177,9 @@ class SplitShareVC: UIViewController {
         
         output.split
             .asDriver()
-            .drive(onNext: { [weak self] in
+            .drive(onNext: { [weak self] split in
                 guard let self = self else { return }
-                self.splitDate = $0.map { $0.createDate }.first ?? .now
+                self.splitDate = split.createDate
             })
             .disposed(by: disposeBag)
         
@@ -218,18 +222,36 @@ class SplitShareVC: UIViewController {
         
         output.showNewCSCreateFlow
             .asDriver()
-            .drive(onNext: {
-                let vc = SplitMethodSelectVC()
-                self.navigationController?.pushViewController(vc, animated: true)
+            .drive(onNext: { [weak self] _ in
+                self?.router?.addNewCS()
             })
             .disposed(by: disposeBag)
         
         output.showCSEditView
             .asDriver()
             .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                let vc = EditCSListVC()
-                self.navigationController?.pushViewController(vc, animated: true)
+                self?.router?.editSplit()
+            })
+            .disposed(by: disposeBag)
+        
+        output.showBackView
+            .asDriver()
+            .drive(onNext: { [weak self] _ in
+                self?.router?.showBackView()
+            })
+            .disposed(by: disposeBag)
+        
+        output.showRootView
+            .asDriver()
+            .drive(onNext: { [weak self] _ in
+                self?.router?.showRootView()
+            })
+            .disposed(by: disposeBag)
+        
+        output.showMyBankAccountView
+            .asDriver()
+            .drive(onNext: { [weak self] _ in
+                self?.router?.showMyBankAccountView()
             })
             .disposed(by: disposeBag)
         

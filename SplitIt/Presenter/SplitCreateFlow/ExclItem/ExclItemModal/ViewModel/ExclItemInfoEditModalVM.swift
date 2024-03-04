@@ -9,16 +9,19 @@ import RxSwift
 import RxCocoa
 import UIKit
 
-class ExclItemInfoEditModalVM {
+final class ExclItemInfoEditModalVM {
     
-    var disposeBag = DisposeBag()
-    
-    var exclItemIdx: String!
-    
+    private var disposeBag = DisposeBag()
+    private let exclItemIdx: String
+    private let createService: CreateServiceType
     let maxTextCount = 8
     
-    let sections = BehaviorRelay<[ExclItemInfoModalSection]>(value: [])
-    let exclInfo = BehaviorRelay<ExclItem>(value: ExclItem(name: "", price: 0, csInfoIdx: ""))
+    init(createService: CreateServiceType,
+         exclItemIdx: String
+    ) {
+        self.createService = createService
+        self.exclItemIdx = exclItemIdx
+    }
     
     struct Input {
         let viewWillAppear: Observable<Bool>
@@ -30,6 +33,7 @@ class ExclItemInfoEditModalVM {
         let cancelButtonTapped: ControlEvent<Void>
         let editButtonTapped: ControlEvent<Void>
         let deleteButtonTapped: ControlEvent<Void>
+        let isActiveRelay: BehaviorRelay<Bool>
     }
     
     struct Output {
@@ -43,9 +47,14 @@ class ExclItemInfoEditModalVM {
         let cancelButtonTapped: Driver<Void>
         let editButtonTapped: Driver<Void>
         let showAlertVC: Driver<(String, String)>
+        let sections: BehaviorRelay<[ExclItemInfoModalSection]>
+        let exclInfo: BehaviorRelay<ExclItem>
     }
     
     func transform(input: Input) -> Output {
+        let sections = BehaviorRelay<[ExclItemInfoModalSection]>(value: [])
+        let exclInfo = BehaviorRelay<ExclItem>(value: ExclItem(name: "", price: 0, csInfoIdx: ""))
+        
         let title = input.title
         let titleTextFieldCount = BehaviorRelay<String>(value: "")
         let titleTextFieldIsValid = BehaviorRelay<Bool>(value: true)
@@ -55,7 +64,6 @@ class ExclItemInfoEditModalVM {
         let showAlertRelay = PublishRelay<(String, String)>()
         let alertItem = BehaviorRelay<(String, String)>(value: ("", ""))
 
-        let maxCurrency = 10000000
         let priceLimit = BehaviorRelay<Int>(value: 0)
         let priceIsLimited = input.price
             .map { price in
@@ -80,6 +88,7 @@ class ExclItemInfoEditModalVM {
             .asDriver()
         
         let exclMemberIsValid = BehaviorRelay<Bool>(value: false)
+        
         sections
             .asDriver()
             .map { value in
@@ -118,25 +127,26 @@ class ExclItemInfoEditModalVM {
             .drive(onNext: { [weak self] title, price in
                 guard let self = self else { return }
 
-                SplitRepository.share.editExclItemName(exclItemIdx: exclItemIdx,
-                                                       name: titleResult.value)
-                SplitRepository.share.editExclItemPrice(exclItemIdx: exclItemIdx,
-                                                        price: priceResult.value)
+                createService.editExclItem(exclItemIdx: exclItemIdx,
+                                           name: titleResult.value,
+                                           price: priceResult.value)
                 
                 // MARK: 현재 Table의 정보와 Repo의 exclMember를 비교하여 toggle 메서드 호출
                 /// table, repo의 member 순서가 다르므로 2중 for문으로 완전탐색
                 /// 조건 1 : table의 isTarget과 repo의 isTarget이 다를때
                 /// 조건 2 : table의 name과 repo의 name이 같을 때
                 /// 조건1, 조건2가 모두 맞으면 해당 repo의 exclMemberIdx로 toggle 메소드를 호출함.
-                let curExclMember = self.sections.value[0].items
-                SplitRepository.share.exclMemberArr.value.forEach { [weak self] exclMember in
+                let curExclMember = sections.value[0].items
+                
+                createService.exclMemberRelay.value.forEach { [weak self] exclMember in
                     guard let self = self else { return }
+                    
                     if exclMember.exclItemIdx == exclItemIdx {
                         for item in curExclMember {
                             if item.isTarget != exclMember.isTarget,
                                item.name == exclMember.name {
                                 let toggleExclMemberIdx = exclMember.exclMemberIdx
-                                SplitRepository.share.toggleExclMember(exclMemberIdx: toggleExclMemberIdx)
+                                createService.toggleExclMember(exclMemberIdx: toggleExclMemberIdx)
                             }
                         }
                     }
@@ -192,7 +202,8 @@ class ExclItemInfoEditModalVM {
             }
             .asDriver(onErrorJustReturn: UIControl.Event())
         
-        let currentMembers = SplitRepository.share.csMemberArr
+        let currentMembers = BehaviorRelay<[CSMember]>(value: createService.csMemberArr)
+        
         currentMembers
             .map { $0.map { csMember -> ExclItemTable in
                 let item = ExclItemTable(name: csMember.name, isTarget: false)
@@ -208,8 +219,8 @@ class ExclItemInfoEditModalVM {
         input.viewDidLoad
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                self.setSectionsByExclItemIdx(exclItemIdx: self.exclItemIdx)
-                self.setCurrentExclItemInfo()
+                sections.accept([self.setSectionsByExclItemIdx(exclItemIdx: self.exclItemIdx)])
+                exclInfo.accept(createService.exclItemRelay.value.first(where: {$0.exclItemIdx == self.exclItemIdx})!)
             })
             .disposed(by: disposeBag)
         
@@ -224,9 +235,17 @@ class ExclItemInfoEditModalVM {
         input.deleteButtonTapped
             .withLatestFrom(alertItem)
             .asDriver(onErrorJustReturn: (("", "")))
-            .drive(onNext: { [weak self] in
-                guard let self = self else { return }
+            .drive(onNext: {
                 showAlertRelay.accept($0)
+            })
+            .disposed(by: disposeBag)
+        
+        input.isActiveRelay
+            .asDriver()
+            .drive(onNext: { isActive in
+                var sectionValue = sections.value
+                sectionValue[0].isActive = isActive
+                sections.accept(sectionValue)
             })
             .disposed(by: disposeBag)
         
@@ -239,29 +258,26 @@ class ExclItemInfoEditModalVM {
                       priceTextFieldControlEvent: priceTFControlEvent,
                       cancelButtonTapped: input.cancelButtonTapped.asDriver(),
                       editButtonTapped: input.editButtonTapped.asDriver(),
-                      showAlertVC: showAlertRelay.asDriver(onErrorJustReturn: ("", "")))
+                      showAlertVC: showAlertRelay.asDriver(onErrorJustReturn: ("", "")),
+                      sections: sections,
+                      exclInfo: exclInfo
+        )
     }
 
-    func setSectionsByExclItemIdx(exclItemIdx: String) {
-        let currentExclMember = SplitRepository.share.exclMemberArr.value.filter{$0.exclItemIdx == exclItemIdx}
+    private func setSectionsByExclItemIdx(exclItemIdx: String) -> ExclItemInfoModalSection {
+        let currentExclMember = createService.exclMemberRelay.value.filter{$0.exclItemIdx == exclItemIdx}
         let exclitemTables = currentExclMember.map { exclMember -> ExclItemTable in
             let item = ExclItemTable(name: exclMember.name, isTarget: exclMember.isTarget)
             return item
         }
         
-        let currentSections = [ExclItemInfoModalSection(isActive: false, items: exclitemTables)]
-        sections.accept(currentSections)
+        return ExclItemInfoModalSection(isActive: false, items: exclitemTables)
     }
     
-    func setCurrentExclItemInfo() {
-        let currentExclItem = SplitRepository.share.exclItemArr.value.first(where: {$0.exclItemIdx == self.exclItemIdx})!
-        exclInfo.accept(currentExclItem)
-    }
-    
-    func calculatePriceLimit() -> Driver<Int> {
+    private func calculatePriceLimit() -> Driver<Int> {
+        var priceLimitValue = createService.csInfo.totalAmount
         
-        var priceLimitValue = SplitRepository.share.csInfoArr.value.first!.totalAmount
-        for item in SplitRepository.share.exclItemArr.value {
+        for item in createService.exclItemRelay.value {
             if item.exclItemIdx != self.exclItemIdx {
                 priceLimitValue -= item.price
             }
@@ -270,6 +286,5 @@ class ExclItemInfoEditModalVM {
         let priceLimitDriver = Driver<Int>.just(priceLimitValue)
         return priceLimitDriver
     }
-
 }
 

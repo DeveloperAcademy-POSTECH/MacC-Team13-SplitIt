@@ -40,7 +40,7 @@ class EditCSInfoVM {
     }
     
     func transform(input: Input) -> Output {
-        var isEdited = BehaviorRelay(value: false)
+        let isEdited = BehaviorRelay(value: false)
         let csinfo = SplitRepository.share.csInfoArr.value.first
         let inputTitle = input.title
         let saveCSInfo = input.confirmButtonTapped
@@ -186,8 +186,7 @@ class EditCSInfoVM {
         let isEditTF = Driver.merge(input.title, input.totalAmount)
         
         isEditTF
-            .map { [weak self] _ in
-                guard let self = self else { return false }
+            .map { _ in
                 if let csinfo = csinfo {
                     return (totalAmountResult.value != csinfo.totalAmount) || (title.value != csinfo.title)
                 }

@@ -72,9 +72,8 @@ final class EditCSListVC: UIViewController, UIScrollViewDelegate {
     }
     
     func setBinding() {
-        let input = EditCSListVM.Input(
-                                    viewDidAppear: self.rx.viewDidAppear,
-                                     csEditTapped: tableView.rx.itemSelected)
+        let input = EditCSListVM.Input(viewDidAppear: self.rx.viewDidAppear,
+                                       csEditTapped: tableView.rx.itemSelected)
         
         let output = viewModel.transform(input: input)
         

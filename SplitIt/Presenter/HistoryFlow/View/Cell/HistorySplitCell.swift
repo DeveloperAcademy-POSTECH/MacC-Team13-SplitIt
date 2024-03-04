@@ -13,8 +13,6 @@ import SnapKit
 
 class HistorySplitCell: UICollectionViewCell, Reusable {
     
-    let viewModel = HistorySplitCellVM()
-    
     let splitTitleLabel = UILabel()
     let csMemberLabel = UILabel()
     let amountStackView = UIStackView()
@@ -132,10 +130,10 @@ class HistorySplitCell: UICollectionViewCell, Reusable {
         }
     }
     
-    func configure(split: Split, index: Int) {
-        self.splitTitleLabel.text = split.title == "" ? viewModel.getCSTitles(splitIdx: split.splitIdx) : split.title
-        self.csMemberLabel.text = viewModel.getCSMembers()
-        self.totalAmountLabel.text = viewModel.getTotalAmount()
+    func configure(_ historyModel: HistoryModel) {
+        self.splitTitleLabel.text = historyModel.title
+        self.csMemberLabel.text = historyModel.csMembers
+        self.totalAmountLabel.text = historyModel.totalAmount
     }
     
     private func setUnderLine(label: UILabel) {

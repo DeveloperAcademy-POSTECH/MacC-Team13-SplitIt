@@ -11,6 +11,11 @@ import Then
 import RxCocoa
 import RxSwift
 
+protocol HomeVCRouter {
+    func showCreateFlowFromHome()
+    func showSettingFlowFromHome()
+}
+
 class HomeVC: UIViewController {
     var disposeBag = DisposeBag()
     let viewModel = HomeVM()
@@ -22,6 +27,7 @@ class HomeVC: UIViewController {
     let myInfoButton = SPButton()
     let splitItButton = SPButton()
 
+    var router: HomeVCRouter?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,15 +126,13 @@ class HomeVC: UIViewController {
         
         output.showCreateSplit
             .drive(onNext: {
-                let vc = SplitMethodSelectVC()
-                self.navigationController?.pushViewController(vc, animated: true)
+                self.router?.showCreateFlowFromHome()
             })
             .disposed(by: disposeBag)
 
         output.showInfoView
             .drive(onNext: {
-                let vc = MyInfoVC()
-                self.navigationController?.pushViewController(vc, animated: true)
+                self.router?.showSettingFlowFromHome()
             })
             .disposed(by: disposeBag)
     }

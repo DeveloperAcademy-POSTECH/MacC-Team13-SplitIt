@@ -8,6 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		1A07DF0B2AE569660081E543 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A07DF0A2AE569660081E543 /* UIButton+.swift */; };
+		1A0DBF172B8C6A43004E160A /* SplitMethodService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0DBF162B8C6A43004E160A /* SplitMethodService.swift */; };
+		1A0DBF192B8C8518004E160A /* UINavigationController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0DBF182B8C8518004E160A /* UINavigationController+.swift */; };
+		1A0DBF1F2B8F1255004E160A /* SettingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0DBF1E2B8F1255004E160A /* SettingCoordinator.swift */; };
+		1A0DBF212B9062A8004E160A /* HistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0DBF202B9062A8004E160A /* HistoryService.swift */; };
+		1A0DBF232B90638E004E160A /* HistoryReamlManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0DBF222B90638E004E160A /* HistoryReamlManager.swift */; };
+		1A0DBF262B907193004E160A /* HistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0DBF252B907193004E160A /* HistoryModel.swift */; };
+		1A0DBF292B907DB5004E160A /* EditCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0DBF282B907DB5004E160A /* EditCoordinator.swift */; };
+		1A0DBF2B2B907FD7004E160A /* EditRealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0DBF2A2B907FD7004E160A /* EditRealmManager.swift */; };
+		1A0DBF2E2B91A485004E160A /* ShareCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0DBF2D2B91A485004E160A /* ShareCoordinator.swift */; };
 		1A1ACC4D2AF3CAF6004AC4CD /* SplitShareSectionFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ACC4C2AF3CAF6004AC4CD /* SplitShareSectionFooter.swift */; };
 		1A1ACC532AF672F3004AC4CD /* SnapshotKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1A1ACC522AF672F3004AC4CD /* SnapshotKit */; };
 		1A2DCC452AF771C600FB2FE2 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2DCC442AF771C600FB2FE2 /* HapticManager.swift */; };
@@ -39,6 +48,19 @@
 		1AC411772B028B78008A45BC /* LocalConvertibleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC411762B028B78008A45BC /* LocalConvertibleType.swift */; };
 		1AC411792B028B8B008A45BC /* RealmRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC411782B028B8B008A45BC /* RealmRepresentable.swift */; };
 		1AC4117C2B028D7C008A45BC /* Realm+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC4117B2B028D7C008A45BC /* Realm+.swift */; };
+		1AE8BC992B7A01D100AAB3F8 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE8BC982B7A01D100AAB3F8 /* Coordinator.swift */; };
+		1AE8BC9B2B7A01E900AAB3F8 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE8BC9A2B7A01E900AAB3F8 /* AppCoordinator.swift */; };
+		1AE8BC9E2B7A021600AAB3F8 /* CreateCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE8BC9D2B7A021600AAB3F8 /* CreateCoordinator.swift */; };
+		1AE8BCA02B7A023B00AAB3F8 /* SmartCreateCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE8BC9F2B7A023B00AAB3F8 /* SmartCreateCoordinator.swift */; };
+		1AE8BCA22B7A025500AAB3F8 /* EqualCreateCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE8BCA12B7A025500AAB3F8 /* EqualCreateCoordinator.swift */; };
+		1AE8BCA82B7A02A200AAB3F8 /* RealmManagerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE8BCA72B7A02A200AAB3F8 /* RealmManagerType.swift */; };
+		1AE8BCAA2B7A02D800AAB3F8 /* CreateRealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE8BCA92B7A02D800AAB3F8 /* CreateRealmManager.swift */; };
+		1AE8BCAC2B7A02F700AAB3F8 /* MemberLogRealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE8BCAB2B7A02F700AAB3F8 /* MemberLogRealmManager.swift */; };
+		1AE8BCAE2B7A033500AAB3F8 /* ShareRealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE8BCAD2B7A033500AAB3F8 /* ShareRealmManager.swift */; };
+		1AE8BCB12B7A03E400AAB3F8 /* CreateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE8BCB02B7A03E400AAB3F8 /* CreateService.swift */; };
+		1AE8BCB32B7A03FC00AAB3F8 /* MemberLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE8BCB22B7A03FC00AAB3F8 /* MemberLogService.swift */; };
+		1AE8BCB52B7A042700AAB3F8 /* ShareService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE8BCB42B7A042700AAB3F8 /* ShareService.swift */; };
+		1AE8BCB72B7A04CB00AAB3F8 /* SPNaviBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE8BCB62B7A04CB00AAB3F8 /* SPNaviBar.swift */; };
 		60104CE52AEFF6F700489AAD /* ExclItemInfoModalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60104CE42AEFF6F700489AAD /* ExclItemInfoModalCell.swift */; };
 		60104CE72AEFF70D00489AAD /* ExclItemInfoDeactiveModalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60104CE62AEFF70D00489AAD /* ExclItemInfoDeactiveModalCell.swift */; };
 		60104CE92AEFF73800489AAD /* ExclItemInfoModalSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60104CE82AEFF73800489AAD /* ExclItemInfoModalSection.swift */; };
@@ -108,7 +130,6 @@
 		C2A797912AE2748E0049E709 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A797902AE2748E0049E709 /* UIFont+.swift */; };
 		C2A797942AE274F10049E709 /* SPTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A797932AE274F10049E709 /* SPTextField.swift */; };
 		C2A7979C2AE276E90049E709 /* HistorySplitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A7979B2AE276E90049E709 /* HistorySplitCell.swift */; };
-		C2A7979E2AE2776B0049E709 /* HistorySplitCellVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A7979D2AE2776B0049E709 /* HistorySplitCellVM.swift */; };
 		C2A797A02AE277AF0049E709 /* CreateDateSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A7979F2AE277AF0049E709 /* CreateDateSection.swift */; };
 		C2A797A22AE277F90049E709 /* HistorySectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A797A12AE277F90049E709 /* HistorySectionHeader.swift */; };
 		C2A797A42AE278190049E709 /* HistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A797A32AE278190049E709 /* HistoryVC.swift */; };
@@ -131,6 +152,15 @@
 
 /* Begin PBXFileReference section */
 		1A07DF0A2AE569660081E543 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
+		1A0DBF162B8C6A43004E160A /* SplitMethodService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMethodService.swift; sourceTree = "<group>"; };
+		1A0DBF182B8C8518004E160A /* UINavigationController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+.swift"; sourceTree = "<group>"; };
+		1A0DBF1E2B8F1255004E160A /* SettingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCoordinator.swift; sourceTree = "<group>"; };
+		1A0DBF202B9062A8004E160A /* HistoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryService.swift; sourceTree = "<group>"; };
+		1A0DBF222B90638E004E160A /* HistoryReamlManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryReamlManager.swift; sourceTree = "<group>"; };
+		1A0DBF252B907193004E160A /* HistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryModel.swift; sourceTree = "<group>"; };
+		1A0DBF282B907DB5004E160A /* EditCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCoordinator.swift; sourceTree = "<group>"; };
+		1A0DBF2A2B907FD7004E160A /* EditRealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRealmManager.swift; sourceTree = "<group>"; };
+		1A0DBF2D2B91A485004E160A /* ShareCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCoordinator.swift; sourceTree = "<group>"; };
 		1A1ACC4C2AF3CAF6004AC4CD /* SplitShareSectionFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitShareSectionFooter.swift; sourceTree = "<group>"; };
 		1A2DCC442AF771C600FB2FE2 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		1A3852F42ADE5A9F00E9A20B /* Split.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Split.swift; sourceTree = "<group>"; };
@@ -159,6 +189,19 @@
 		1AC411762B028B78008A45BC /* LocalConvertibleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalConvertibleType.swift; sourceTree = "<group>"; };
 		1AC411782B028B8B008A45BC /* RealmRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmRepresentable.swift; sourceTree = "<group>"; };
 		1AC4117B2B028D7C008A45BC /* Realm+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm+.swift"; sourceTree = "<group>"; };
+		1AE8BC982B7A01D100AAB3F8 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		1AE8BC9A2B7A01E900AAB3F8 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		1AE8BC9D2B7A021600AAB3F8 /* CreateCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCoordinator.swift; sourceTree = "<group>"; };
+		1AE8BC9F2B7A023B00AAB3F8 /* SmartCreateCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartCreateCoordinator.swift; sourceTree = "<group>"; };
+		1AE8BCA12B7A025500AAB3F8 /* EqualCreateCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualCreateCoordinator.swift; sourceTree = "<group>"; };
+		1AE8BCA72B7A02A200AAB3F8 /* RealmManagerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManagerType.swift; sourceTree = "<group>"; };
+		1AE8BCA92B7A02D800AAB3F8 /* CreateRealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRealmManager.swift; sourceTree = "<group>"; };
+		1AE8BCAB2B7A02F700AAB3F8 /* MemberLogRealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberLogRealmManager.swift; sourceTree = "<group>"; };
+		1AE8BCAD2B7A033500AAB3F8 /* ShareRealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareRealmManager.swift; sourceTree = "<group>"; };
+		1AE8BCB02B7A03E400AAB3F8 /* CreateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateService.swift; sourceTree = "<group>"; };
+		1AE8BCB22B7A03FC00AAB3F8 /* MemberLogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberLogService.swift; sourceTree = "<group>"; };
+		1AE8BCB42B7A042700AAB3F8 /* ShareService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareService.swift; sourceTree = "<group>"; };
+		1AE8BCB62B7A04CB00AAB3F8 /* SPNaviBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPNaviBar.swift; sourceTree = "<group>"; };
 		60104CE42AEFF6F700489AAD /* ExclItemInfoModalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInfoModalCell.swift; sourceTree = "<group>"; };
 		60104CE62AEFF70D00489AAD /* ExclItemInfoDeactiveModalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInfoDeactiveModalCell.swift; sourceTree = "<group>"; };
 		60104CE82AEFF73800489AAD /* ExclItemInfoModalSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInfoModalSection.swift; sourceTree = "<group>"; };
@@ -221,7 +264,6 @@
 		C2A797902AE2748E0049E709 /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		C2A797932AE274F10049E709 /* SPTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPTextField.swift; sourceTree = "<group>"; };
 		C2A7979B2AE276E90049E709 /* HistorySplitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySplitCell.swift; sourceTree = "<group>"; };
-		C2A7979D2AE2776B0049E709 /* HistorySplitCellVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySplitCellVM.swift; sourceTree = "<group>"; };
 		C2A7979F2AE277AF0049E709 /* CreateDateSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDateSection.swift; sourceTree = "<group>"; };
 		C2A797A12AE277F90049E709 /* HistorySectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySectionHeader.swift; sourceTree = "<group>"; };
 		C2A797A32AE278190049E709 /* HistoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVC.swift; sourceTree = "<group>"; };
@@ -265,6 +307,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A0DBF1D2B8F1241004E160A /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				1A0DBF1E2B8F1255004E160A /* SettingCoordinator.swift */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
+		1A0DBF242B907182004E160A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C2A7979F2AE277AF0049E709 /* CreateDateSection.swift */,
+				1A0DBF252B907193004E160A /* HistoryModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		1A0DBF272B907D9E004E160A /* Edit */ = {
+			isa = PBXGroup;
+			children = (
+				1A0DBF282B907DB5004E160A /* EditCoordinator.swift */,
+			);
+			path = Edit;
+			sourceTree = "<group>";
+		};
+		1A0DBF2C2B91A46C004E160A /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				1A0DBF2D2B91A485004E160A /* ShareCoordinator.swift */,
+			);
+			path = Share;
+			sourceTree = "<group>";
+		};
 		1A2DCC432AF771A000FB2FE2 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
@@ -392,9 +467,58 @@
 			isa = PBXGroup;
 			children = (
 				1AC4117B2B028D7C008A45BC /* Realm+.swift */,
+				1AE8BCA62B7A029400AAB3F8 /* RealmManager */,
 				1AC411682B028A7B008A45BC /* Entity */,
 			);
 			path = Realm;
+			sourceTree = "<group>";
+		};
+		1AE8BC972B7A01BC00AAB3F8 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				1AE8BC982B7A01D100AAB3F8 /* Coordinator.swift */,
+				1AE8BC9A2B7A01E900AAB3F8 /* AppCoordinator.swift */,
+				1AE8BC9C2B7A01FE00AAB3F8 /* Create */,
+				1A0DBF2C2B91A46C004E160A /* Share */,
+				1A0DBF1D2B8F1241004E160A /* Setting */,
+				1A0DBF272B907D9E004E160A /* Edit */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		1AE8BC9C2B7A01FE00AAB3F8 /* Create */ = {
+			isa = PBXGroup;
+			children = (
+				1AE8BC9D2B7A021600AAB3F8 /* CreateCoordinator.swift */,
+				1AE8BC9F2B7A023B00AAB3F8 /* SmartCreateCoordinator.swift */,
+				1AE8BCA12B7A025500AAB3F8 /* EqualCreateCoordinator.swift */,
+			);
+			path = Create;
+			sourceTree = "<group>";
+		};
+		1AE8BCA62B7A029400AAB3F8 /* RealmManager */ = {
+			isa = PBXGroup;
+			children = (
+				1AE8BCA72B7A02A200AAB3F8 /* RealmManagerType.swift */,
+				1AE8BCA92B7A02D800AAB3F8 /* CreateRealmManager.swift */,
+				1AE8BCAB2B7A02F700AAB3F8 /* MemberLogRealmManager.swift */,
+				1AE8BCAD2B7A033500AAB3F8 /* ShareRealmManager.swift */,
+				1A0DBF222B90638E004E160A /* HistoryReamlManager.swift */,
+				1A0DBF2A2B907FD7004E160A /* EditRealmManager.swift */,
+			);
+			path = RealmManager;
+			sourceTree = "<group>";
+		};
+		1AE8BCAF2B7A037B00AAB3F8 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				1AE8BCB02B7A03E400AAB3F8 /* CreateService.swift */,
+				1AE8BCB22B7A03FC00AAB3F8 /* MemberLogService.swift */,
+				1AE8BCB42B7A042700AAB3F8 /* ShareService.swift */,
+				1A0DBF162B8C6A43004E160A /* SplitMethodService.swift */,
+				1A0DBF202B9062A8004E160A /* HistoryService.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 		60115DF22ADBF0DD0050D32C /* Presenter */ = {
@@ -441,6 +565,7 @@
 				C291BA122AF4DD6F009501F3 /* UIDevice+.swift */,
 				60F793422B05C5D800D55ADD /* UILabel+.swift */,
 				60F793492B07AD8000D55ADD /* Notification+.swift */,
+				1A0DBF182B8C8518004E160A /* UINavigationController+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -615,7 +740,9 @@
 			children = (
 				6078ACCB2ADA74AC00995811 /* AppDelegate.swift */,
 				6078ACCD2ADA74AC00995811 /* SceneDelegate.swift */,
+				1AE8BC972B7A01BC00AAB3F8 /* Coordinator */,
 				1AC4117A2B028D54008A45BC /* Realm */,
+				1AE8BCAF2B7A037B00AAB3F8 /* Service */,
 				1A4DB2272ADE61D400616243 /* Repository */,
 				60115DFF2ADC000F0050D32C /* Models */,
 				60115DF42ADBF1F80050D32C /* Resources */,
@@ -897,6 +1024,7 @@
 				86C65FFD2AF0F6FB00A7942A /* DefaultEditButton.swift */,
 				60F496942AF753180077F6FB /* SPAlertController.swift */,
 				1AC411622B0231BD008A45BC /* SPPopUp.swift */,
+				1AE8BCB62B7A04CB00AAB3F8 /* SPNaviBar.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -904,9 +1032,9 @@
 		C2A797972AE276B50049E709 /* HistoryFlow */ = {
 			isa = PBXGroup;
 			children = (
+				1A0DBF242B907182004E160A /* Model */,
 				C2A797992AE276C40049E709 /* View */,
 				C2A797982AE276BD0049E709 /* ViewModel */,
-				C2A7979F2AE277AF0049E709 /* CreateDateSection.swift */,
 			);
 			path = HistoryFlow;
 			sourceTree = "<group>";
@@ -914,7 +1042,6 @@
 		C2A797982AE276BD0049E709 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				C2A7979D2AE2776B0049E709 /* HistorySplitCellVM.swift */,
 				C2A797A52AE2784B0049E709 /* HistoryVM.swift */,
 			);
 			path = ViewModel;
@@ -1095,7 +1222,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1510;
 				TargetAttributes = {
 					6078ACC72ADA74AC00995811 = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -1155,6 +1282,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A0DBF192B8C8518004E160A /* UINavigationController+.swift in Sources */,
 				60AE3EAA2AE6562E009D9D18 /* DateFormatterHelper.swift in Sources */,
 				60104CE52AEFF6F700489AAD /* ExclItemInfoModalCell.swift in Sources */,
 				604CDC7B2AF14A8200416454 /* ExclItemInputEmptyView.swift in Sources */,
@@ -1173,41 +1301,53 @@
 				1A4DB2532ADEB24F00616243 /* MemberLog.swift in Sources */,
 				DE73D6F92AE1983A00ABF3EF /* MemberLogVM.swift in Sources */,
 				C2A797A62AE2784B0049E709 /* HistoryVM.swift in Sources */,
+				1AE8BC9E2B7A021600AAB3F8 /* CreateCoordinator.swift in Sources */,
 				1AC411722B028AB5008A45BC /* RMExclMember.swift in Sources */,
 				C2A797A42AE278190049E709 /* HistoryVC.swift in Sources */,
 				1A7845122AFD299D00E38403 /* CSMemberSelectedCell.swift in Sources */,
 				604CDC7F2AF1527500416454 /* ExclItemInfoEditModalVM.swift in Sources */,
 				86C65FFE2AF0F6FB00A7942A /* DefaultEditButton.swift in Sources */,
+				1AE8BCAC2B7A02F700AAB3F8 /* MemberLogRealmManager.swift in Sources */,
 				C229F51A2AEA442E00F9E28D /* SPButton.swift in Sources */,
 				C2A797912AE2748E0049E709 /* UIFont+.swift in Sources */,
 				86DACB162AF63B99008D7BAF /* EditExclItemInputVC.swift in Sources */,
 				604CDC7D2AF1522C00416454 /* ExclItemInfoEditModalVC.swift in Sources */,
 				DE73D6E72AE0D20600ABF3EF /* BankListData.swift in Sources */,
+				1AE8BCA82B7A02A200AAB3F8 /* RealmManagerType.swift in Sources */,
 				DEFE9D832AEAB80A009C693E /* KeyboardButton.swift in Sources */,
 				60F496952AF753180077F6FB /* SPAlertController.swift in Sources */,
 				1A2DCC452AF771C600FB2FE2 /* HapticManager.swift in Sources */,
 				6078ACD02ADA74AC00995811 /* HomeVC.swift in Sources */,
 				1AC411702B028AA9008A45BC /* RMExclItem.swift in Sources */,
 				1A8B05DC2AF0E15A00CF5BC5 /* SPNavigationBar.swift in Sources */,
+				1A0DBF262B907193004E160A /* HistoryModel.swift in Sources */,
+				1A0DBF2B2B907FD7004E160A /* EditRealmManager.swift in Sources */,
 				1A7845142AFD29BE00E38403 /* CSMemberEmptyBackGroundView.swift in Sources */,
 				1A1ACC4D2AF3CAF6004AC4CD /* SplitShareSectionFooter.swift in Sources */,
 				60F793462B07053800D55ADD /* SplitMethodCell.swift in Sources */,
 				DE73D6F72AE1983200ABF3EF /* MemberLogVC.swift in Sources */,
+				1A0DBF232B90638E004E160A /* HistoryReamlManager.swift in Sources */,
+				1A0DBF212B9062A8004E160A /* HistoryService.swift in Sources */,
 				60F7934A2B07AD8000D55ADD /* Notification+.swift in Sources */,
+				1AE8BCA02B7A023B00AAB3F8 /* SmartCreateCoordinator.swift in Sources */,
 				86C660002AF126DE00A7942A /* EditCSItemVM.swift in Sources */,
+				1A0DBF1F2B8F1255004E160A /* SettingCoordinator.swift in Sources */,
 				C2A7979C2AE276E90049E709 /* HistorySplitCell.swift in Sources */,
 				DE73D6ED2AE0D2C300ABF3EF /* BankListModalVC.swift in Sources */,
 				60115DF72ADBF2980050D32C /* UIColor+.swift in Sources */,
 				1A3852F92ADE5AC200E9A20B /* CSMember.swift in Sources */,
+				1AE8BC992B7A01D100AAB3F8 /* Coordinator.swift in Sources */,
+				1AE8BCA22B7A025500AAB3F8 /* EqualCreateCoordinator.swift in Sources */,
 				86C65FF22AEF970F00A7942A /* EditCSListVC.swift in Sources */,
+				1AE8BCB12B7A03E400AAB3F8 /* CreateService.swift in Sources */,
 				C2A797942AE274F10049E709 /* SPTextField.swift in Sources */,
 				1A3852F72ADE5AB200E9A20B /* CSInfo.swift in Sources */,
 				6032DCF12AEE6FFC004A6BFA /* ExclItemInputVM.swift in Sources */,
 				6032DCEF2AEE5452004A6BFA /* ExclItemInputVC.swift in Sources */,
-				C2A7979E2AE2776B0049E709 /* HistorySplitCellVM.swift in Sources */,
 				60AE3EBE2AE77467009D9D18 /* SplitShareSectionHeader.swift in Sources */,
 				DE73D6E92AE0D27500ABF3EF /* Bank.swift in Sources */,
 				DE73D6E32AE0D12300ABF3EF /* MyBankAccountVC.swift in Sources */,
+				1AE8BC9B2B7A01E900AAB3F8 /* AppCoordinator.swift in Sources */,
 				60AE3EC12AE77488009D9D18 /* CSMemberResult.swift in Sources */,
 				60AE3EBA2AE77417009D9D18 /* SplitShareTableCell.swift in Sources */,
 				6078ACCC2ADA74AC00995811 /* AppDelegate.swift in Sources */,
@@ -1217,13 +1357,16 @@
 				1A4DB2292ADE61E800616243 /* RealmManager.swift in Sources */,
 				8656D6D72B020C6D003660A4 /* EditCSMemberVM.swift in Sources */,
 				60115E012ADC01150050D32C /* UITextField+.swift in Sources */,
+				1A0DBF292B907DB5004E160A /* EditCoordinator.swift in Sources */,
 				60104CE92AEFF73800489AAD /* ExclItemInfoModalSection.swift in Sources */,
 				1AC411792B028B8B008A45BC /* RealmRepresentable.swift in Sources */,
 				604CDC862AF2396300416454 /* ExcltemInfoModalAlertVC.swift in Sources */,
 				1A8B05E32AF1540A00CF5BC5 /* SplitMethodSelectVM.swift in Sources */,
 				60115DF92ADBF2E10050D32C /* HomeVM.swift in Sources */,
 				1A78450B2AFD28F300E38403 /* CSMemberVM.swift in Sources */,
+				1A0DBF172B8C6A43004E160A /* SplitMethodService.swift in Sources */,
 				60F793482B070A2200D55ADD /* SplitMethod.swift in Sources */,
+				1A0DBF2E2B91A485004E160A /* ShareCoordinator.swift in Sources */,
 				1AC411742B028AC2008A45BC /* RMMemberLog.swift in Sources */,
 				1A78450D2AFD291C00E38403 /* CSMemberVC.swift in Sources */,
 				1A3852F52ADE5A9F00E9A20B /* Split.swift in Sources */,
@@ -1234,14 +1377,17 @@
 				C2A797A02AE277AF0049E709 /* CreateDateSection.swift in Sources */,
 				1AC4116E2B028A9B008A45BC /* RMCSMember.swift in Sources */,
 				6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */,
+				1AE8BCAE2B7A033500AAB3F8 /* ShareRealmManager.swift in Sources */,
 				1AC4116A2B028A88008A45BC /* RMSplit.swift in Sources */,
 				DE73D6E52AE0D12C00ABF3EF /* MyBankAccountVM.swift in Sources */,
 				1AC4116C2B028A92008A45BC /* RMCSInfo.swift in Sources */,
 				8656D6D42B020C03003660A4 /* EditCSMemberVC.swift in Sources */,
 				1A4DB22B2ADE68E400616243 /* SplitRepository.swift in Sources */,
 				C291BA132AF4DD6F009501F3 /* UIDevice+.swift in Sources */,
+				1AE8BCB32B7A03FC00AAB3F8 /* MemberLogService.swift in Sources */,
 				1A3852FD2ADE5B0100E9A20B /* ExclMember.swift in Sources */,
 				86DACB0C2AF4ECC9008D7BAF /* EditCSInfoVC.swift in Sources */,
+				1AE8BCB72B7A04CB00AAB3F8 /* SPNaviBar.swift in Sources */,
 				DE73D6FC2AE1993F00ABF3EF /* MemberCell.swift in Sources */,
 				1AC4117C2B028D7C008A45BC /* Realm+.swift in Sources */,
 				6032DCE42AECE4B3004A6BFA /* CSInfoVC.swift in Sources */,
@@ -1249,7 +1395,9 @@
 				6032DCFA2AEF5F68004A6BFA /* ExclItemInfoAddModalVC.swift in Sources */,
 				DE73D6EF2AE0D2D500ABF3EF /* BankCell.swift in Sources */,
 				86C65FF62AEF9ADF00A7942A /* EditCSListCell.swift in Sources */,
+				1AE8BCAA2B7A02D800AAB3F8 /* CreateRealmManager.swift in Sources */,
 				6032DCE62AECE4BC004A6BFA /* CSInfoVM.swift in Sources */,
+				1AE8BCB52B7A042700AAB3F8 /* ShareService.swift in Sources */,
 				1A8B05E12AF1466300CF5BC5 /* SplitMethodSelectVC.swift in Sources */,
 				60AE3EB82AE773F5009D9D18 /* SplitShareVM.swift in Sources */,
 				C2A797A22AE277F90049E709 /* HistorySectionHeader.swift in Sources */,
@@ -1309,6 +1457,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1369,6 +1518,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1433,7 +1583,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;
-				DEVELOPMENT_TEAM = 3NP4Z3WZ94;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SplitIt/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Split it!";

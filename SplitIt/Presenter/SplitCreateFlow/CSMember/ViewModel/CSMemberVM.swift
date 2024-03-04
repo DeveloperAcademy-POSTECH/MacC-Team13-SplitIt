@@ -10,10 +10,16 @@ import RxCocoa
 import RxSwift
 
 class CSMemberVM {
-    let repo = SplitRepository.share
+    let createService: CreateServiceType
+    let memberLogService: MemberLogServiceType
     let disposeBag = DisposeBag()
     
-    let maxTextCount = 8
+    init(createService: CreateServiceType,
+         memberLogService: MemberLogServiceType
+    ) {
+        self.createService = createService
+        self.memberLogService = memberLogService
+    }
     
     struct Input {
         let viewWillAppear: Observable<Bool>
@@ -24,6 +30,7 @@ class CSMemberVM {
         let addButtonTapped: ControlEvent<Void>
         let nextButtonTapped: ControlEvent<Void>
         let exitButtonTapped: ControlEvent<Void>
+        let backButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
@@ -32,50 +39,56 @@ class CSMemberVM {
         let isCellAppear: BehaviorRelay<Bool>
         let deleteIndex: BehaviorRelay<Int>
         let textFieldValue: BehaviorRelay<String>
-        let showExclItemVC: ControlEvent<Void>
+        let showNextVC: Driver<Void>
         let showExitAlert: Driver<Void>
+        let backToPreVC: Driver<Void>
         let textCount: BehaviorRelay<String>
     }
     
     func transform(input: Input) -> Output {
+        let maxTextCount = 8
+        
         let allMemberArr = BehaviorRelay<[MemberCheck]>(value: [])
         let searchMemberArr = BehaviorRelay<[MemberCheck]>(value: [])
-        let selectedMemberArr = BehaviorRelay<[MemberCheck]>(value: repo.csMemberArr.value.map { MemberCheck(name: $0.name, isCheck: true) }.reversed())
+        let selectedMemberArr = BehaviorRelay<[MemberCheck]>(value: self.setSelectedMember())
         
         let isCellAppearRelay = BehaviorRelay(value: true)
         let deleteIndexRelay = BehaviorRelay(value: 0)
         let textFieldValue = BehaviorRelay(value: "")
         let textCount = BehaviorRelay(value: "| 0/8자")
         
-        let showExclItemVC = input.nextButtonTapped
-        let showExitAlert = input.exitButtonTapped.asDriver()
+        let showNextVC: Driver<Void> = input.nextButtonTapped.asDriver()
+        let showExitAlert: Driver<Void> = input.exitButtonTapped.asDriver()
+        let backToPreVC: Driver<Void> = input.backButtonTapped.asDriver()
         
         let hapticManager = HapticManager()
         
-        // 현재 csMember에 들어가 있는 값은 처음 뷰에 들어올 때부터 selectedMemberArr에 들어가 있어야하고 isCheck도 true여야 한다
-        input.viewWillAppear.asDriver(onErrorJustReturn: true)
-            .drive(onNext: { _ in
-                self.repo.fetchMemberLog()
-                allMemberArr.accept(self.repo.memberLogArr.value.map { MemberCheck(name: $0.name) })
-                
-                var allMembers = allMemberArr.value
-                
-                for i in 0..<allMembers.count {
-                    if selectedMemberArr.value.map({ $0.name }).contains(allMembers[i].name) {
-                        allMembers[i].isCheck = true
+        memberLogService.fetchMemberLog()
+            .map { memberLogArr in
+                let memberCheckArr = memberLogArr
+                    .map { member in
+                        MemberCheck(name: member.name)
                     }
-                }
+                    .map { memberCheck in
+                        var check = memberCheck
+                        if selectedMemberArr.value.map({ $0.name }).contains(memberCheck.name) {
+                            check.isCheck = true
+                        }
+                        return check
+                    }
                 
-                allMemberArr.accept(allMembers)
+                return memberCheckArr
+            }
+            .subscribe(onNext: { memberCheckArr in
+                allMemberArr.accept(memberCheckArr)
             })
             .disposed(by: disposeBag)
         
         input.textFieldValue
-            .map { [weak self] text in
-                guard let self = self else { return "" }
+            .map { text in
                 var fixText: String = text
                 
-                if text.count > self.maxTextCount {
+                if text.count > maxTextCount {
                     fixText.removeLast()
                 }
                 
@@ -104,7 +117,8 @@ class CSMemberVM {
         
         // searchCell을 탭 했을 때 allMemberArr의 해당 isCheck를 바꿔주고 isCheck가 true면 selectedMemberArr에 넣어주고 false면 빼주기
         input.searchCellTapped.asDriver()
-            .drive(onNext: { indexPath in
+            .drive(onNext: { [weak self] indexPath in
+                guard let self = self else { return }
                 let selectMember = searchMemberArr.value[indexPath.row]
                 
                 if !selectMember.isCheck {
@@ -130,7 +144,9 @@ class CSMemberVM {
         
         // selectedMember를 탭 했을 때 allMemberArr를 변경해서 searchMemberArr, selectedMemberArr 둘 다 변경
         input.selectedCellTapped.asDriver()
-            .drive(onNext: { indexPath in
+            .drive(onNext: { [weak self] indexPath in
+                guard let self = self else { return }
+                
                 let selectedMember = selectedMemberArr.value[indexPath.row]
                 if selectedMember.name == "정산자" { return }
                 
@@ -151,8 +167,8 @@ class CSMemberVM {
         // + 버튼을 눌렀을 때 확인해서 동작
         Driver.merge(input.addButtonTapped.asDriver(), input.textFieldReturnKeyTapped.asDriver(onErrorJustReturn: ()))
             .withLatestFrom(textFieldValue.asDriver())
-            .drive(onNext: { name in
-                
+            .drive(onNext: { [weak self] name in
+                guard let self = self else { return }
                 let name = name.trimmingCharacters(in: .whitespacesAndNewlines)
                 
                 if name == "" || name == "정산자" { return }
@@ -171,7 +187,7 @@ class CSMemberVM {
                     var currentAllMemberArr = allMemberArr.value
                     currentAllMemberArr.append(newSelectMember)
                     allMemberArr.accept(currentAllMemberArr)
-                    self.repo.createMemberLog(name: name)
+                    self.memberLogService.createMemberLog(name: name)
                 }
                 
                 searchMemberArr.accept(allMemberArr.value)
@@ -182,21 +198,9 @@ class CSMemberVM {
             })
             .disposed(by: disposeBag)
         
-        // 버튼 탭 시 repo에 있는 csMemberArr를 업데이트하고 기존 검색기록에 없던 이름은 검색기록에 추가
-        input.nextButtonTapped
-            .asDriver()
-            .drive(onNext: {
-                if UserDefaults.standard.string(forKey: "CreateFlow") == "Equal" { self.repo.updateDataToDB() }
-            })
-            .disposed(by: disposeBag)
-        
-        // 멤버 선택 시 SplitRepository의 csMember에 바로 적용
-        selectedMemberArr
-            .asDriver()
-            .drive(onNext: { member in
-                var selectedMemberNameArr = member.map { $0.name }
-                selectedMemberNameArr.reverse()
-                self.repo.createCSMemberArr(nameArr: selectedMemberNameArr)
+        Driver.merge(showNextVC, backToPreVC)
+            .drive(onNext: { [weak self] _ in
+                self?.createService.createCSMembers(names: selectedMemberArr.value.map({ $0.name }))
             })
             .disposed(by: disposeBag)
         
@@ -205,9 +209,22 @@ class CSMemberVM {
                       isCellAppear: isCellAppearRelay,
                       deleteIndex: deleteIndexRelay,
                       textFieldValue: textFieldValue,
-                      showExclItemVC: showExclItemVC,
+                      showNextVC: showNextVC,
                       showExitAlert: showExitAlert,
+                      backToPreVC: backToPreVC,
                       textCount: textCount)
+    }
+    
+    private func setSelectedMember() -> [MemberCheck] {
+        var members = createService.csMemberArr.map {
+            MemberCheck(name: $0.name, isCheck: true)
+        }
+        
+        if members.last?.name != "정산자" {
+            members.reverse()
+        }
+        
+        return members
     }
     
     private func tranformIsCheckInSelectMemberArr(allMemberArrValue: [MemberCheck], name: String) -> [MemberCheck] {

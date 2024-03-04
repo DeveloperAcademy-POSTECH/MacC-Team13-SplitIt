@@ -9,6 +9,12 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+protocol CSInfoVCRouter {
+    func showCSMemberVC()
+    func quitCreateFlow()
+    func backFromCSInfo()
+}
+
 class CSInfoVC: UIViewController, SPAlertDelegate {
     
     let inputTextRelay = BehaviorRelay<Int?>(value: 0)
@@ -16,10 +22,11 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
     let exitAlert = SPAlertController()
     
     var disposeBag = DisposeBag()
+    var router: CSInfoVCRouter?
     
-    let viewModel = CSInfoVM()
-
-    let header = SPNavigationBar()
+    let viewModel: CSInfoVM
+    let header: SPNaviBar
+    
     let scrollView = UIScrollView(frame: .zero)
     let contentView = UIView()
     let titleMessage = UILabel()
@@ -29,6 +36,16 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
     let totalAmountTextFiled = SPTextField()
     let totalAmountTextFiledNotice = UILabel()
     let nextButton = SPButton()
+    
+    init(viewModel: CSInfoVM, header: SPNaviBar) {
+        self.viewModel = viewModel
+        self.header = header
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,16 +57,16 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
         setKeyboardObserver()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.titleTextFiled.becomeFirstResponder()
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        
+//        self.titleTextFiled.becomeFirstResponder()
+//    }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+//    }
     
     func setAttribute() {
         view.backgroundColor = .SurfacePrimary
@@ -57,10 +74,6 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
         scrollView.do {
             $0.showsVerticalScrollIndicator = false
             $0.delaysContentTouches = false
-        }
-        
-        header.do {
-            $0.applyStyle(style: .csInfoCreate, vc: self)
         }
         
         titleMessage.do {
@@ -172,20 +185,20 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
     }
     
     func setBinding() {
-        let titleTFEvent = Observable.merge(
-            titleTextFiled.rx.controlEvent(.editingDidBegin).map { UIControl.Event.editingDidBegin},
-            titleTextFiled.rx.controlEvent(.editingDidEnd).map { UIControl.Event.editingDidEnd },
-            titleTextFiled.rx.controlEvent(.editingDidEndOnExit).map { UIControl.Event.editingDidEndOnExit })
-        
-        let totalAmountTFEvent = Observable.merge(
-            totalAmountTextFiled.rx.controlEvent(.editingDidBegin).map { UIControl.Event.editingDidBegin},
-            totalAmountTextFiled.rx.controlEvent(.editingDidEnd).map { UIControl.Event.editingDidEnd })
+//        let titleTFEvent = Observable.merge(
+//            titleTextFiled.rx.controlEvent(.editingDidBegin).map { UIControl.Event.editingDidBegin},
+//            titleTextFiled.rx.controlEvent(.editingDidEnd).map { UIControl.Event.editingDidEnd },
+//            titleTextFiled.rx.controlEvent(.editingDidEndOnExit).map { UIControl.Event.editingDidEndOnExit })
+//        
+//        let totalAmountTFEvent = Observable.merge(
+//            totalAmountTextFiled.rx.controlEvent(.editingDidBegin).map { UIControl.Event.editingDidBegin},
+//            totalAmountTextFiled.rx.controlEvent(.editingDidEnd).map { UIControl.Event.editingDidEnd })
         
         let input = CSInfoVM.Input(nextButtonTapped: nextButton.rx.tap,
                                    title: titleTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
                                    totalAmount: totalAmountTextFiled.rx.text.orEmpty.asDriver(onErrorJustReturn: ""),
-                                   titleTextFieldControlEvent: titleTFEvent,
-                                   totalAmountTextFieldControlEvent: totalAmountTFEvent,
+//                                   titleTextFieldControlEvent: titleTFEvent,
+//                                   totalAmountTextFieldControlEvent: totalAmountTFEvent,
                                    exitButtonTapped: header.rightButton.rx.tap,
                                    backButtonTapped: header.leftButton.rx.tap
         )
@@ -244,35 +257,34 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
             .disposed(by: disposeBag)
         
         // MARK: Animation
-        output.titleTextFieldControlEvent
-            .drive(onNext: { [weak self] event in
-                guard let self = self else { return }
-                switch event {
-                case .editingDidBegin:
-                    focusTitleTF(output: output)
-                    unfocusTotalAmountTF()
-                case .editingDidEnd:
-                    focusTotalAmountTF()
-                    unfocusTitleTF()
-                default:
-                    break
-                }
-            })
-            .disposed(by: disposeBag)
+//        output.titleTextFieldControlEvent
+//            .drive(onNext: { [weak self] event in
+//                guard let self = self else { return }
+//                switch event {
+//                case .editingDidBegin:
+//                    focusTitleTF(output: output)
+//                    unfocusTotalAmountTF()
+//                case .editingDidEnd:
+//                    focusTotalAmountTF()
+//                    unfocusTitleTF()
+//                default:
+//                    break
+//                }
+//            })
+//            .disposed(by: disposeBag)
 
         // MARK: ExitAlert
         output.showExitAlert
             .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                showExitAlert(view: exitAlert)
+                self.showExitAlert(view: self.exitAlert)
             })
             .disposed(by: disposeBag)
         
         exitAlert.rightButtonTapSubject
             .asDriver(onErrorJustReturn: ())
             .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.handleExitAlertButtonTap()
+                self?.router?.quitCreateFlow()
             })
             .disposed(by: disposeBag)
         
@@ -283,28 +295,22 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
         
         output.showCSMemberView
             .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                let vc = CSMemberVC()
-                self.navigationController?.pushViewController(vc, animated: true)
+                self?.router?.showCSMemberVC()
             })
             .disposed(by: disposeBag)
-    }
-    
-    private func handleExitAlertButtonTap() {
-        guard let navigationController = navigationController else { return }
-
-        if let splitShareVC = navigationController.viewControllers.first(where: { $0 is SplitShareVC }) as? SplitShareVC {
-            navigationController.popToViewController(splitShareVC, animated: true)
-        } else {
-            navigationController.popToRootViewController(animated: true)
-        }
+        
+        output.backToPreVC
+            .drive(onNext: { [weak self] _ in
+                self?.router?.backFromCSInfo()
+            })
+            .disposed(by: disposeBag)
     }
 }
 
 // MARK: TextField (활성화/비활성화)에 따른 UI 로직
 extension CSInfoVC {
     func focusTitleTF(output: CSInfoVM.Output) {
-        self.titleTextFiled.becomeFirstResponder()
+//        self.titleTextFiled.becomeFirstResponder()
         
         UIView.animate(withDuration: 0.33) {
             self.titleTextFiled.applyStyle(.editingDidBeginNormal)
@@ -333,7 +339,7 @@ extension CSInfoVC {
     }
     
     func focusTotalAmountTF() {
-        self.totalAmountTextFiled.becomeFirstResponder()
+//        self.totalAmountTextFiled.becomeFirstResponder()
         
         UIView.animate(withDuration: 0.33) {
             self.totalAmountTextFiled.applyStyle(.editingDidBeginNumber)

@@ -11,17 +11,27 @@ import RxCocoa
 import RxAppState
 import RxGesture
 
-class ExclItemInputVC: UIViewController, SPAlertDelegate {
+protocol ExclItemInputVCRouter {
+    func finishSmartCreate()
+    func quitCreateFlow()
+    func backFromExclItem()
+    func addExclItem()
+    func editExclItem(with selectedExclItemIdx: String)
+}
+
+final class ExclItemInputVC: UIViewController, SPAlertDelegate {
     
     var disposeBag = DisposeBag()
+    var router: ExclItemInputVCRouter?
     
-    let viewModel = ExclItemInputVM()
+    let viewModel: ExclItemInputVM
     
     var backAlert = SPAlertController()
     var exitAlert = SPAlertController()
     var isExit: Bool? = nil
     
-    let header = SPNavigationBar()
+    let header: SPNaviBar
+    
     let exclListLabel = UILabel()
     let textDivider = UILabel()
     let exclItemCountLabel = UILabel()
@@ -35,6 +45,18 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
     
     let backLeftEdgePanGesture = UIScreenEdgePanGestureRecognizer()
 
+    init(viewModel: ExclItemInputVM,
+         header: SPNaviBar
+    ) {
+        self.viewModel = viewModel
+        self.header = header
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -50,10 +72,6 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
     
     func setAttribute() {
         view.backgroundColor = .SurfacePrimary
-        
-        header.do {
-            $0.applyStyle(style: .exclItemCreate, vc: self)
-        }
         
         exclListLabel.do {
             $0.text = "따로 정산 목록"
@@ -156,15 +174,15 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
     
     func setBinding() {
         // MARK: Alert가 존재할 때 Swipe Back Left Side 감지
-        let swipeBackLeftSideObservable = backLeftEdgePanGesture.rx.event
-            .when(.recognized)
+//        let swipeBackLeftSideObservable = backLeftEdgePanGesture.rx.event
+//            .when(.recognized)
 
-        let input = ExclItemInputVM.Input(viewDidDisappear: self.rx.viewDidDisappear,
-                                          nextButtonTapped: nextButton.rx.tap,
+        let input = ExclItemInputVM.Input(nextButtonTapped: nextButton.rx.tap,
                                           exclItemAddButtonTapped: exclItemAddButton.rx.tap,
                                           exitButtonTapped: header.rightButton.rx.tap,
                                           backButtonTapped: header.leftButton.rx.tap,
-                                          swipeBack: swipeBackLeftSideObservable)
+                                          swipeBack: backLeftEdgePanGesture.rx.event)
+        
         //MARK: swipeBack을 하면 Alert가 뜨도록!
         let output = viewModel.transform(input: input)
         
@@ -188,10 +206,7 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
         output.showExclItemInfoModal
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                let vc = ExclItemInfoAddModalVC()
-                vc.modalPresentationStyle = .formSheet
-                vc.modalTransitionStyle = .coverVertical
-                self.present(vc, animated: true)
+                self.router?.addExclItem()
             })
             .disposed(by: disposeBag)
         
@@ -208,13 +223,7 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
             .drive(onNext: { [weak self] indexPath in
                 guard let self = self else { return }
                 let exclItemIdx = output.exclItemsRelay.value[indexPath.row].exclItem.exclItemIdx
-                let vm = ExclItemInfoEditModalVM()
-                vm.exclItemIdx = exclItemIdx
-                let vc = ExclItemInfoEditModalVC(viewModel: vm)
-                
-                vc.modalPresentationStyle = .formSheet
-                vc.modalTransitionStyle = .coverVertical
-                self.present(vc, animated: true)
+                self.router?.editExclItem(with: exclItemIdx)
             })
             .disposed(by: disposeBag)
         
@@ -234,29 +243,28 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
             .disposed(by: disposeBag)
 
         output.showResultView
-            .drive(onNext: { [weak self] indexPath in
-                guard let self = self else { return }
-                SplitRepository.share.updateDataToDB()
-                let vc = SplitShareVC()
-                self.navigationController?.pushViewController(vc, animated: true)
+            .drive(onNext: { [weak self] _ in
+                self?.router?.finishSmartCreate()
+            })
+            .disposed(by: disposeBag)
+        
+        output.backToPreVC
+            .drive(onNext: { [weak self] _ in
+                self?.router?.backFromExclItem()
             })
             .disposed(by: disposeBag)
         
         output.showBackAlert
-            .observe(on: MainScheduler.asyncInstance)
-            .subscribe(onNext: { [weak self] _ in
+            .drive(onNext: { [weak self] _ in
                 guard let self = self else { return }
+                
                 let itemCount = output.exclItemsRelay.value.count
-                if itemCount > 0 {
-                    self.showAlert(view: backAlert,
-                              type: .warnNormal,
-                              title: "정산 멤버를 다시 선택하시겠어요?",
-                              descriptions: "추가한 따로 정산 목록 \(itemCount)개가 사라져요",
-                              leftButtonTitle: "취 소",
-                              rightButtonTitle: "다시 선택")
-                } else {
-                    self.navigationController?.popViewController(animated: true)
-                }
+                self.showAlert(view: backAlert,
+                          type: .warnNormal,
+                          title: "정산 멤버를 다시 선택하시겠어요?",
+                          descriptions: "추가한 따로 정산 목록 \(itemCount)개가 사라져요",
+                          leftButtonTitle: "취 소",
+                          rightButtonTitle: "다시 선택")
             })
             .disposed(by: disposeBag)
         
@@ -270,27 +278,16 @@ class ExclItemInputVC: UIViewController, SPAlertDelegate {
         backAlert.rightButtonTapSubject
             .asDriver(onErrorJustReturn: ())
             .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.navigationController?.popViewController(animated: true)
+                self?.router?.backFromExclItem()
+                self?.viewModel.createService.deleteExcls()
             })
             .disposed(by: disposeBag)
         
         exitAlert.rightButtonTapSubject
             .asDriver(onErrorJustReturn: ())
             .drive(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.handleExitAlertButtonTap()
+                self?.router?.quitCreateFlow()
             })
             .disposed(by: disposeBag)
-    }
-    
-    private func handleExitAlertButtonTap() {
-        guard let navigationController = navigationController else { return }
-
-        if let splitShareVC = navigationController.viewControllers.first(where: { $0 is SplitShareVC }) as? SplitShareVC {
-            navigationController.popToViewController(splitShareVC, animated: true)
-        } else {
-            navigationController.popToRootViewController(animated: true)
-        }
     }
 }

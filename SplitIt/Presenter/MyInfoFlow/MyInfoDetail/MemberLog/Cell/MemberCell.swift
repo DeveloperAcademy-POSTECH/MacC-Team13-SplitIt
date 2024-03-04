@@ -12,14 +12,11 @@ import SnapKit
 
 class MemberCell: UITableViewCell {
     
-    var nameLabel = UILabel()
-    var deleteBtn = UIButton()
-    
-    let viewModel = MemberLogVM()
     var disposeBag = DisposeBag()
+    let nameLabel = UILabel()
+    let deleteBtn = UIButton()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-               
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         addView()
@@ -29,17 +26,19 @@ class MemberCell: UITableViewCell {
         self.selectionStyle = .none
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
     }
-
     
     func addView() {
         contentView.addSubview(nameLabel)
         contentView.addSubview(deleteBtn)
     }
-
     
     func setLayout() {
         nameLabel.snp.makeConstraints {
@@ -52,7 +51,6 @@ class MemberCell: UITableViewCell {
             $0.top.bottom.equalToSuperview().inset(12)
             $0.trailing.equalToSuperview().offset(-15)
         }
-        
     }
     
     func setAttribute() {
@@ -63,7 +61,6 @@ class MemberCell: UITableViewCell {
             $0.textColor = .TextPrimary
         }
        
-        
         deleteBtn.do {
             $0.isEnabled = true
             $0.setImage(UIImage(systemName: "x.circle.fill"), for: .normal)
@@ -72,12 +69,6 @@ class MemberCell: UITableViewCell {
             $0.layer.cornerRadius = 12
             $0.backgroundColor = .clear
         }
-        
-        
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 

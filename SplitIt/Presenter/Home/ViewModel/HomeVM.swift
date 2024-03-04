@@ -26,12 +26,6 @@ class HomeVM {
         let showCreateSplit = input.splitItButtonTapped.asDriver()
         let showInfoView = input.myInfoButtonTapped.asDriver()
 
-        showCreateSplit
-            .drive(onNext: {
-                SplitRepository.share.createDatasForCreateFlow()
-            })
-            .disposed(by: disposeBag)
-
         return Output(showCreateSplit: showCreateSplit,
                       showInfoView: showInfoView)
     }

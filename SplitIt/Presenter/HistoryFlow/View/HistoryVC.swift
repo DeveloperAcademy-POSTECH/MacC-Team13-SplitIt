@@ -13,12 +13,18 @@ import RxAppState
 import RxDataSources
 import Reusable
 
+protocol HistoryVCRouter {
+    func moveToSplitShareView(splitIdx: String)
+    func moveToBackView()
+}
+
 class HistoryVC: UIViewController {
     
-    var disposeBag = DisposeBag()
-    let viewModel = HistoryVM()
+    let disposeBag = DisposeBag()
+    let viewModel: HistoryVM
+    let header: SPNaviBar
+    var router: HistoryVCRouter?
     
-    let header = SPNavigationBar()
     let emptyView = UIView()
     let emptyLabel = UILabel()
     
@@ -28,6 +34,16 @@ class HistoryVC: UIViewController {
     
     private var dataSource: RxCollectionViewSectionedReloadDataSource<CreateDateSection>!
     
+    init(viewModel: HistoryVM, header: SPNaviBar) {
+        self.viewModel = viewModel
+        self.header = header
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,18 +52,8 @@ class HistoryVC: UIViewController {
         setBinding()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-    }
-    
     private func setAttribute() {
-        view.backgroundColor = .SurfaceBrandCalmshell 
-        
-        header.do {
-            $0.applyStyle(style: .history, vc: self)
-        }
+        view.backgroundColor = .SurfaceBrandCalmshell
         
         splitCollectionFlowLayout.do {
             $0.scrollDirection = .vertical
@@ -116,8 +122,8 @@ class HistoryVC: UIViewController {
     }
     
     private func setBinding() {
-        let input = HistoryVM.Input(viewWillAppear: self.rx.viewWillAppear,
-                                    viewWillDisappear: self.rx.viewWillDisappear)
+        let input = HistoryVM.Input(selectedIndexPath: collectionView.rx.itemSelected,
+                                    backButtonTapped: header.leftButton.rx.tap)
         let output = viewModel.transform(input: input)
         
         output.sectionRelay
@@ -128,13 +134,17 @@ class HistoryVC: UIViewController {
             .bind(to: emptyView.rx.isHidden)
             .disposed(by: disposeBag)
         
-        collectionView.rx.itemSelected
+        output.selectedSplitIdx
             .asDriver()
-            .drive(onNext: { indexPath in
-                let vc = SplitShareVC()
-                self.navigationController?.pushViewController(vc, animated: true)
-                let item = self.dataSource[indexPath]
-                SplitRepository.share.fetchSplitArrFromDBWithSplitIdx(splitIdx: item.splitIdx)
+            .filter { $0 != "" }
+            .drive(onNext: { [weak self] splitIdx in
+                self?.router?.moveToSplitShareView(splitIdx: splitIdx)
+            })
+            .disposed(by: disposeBag)
+        
+        output.moveToBackView
+            .drive(onNext: { [weak self] _ in
+                self?.router?.moveToBackView()
             })
             .disposed(by: disposeBag)
     }
@@ -176,10 +186,13 @@ class HistoryVC: UIViewController {
     }
     
     private func configureCollectionViewDataSource() {
-        dataSource = RxCollectionViewSectionedReloadDataSource<CreateDateSection>(configureCell: { dataSource, collectionView, indexPath, item in
+        dataSource = RxCollectionViewSectionedReloadDataSource<CreateDateSection>(configureCell: { [weak self] dataSource, collectionView, indexPath, item in
             let cell = collectionView.dequeueReusableCell(for: indexPath) as HistorySplitCell
-            let splitItem = item
-            cell.configure(split: splitItem, index: indexPath.section)
+            
+            if let historyModel = self?.viewModel.transformToHistoryModel(split: item) {
+                cell.configure(historyModel)
+            }
+            
             return cell
         }, configureSupplementaryView: { (dataSource, collectionView, kind, indexPath) -> UICollectionReusableView in
             switch kind {

@@ -69,7 +69,6 @@ class MyBankAccountVM {
         let kakaoTapped = input.kakaoTapeed
         let naverTapped = input.naverTapped
         let deleteBtnTapped = input.deleteBtnTapped
-        let cancelBtnTapped = input.cancelBtnTapped
         let inputUserBankName = input.inputUserBankName
         
         let maxTextCount = 8
