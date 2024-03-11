@@ -69,6 +69,11 @@
 		60115DFC2ADBF8860050D32C /* RxAppState in Frameworks */ = {isa = PBXBuildFile; productRef = 60115DFB2ADBF8860050D32C /* RxAppState */; };
 		60115E012ADC01150050D32C /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E002ADC01150050D32C /* UITextField+.swift */; };
 		60115E182ADD19CD0050D32C /* NumberFormatterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60115E172ADD19CD0050D32C /* NumberFormatterHelper.swift */; };
+		602808CC2B9EE6B500BB1F64 /* SPButtonAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602808CB2B9EE6B500BB1F64 /* SPButtonAttributes.swift */; };
+		602808CE2B9EE84E00BB1F64 /* SPButtonImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602808CD2B9EE84E00BB1F64 /* SPButtonImpl.swift */; };
+		602808D02B9EEB9400BB1F64 /* SPSquareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602808CF2B9EEB9400BB1F64 /* SPSquareButton.swift */; };
+		602808D22B9EF0DA00BB1F64 /* SPHomeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602808D12B9EF0DA00BB1F64 /* SPHomeButton.swift */; };
+		602808D42B9EF9A000BB1F64 /* SPRoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602808D32B9EF9A000BB1F64 /* SPRoundedButton.swift */; };
 		6032DCE42AECE4B3004A6BFA /* CSInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCE32AECE4B3004A6BFA /* CSInfoVC.swift */; };
 		6032DCE62AECE4BC004A6BFA /* CSInfoVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCE52AECE4BC004A6BFA /* CSInfoVM.swift */; };
 		6032DCEF2AEE5452004A6BFA /* ExclItemInputVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032DCEE2AEE5452004A6BFA /* ExclItemInputVC.swift */; };
@@ -108,6 +113,7 @@
 		60F793462B07053800D55ADD /* SplitMethodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F793452B07053800D55ADD /* SplitMethodCell.swift */; };
 		60F793482B070A2200D55ADD /* SplitMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F793472B070A2200D55ADD /* SplitMethod.swift */; };
 		60F7934A2B07AD8000D55ADD /* Notification+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F793492B07AD8000D55ADD /* Notification+.swift */; };
+		60FD82222B9F2EDF00656DDC /* SPButtonProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD82212B9F2EDF00656DDC /* SPButtonProtocol.swift */; };
 		8656D6D42B020C03003660A4 /* EditCSMemberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D32B020C03003660A4 /* EditCSMemberVC.swift */; };
 		8656D6D72B020C6D003660A4 /* EditCSMemberVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8656D6D62B020C6D003660A4 /* EditCSMemberVM.swift */; };
 		86C65FF22AEF970F00A7942A /* EditCSListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C65FF12AEF970F00A7942A /* EditCSListVC.swift */; };
@@ -209,6 +215,11 @@
 		60115DF82ADBF2E10050D32C /* HomeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVM.swift; sourceTree = "<group>"; };
 		60115E002ADC01150050D32C /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
 		60115E172ADD19CD0050D32C /* NumberFormatterHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatterHelper.swift; sourceTree = "<group>"; };
+		602808CB2B9EE6B500BB1F64 /* SPButtonAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPButtonAttributes.swift; sourceTree = "<group>"; };
+		602808CD2B9EE84E00BB1F64 /* SPButtonImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPButtonImpl.swift; sourceTree = "<group>"; };
+		602808CF2B9EEB9400BB1F64 /* SPSquareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPSquareButton.swift; sourceTree = "<group>"; };
+		602808D12B9EF0DA00BB1F64 /* SPHomeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPHomeButton.swift; sourceTree = "<group>"; };
+		602808D32B9EF9A000BB1F64 /* SPRoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPRoundedButton.swift; sourceTree = "<group>"; };
 		6032DCE32AECE4B3004A6BFA /* CSInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSInfoVC.swift; sourceTree = "<group>"; };
 		6032DCE52AECE4BC004A6BFA /* CSInfoVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSInfoVM.swift; sourceTree = "<group>"; };
 		6032DCEE2AEE5452004A6BFA /* ExclItemInputVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclItemInputVC.swift; sourceTree = "<group>"; };
@@ -242,6 +253,7 @@
 		60F793452B07053800D55ADD /* SplitMethodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMethodCell.swift; sourceTree = "<group>"; };
 		60F793472B070A2200D55ADD /* SplitMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitMethod.swift; sourceTree = "<group>"; };
 		60F793492B07AD8000D55ADD /* Notification+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+.swift"; sourceTree = "<group>"; };
+		60FD82212B9F2EDF00656DDC /* SPButtonProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPButtonProtocol.swift; sourceTree = "<group>"; };
 		8656D6D32B020C03003660A4 /* EditCSMemberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSMemberVC.swift; sourceTree = "<group>"; };
 		8656D6D62B020C6D003660A4 /* EditCSMemberVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSMemberVM.swift; sourceTree = "<group>"; };
 		86C65FF12AEF970F00A7942A /* EditCSListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCSListVC.swift; sourceTree = "<group>"; };
@@ -608,6 +620,36 @@
 				1A8B05DD2AF145F000CF5BC5 /* SplitMethodSelect */,
 			);
 			path = SplitCreateFlow;
+			sourceTree = "<group>";
+		};
+		602808C42B9EE0C400BB1F64 /* SPButton */ = {
+			isa = PBXGroup;
+			children = (
+				602808CA2B9EE6AA00BB1F64 /* Attributes */,
+				602808C72B9EE4B900BB1F64 /* Protocol */,
+				C229F5192AEA442E00F9E28D /* SPButton.swift */,
+				602808CD2B9EE84E00BB1F64 /* SPButtonImpl.swift */,
+				602808CF2B9EEB9400BB1F64 /* SPSquareButton.swift */,
+				602808D12B9EF0DA00BB1F64 /* SPHomeButton.swift */,
+				602808D32B9EF9A000BB1F64 /* SPRoundedButton.swift */,
+			);
+			path = SPButton;
+			sourceTree = "<group>";
+		};
+		602808C72B9EE4B900BB1F64 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				60FD82212B9F2EDF00656DDC /* SPButtonProtocol.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
+		602808CA2B9EE6AA00BB1F64 /* Attributes */ = {
+			isa = PBXGroup;
+			children = (
+				602808CB2B9EE6B500BB1F64 /* SPButtonAttributes.swift */,
+			);
+			path = Attributes;
 			sourceTree = "<group>";
 		};
 		6032DCE02AECE1EE004A6BFA /* CSInfo */ = {
@@ -1019,7 +1061,7 @@
 			isa = PBXGroup;
 			children = (
 				C2A797932AE274F10049E709 /* SPTextField.swift */,
-				C229F5192AEA442E00F9E28D /* SPButton.swift */,
+				602808C42B9EE0C400BB1F64 /* SPButton */,
 				1A8B05DB2AF0E15A00CF5BC5 /* SPNavigationBar.swift */,
 				86C65FFD2AF0F6FB00A7942A /* DefaultEditButton.swift */,
 				60F496942AF753180077F6FB /* SPAlertController.swift */,
@@ -1325,6 +1367,7 @@
 				1A7845142AFD29BE00E38403 /* CSMemberEmptyBackGroundView.swift in Sources */,
 				1A1ACC4D2AF3CAF6004AC4CD /* SplitShareSectionFooter.swift in Sources */,
 				60F793462B07053800D55ADD /* SplitMethodCell.swift in Sources */,
+				602808D02B9EEB9400BB1F64 /* SPSquareButton.swift in Sources */,
 				DE73D6F72AE1983200ABF3EF /* MemberLogVC.swift in Sources */,
 				1A0DBF232B90638E004E160A /* HistoryReamlManager.swift in Sources */,
 				1A0DBF212B9062A8004E160A /* HistoryService.swift in Sources */,
@@ -1334,6 +1377,7 @@
 				1A0DBF1F2B8F1255004E160A /* SettingCoordinator.swift in Sources */,
 				C2A7979C2AE276E90049E709 /* HistorySplitCell.swift in Sources */,
 				DE73D6ED2AE0D2C300ABF3EF /* BankListModalVC.swift in Sources */,
+				602808CC2B9EE6B500BB1F64 /* SPButtonAttributes.swift in Sources */,
 				60115DF72ADBF2980050D32C /* UIColor+.swift in Sources */,
 				1A3852F92ADE5AC200E9A20B /* CSMember.swift in Sources */,
 				1AE8BC992B7A01D100AAB3F8 /* Coordinator.swift in Sources */,
@@ -1351,6 +1395,8 @@
 				60AE3EC12AE77488009D9D18 /* CSMemberResult.swift in Sources */,
 				60AE3EBA2AE77417009D9D18 /* SplitShareTableCell.swift in Sources */,
 				6078ACCC2ADA74AC00995811 /* AppDelegate.swift in Sources */,
+				602808D42B9EF9A000BB1F64 /* SPRoundedButton.swift in Sources */,
+				602808CE2B9EE84E00BB1F64 /* SPButtonImpl.swift in Sources */,
 				DE73D6EB2AE0D29000ABF3EF /* BankManager.swift in Sources */,
 				60990AEC2B01F24100202319 /* MemberCheck.swift in Sources */,
 				86DACB0E2AF4ECE7008D7BAF /* EditCSInfoVM.swift in Sources */,
@@ -1374,7 +1420,9 @@
 				DE1711C22AE0BA9B0097850D /* MyInfoVM.swift in Sources */,
 				6032DCFC2AEF5FBE004A6BFA /* ExclItemInfoAddModalVM.swift in Sources */,
 				1A3852FB2ADE5ADA00E9A20B /* ExclItem.swift in Sources */,
+				602808D22B9EF0DA00BB1F64 /* SPHomeButton.swift in Sources */,
 				C2A797A02AE277AF0049E709 /* CreateDateSection.swift in Sources */,
+				60FD82222B9F2EDF00656DDC /* SPButtonProtocol.swift in Sources */,
 				1AC4116E2B028A9B008A45BC /* RMCSMember.swift in Sources */,
 				6078ACCE2ADA74AC00995811 /* SceneDelegate.swift in Sources */,
 				1AE8BCAE2B7A033500AAB3F8 /* ShareRealmManager.swift in Sources */,
