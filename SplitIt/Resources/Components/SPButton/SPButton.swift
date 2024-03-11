@@ -15,32 +15,12 @@ final class SPButton: UIButton {
     var disposeBag = DisposeBag()
     
     let buttonState = BehaviorRelay<Bool>(value: false)
+    private var style: Style = .primaryCalmshell
+    private var shape: Shape = .square
     
-    let colorArray: [Style: UIColor] = [
-        .primaryCalmshell: .SurfaceBrandCalmshell,
-        .primaryWatermelon: .SurfaceBrandWatermelon,
-        .primaryCherry: .SurfaceBrandCherry,
-        .primaryPear: .SurfaceBrandPear,
-        .primaryMushroom: .SurfaceBrandMushroom,
-        .primaryRadish: .SurfaceBrandRadish,
-        .surfaceWhite: .SurfaceWhite,
-        .surfaceSecondary: .SurfaceSecondary,
-        .warningRed: .SurfaceWarnRed
-    ]
-    
-    let colorPressedArray: [Style: UIColor] = [
-        .primaryCalmshell: .SurfaceBrandCalmshellPressed,
-        .primaryWatermelon: .SurfaceBrandWatermelonPressed,
-        .primaryCherry: .SurfaceBrandCherryPressed,
-        .primaryPear: .SurfaceBrandPearPressed,
-        .primaryMushroom: .SurfaceBrandMushroomPressed,
-        .primaryRadish: .SurfaceBrandRadishPressed,
-        .surfaceWhite: .SurfaceSelected,
-        .surfaceSecondary: .SurfaceSecondaryPressed,
-        .warningRed: .SurfaceWarnRedPressed
-    ]
-
     func applyStyle(style: Style, shape: Shape) {
+        self.style = style
+        self.shape = shape
         configureCommonProperties()
         
         switch shape {
@@ -59,7 +39,7 @@ final class SPButton: UIButton {
                             self.frame = CGRect(origin: CGPoint(x: self.frame.minX, y: self.frame.minY - 4.0), size: self.frame.size)
                         }
                         UIView.transition(with: self, duration: 0.22, options: .transitionCrossDissolve) {
-                            self.backgroundColor = self.colorArray[style]
+                            self.backgroundColor = self.unpressedColor
                             self.configureActiveProperties()
                         }
                     } else {
@@ -76,7 +56,7 @@ final class SPButton: UIButton {
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
-                self.backgroundColor = colorArray[style]
+                self.backgroundColor = unpressedColor
                 self.isEnabled = true
                 self.configureActiveProperties()
                 self.configureUnpressedProperties()
@@ -89,7 +69,7 @@ final class SPButton: UIButton {
                 .subscribe(onNext: { [weak self] in
                     guard let self = self else { return }
                     self.configurePressedProperties()
-                    self.backgroundColor = colorPressedArray[style]
+                    self.backgroundColor = pressedColor
                     self.frame = CGRect(origin: CGPoint(x: self.frame.minX, y: self.frame.minY + 4.0), size: self.frame.size)
                 })
                 .disposed(by: disposeBag)
@@ -103,9 +83,9 @@ final class SPButton: UIButton {
                     guard let self = self else { return }
                     self.isEnabled = isEnable
                     if isEnable {
-                        self.backgroundColor = colorArray[style]
+                        self.backgroundColor = unpressedColor
                         
-                        if colorArray[style] == .SurfaceSecondary {
+                        if unpressedColor == .SurfaceSecondary {
                             self.configureActivePropertiesInvert()
                         } else {
                             self.configureActiveProperties()
@@ -127,14 +107,14 @@ final class SPButton: UIButton {
                 guard let self = self else { return }
                 self.isEnabled = true
                 
-                if colorArray[style] == .SurfaceSecondary {
+                if unpressedColor == .SurfaceSecondary {
                     self.configureActivePropertiesInvert()
                 } else {
                     self.configureActiveProperties()
                 }
                 
                 self.configureUnpressedPropertiesForSquare()
-                self.backgroundColor = colorArray[style]
+                self.backgroundColor = unpressedColor
                 self.frame = CGRect(origin: CGPoint(x: self.frame.minX, y: self.frame.minY - 2.0), size: self.frame.size)
             })
             .disposed(by: disposeBag)
@@ -145,7 +125,7 @@ final class SPButton: UIButton {
                 .subscribe(onNext: { [weak self] in
                     guard let self = self else { return }
                     self.configurePressedPropertiesForSquare()
-                    self.backgroundColor = colorPressedArray[style]
+                    self.backgroundColor = pressedColor
                     self.frame = CGRect(origin: CGPoint(x: self.frame.minX, y: self.frame.minY + 2.0), size: self.frame.size)
                 })
                 .disposed(by: disposeBag)
@@ -159,7 +139,7 @@ final class SPButton: UIButton {
                     guard let self = self else { return }
                     self.isEnabled = isEnable
                     if isEnable {
-                        self.backgroundColor = colorArray[style]
+                        self.backgroundColor = unpressedColor
                         self.configureActiveProperties()
                         self.configureUnpressedPropertiesForHome()
                     } else {
@@ -178,7 +158,7 @@ final class SPButton: UIButton {
                 self.isEnabled = true
                 self.configureActiveProperties()
                 self.configureUnpressedPropertiesForHome()
-                self.backgroundColor = colorArray[style]
+                self.backgroundColor = unpressedColor
                 self.frame = CGRect(origin: CGPoint(x: self.frame.minX, y: self.frame.minY - 6.0), size: self.frame.size)
             })
             .disposed(by: disposeBag)
@@ -188,7 +168,7 @@ final class SPButton: UIButton {
                 .subscribe(onNext: { [weak self] in
                     guard let self = self else { return }
                     self.configurePressedPropertiesForHome()
-                    self.backgroundColor = colorPressedArray[style]
+                    self.backgroundColor = pressedColor
                     self.frame = CGRect(origin: CGPoint(x: self.frame.minX, y: self.frame.minY + 6.0), size: self.frame.size)
                 })
                 .disposed(by: disposeBag)
@@ -213,6 +193,34 @@ extension SPButton {
         case rounded
         case square
         case home
+    }
+        
+    var pressedColor: UIColor {
+        switch self.style {
+        case .primaryCalmshell: .SurfaceBrandCalmshellPressed
+        case .primaryWatermelon: .SurfaceBrandWatermelonPressed
+        case .primaryCherry: .SurfaceBrandCherryPressed
+        case .primaryPear: .SurfaceBrandPearPressed
+        case .primaryMushroom: .SurfaceBrandMushroomPressed
+        case .primaryRadish: .SurfaceBrandRadishPressed
+        case .surfaceWhite: .SurfaceSelected
+        case .surfaceSecondary: .SurfaceSecondaryPressed
+        case .warningRed: .SurfaceWarnRedPressed
+        }
+    }
+    
+    var unpressedColor: UIColor {
+        switch self.style {
+        case .primaryCalmshell: .SurfaceBrandCalmshell
+        case .primaryWatermelon: .SurfaceBrandWatermelon
+        case .primaryCherry: .SurfaceBrandCherry
+        case .primaryPear: .SurfaceBrandPear
+        case .primaryMushroom: .SurfaceBrandMushroom
+        case .primaryRadish: .SurfaceBrandRadish
+        case .surfaceWhite: .SurfaceWhite
+        case .surfaceSecondary: .SurfaceSecondary
+        case .warningRed: .SurfaceWarnRed
+        }
     }
 }
 
