@@ -41,7 +41,7 @@ final class ExclItemInputVC: UIViewController, SPAlertDelegate {
     let emptyView = ExclItemInputEmptyView()
     let tableView = UITableView(frame: .zero)
     
-    let nextButton = SPButton()
+    let nextButton = SPRoundedButton()
     
     let backLeftEdgePanGesture = UIScreenEdgePanGestureRecognizer()
 
@@ -98,7 +98,7 @@ final class ExclItemInputVC: UIViewController, SPAlertDelegate {
         
         nextButton.do {
             $0.setTitle("정산 결과 확인하기", for: .normal)
-            $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
+            $0.applyStyle(style: .primaryWatermelon)
         }
         
         backLeftEdgePanGesture.do {
@@ -199,7 +199,7 @@ final class ExclItemInputVC: UIViewController, SPAlertDelegate {
             .disposed(by: disposeBag)
         
         output.nextButtonIsEnable
-            .drive(nextButton.buttonState)
+            .drive(nextButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
         output.showExclItemInfoModal

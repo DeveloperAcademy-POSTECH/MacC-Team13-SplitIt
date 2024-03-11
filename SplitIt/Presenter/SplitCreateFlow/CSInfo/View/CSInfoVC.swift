@@ -35,7 +35,7 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
     let totalAmountTitleMessage = UILabel()
     let totalAmountTextFiled = SPTextField()
     let totalAmountTextFiledNotice = UILabel()
-    let nextButton = SPButton()
+    let nextButton = SPRoundedButton()
     
     init(viewModel: CSInfoVM, header: SPNaviBar) {
         self.viewModel = viewModel
@@ -113,7 +113,7 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
         
         nextButton.do {
             $0.setTitle("다음으로", for: .normal)
-            $0.applyStyle(style: .primaryMushroom, shape: .rounded)
+            $0.applyStyle(style: .primaryMushroom)
         }
     }
     
@@ -290,7 +290,7 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
         
         // MARK: NextButton
         output.nextButtonIsEnable
-            .drive(nextButton.buttonState)
+            .drive(nextButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
         output.showCSMemberView

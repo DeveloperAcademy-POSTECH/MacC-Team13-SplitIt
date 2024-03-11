@@ -32,7 +32,7 @@ class SplitShareVC: UIViewController {
     let tableView = UITableView(frame: .zero, style: .grouped)
     let csAddButton = SPSquareButton()
     let editButton = SPSquareButton()
-    let shareButton = SPButton()
+    let shareButton = SPRoundedButton()
     
     let popUpBackGroundView = UIView()
     let popUpView = SPPopUp()
@@ -102,9 +102,8 @@ class SplitShareVC: UIViewController {
         }
         
         shareButton.do {
-            $0.applyStyle(style: .primaryWatermelon, shape: .rounded)
+            $0.applyStyle(style: .primaryWatermelon)
             $0.setTitle("영수증 공유하기", for: .normal)
-            $0.buttonState.accept(true)
         }
     }
     
