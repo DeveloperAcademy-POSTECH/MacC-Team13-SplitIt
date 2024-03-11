@@ -30,8 +30,8 @@ class SplitShareVC: UIViewController {
     let header: SPNaviBar
     
     let tableView = UITableView(frame: .zero, style: .grouped)
-    let csAddButton = SPButton()
-    let editButton = SPButton()
+    let csAddButton = SPSquareButton()
+    let editButton = SPSquareButton()
     let shareButton = SPButton()
     
     let popUpBackGroundView = UIView()
@@ -91,16 +91,14 @@ class SplitShareVC: UIViewController {
         }
         
         csAddButton.do {
-            $0.applyStyle(style: .surfaceWhite, shape: .square)
-            $0.buttonState.accept(true)
+            $0.applyStyle(style: .surfaceWhite)
         }
         
         editButton.do {
-            $0.applyStyle(style: .surfaceSecondary, shape: .square)
+            $0.applyStyle(style: .surfaceSecondary)
             $0.setImage(UIImage(named: "SplitEditIcon"), for: .normal)
             $0.setImage(UIImage(named: "SplitEditIcon"), for: .highlighted)
             $0.setTitle(" 정산 수정", for: .normal)
-            $0.buttonState.accept(true)
         }
         
         shareButton.do {

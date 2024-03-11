@@ -20,7 +20,7 @@ class EditExclItemInputVC: UIViewController {
     let header = SPNavigationBar()
     let exclListLabel = UILabel()
     let exclItemCountLabel = UILabel()
-    let exclItemAddButton = SPButton()
+    let exclItemAddButton = SPSquareButton()
     
     let contentView = UIView()
     let emptyView = ExclItemInputEmptyView()
@@ -74,8 +74,7 @@ class EditExclItemInputVC: UIViewController {
         
         exclItemAddButton.do {
             $0.setTitle("항목 추가", for: .normal)
-            $0.buttonState.accept(true)
-            $0.applyStyle(style: .primaryWatermelon, shape: .square)
+            $0.applyStyle(style: .primaryWatermelon)
             $0.titleLabel?.font = .KoreanSmallButtonText
         }
         

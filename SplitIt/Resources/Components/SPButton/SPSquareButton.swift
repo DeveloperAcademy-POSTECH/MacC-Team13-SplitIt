@@ -111,6 +111,8 @@ extension SPSquareButton: SPButtonProtocol {
     func configureCommonProperties() {
         self.titleLabel?.font = UIFont.KoreanButtonText
         self.layer.cornerRadius = 8
+        
+        configureButtonUpUI()
     }
     
     func configureUnpressedProperties() {

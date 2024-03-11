@@ -20,7 +20,7 @@ class SPPopUp: UIView {
     var title = UILabel()
     var image = UIImageView()
     var descript = UILabel()
-    let bottomButton = SPButton()
+    let bottomButton = SPSquareButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -44,8 +44,7 @@ class SPPopUp: UIView {
             
             bottomButton.do {
                 $0.setTitle("입력하러 가기", for: .normal)
-                $0.applyStyle(style: .primaryWatermelon, shape: .square)
-                $0.buttonState.accept(true)
+                $0.applyStyle(style: .primaryWatermelon)
             }
         }
     }

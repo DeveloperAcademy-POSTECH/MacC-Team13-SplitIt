@@ -35,7 +35,7 @@ final class ExclItemInputVC: UIViewController, SPAlertDelegate {
     let exclListLabel = UILabel()
     let textDivider = UILabel()
     let exclItemCountLabel = UILabel()
-    let exclItemAddButton = SPButton()
+    let exclItemAddButton = SPSquareButton()
     
     let contentView = UIView()
     let emptyView = ExclItemInputEmptyView()
@@ -92,8 +92,7 @@ final class ExclItemInputVC: UIViewController, SPAlertDelegate {
         
         exclItemAddButton.do {
             $0.setTitle("항목 추가", for: .normal)
-            $0.buttonState.accept(true)
-            $0.applyStyle(style: .primaryWatermelon, shape: .square)
+            $0.applyStyle(style: .primaryWatermelon)
             $0.titleLabel?.font = .KoreanSmallButtonText
         }
         
