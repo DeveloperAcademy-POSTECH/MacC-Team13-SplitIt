@@ -107,6 +107,8 @@ extension SPRoundedButton: SPButtonProtocol {
     func configureCommonProperties() {
         self.titleLabel?.font = UIFont.KoreanButtonText
         self.layer.cornerRadius = 24
+        
+        configureButtonUpUI()
     }
     
     func configureUnpressedProperties() {
