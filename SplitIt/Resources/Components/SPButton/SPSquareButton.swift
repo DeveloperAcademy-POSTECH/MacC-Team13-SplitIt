@@ -9,8 +9,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-final class SPSquareButton: SPButtonImpl {
-    
+final class SPSquareButton: UIButton, SPButton {
+    private var style: SPButtonStyle
+
     private var disposeBag = DisposeBag()
     
     override var isEnabled: Bool {
@@ -27,11 +28,20 @@ final class SPSquareButton: SPButtonImpl {
         }
     }
     
-    override func applyStyle(style: SPButtonStyle) {
-        super.applyStyle(style: style)
-        
-        configureCommonProperties()
+    init(style: SPButtonStyle) {
+        self.style = style
+
+        super.init(frame: .zero)
+        configureUniqueProperties()
         bindInput()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func applyStyle(style: SPButtonStyle) {
+        self.style = style
     }
     
     private func bindInput() {
@@ -57,30 +67,30 @@ final class SPSquareButton: SPButtonImpl {
     
     private func didTouchUp() {
         configureButtonUpUI()
-        updateVerticalPosition(by: -2.0)
+        updateVerticalPosition(self, by: -2.0)
     }
     
     private func didTouchDown() {
         configureButtonDownUI()
-        updateVerticalPosition(by: 2.0)
+        updateVerticalPosition(self, by: 2.0)
     }
 }
 
 extension SPSquareButton {
     private func configureButtonUpUI() {
-        if unpressedColor == .SurfaceSecondary {
-            configureActivePropertiesInvert()
+        if style.unpressedColor == .SurfaceSecondary {
+            configureActivePropertiesInvert(self)
         } else {
-            configureActiveProperties()
+            configureActiveProperties(self)
         }
         
         configureUnpressedProperties()
-        self.backgroundColor = unpressedColor
+        self.backgroundColor = style.unpressedColor
     }
     
     private func configureButtonDownUI() {
         configurePressedProperties()
-        self.backgroundColor = pressedColor
+        self.backgroundColor = style.pressedColor
     }
 }
     
@@ -88,12 +98,12 @@ extension SPSquareButton {
 extension SPSquareButton {
     // 버튼 활성 애니메이션
     private func animateButtonActive() {
-        self.backgroundColor = unpressedColor
+        self.backgroundColor = style.unpressedColor
         
-        if unpressedColor == .SurfaceSecondary {
-            configureActivePropertiesInvert()
+        if style.unpressedColor == .SurfaceSecondary {
+            configureActivePropertiesInvert(self)
         } else {
-            configureActiveProperties()
+            configureActiveProperties(self)
         }
 
         configureUnpressedProperties()
@@ -102,13 +112,16 @@ extension SPSquareButton {
     // 버튼 비활성 애니메이션 (즉시 적용)
     private func animateButtonDeactive() {
         self.backgroundColor = .AppColorBrandCalmshell
-        configureDeactiveProperties()
+        configureDeactiveProperties(self)
         configurePressedProperties()
     }
 }
 
-extension SPSquareButton: SPButtonProtocol {
-    func configureCommonProperties() {
+// SquareButton 기본 특성
+extension SPSquareButton {
+    func configureUniqueProperties() {
+        configureCommonProperties(self)
+        
         self.titleLabel?.font = UIFont.KoreanButtonText
         self.layer.cornerRadius = 8
         
@@ -116,10 +129,12 @@ extension SPSquareButton: SPButtonProtocol {
     }
     
     func configureUnpressedProperties() {
-        self.layer.shadowOffset = CGSize(width: 0, height: 3)
+        self.layer.shadowOffset = CGSize(width: 0, 
+                                         height: 3)
     }
     
     func configurePressedProperties() {
-        self.layer.shadowOffset = CGSize(width: 0, height: 1)
+        self.layer.shadowOffset = CGSize(width: 0, 
+                                         height: 1)
     }
 }

@@ -40,7 +40,7 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     let searchView = UIView()
     let searchLabel = UILabel()
     let searchTableView = UITableView(frame: .zero)
-    let nextButton = SPRoundedButton()
+    let nextButton = SPRoundedButton(style: .primaryCherry)
     
     let backgroundView = CSMemberEmptyBackGroundView()
     
@@ -169,9 +169,7 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         }
         
         nextButton.do {
-            self.nextButton.setTitle("2명부터 정산할 수 있어요", for: .normal)
-            $0.applyStyle(style: .primaryCherry)
-            $0.rx.isEnabled.onNext(false)
+            $0.setTitle("2명부터 정산할 수 있어요", for: .normal)
         }
     }
     

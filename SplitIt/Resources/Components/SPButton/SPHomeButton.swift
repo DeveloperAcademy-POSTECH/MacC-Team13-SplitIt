@@ -9,15 +9,25 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-final class SPHomeButton: SPButtonImpl {
+final class SPHomeButton: UIButton, SPButton {
+    private var style: SPButtonStyle
     
     private var disposeBag = DisposeBag()
-
-    override func applyStyle(style: SPButtonStyle) {
-        super.applyStyle(style: style)
+    
+    init(style: SPButtonStyle) {
+        self.style = style
         
-        configureCommonProperties()
+        super.init(frame: .zero)
+        configureUniqueProperties()
         bindInput()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func applyStyle(style: SPButtonStyle) {
+        self.style = style
     }
     
     private func bindInput() {
@@ -43,30 +53,32 @@ final class SPHomeButton: SPButtonImpl {
 
     private func didTouchUp() {
         configureButtonUpUI()
-        updateVerticalPosition(by: -6.0)
+        updateVerticalPosition(self, by: -6.0)
     }
     
     private func didTouchDown() {
         configureButtonDownUI()
-        updateVerticalPosition(by: 6.0)
+        updateVerticalPosition(self, by: 6.0)
     }
 }
 
 extension SPHomeButton {
     private func configureButtonUpUI() {
-        self.backgroundColor = unpressedColor
-        self.configureActiveProperties()
+        self.backgroundColor = style.unpressedColor
+        self.configureActiveProperties(self)
         self.configureUnpressedProperties()
     }
     
     private func configureButtonDownUI() {
         configurePressedProperties()
-        self.backgroundColor = pressedColor
+        self.backgroundColor = style.pressedColor
     }
 }
 
-extension SPHomeButton: SPButtonProtocol {
-    func configureCommonProperties() {
+// HomeButton 기본 특성
+extension SPHomeButton {
+    func configureUniqueProperties() {
+        configureCommonProperties(self)
         self.layer.cornerRadius = 8
         self.layer.borderWidth = 2
         
@@ -74,10 +86,12 @@ extension SPHomeButton: SPButtonProtocol {
     }
     
     func configureUnpressedProperties() {
-        self.layer.shadowOffset = CGSize(width: 0, height: 10)
+        self.layer.shadowOffset = CGSize(width: 0, 
+                                         height: 10)
     }
     
     func configurePressedProperties() {
-        self.layer.shadowOffset = CGSize(width: 0, height: 2)
+        self.layer.shadowOffset = CGSize(width: 0, 
+                                         height: 2)
     }
 }

@@ -33,8 +33,8 @@ final class SPAlertController: UIViewController {
     private let itemLabel = UILabel()
     private let alertTitleLabel = UILabel()
     private let alertDescriptionLabel = UILabel()
-    private let leftButton = SPSquareButton()
-    private let rightButton = SPSquareButton()
+    private let leftButton = SPSquareButton(style: .primaryCalmshell)
+    private let rightButton = SPSquareButton(style: .warningRed)
     
     fileprivate var item: String?
     fileprivate var alertTitle: String!
@@ -100,7 +100,6 @@ final class SPAlertController: UIViewController {
         // MARK: 현재 leftButton은 AlertType에 관계없이 항상 (.primaryCalmshell) (23.11.05.)
         leftButton.do {
             $0.setTitle(leftButtonTitle, for: .normal)
-            $0.applyStyle(style: .primaryCalmshell)
         }
         
         rightButton.do {
