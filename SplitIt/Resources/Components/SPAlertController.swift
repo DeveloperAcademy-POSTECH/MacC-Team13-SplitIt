@@ -33,8 +33,8 @@ final class SPAlertController: UIViewController {
     private let itemLabel = UILabel()
     private let alertTitleLabel = UILabel()
     private let alertDescriptionLabel = UILabel()
-    private let leftButton = SPButton()
-    private let rightButton = SPButton()
+    private let leftButton = SPSquareButton(style: .primaryCalmshell)
+    private let rightButton = SPSquareButton(style: .warningRed)
     
     fileprivate var item: String?
     fileprivate var alertTitle: String!
@@ -86,27 +86,24 @@ final class SPAlertController: UIViewController {
         // MARK: AlertType에 따라 itemLabel과 rightButton을 config
         switch alertType {
         case .warnNormal:
-            rightButton.applyStyle(style: .warningRed, shape: .square)
+            rightButton.applyStyle(style: .warningRed)
         case .warnWithItem(let item):
-            rightButton.applyStyle(style: .warningRed, shape: .square)
+            rightButton.applyStyle(style: .warningRed)
             itemLabel.text = "'\(item)'"
         case .confirmNormal:
-            rightButton.applyStyle(style: .primaryWatermelon, shape: .square)
+            rightButton.applyStyle(style: .primaryWatermelon)
         case .confirmWithItem(let item):
-            rightButton.applyStyle(style: .primaryWatermelon, shape: .square)
+            rightButton.applyStyle(style: .primaryWatermelon)
             itemLabel.text = "'\(item)'"
         }
         
         // MARK: 현재 leftButton은 AlertType에 관계없이 항상 (.primaryCalmshell) (23.11.05.)
         leftButton.do {
             $0.setTitle(leftButtonTitle, for: .normal)
-            $0.applyStyle(style: .primaryCalmshell, shape: .square)
-            $0.buttonState.accept(true)
         }
         
         rightButton.do {
             $0.setTitle(rightButtonTitle, for: .normal)
-            $0.buttonState.accept(true)
         }
     }
     

@@ -30,8 +30,8 @@ class ExcltemInfoModalAlertVC: UIViewController {
     let titleLabel = UILabel()
     let warningLabel = UILabel()
     
-    let cancelButton = SPButton()
-    let deleteBtn = SPButton()
+    let cancelButton = SPSquareButton(style: .primaryCalmshell)
+    let deleteBtn = SPSquareButton(style: .warningRed)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,14 +97,10 @@ class ExcltemInfoModalAlertVC: UIViewController {
         
         cancelButton.do {
             $0.setTitle("취소", for: .normal)
-            $0.applyStyle(style: .primaryCalmshell, shape: .square)
-            $0.buttonState.accept(true)
         }
         
         deleteBtn.do {
             $0.setTitle("삭제하기", for: .normal)
-            $0.applyStyle(style: .warningRed, shape: .square)
-            $0.buttonState.accept(true)
         }
     }
     

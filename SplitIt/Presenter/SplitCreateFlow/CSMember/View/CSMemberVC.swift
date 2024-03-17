@@ -40,7 +40,7 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
     let searchView = UIView()
     let searchLabel = UILabel()
     let searchTableView = UITableView(frame: .zero)
-    let nextButton = SPButton()
+    let nextButton = SPRoundedButton(style: .primaryCherry)
     
     let backgroundView = CSMemberEmptyBackGroundView()
     
@@ -169,8 +169,7 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
         }
         
         nextButton.do {
-            $0.applyStyle(style: .primaryCherry, shape: .rounded)
-            self.nextButton.setTitle("2명부터 정산할 수 있어요", for: .normal)
+            $0.setTitle("2명부터 정산할 수 있어요", for: .normal)
         }
     }
     
@@ -344,14 +343,16 @@ class CSMemberVC: UIViewController, Reusable, SPAlertDelegate {
             .asDriver()
             .drive(onNext: { [weak self] memberArr in
                 guard let self = self else { return }
+                
+                self.memberCount.text = "\(memberArr.count)명"
+                
                 let buttonState = memberArr.count >= 2
-                self.nextButton.buttonState.accept(buttonState)
                 
                 buttonState
                 ? self.nextButton.setTitle("\(memberArr.count)명이서 돈을 썼어요", for: .normal)
                 : self.nextButton.setTitle("2명부터 정산할 수 있어요", for: .normal)
-                
-                self.memberCount.text = "\(memberArr.count)명"
+
+                self.nextButton.rx.isEnabled.onNext(buttonState)
             })
             .disposed(by: disposeBag)
         

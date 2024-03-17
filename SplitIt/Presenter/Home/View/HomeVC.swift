@@ -24,8 +24,8 @@ class HomeVC: UIViewController {
     let splitTitleLogo = UIImageView()
     let titleDescriptionLabel = UILabel()
     let splitImageLogo = UIImageView()
-    let myInfoButton = SPButton()
-    let splitItButton = SPButton()
+    let myInfoButton = SPHomeButton(style: .surfaceWhite)
+    let splitItButton = SPHomeButton(style: .primaryWatermelon)
 
     var router: HomeVCRouter?
     
@@ -64,15 +64,11 @@ class HomeVC: UIViewController {
         myInfoButton.do {
             $0.setImage(UIImage(named: "SplitInfoIcon"), for: .normal)
             $0.setImage(UIImage(named: "SplitInfoIcon"), for: .highlighted)
-            $0.applyStyle(style: .surfaceWhite, shape: .home)
-            $0.buttonState.accept(true)
         }
 
         splitItButton.do {
             $0.setImage(UIImage(named: "SplitBeginArrow"), for: .normal)
             $0.setImage(UIImage(named: "SplitBeginArrow"), for: .highlighted)
-            $0.applyStyle(style: .primaryWatermelon, shape: .home)
-            $0.buttonState.accept(true)
         }
     }
 

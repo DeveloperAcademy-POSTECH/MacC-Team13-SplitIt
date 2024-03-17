@@ -50,7 +50,9 @@ final class SPTextField: UITextField {
     private func setBinding() {
         // MARK: editingDidEnd일 때를 구독하여 공백을 제거합니다.
         rx.controlEvent(.editingDidEnd)
-            .map{ self.text?.trimmingCharacters(in: .whitespaces) ?? "" }
+            .map { [weak self] in
+                self?.text?.trimmingCharacters(in: .whitespaces) ?? ""
+            }
             .asDriver(onErrorJustReturn: "")
             .drive(rx.text)
             .disposed(by: disposeBag)

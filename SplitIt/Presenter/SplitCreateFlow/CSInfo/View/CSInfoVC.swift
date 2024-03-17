@@ -35,7 +35,7 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
     let totalAmountTitleMessage = UILabel()
     let totalAmountTextFiled = SPTextField()
     let totalAmountTextFiledNotice = UILabel()
-    let nextButton = SPButton()
+    let nextButton = SPRoundedButton(style: .primaryMushroom)
     
     init(viewModel: CSInfoVM, header: SPNaviBar) {
         self.viewModel = viewModel
@@ -113,7 +113,6 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
         
         nextButton.do {
             $0.setTitle("다음으로", for: .normal)
-            $0.applyStyle(style: .primaryMushroom, shape: .rounded)
         }
     }
     
@@ -290,7 +289,7 @@ class CSInfoVC: UIViewController, SPAlertDelegate {
         
         // MARK: NextButton
         output.nextButtonIsEnable
-            .drive(nextButton.buttonState)
+            .drive(nextButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
         output.showCSMemberView
@@ -312,17 +311,17 @@ extension CSInfoVC {
     func focusTitleTF(output: CSInfoVM.Output) {
 //        self.titleTextFiled.becomeFirstResponder()
         
-        UIView.animate(withDuration: 0.33) {
-            self.titleTextFiled.applyStyle(.editingDidBeginNormal)
+        UIView.animate(withDuration: 0.33) { [weak self] in
+            self?.titleTextFiled.applyStyle(.editingDidBeginNormal)
         }
         
-        UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) {
-            self.titleMessage.textColor = .TextPrimary
-            self.titleTextFiled.textColor = .TextPrimary
+        UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) { [weak self] in
+            self?.titleMessage.textColor = .TextPrimary
+            self?.titleTextFiled.textColor = .TextPrimary
             
             // Title이 focus 될 때는 경고창이 안보여야함
-            self.totalAmountTextFiledNotice.isHidden = true
-            self.textFiledCounter.textColor = output.titleTextFieldIsValid.value
+            self?.totalAmountTextFiledNotice.isHidden = true
+            self?.textFiledCounter.textColor = output.titleTextFieldIsValid.value
             ? .TextSecondary
             : .AppColorStatusError
         }
@@ -341,14 +340,14 @@ extension CSInfoVC {
     func focusTotalAmountTF() {
 //        self.totalAmountTextFiled.becomeFirstResponder()
         
-        UIView.animate(withDuration: 0.33) {
-            self.totalAmountTextFiled.applyStyle(.editingDidBeginNumber)
+        UIView.animate(withDuration: 0.33) { [weak self] in
+            self?.totalAmountTextFiled.applyStyle(.editingDidBeginNumber)
         }
         
-        UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) {
-            self.totalAmountTitleMessage.textColor = .TextPrimary
-            self.totalAmountTextFiled.textColor = .TextPrimary
-            self.totalAmountTextFiled.currencyLabel.textColor = .TextPrimary
+        UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve) { [weak self] in
+            self?.totalAmountTitleMessage.textColor = .TextPrimary
+            self?.totalAmountTextFiled.textColor = .TextPrimary
+            self?.totalAmountTextFiled.currencyLabel.textColor = .TextPrimary
         }
         
         view.layoutIfNeeded()
